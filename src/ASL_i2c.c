@@ -448,16 +448,15 @@ uint8_t get_PROP_version(void)
    g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH);	//output_high(i2c_cs);
    
 
-  wait = 53000;  //520ms
+  wait = 20; // GC 53000;  //520ms
   do {    // if i2c_res == 0, can not send package
   	g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
 
-    if(wait == 0) {
+    if (--wait < 2) {
       return 1;    // time out error
     }
     
     R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
-    wait--;
     
   } while(pin_state == IOPORT_LEVEL_LOW);
    

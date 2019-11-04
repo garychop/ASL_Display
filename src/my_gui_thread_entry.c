@@ -630,7 +630,7 @@ static void reset_check(void)
     		update_display();
            
   			
-  			R_BSP_SoftwareDelay(1500, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(1500);  
+//GC  			R_BSP_SoftwareDelay(1500, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(1500);
   			
   			//reset the System
         NVIC_SystemReset();
@@ -639,7 +639,7 @@ static void reset_check(void)
         break;
 
     default:
-    		R_BSP_SoftwareDelay(100, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(100);
+//GC    		R_BSP_SoftwareDelay(100, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(100);
        	break;
   }
 
@@ -846,7 +846,9 @@ void my_gui_thread_entry(void)
   	do {
   		test_num = get_PROP_version();
   		
-    	R_BSP_SoftwareDelay(30, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(30);  
+    	//GC Replace the following with a tx_thread_sleep
+  		//GC    R_BSP_SoftwareDelay(30, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(30);
+  		tx_thread_sleep(10);
     	//Start the WDT by refreshing it
 // 	  	g_wdt.p_api->refresh(g_wdt.p_ctrl);
     	if(i > 5)
@@ -860,13 +862,14 @@ void my_gui_thread_entry(void)
 //  	    status = gx_prompt_text_set(first_pmpt_text, "Communication Fail");
 //		if (GX_SUCCESS != status)
 //    	{
-    		g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+//    		g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
 //    	}
 		update_display();
     
     	while(1)
     	{
     		reset_check();
+    		tx_thread_sleep (2);
     	}
   	}
  	

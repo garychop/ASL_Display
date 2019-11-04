@@ -3,6 +3,7 @@
 #include "tx_api.h"
 
 extern void my_gui_thread_create(void);
+extern void DigitalControl_create(void);
 
 uint32_t g_ssp_common_thread_count;
 bool g_ssp_common_initialized;
@@ -58,6 +59,7 @@ void tx_application_define(void *first_unused_memory)
     }
 
     my_gui_thread_create ();
+    DigitalControl_create ();
 
 #ifdef TX_USER_ENABLE_TRACE
     TX_USER_ENABLE_TRACE;

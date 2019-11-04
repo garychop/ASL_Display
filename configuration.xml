@@ -797,6 +797,14 @@
         <property id="rtos.threadx.object.semaphore.count" value="0"/>
       </object>
     </context>
+    <context id="rtos.threadx.thread.58019536">
+      <property id="_symbol" value="DigitalControl"/>
+      <property id="rtos.threadx.thread.name" value="Digital Control"/>
+      <property id="rtos.threadx.thread.stack" value="1024"/>
+      <property id="rtos.threadx.thread.priority" value="23"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
+      <property id="rtos.threadx.thread.timeslice" value="23"/>
+    </context>
     <config id="config.driver.jpeg_decode">
       <property id="config.driver.jpeg_decode.param_checking_enable" value="config.driver.jpeg_decode.param_checking_enable.enabled"/>
     </config>

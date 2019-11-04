@@ -112,7 +112,7 @@ Synergy Configuration
       P305 65 GPIO GPIO17 Medium None "Output mode (Initial Low)" CMOS None "BUS0: A10; GLCDC0: LCD_DATA17; IRQ0: IRQ08; SCI6: SDA; SCI6: TXD_MOSI" 
       P306 64 GPIO GPIO18 Medium - "Output mode (Initial Low)" CMOS None "BUS0: A11; GLCDC0: LCD_DATA18; SCI6: SCK" 
       P307 63 GPIO GPIO19 Medium - "Output mode (Initial High)" CMOS None "BUS0: A12; GLCDC0: LCD_DATA19; SCI6: CTS_RTS_SS" 
-      P308 62 GPIO GPIO4 Low - "Output mode (Initial Low)" CMOS None "BUS0: A13; GLCDC0: LCD_DATA20" 
+      P308 62 GPIO GPIO4 High - "Output mode (Initial Low)" CMOS None "BUS0: A13; GLCDC0: LCD_DATA20" 
       P309 61 - - - - Disabled - - "BUS0: A14; GLCDC0: LCD_DATA21" 
       P310 60 GPIO GPIO5 Low - "Output mode (Initial Low)" CMOS None "BUS0: A15; GLCDC0: LCD_DATA22" 
       P311 59 - - - - Disabled - - "BUS0: CS2_RAS; GLCDC0: LCD_DATA23" 
@@ -822,6 +822,14 @@ Synergy Configuration
       Symbol: g_my_gui_semaphore
       Initial count: 0
       
+  Thread "Digital Control"
+    Symbol: DigitalControl
+    Name: Digital Control
+    Stack size (bytes): 1024
+    Priority: 23
+    Auto start: Enabled
+    Time slicing interval (ticks): 23
+    
   Messaging
     Subscriber "My Gui Thread" 0 0
       Event Class "Touch"

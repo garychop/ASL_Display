@@ -90,8 +90,7 @@ uint8_t kbhit_sw(void)
         sw_data = sw_data|0x01;
 
     g_ioport.p_api->pinRead(IOPORT_PORT_00_PIN_06, &pin_state);	//SW2
-    if (IOPORT_LEVEL_LOW == pin_state)
-        sw_data = sw_data|0x02;
+    if (IOPORT_LEVEL_LOW == pin_state) sw_data = sw_data|0x02;
  
 	return sw_data;
 }
