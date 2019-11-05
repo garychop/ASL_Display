@@ -77,8 +77,6 @@ void  g_timer0_callback(timer_callback_args_t * p_args) //25ms
 
   if(chk_date_time_timeout != 0) chk_date_time_timeout--;
 
-  if(chk_screen_chg_timeout != 0) chk_screen_chg_timeout--;
-  
 }
 
 //-------------------------------------------------------------------------
@@ -113,292 +111,6 @@ void g_lcd_spi_callback(spi_callback_args_t * p_args)
   if (p_args->event == SPI_EVENT_TRANSFER_COMPLETE) 
     tx_semaphore_ceiling_put(&g_my_gui_semaphore, 1);
     
-}
-
-//-------------------------------------------------------------------------
-uint8_t eprm_read(uint16_t addr)	//need 163us?
-{
-  uint8_t i, data;
-  uint16_t addr_temp;
-  ioport_level_t pin_state;
-  
-  
-  addr_temp = addr&0x00ff;
-  if(addr&0x0100) addr_temp |= 0x0b00; 
-  else addr_temp |= 0x0300;
-  
-  g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);
-  g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_LOW);
-  R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-  
-  //send address
-  for(i = 0; i < 16; i++) {
-    if( addr_temp&0x8000 ) {
-      g_ioport.p_api->pinWrite(eprm_in, IOPORT_LEVEL_HIGH);//output_high(eprm_in);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);    
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-      //delay_us(1);
-    }
-    else {
-      g_ioport.p_api->pinWrite(eprm_in, IOPORT_LEVEL_LOW);//output_low(eprm_in);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1); 
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-      //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    }
-    
-    addr_temp = (uint16_t)(addr_temp<<1);
-    
-  }
-	
-	//read data
-	data = 0;
-  for(i = 0; i < 8; i++) {
-    //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    g_ioport_on_ioport.pinRead(eprm_out, &pin_state); 
-    if(pin_state == IOPORT_LEVEL_HIGH) data = (uint8_t)( (data<<1)|0x01 );
-    else data = (uint8_t)( (data<<1)&0xfe );
-    g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-    R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-    R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    
-  }
-  
-  g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);//output_high(eprm_sel);
-	
-  return data;
-	
-}
-//-------------------------------------------------------------------------
-uint8_t eprm_write(uint16_t addr, uint8_t value)	//need 2.72ms?
-{
-  uint8_t i, data, wait;
-  uint16_t addr_temp;
-  ioport_level_t pin_state;
-  
-  
-//  output_low(PIN_B7);
-  
-  addr_temp = addr&0x00ff;
-  if(addr&0x0100) addr_temp |= 0x0a00; 
-  else addr_temp |= 0x0200;
-  
-  g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-  g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_LOW);//output_low(eprm_sel);
-  R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-
-  //send Write Enable
-  data = 0x06;
-  for(i = 0; i < 8; i++) {
-    if( data&0x80 ) {
-      g_ioport.p_api->pinWrite(eprm_in, IOPORT_LEVEL_HIGH);//output_high(eprm_in);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);    
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-      //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    }
-    else {
-      g_ioport.p_api->pinWrite(eprm_in, IOPORT_LEVEL_LOW);//output_low(eprm_in);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1); 
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-      //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    }
-    
-    data = (uint8_t)(data<<1);
-    
-  }
-
-  g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);//output_high(eprm_sel);
-  R_BSP_SoftwareDelay(3,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(3);
-
-  g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_LOW);//output_low(eprm_sel);
-  R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-  
-  //send address
-  for(i = 0; i < 16; i++) {
-    if( addr_temp&0x8000 ) {
-      g_ioport.p_api->pinWrite(eprm_in, IOPORT_LEVEL_HIGH);//output_high(eprm_in);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);    
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-      //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    }
-    else {
-      g_ioport.p_api->pinWrite(eprm_in, IOPORT_LEVEL_LOW);//output_low(eprm_in);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1); 
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-      //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    }
-    
-    addr_temp = (uint16_t)(addr_temp<<1);
-    
-  }
-	
-	//send value
-	for(i = 0; i < 8; i++) {
-    if( value&0x80 ) {
-      g_ioport.p_api->pinWrite(eprm_in, IOPORT_LEVEL_HIGH);//output_high(eprm_in);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);    
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-      //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    }
-    else {
-      g_ioport.p_api->pinWrite(eprm_in, IOPORT_LEVEL_LOW);//output_low(eprm_in);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1); 
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-      //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    }
-    
-    value = (uint8_t)(value<<1);
-    
-  }
-
-  g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);//output_high(eprm_sel);
-	
-	//read Status Register
-  g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_LOW);//output_low(eprm_sel);
-  R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-  
-  //send instruction
-  data = 0x05;
-  for(i = 0; i < 8; i++) {
-    if( data&0x80 ) {
-      g_ioport.p_api->pinWrite(eprm_in, IOPORT_LEVEL_HIGH);//output_high(eprm_in);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);    
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-      //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    }
-    else {
-      g_ioport.p_api->pinWrite(eprm_in, IOPORT_LEVEL_LOW);//output_low(eprm_in);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1); 
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-      R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-      g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-      //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-    }
-    
-    data = (uint8_t)(data<<1);
-    
-  }
-	
-  wait = 90; //waiting time //max: about 5ms 
-  do {	
-  	//read data
-  	data = 0;
-    for(i = 0; i < 8; i++) {
-  	  //R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1); 
-  	  g_ioport_on_ioport.pinRead(eprm_out, &pin_state); 
-    	if(pin_state == IOPORT_LEVEL_HIGH) data = (uint8_t)( (data<<1)|0x01 );
-    	else data = (uint8_t)( (data<<1)&0xfe );
-    	
-  	  g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_HIGH);//output_high(eprm_clk);
-  	  R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-  	  g_ioport.p_api->pinWrite(eprm_clk, IOPORT_LEVEL_LOW);//output_low(eprm_clk);
-  	  R_BSP_SoftwareDelay(1,BSP_DELAY_UNITS_MICROSECONDS);//delay_us(1);
-  	  
-  	}
-  	
-  	wait--;
-    if(wait == 0) break; //time out
-      
-	}while(data&0x01);	//nomally 'wait' is change to 39
-
-
-  g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);//output_high(eprm_sel);
-	
-	if(wait == 0) {
-	//	eeprm_w_err++;
-		return 1;						//err happenned
-	}
-	else return 0;
-	
-//	output_high(PIN_B7);
-	
-}
-
-//-------------------------------------------------------------------------
-void init_rtcc(void)
-{
-	ssp_err_t err;
-	
-	
-	rtcc_data[8] = 0;	//addr0 for reading ST
-	g_i2c1.p_api->write(g_i2c1.p_ctrl, &rtcc_data[8], 1, true);
-
-	err = g_i2c1.p_api->read(g_i2c1.p_ctrl, rtcc_data, 1, false);
-  if(SSP_SUCCESS != err)
-  {
-      g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
-  }
-  
-  if( (rtcc_data[0]&0x80) != 0x80 ) { //ST = 0
-		rtcc_data[0] = 0; 		//addr0
-		rtcc_data[1] = 0x81; 	//Data to TIMEKEEPING SECONDS VALUE REGISTER
-		rtcc_data[2] = 0x01;
-		rtcc_data[3] = 0x41; 	//set to 12 Hour Time Format
-		rtcc_data[4] = 0x09;	//External Battery Backup Supply (VBAT) Enable
-		rtcc_data[5] = 0x01;
-		rtcc_data[6] = 0x01;
-		rtcc_data[7] = 0x17;
-		rtcc_data[8] = 0x80; 	//CONTROL REGISTER
-		rtcc_data[9] = 80;		//OSCILLATOR DIGITAL TRIM REGISTER
-		
-		err = g_i2c1.p_api->write(g_i2c1.p_ctrl, rtcc_data, 10, false);
-  	if(SSP_SUCCESS != err)
-  	{
-  	   g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
-  	}
-  	
-  }  
-
-}
-
-//-------------------------------------------------------------------------
-void read_rtcc(void)
-{
-	ssp_err_t err;
-	
-	
-	rtcc_data[0] = 0;	//addr0
-	g_i2c1.p_api->write(g_i2c1.p_ctrl, &rtcc_data[0], 1, true);
-
-	err = g_i2c1.p_api->read(g_i2c1.p_ctrl, &rtcc_data[1], 7, false);
-  if(SSP_SUCCESS != err)
-  {
-      g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
-  }
-  
-}
-
-//-------------------------------------------------------------------------
-void write_rtcc(void)
-{
-	ssp_err_t err;
-	
-  
-	rtcc_data[0] = 0; //addr0
-	err = g_i2c1.p_api->write(g_i2c1.p_ctrl, rtcc_data, 8, false);
-  if(SSP_SUCCESS != err)
-  {
-     g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
-  }
-  	
 }
 
 //-------------------------------------------------------------------------
@@ -653,8 +365,6 @@ void my_gui_thread_entry(void)
     sf_message_header_t * p_message = NULL;
     UINT status = TX_SUCCESS;
     uint8_t i, test_num;
-    int check_temp_num;
-    
     
 		//debug pins
     g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_HIGH);
@@ -882,16 +592,12 @@ void my_gui_thread_entry(void)
   	
   	chk_status_timeout = 20;	//delay about 550ms
   	
- 	check_temp_num = 0;
-    
     //Open WDT; 4.46s; PCLKB 30MHz
  	//  g_wdt.p_api->open(g_wdt.p_ctrl, g_wdt.p_cfg);
 		//Start the WDT by refreshing it
  	//  g_wdt.p_api->refresh(g_wdt.p_ctrl);
 
   	
-  	chk_screen_chg_timeout = 16; //for Static Test
-  						
     while(1)
     {
         err = g_sf_message0.p_api->pend(g_sf_message0.p_ctrl, &my_gui_thread_message_queue, (sf_message_header_t **) &p_message, 10); //TX_WAIT_FOREVER); //
@@ -922,7 +628,8 @@ void my_gui_thread_entry(void)
 
         }
 
-        if( chk_status_timeout == 0 && LCD_off_flag == 0 ) { //adding LCD_off_flag check is for clear 'sigma_dat1_get' 
+        if( chk_status_timeout == 0 && LCD_off_flag == 0 )
+        { //adding LCD_off_flag check is for clear 'sigma_dat1_get'
         
           get_PROP_version();//chk_sigma_status();
           chk_status_timeout = 20;	//delay about 550ms
@@ -933,42 +640,14 @@ void my_gui_thread_entry(void)
         if(LCD_off_flag == 1)
             main_menu();
         
-        if(Shut_down_display_timeout == 0 && Shut_down_display_timeout2 == 0 && LCD_off_flag == 0) {
+        if(Shut_down_display_timeout == 0 && Shut_down_display_timeout2 == 0 && LCD_off_flag == 0)
+        {
           BackLight(OFF);
           LCD_off_flag = 1;
         }
-				
-				//Check Date_Time
-    		if(chk_date_time_timeout == 0) {
-    			
-    			if(page_information_screen_flag == 1) {
-    				read_rtcc();
-    				
-						if( (rtcc_data[3]&0x20) == 0x20 ) sprintf(time_string, "%02x:%02x", rtcc_data[3]&0x1f, rtcc_data[2]);
-        		else sprintf(time_string, "%02x:%02x", rtcc_data[3]&0x1f, rtcc_data[2]);
-        	
-    				gx_prompt_text_set(time_infor_pmpt_text, time_string);
-    				
-    				chk_date_time_timeout = 40;  //check every 1s
-    				
-    				update_display();
-        	}   
-  			
-  				check_temp_num++;
-  				if(check_temp_num > 10) {	//11s
-  					check_temp_num = 0;
-  				}
-    		}
-        
-        //for Static Test
-        if(page_information_screen_flag == 1 && chk_screen_chg_timeout == 0 && LCD_off_flag == 1) {	
-        	chk_screen_chg_timeout = 64; //for Static Test
-        	show_window((GX_WINDOW*)&information_screen, (GX_WIDGET*)&information_screen, false);
-          chk_screen_chg_timeout = 32; //for Static Test
-        }
-        
-			 	//Refresh WDT
- 	  		g_wdt.p_api->refresh(g_wdt.p_ctrl);
+
+        //Refresh WDT
+ 	  	g_wdt.p_api->refresh(g_wdt.p_ctrl);
 
     }
 }

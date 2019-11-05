@@ -103,8 +103,6 @@ uint8_t chk_date_time_timeout;
 
 ioport_level_t beep_level;
 
-uint8_t chk_screen_chg_timeout;
-
 uint8_t prop_ver1, prop_ver2, prop_ver3;
 
 //----------------------------
@@ -137,14 +135,7 @@ uint8_t get_sw(void);
 void show_info_scrn(void);
 void return_info_scrn(void);
 
-uint8_t eprm_read(uint16_t addr);
-uint8_t eprm_write(uint16_t addr, uint8_t value);
-
 void beep_set(uint8_t beepType, uint32_t beepPeriod);
-
-void init_rtcc(void);
-void read_rtcc(void);
-void write_rtcc(void);
 
 UINT show_window(GX_WINDOW * p_new, GX_WIDGET * p_widget, bool detach_old);
 

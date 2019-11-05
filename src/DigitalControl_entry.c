@@ -34,6 +34,8 @@
 
 #define BEEP_OUT        IOPORT_PORT_03_PIN_08   //beep Control
 #define GRNLED_PORT     IOPORT_PORT_07_PIN_10   //IOPORT_PORT_06_PIN_00
+#define UP_ARROW_BTN_PORT   IOPORT_PORT_00_PIN_05
+#define DOWN_ARROW_BTN_PORT IOPORT_PORT_00_PIN_06
 
 #define UP_ARROW_BTN    0x01
 #define DOWN_ARROW_BTN  0x02
@@ -58,8 +60,8 @@ typedef struct st_ButtonInfo
 // Global Variables
 //****************************************************************************
 
-st_ButtonInfo_t g_ButtonInfo[] = {{IOPORT_PORT_00_PIN_05, IOPORT_LEVEL_LOW,0, UP_ARROW_BTN},
-                                  {IOPORT_PORT_00_PIN_06, IOPORT_LEVEL_LOW,0, DOWN_ARROW_BTN}};
+st_ButtonInfo_t g_ButtonInfo[] = {{UP_ARROW_BTN_PORT, IOPORT_LEVEL_LOW,0, UP_ARROW_BTN},
+                                  {DOWN_ARROW_BTN_PORT, IOPORT_LEVEL_LOW,0, DOWN_ARROW_BTN}};
 
 uint16_t g_ArrowState = 0;          // Where 0x01 = Up, 0x02, Down
 uint16_t g_OldArrowState = 0;
@@ -83,7 +85,7 @@ void DigitalControl_entry(void)
 
     while (1)
     {
-        // Do keyboard input processing including debouncing.
+        // Do keyboard input processing including debouncing. Arrow Buttons are active LOW.
         for (uint16_t i=0; i<2; ++i)
         {
             g_ioport.p_api->pinRead(g_ButtonInfo[i].m_PortID, &pin_state);     // Get current status of switch input
@@ -94,7 +96,7 @@ void DigitalControl_entry(void)
                     g_ButtonInfo[i].m_Counter = 8;                             // Yep, make sure we don't exceed the uint.
                     if (pin_state == IOPORT_LEVEL_HIGH)                         // Is it High or low.
                     {
-                        g_ArrowState &= ~g_ButtonInfo[i].m_Mask;
+                        g_ArrowState &= (0xff ^ g_ButtonInfo[i].m_Mask);        // Couldn't use "~" without getting compile warnings. A true hack
                     }
                     else
                     {
@@ -109,13 +111,14 @@ void DigitalControl_entry(void)
             }
         }
 
+        // Process a change in switch state and turn on LED when active as diagnostics.
         if (g_OldArrowState!=g_ArrowState)
         {
             g_OldArrowState = g_ArrowState;
             if ((g_ArrowState &= (UP_ARROW_BTN | DOWN_ARROW_BTN)) == 0x00)
-                g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);
+                g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);       // Turn off LED
             else
-                g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
+                g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
         }
 
 //        if (myFlag == 0)

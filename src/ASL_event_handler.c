@@ -140,7 +140,6 @@ UINT InitScreenEventHandler (GX_WINDOW * widget, GX_EVENT * event_ptr)
 
         case Display_Information_Screen:
             show_window((GX_WINDOW*)&information_screen, (GX_WIDGET*)widget, true);
-            chk_screen_chg_timeout = 16; //for Static Test
             page_information_screen_flag = 1;
             function_set_flag = 0;
             
@@ -448,7 +447,6 @@ UINT keyboard_frame_event_handler(GX_WINDOW *frame, GX_EVENT *event_ptr)
       	  	Shut_down_display_timeout = shut_down_timer1;
       	  	
       	  	show_window((GX_WINDOW*)&information_screen, (GX_WIDGET*)frame, true);
-      	  	chk_screen_chg_timeout = 16; //for Static Test
 						page_information_screen_flag = 1;
 						Shut_down_display_timeout = shut_down_timer1;
   					Shut_down_display_timeout2 = 0;
@@ -470,7 +468,6 @@ UINT keyboard_frame_event_handler(GX_WINDOW *frame, GX_EVENT *event_ptr)
   					}
   					
       	  	show_window((GX_WINDOW*)&information_screen, (GX_WIDGET*)frame, true);
-      	  	chk_screen_chg_timeout = 16; //for Static Test
 						page_information_screen_flag = 1;
 						function_set_flag = 0;
     				
@@ -685,7 +682,6 @@ UINT DateTimeScreenEventHandler (GX_WINDOW * widget, GX_EVENT * event_ptr)
 				case GX_SIGNAL(ID_DATETIME_SAVE, GX_EVENT_CLICKED):
 						Shut_down_display_timeout2 = shut_down_timer2;
 						if(change_flag == 1) {
-              write_rtcc();
 
               change_flag = 0; 
               gx_prompt_text_set(DateTime_pmpt_text, "Ok!");
@@ -717,7 +713,6 @@ UINT EditScreenEventHandler (GX_WINDOW * widget, GX_EVENT * event_ptr)
 								
 						//for ASL
 						show_window((GX_WINDOW*)&information_screen, (GX_WIDGET*)widget, true);
-    				chk_screen_chg_timeout = 16; //for Static Test
 						page_information_screen_flag = 1;
 						function_set_flag = 0;
 						//for ASL end
@@ -726,7 +721,6 @@ UINT EditScreenEventHandler (GX_WINDOW * widget, GX_EVENT * event_ptr)
            
     		case Return_SettingScr_Event:
 						show_window((GX_WINDOW*)&information_screen, (GX_WIDGET*)widget, true);
-    				chk_screen_chg_timeout = 16; //for Static Test
 						page_information_screen_flag = 1;
 					//	function_set_flag = 0;
     				
