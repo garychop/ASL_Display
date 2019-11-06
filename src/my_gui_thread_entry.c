@@ -55,7 +55,7 @@ GX_RECTANGLE g_FeatureLocation[] = {
 
 int g_ChangeScreen_WIP;
 GX_WINDOW *g_GoBackScreen = GX_NULL;
-GX_WINDOW_ROOT           *root;
+//GX_WINDOW_ROOT           *root;
 
 //-------------------------------------------------------------------------
 extern GX_PROMPT * time_infor_pmpt_text;
@@ -64,6 +64,7 @@ extern GX_PROMPT * time_infor_pmpt_text;
 GX_WINDOW_ROOT * p_window_root;
 GX_PROMPT * firmware_ver_text = &init_screen.init_screen_InitPrmpt2;
 GX_PROMPT * first_pmpt_text = &init_screen.init_screen_InitPrmpt3;
+//GX_WIDGET *HHP_Start_Screen_Widget;
 
 //-------------------------------------------------------------------------
 // Forward declarations.
@@ -198,7 +199,7 @@ static void guix_test_send_touch_message(sf_touch_panel_payload_t * p_payload)
     }
 }
 //-------------------------------------------------------------------------
-void update_display(void)
+void Process_Touches (void)
 {
     ssp_err_t err;
 
@@ -253,7 +254,7 @@ static void reset_check(void)
     			g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     		}
     		
-    		update_display();
+				Process_Touches();
            
   			
 //GC  			R_BSP_SoftwareDelay(1500, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(1500);
@@ -367,7 +368,8 @@ void my_gui_thread_entry(void)
         g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
     
-    status = gx_studio_named_widget_create("HHP_Start_Screen", (GX_WIDGET *)p_window_root, &p_first_screen);
+//    status = gx_studio_named_widget_create("HHP_Start_Screen", (GX_WIDGET *)p_window_root, &HHP_Start_Screen_Widget);
+    status = gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
     if(TX_SUCCESS != status)
     {
         g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
@@ -452,7 +454,7 @@ void my_gui_thread_entry(void)
 //    	g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
 //    }
     
-    update_display();
+	Process_Touches();
 
 // Removed the RTCC.
 //	init_rtcc();
@@ -484,7 +486,7 @@ void my_gui_thread_entry(void)
   	{
     	while(1)
     	{
-            update_display();
+    	    Process_Touches();
     		//reset_check();
     		tx_thread_sleep (2);
     	}
@@ -539,7 +541,7 @@ void my_gui_thread_entry(void)
           get_PROP_version();//chk_sigma_status();
           chk_status_timeout = 20;	//delay about 550ms
           
-          update_display();
+          Process_Touches();
         }
         
         if(LCD_off_flag == 1)
@@ -642,7 +644,7 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_EVENT_TIMER:
         if (event_ptr->gx_event_payload.gx_event_timer_id == ARROW_PUSHED_TIMER_ID)
         {
-            myErr = gx_widget_attach (root, (GX_WIDGET*) &HHP_Start_Screen);
+            myErr = gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
             myErr = gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
             g_ChangeScreen_WIP = TRUE;
         }
@@ -734,7 +736,10 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         break;
 
     case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        myErr = gx_widget_attach (root, (GX_WIDGET*) &HHP_Start_Screen);
+        myErr = gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
+        if (myErr)
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
+
         myErr = gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
         if (myErr)
             g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
@@ -768,16 +773,16 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     switch (event_ptr->gx_event_type)
     {
     case GX_SIGNAL(DIAGNOSTIC_BTN_ID, GX_EVENT_CLICKED):
-//        myErr = gx_widget_attach (root, (GX_WIDGET*) &DiagnosticScreen);
+//        myErr = gx_widget_attach (p_window_root, (GX_WIDGET*) &DiagnosticScreen);
 //        myErr = gx_widget_show ((GX_WIDGET*) &DiagnosticScreen);
         myErr = GX_SUCCESS;
         break;
     case GX_SIGNAL(SETTINGS_BTN_ID, GX_EVENT_CLICKED):
-//        myErr = gx_widget_attach (root, (GX_WIDGET*) &SettingsScreen);
+//        myErr = gx_widget_attach (p_window_root, (GX_WIDGET*) &SettingsScreen);
 //        myErr = gx_widget_show ((GX_WIDGET*) &SettingsScreen);
         break;
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-//        myErr = gx_widget_attach (root, (GX_WIDGET*) g_GoBackScreen);
+//        myErr = gx_widget_attach (p_window_root, (GX_WIDGET*) g_GoBackScreen);
 //        myErr = gx_widget_show ((GX_WIDGET*) g_GoBackScreen);
         break;
     }

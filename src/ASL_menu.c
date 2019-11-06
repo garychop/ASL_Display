@@ -301,7 +301,8 @@ void main_menu(void)
                 }
                 
       					gx_prompt_text_set(DateTime_pmpt_text, "DateTime"); 
-                update_display();
+      					Process_Touches();
+
                 
                 LongHoldtmr = 25;
                 flonghold = 1;
@@ -399,7 +400,7 @@ void main_menu(void)
             }
             
       			gx_prompt_text_set(DateTime_pmpt_text, "DateTime"); 
-            update_display();
+      			Process_Touches();
             
             change_flag = 1;
             do_not_save = 0; 
@@ -527,7 +528,7 @@ void main_menu(void)
                 }
                 
       					gx_prompt_text_set(DateTime_pmpt_text, "DateTime"); 
-                update_display();
+      		            Process_Touches();
                 
                 LongHoldtmr = 25;
                 flonghold = 1;
@@ -619,7 +620,7 @@ void main_menu(void)
             }
             
       			gx_prompt_text_set(DateTime_pmpt_text, "DateTime"); 
-            update_display();
+            Process_Touches();
             
             change_flag = 1;
             do_not_save = 0; 
@@ -648,7 +649,7 @@ void main_menu(void)
         break;
   }
   
-  update_display();
+  Process_Touches();
   
 }
 

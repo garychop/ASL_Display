@@ -124,7 +124,7 @@ void InitializeSys(void);
 void BackLight(int ONOFF);
 void LCD_ON(void);
 void main_menu(void);
-void update_display(void);
+void Process_Touches (void);
 
 uint8_t m250_pwr_on(uint8_t on_off);
 uint8_t m250_setup_mode(uint8_t on_off);
