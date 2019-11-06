@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 16.10.2019   Time (hh:mm): 12:56                        */
+/*  Date (dd.mm.yyyy):  5.11.2019   Time (hh:mm): 22:11                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,7 @@
 #include "my_guix_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+HHP_START_SCREEN_CONTROL_BLOCK HHP_Start_Screen;
 MAIN_USER_SCREEN_CONTROL_BLOCK Main_User_Screen;
 EDIT_SCREEN_CONTROL_BLOCK edit_screen;
 KEYBOARD_SCREEN_CONTROL_BLOCK keyboard_screen;
@@ -140,6 +141,183 @@ UINT gx_studio_text_input_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *con
     }
     return status;
 }
+GX_WINDOW_PROPERTIES HHP_Start_Screen_properties =
+{
+    GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
+};
+GX_TEXT_BUTTON_PROPERTIES HHP_Start_Screen_Diagnostic_Button_properties =
+{
+    GX_STRING_ID_STRING_10,                  /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_TEXT_BUTTON_PROPERTIES HHP_Start_Screen_Settings_Button_properties =
+{
+    GX_STRING_ID_STRING_11,                  /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_TEXT_BUTTON_PROPERTIES HHP_Start_Screen_OK_Button_properties =
+{
+    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_PROMPT_PROPERTIES HHP_Start_Screen_VersionPrompt_properties =
+{
+    GX_STRING_ID_STRING_48,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_TEXT,                        /* normal text color              */
+    GX_COLOR_ID_TEXT                         /* selected text color            */
+};
+GX_PROMPT_PROPERTIES HHP_Start_Screen_VersionPrompt_1_properties =
+{
+    GX_STRING_ID_STRING_49,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_TEXT,                        /* normal text color              */
+    GX_COLOR_ID_TEXT                         /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_VersionPrompt_1_define =
+{
+    "VersionPrompt_1",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    VERSION_PROMPT1l_ID,                     /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_TEXT,                        /* normal color id                */
+    GX_COLOR_ID_BTN_TEXT,                    /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {8, 196, 168, 219},                      /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_VersionPrompt_1), /* control block */
+    (void *) &HHP_Start_Screen_VersionPrompt_1_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_VersionPrompt_define =
+{
+    "VersionPrompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    VERSION_PROMPT_ID,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_TEXT,                        /* normal color id                */
+    GX_COLOR_ID_BTN_TEXT,                    /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {8, 172, 168, 195},                      /* widget size                    */
+    &HHP_Start_Screen_VersionPrompt_1_define, /* next widget definition        */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_VersionPrompt), /* control block */
+    (void *) &HHP_Start_Screen_VersionPrompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_OK_Button_define =
+{
+    "OK_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    OK_BTN_ID,                               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {230, 164, 309, 227},                    /* widget size                    */
+    &HHP_Start_Screen_VersionPrompt_define,  /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_OK_Button), /* control block */
+    (void *) &HHP_Start_Screen_OK_Button_properties /* extended properties     */
+};
+
+GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_Settings_Button_define =
+{
+    "Settings_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    SETTINGS_BTN_ID,                         /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {16, 88, 205, 151},                      /* widget size                    */
+    &HHP_Start_Screen_OK_Button_define,      /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_Settings_Button), /* control block */
+    (void *) &HHP_Start_Screen_Settings_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_Diagnostic_Button_define =
+{
+    "Diagnostic_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    DIAGNOSTIC_BTN_ID,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {16, 14, 205, 77},                       /* widget size                    */
+    &HHP_Start_Screen_Settings_Button_define, /* next widget definition        */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_Diagnostic_Button), /* control block */
+    (void *) &HHP_Start_Screen_Diagnostic_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_define =
+{
+    "HHP_Start_Screen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(HHP_START_SCREEN_CONTROL_BLOCK),  /* control block size             */
+    GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) HHP_Start_Screen_event_process, /* event function override */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &HHP_Start_Screen_Diagnostic_Button_define, /* child widget                */
+    0,                                       /* control block                  */
+    (void *) &HHP_Start_Screen_properties    /* extended properties            */
+};
 GX_WINDOW_PROPERTIES Main_User_Screen_properties =
 {
     GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_FLATTEN  /* wallpaper pixelmap id        */
@@ -185,7 +363,7 @@ GX_PIXELMAP_PROMPT_PROPERTIES Main_User_Screen_ProfileNextLargePrompt_properties
 };
 GX_PIXELMAP_PROMPT_PROPERTIES Main_User_Screen_PowerSmallPrompt_properties =
 {
-    GX_STRING_ID_STRING_31,                  /* string id                      */
+    GX_STRING_ID_STRING_1,                   /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SLIDER_NEEDLE_LINE2,         /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT,               /* selected text color            */
@@ -274,6 +452,96 @@ GX_PIXELMAP_PROMPT_PROPERTIES Main_User_Screen_BluetoothSmallPrompt_properties =
     0,                                       /* selected fill pixelmap id      */
     0                                        /* selected right pixelmap id     */
 };
+GX_TEXT_BUTTON_PROPERTIES Main_User_Screen_UpArrowBtn_properties =
+{
+    GX_STRING_ID_STRING_4,                   /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_TEXT_BUTTON_PROPERTIES Main_User_Screen_DownArrowBtn_properties =
+{
+    GX_STRING_ID_STRING_5,                   /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_TEXT_BUTTON_PROPERTIES Main_User_Screen_BothButton_properties =
+{
+    GX_STRING_ID_STRING_6,                   /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET Main_User_Screen_BothButton_define =
+{
+    "BothButton",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    BOTH_ARROW_BTN_ID,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {340, 108, 419, 131},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_BothButton), /* control block */
+    (void *) &Main_User_Screen_BothButton_properties /* extended properties    */
+};
+
+GX_CONST GX_STUDIO_WIDGET Main_User_Screen_DownArrowBtn_define =
+{
+    "DownArrowBtn",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    DOWN_ARROW_BTN_ID,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {340, 108, 419, 131},                    /* widget size                    */
+    &Main_User_Screen_BothButton_define,     /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_DownArrowBtn), /* control block */
+    (void *) &Main_User_Screen_DownArrowBtn_properties /* extended properties  */
+};
+
+GX_CONST GX_STUDIO_WIDGET Main_User_Screen_UpArrowBtn_define =
+{
+    "UpArrowBtn",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    UP_ARROW_BTN_ID,                         /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {340, 108, 419, 131},                    /* widget size                    */
+    &Main_User_Screen_DownArrowBtn_define,   /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_UpArrowBtn), /* control block */
+    (void *) &Main_User_Screen_UpArrowBtn_properties /* extended properties    */
+};
 
 GX_CONST GX_STUDIO_WIDGET Main_User_Screen_BluetoothSmallPrompt_define =
 {
@@ -292,7 +560,7 @@ GX_CONST GX_STUDIO_WIDGET Main_User_Screen_BluetoothSmallPrompt_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {30, 94, 289, 125},                      /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &Main_User_Screen_UpArrowBtn_define,     /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_BluetoothSmallPrompt), /* control block */
     (void *) &Main_User_Screen_BluetoothSmallPrompt_properties /* extended properties */
@@ -526,33 +794,6 @@ GX_CONST GX_STUDIO_WIDGET Main_User_Screen_define =
     &Main_User_Screen_RightPadOFF_define,    /* child widget                   */
     0,                                       /* control block                  */
     (void *) &Main_User_Screen_properties    /* extended properties            */
-};
-GX_WINDOW_PROPERTIES PrimaryTemplate_properties =
-{
-    0                                        /* wallpaper pixelmap id          */
-};
-
-GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_define =
-{
-    "PrimaryTemplate",
-    GX_TYPE_WINDOW,                          /* widget type                    */
-    GX_ID_NONE,                              /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_THIN,                    /* style flags                    */
-    0,                                       /* status flags                   */
-    sizeof(PRIMARYTEMPLATE_CONTROL_BLOCK),   /* control block size             */
-    GX_COLOR_ID_CANVAS,                      /* normal color id                */
-    GX_COLOR_ID_CANVAS,                      /* selected color id              */
-    gx_studio_window_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    (UINT (*)(GX_WIDGET *, GX_EVENT *)) Template_event_function, /* event function override */
-    {0, 0, 319, 239},                        /* widget size                    */
-    GX_NULL,                                 /* next widget                    */
-    GX_NULL,                                 /* child widget                   */
-    0,                                       /* control block                  */
-    (void *) &PrimaryTemplate_properties     /* extended properties            */
 };
 GX_WINDOW_PROPERTIES edit_screen_properties =
 {
@@ -2083,6 +2324,7 @@ GX_CONST GX_STUDIO_WIDGET init_screen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY my_guix_widget_table[] =
 {
+    { &HHP_Start_Screen_define, (GX_WIDGET *) &HHP_Start_Screen },
     { &Main_User_Screen_define, (GX_WIDGET *) &Main_User_Screen },
     { &edit_screen_define, (GX_WIDGET *) &edit_screen },
     { &keyboard_screen_define, (GX_WIDGET *) &keyboard_screen },

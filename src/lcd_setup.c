@@ -37,7 +37,7 @@ static void lcd_write(uint8_t cmd, uint8_t * data ,uint32_t len)
     err = g_rspi_lcdc.p_api->write(g_rspi_lcdc.p_ctrl, &cmd, 1, SPI_BIT_WIDTH_8_BITS);
     if (SSP_SUCCESS != err)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);//while(1);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);//while(1);
     }
 
     tx_semaphore_get(&g_my_gui_semaphore,TX_WAIT_FOREVER);
@@ -49,7 +49,7 @@ static void lcd_write(uint8_t cmd, uint8_t * data ,uint32_t len)
         err = g_rspi_lcdc.p_api->write(g_rspi_lcdc.p_ctrl, data, len,SPI_BIT_WIDTH_8_BITS);
         if (SSP_SUCCESS != err)
         {
-            g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);//while(1);
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);//while(1);
         }
 
         tx_semaphore_get(&g_my_gui_semaphore,TX_WAIT_FOREVER);

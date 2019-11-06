@@ -13,6 +13,18 @@ GX_CHAR version_string2[20] = "Attendant: V0.0.1";
 GX_CHAR version_string3[10]     		 	=  "V0.0.1";
 
 //-------------------------------------------------------------------------
+// Typdefs and defines
+//-------------------------------------------------------------------------
+
+enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PAD_ACTIVE_TIMER_ID};
+
+//#define UP_ARROW_BTN_ID 2           // Temp
+//#define DOWN_ARROW_BTN_ID 0         // Temp
+#define LONG_PRESS_BUTTON_ID 1      // Temp
+
+#define min(a,b)   ((a < b) ? a : b)
+
+//-------------------------------------------------------------------------
 // Local variables
 //-------------------------------------------------------------------------
 
@@ -41,6 +53,9 @@ GX_RECTANGLE g_FeatureLocation[] = {
     {30, 166, 290, 198},
     {0,0,0,0}};
 
+int g_ChangeScreen_WIP;
+GX_WINDOW *g_GoBackScreen = GX_NULL;
+GX_WINDOW_ROOT           *root;
 
 //-------------------------------------------------------------------------
 extern GX_PROMPT * time_infor_pmpt_text;
@@ -57,7 +72,9 @@ void my_gui_thread_entry(void);
 
 static void guix_test_send_touch_message(sf_touch_panel_payload_t * p_payload);
 
+#ifdef OK_TO_USE_RESET
 static void reset_check(void);
+#endif
 
 UINT DisplayMainScreenActiveFeatures ();
 
@@ -124,8 +141,8 @@ static void guix_test_send_touch_message(sf_touch_panel_payload_t * p_payload)
 {
     bool send_event = true;
     GX_EVENT gxe;
-		GX_VALUE x_num;	//, y_num;
-		
+	GX_VALUE x_num;
+
 
     switch (p_payload->event_type)
     {
@@ -153,10 +170,11 @@ static void guix_test_send_touch_message(sf_touch_panel_payload_t * p_payload)
         gxe.gx_event_target         = 0;  /* the event to be routed to the widget that has input focus */
         gxe.gx_event_display_handle = 0;
 
-        gxe.gx_event_payload.gx_event_pointdata.gx_point_x = (GX_VALUE)(p_payload->y);//y_num;
+        gxe.gx_event_payload.gx_event_pointdata.gx_point_x = (GX_VALUE)(p_payload->y);  //y_num;
+        gxe.gx_event_payload.gx_event_pointdata.gx_point_y = (GX_VALUE)(p_payload->x);
         
         x_num = (GX_VALUE)(240 - p_payload->x);
-
+#ifdef USE
         if(x_num < 140) {
            if(x_num < 5) x_num = 0;
            else if(x_num < 10) x_num = (GX_VALUE)(x_num - 5);
@@ -173,7 +191,7 @@ static void guix_test_send_touch_message(sf_touch_panel_payload_t * p_payload)
         	x_num = (GX_VALUE)(x_num + 10);
         	if(x_num > 240) x_num = 240;
         }
-
+#endif
         gxe.gx_event_payload.gx_event_pointdata.gx_point_y = x_num;
 
         gx_system_event_send(&gxe);
@@ -186,79 +204,25 @@ void update_display(void)
 
     sf_message_header_t * p_message = NULL;
 
+#ifdef USE_OLD_CODE
     GX_EVENT gxe;
 
-
     gxe.gx_event_sender = GX_ID_NONE;
-
     gxe.gx_event_target = 0;
-
     gxe.gx_event_display_handle = 0;
-
     gxe.gx_event_type = UPDATE_DISPLAY_EVENT;
-
     gx_system_event_send(&gxe);
-    
+#endif
    	
-    err = g_sf_message0.p_api->pend(g_sf_message0.p_ctrl, &my_gui_thread_message_queue, (sf_message_header_t **) &p_message, 10); //TX_WAIT_FOREVER); //
-    if(!err) {
+    err = g_sf_message0.p_api->pend(g_sf_message0.p_ctrl, &my_gui_thread_message_queue, (sf_message_header_t **) &p_message, 1); //TX_WAIT_FOREVER); //
+    if(!err)
+    {
         switch (p_message->event_b.class_code)
         {
             case SF_MESSAGE_EVENT_CLASS_TOUCH:
                 if (SF_MESSAGE_EVENT_NEW_DATA == p_message->event_b.code)
                 {
-                    //sf_touch_panel_payload_t * p_touch_message = (sf_touch_panel_payload_t *) p_message;
-
-                    /** Translate a touch event into a GUIX event */
-                    guix_test_send_touch_message((sf_touch_panel_payload_t *) p_message);
-                }
-                break;
-
-            default:
-                break;
-        }
-
-        /** Message is processed, so release buffer. */
-        err = g_sf_message0.p_api->bufferRelease(g_sf_message0.p_ctrl, (sf_message_header_t *) p_message, SF_MESSAGE_RELEASE_OPTION_NONE);
-        if (err)
-        {
-        		g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
-        }
-
-    }
-
-}
-
-//-------------------------------------------------------------------------
-void show_info_scrn(void)
-{
-    ssp_err_t err;
-
-    sf_message_header_t * p_message = NULL;
-
-    GX_EVENT gxe;
-
-
-    gxe.gx_event_sender = GX_ID_NONE;
-
-    gxe.gx_event_target = 0;
-
-    gxe.gx_event_display_handle = 0;
-
-    gxe.gx_event_type = Display_Information_Screen;
-
-    gx_system_event_send(&gxe);
-   
-    err = g_sf_message0.p_api->pend(g_sf_message0.p_ctrl, &my_gui_thread_message_queue, (sf_message_header_t **) &p_message, 10); //TX_WAIT_FOREVER);
-    if(!err) {
-        switch (p_message->event_b.class_code)
-        {
-            case SF_MESSAGE_EVENT_CLASS_TOUCH:
-                if (SF_MESSAGE_EVENT_NEW_DATA == p_message->event_b.code)
-                {
-                    //sf_touch_panel_payload_t * p_touch_message = (sf_touch_panel_payload_t *) p_message;
-
-                    // Translate a touch event into a GUIX event 
+                    // Translate a touch event into a GUIX event
                     guix_test_send_touch_message((sf_touch_panel_payload_t *) p_message);
                 }
                 break;
@@ -269,63 +233,13 @@ void show_info_scrn(void)
 
         // Message is processed, so release buffer.
         err = g_sf_message0.p_api->bufferRelease(g_sf_message0.p_ctrl, (sf_message_header_t *) p_message, SF_MESSAGE_RELEASE_OPTION_NONE);
-        if (err)
-        {
-        		g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
-        }
-				
     }
 
 }
+
 //-------------------------------------------------------------------------
-void return_info_scrn(void)
-{
-    ssp_err_t err;
+#ifdef OK_TO_USE_RESET
 
-    sf_message_header_t * p_message = NULL;
-
-    GX_EVENT gxe;
-
-
-    gxe.gx_event_sender = GX_ID_NONE;
-
-    gxe.gx_event_target = 0;
-
-    gxe.gx_event_display_handle = 0;
-
-    gxe.gx_event_type = Return_InforScr_Event;
-
-    gx_system_event_send(&gxe);
-   
-    err = g_sf_message0.p_api->pend(g_sf_message0.p_ctrl, &my_gui_thread_message_queue, (sf_message_header_t **) &p_message, 10); //TX_WAIT_FOREVER);
-    if(!err) {
-        switch (p_message->event_b.class_code)
-        {
-            case SF_MESSAGE_EVENT_CLASS_TOUCH:
-                if (SF_MESSAGE_EVENT_NEW_DATA == p_message->event_b.code)
-                {
-                    //sf_touch_panel_payload_t * p_touch_message = (sf_touch_panel_payload_t *) p_message;
-
-                    // Translate a touch event into a GUIX event 
-                    guix_test_send_touch_message((sf_touch_panel_payload_t *) p_message);
-                }
-                break;
-
-            default:
-                break;
-        }
-
-        // Message is processed, so release buffer.
-        err = g_sf_message0.p_api->bufferRelease(g_sf_message0.p_ctrl, (sf_message_header_t *) p_message, SF_MESSAGE_RELEASE_OPTION_NONE);
-        if (err)
-        {
-        		g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
-        }
-				
-    }
-
-}
-//-------------------------------------------------------------------------
 static void reset_check(void) 
 {
 	UINT status = TX_SUCCESS;
@@ -336,7 +250,7 @@ static void reset_check(void)
     		status = gx_prompt_text_set(first_pmpt_text, "Reset Device");
 				if (GX_SUCCESS != status)
     		{
-    			g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+    			g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     		}
     		
     		update_display();
@@ -356,6 +270,7 @@ static void reset_check(void)
   }
 
 }
+#endif
 
 //-------------------------------------------------------------------------
 /* Gui Test App Thread entry function */
@@ -367,7 +282,7 @@ void my_gui_thread_entry(void)
     uint8_t i, test_num;
     
 		//debug pins
-    g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_HIGH);
+    g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);
     g_ioport.p_api->pinWrite(TEST_PIN, IOPORT_LEVEL_LOW);
     
     g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH);
@@ -378,14 +293,14 @@ void my_gui_thread_entry(void)
     status = gx_system_initialize();
     if(TX_SUCCESS != status)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 
     /* Initializes GUIX drivers. */
     err = g_sf_el_gx0.p_api->open (g_sf_el_gx0.p_ctrl, g_sf_el_gx0.p_cfg);
     if(SSP_SUCCESS != err)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 
     gx_studio_display_configure ( MAIN_DISPLAY,
@@ -397,7 +312,7 @@ void my_gui_thread_entry(void)
     err = g_sf_el_gx0.p_api->canvasInit(g_sf_el_gx0.p_ctrl, p_window_root);
     if(SSP_SUCCESS != err)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 
     // Populate the screen stuff.
@@ -442,21 +357,20 @@ void my_gui_thread_entry(void)
 		
     if(TX_SUCCESS != status)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 		
 		status = gx_studio_named_widget_create("information_screen",
                                            (GX_WIDGET *)p_window_root, &p_first_screen);
     if(TX_SUCCESS != status)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
     
-    status = gx_studio_named_widget_create("init_screen",
-                                           (GX_WIDGET *)p_window_root, &p_first_screen);
+    status = gx_studio_named_widget_create("HHP_Start_Screen", (GX_WIDGET *)p_window_root, &p_first_screen);
     if(TX_SUCCESS != status)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 
     // Create and show first startup screen.
@@ -464,7 +378,7 @@ void my_gui_thread_entry(void)
                                            (GX_WIDGET *)p_window_root, &p_first_screen);
     if(TX_SUCCESS != status)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 
     /* Attach the first screen to the root so we can see it when the root is shown */
@@ -474,14 +388,14 @@ void my_gui_thread_entry(void)
     status = gx_widget_show(p_window_root);
     if(TX_SUCCESS != status)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 
     /* Lets GUIX run. */
     status = gx_system_start();
     if(TX_SUCCESS != status)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 
     gx_system_focus_claim(p_first_screen);
@@ -490,21 +404,21 @@ void my_gui_thread_entry(void)
     err = g_rspi_lcdc.p_api->open(g_rspi_lcdc.p_ctrl, g_rspi_lcdc.p_cfg);
     if(SSP_SUCCESS != err)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 
     // Open the I2C driver for CLOCK 
     err = g_i2c1.p_api->open(g_i2c1.p_ctrl, g_i2c1.p_cfg);
     if(SSP_SUCCESS != err)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 
     // Open the ADC driver for Thermistor 
     err = g_adc0.p_api->open(g_adc0.p_ctrl, g_adc0.p_cfg);
     if(SSP_SUCCESS != err)
     {
-        g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 		
 		g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
@@ -522,20 +436,20 @@ void my_gui_thread_entry(void)
 	err = g_timer0.p_api->open(g_timer0.p_ctrl, g_timer0.p_cfg);
 	if (err != SSP_SUCCESS)
 	{
-		g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);	//Error
+		g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);	//Error
 	}
 		
 	// version of firmware
 	status = gx_prompt_text_set(firmware_ver_text, version_string);
 	if (GX_SUCCESS != status)
     {
-    	g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+    	g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
     
 //    status = gx_prompt_text_set(first_pmpt_text, "Init...");
 //	if (GX_SUCCESS != status)
 //    {
-//    	g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+//    	g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
 //    }
     
     update_display();
@@ -568,25 +482,16 @@ void my_gui_thread_entry(void)
 
   	if (i > 5)
   	{
-  	    beep_set(3, 300);
-//  	    status = gx_prompt_text_set(first_pmpt_text, "Communication Fail");
-//		if (GX_SUCCESS != status)
-//    	{
-//    		g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
-//    	}
-		update_display();
-    
     	while(1)
     	{
-    		reset_check();
+            update_display();
+    		//reset_check();
     		tx_thread_sleep (2);
     	}
   	}
  	
-	show_info_scrn();
-
   	//beep
-	beep_set(3, 300);
+//	beep_set(3, 300);
   	
   	Shut_down_display_timeout = shut_down_timer1;
   	
@@ -623,7 +528,7 @@ void my_gui_thread_entry(void)
             err = g_sf_message0.p_api->bufferRelease(g_sf_message0.p_ctrl, (sf_message_header_t *) p_message, SF_MESSAGE_RELEASE_OPTION_NONE);
             if (err)
                 {
-                    g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+                    g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
                 }
 
         }
@@ -651,8 +556,6 @@ void my_gui_thread_entry(void)
 
     }
 }
-
-//-------------------------------------------------------------------------
 
 //*************************************************************************************
 // Function Name: DisplayMainScreenActiveFeatures
@@ -713,100 +616,6 @@ UINT DisplayMainScreenActiveFeatures ()
 }
 
 
-//*************************************************************************************
-// Function Name: Template_event_function
-//
-// Description: This handles any messages sent to the template window
-//
-//*************************************************************************************
-
-UINT Template_event_function (GX_WINDOW *window, GX_EVENT *event_ptr)
-{
-    UINT myErr = 0;
-
-#ifdef OLD_CODE_THAT_MAY_BE_USEFUL_SOMEDAY
-
-    switch (event_ptr->gx_event_type)
-    {
-    case GX_SIGNAL(DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        if (window->gx_widget_name == "PadCalibrationScreen")
-        {
-            if (g_CalibrationStepNumber == 0)       // We are doing minimum
-            {
-                if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue > 4)
-                    g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue -= 5;
-                myErr = gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
-            }
-            else if (g_CalibrationStepNumber == 1)  // Doing maximum
-            {
-                if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue > 4)
-                    g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue -= 5;
-                myErr = gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
-            }
-            gx_system_dirty_mark(g_CalibrationScreen);      // This forces the gauge to be updated and redrawn
-        }
-        break;
-    case GX_SIGNAL(UP_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        if (window->gx_widget_name == "PadCalibrationScreen")
-        {
-            if (g_CalibrationStepNumber == 0)       // We are doing minimum
-            {
-                if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue < 100)
-                    g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue += 5;
-                myErr = gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
-            }
-            else if (g_CalibrationStepNumber == 1)  // Doing maximum
-            {
-                if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue < 100)
-                    g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue += 5;
-                myErr = gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
-            }
-            gx_system_dirty_mark(g_CalibrationScreen);      // This forces the gauge to be updated and redrawn
-        }
-        break;
-    case GX_EVENT_PEN_DOWN: // We are going to determine if the PAD button is pressed and start a timer to increment the
-                            // ... long time (2 seconds) and goto Programming if so.
-        if (event_ptr->gx_event_target->gx_widget_name == "PadActiveButton")
-        {
-            g_DeltaValue = +5;
-            gx_system_timer_start(window, PAD_ACTIVE_TIMER_ID, 8, 8);
-            //myErr = gx_slider_value_set((GX_SLIDER*)&PadCalibrationScreen.PadCalibrationScreen_PadValue_Slider, &PadCalibrationScreen.PadCalibrationScreen_PadValue_Slider.gx_slider_info, g_PadValue);
-        }
-        break;
-    case GX_EVENT_TIMER:
-        if (event_ptr->gx_event_payload.gx_event_timer_id == PAD_ACTIVE_TIMER_ID)
-        {
-            g_PadValue += g_DeltaValue;
-            if (g_PadValue > 100)
-                g_PadValue = 100;
-            if (g_PadValue <= 0)
-                gx_system_timer_stop(window, PAD_ACTIVE_TIMER_ID);
-            if (g_PadValue > 0)
-            {
-                myErr = gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_PadValue_Prompt, &g_CalibrationPromptLocations[1]);
-                myErr = gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_PadValue_Prompt, g_PadValue);
-            }
-            else
-            {
-                myErr = gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_PadValue_Prompt, &g_HiddenRectangle);
-                myErr = gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_PadValue_Prompt, g_PadValue);
-            }
-            gx_system_dirty_mark(g_CalibrationScreen);      // This forces the gauge to be updated and redrawn
-        }
-        break;
-    case GX_EVENT_PEN_UP:
-        {
-            g_DeltaValue = -5;
-        }
-        break;
-    } // end switch
-#endif
-
-    myErr = gx_window_event_process(window, event_ptr);
-
-    return myErr;
-}
-
 
 //*************************************************************************************
 // Function Name: Main_User_Screen_event_process
@@ -824,7 +633,7 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     UINT myErr = 0;
 
-    #ifdef SOMEDAY_THIS_WILL_BECOME_USEFUL
+//    #ifdef SOMEDAY_THIS_WILL_BECOME_USEFUL
     UINT feature;
     int activeCount;
 
@@ -923,8 +732,18 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         }
         DisplayMainScreenActiveFeatures();
         break;
+
+    case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        myErr = gx_widget_attach (root, (GX_WIDGET*) &HHP_Start_Screen);
+        myErr = gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
+        if (myErr)
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
+
+        g_ChangeScreen_WIP = TRUE;
+        break;
+
     }
-#endif
+//#endif
 
     DisplayMainScreenActiveFeatures();  // Remove this when more of the previous code is "undefinded".
 
@@ -933,3 +752,34 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     return myErr;
 }
 
+//*************************************************************************************
+// Function Name: HHP_Start_Screen_event_process
+//
+// Description: This handles the Startup Screen messages
+//
+//*************************************************************************************
+
+UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    UINT myErr = 0xff;
+
+    myErr = gx_window_event_process(window, event_ptr);
+
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_SIGNAL(DIAGNOSTIC_BTN_ID, GX_EVENT_CLICKED):
+//        myErr = gx_widget_attach (root, (GX_WIDGET*) &DiagnosticScreen);
+//        myErr = gx_widget_show ((GX_WIDGET*) &DiagnosticScreen);
+        myErr = GX_SUCCESS;
+        break;
+    case GX_SIGNAL(SETTINGS_BTN_ID, GX_EVENT_CLICKED):
+//        myErr = gx_widget_attach (root, (GX_WIDGET*) &SettingsScreen);
+//        myErr = gx_widget_show ((GX_WIDGET*) &SettingsScreen);
+        break;
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+//        myErr = gx_widget_attach (root, (GX_WIDGET*) g_GoBackScreen);
+//        myErr = gx_widget_show ((GX_WIDGET*) g_GoBackScreen);
+        break;
+    }
+    return myErr;
+}

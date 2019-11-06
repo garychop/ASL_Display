@@ -192,7 +192,7 @@ UINT InformationScreenEventHandler (GX_WINDOW * widget, GX_EVENT * event_ptr)
 					#ifdef using_keyboard	
 						err = show_window((GX_WINDOW*)&keyboard_screen, (GX_WIDGET*)widget, true);	//setting_screen
 						//debug
-						if(err != GX_SUCCESS) g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+						if(err != GX_SUCCESS) g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
 					#endif
 						
 						page_information_screen_flag = 2;
@@ -263,7 +263,7 @@ static VOID key_widget_draw(KEY_WIDGET *key)
             UINT err = gx_context_pixelmap_get(key->icon, &map);
 						
 						if(err != GX_SUCCESS) {
-							g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+							g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
    					}
    		
             if (map)
@@ -281,7 +281,7 @@ static VOID key_widget_draw(KEY_WIDGET *key)
                 err = gx_canvas_pixelmap_draw( (GX_VALUE)x_offset, (GX_VALUE)y_offset, map );
                 
 								if(err != GX_SUCCESS) {
-									g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+									g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
    							}
    		
             }
@@ -354,7 +354,7 @@ static VOID key_widget_create(KEY_WIDGET *key_widget, USHORT id, KEY_LAYOUT_ENTR
     
     	//debug
 			if(err != GX_SUCCESS) {
-				g_ioport.p_api->pinWrite(GRNLED, IOPORT_LEVEL_LOW);
+				g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
    		}
    		
 		}

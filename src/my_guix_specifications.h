@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 16.10.2019   Time (hh:mm): 12:56                        */
+/*  Date (dd.mm.yyyy):  5.11.2019   Time (hh:mm): 22:11                        */
 /*******************************************************************************/
 
 
@@ -22,32 +22,40 @@ extern   "C" {
 
 /* Define widget ids                                                           */
 
-#define MAIN_USER_SCREEN_ID 1
-#define RIGHT_PAD_OFF_ID 2
-#define PROFILE_NEXT_SMALL_PROMPT_ID 3
-#define PROFILE_NEXT_LARGE_PROMPT_ID 4
-#define POWER_SMALL_PROMPT_ID 5
-#define POWER_LARGE_PROMPT_ID 6
-#define FUNCTION_NEXT_SMALL_PROMPT_ID 7
-#define FUNCITON_NET_LARGE_PROMPT_ID 8
-#define CENTER_PAD_ON_ID 9
-#define BLUETOOTH_LARGE_PROMPT_ID 10
-#define BLUETOOTH_SMALL_PROMPT_ID 11
-#define ID_EDIT_SCREEN_R_BTN 12
-#define ID_BTN_LeftPad 13
-#define ID_BTN_rightPad 14
-#define ID_BTN_CenterPad 15
-#define ID_BTN_Power 16
-#define ID_BTN_DateTime 17
-#define ID_BTN_Sound 18
-#define ID_INPUT_FIELD 19
-#define IDB_BACKSPACE 20
-#define ID_DATETIME_SCREEN_R_BTN 21
-#define ID_DATETIME_SAVE 22
-#define ID_DATETIME_LIST 23
-#define ID_DATETIME_PGUP_BTN 24
-#define ID_DATETIME_PGDN_BTN 25
-#define ID_SETTING_FUNCTION_BTN 26
+#define DIAGNOSTIC_BTN_ID 1
+#define SETTINGS_BTN_ID 2
+#define OK_BTN_ID 3
+#define VERSION_PROMPT_ID 4
+#define VERSION_PROMPT1l_ID 5
+#define MAIN_USER_SCREEN_ID 6
+#define RIGHT_PAD_OFF_ID 7
+#define PROFILE_NEXT_SMALL_PROMPT_ID 8
+#define PROFILE_NEXT_LARGE_PROMPT_ID 9
+#define POWER_SMALL_PROMPT_ID 10
+#define POWER_LARGE_PROMPT_ID 11
+#define FUNCTION_NEXT_SMALL_PROMPT_ID 12
+#define FUNCITON_NET_LARGE_PROMPT_ID 13
+#define CENTER_PAD_ON_ID 14
+#define BLUETOOTH_LARGE_PROMPT_ID 15
+#define BLUETOOTH_SMALL_PROMPT_ID 16
+#define UP_ARROW_BTN_ID 17
+#define DOWN_ARROW_BTN_ID 18
+#define BOTH_ARROW_BTN_ID 19
+#define ID_EDIT_SCREEN_R_BTN 20
+#define ID_BTN_LeftPad 21
+#define ID_BTN_rightPad 22
+#define ID_BTN_CenterPad 23
+#define ID_BTN_Power 24
+#define ID_BTN_DateTime 25
+#define ID_BTN_Sound 26
+#define ID_INPUT_FIELD 27
+#define IDB_BACKSPACE 28
+#define ID_DATETIME_SCREEN_R_BTN 29
+#define ID_DATETIME_SAVE 30
+#define ID_DATETIME_LIST 31
+#define ID_DATETIME_PGUP_BTN 32
+#define ID_DATETIME_PGDN_BTN 33
+#define ID_SETTING_FUNCTION_BTN 34
 
 
 /* Define animation ids                                                        */
@@ -153,6 +161,16 @@ typedef struct
 
 /* Declare top-level control blocks                                            */
 
+typedef struct HHP_START_SCREEN_CONTROL_BLOCK_STRUCT
+{
+    GX_WINDOW_MEMBERS_DECLARE
+    GX_TEXT_BUTTON HHP_Start_Screen_Diagnostic_Button;
+    GX_TEXT_BUTTON HHP_Start_Screen_Settings_Button;
+    GX_TEXT_BUTTON HHP_Start_Screen_OK_Button;
+    GX_PROMPT HHP_Start_Screen_VersionPrompt;
+    GX_PROMPT HHP_Start_Screen_VersionPrompt_1;
+} HHP_START_SCREEN_CONTROL_BLOCK;
+
 typedef struct MAIN_USER_SCREEN_CONTROL_BLOCK_STRUCT
 {
     GX_WINDOW_MEMBERS_DECLARE
@@ -166,12 +184,10 @@ typedef struct MAIN_USER_SCREEN_CONTROL_BLOCK_STRUCT
     GX_PIXELMAP_PROMPT Main_User_Screen_CenterPadON;
     GX_PIXELMAP_PROMPT Main_User_Screen_BluetoothLargePrompt;
     GX_PIXELMAP_PROMPT Main_User_Screen_BluetoothSmallPrompt;
+    GX_TEXT_BUTTON Main_User_Screen_UpArrowBtn;
+    GX_TEXT_BUTTON Main_User_Screen_DownArrowBtn;
+    GX_TEXT_BUTTON Main_User_Screen_BothButton;
 } MAIN_USER_SCREEN_CONTROL_BLOCK;
-
-typedef struct PRIMARYTEMPLATE_CONTROL_BLOCK_STRUCT
-{
-    GX_WINDOW_MEMBERS_DECLARE
-} PRIMARYTEMPLATE_CONTROL_BLOCK;
 
 typedef struct EDIT_SCREEN_CONTROL_BLOCK_STRUCT
 {
@@ -249,8 +265,8 @@ typedef struct INIT_SCREEN_CONTROL_BLOCK_STRUCT
 /* extern statically defined control blocks                                    */
 
 #ifndef GUIX_STUDIO_GENERATED_FILE
+extern HHP_START_SCREEN_CONTROL_BLOCK HHP_Start_Screen;
 extern MAIN_USER_SCREEN_CONTROL_BLOCK Main_User_Screen;
-extern PRIMARYTEMPLATE_CONTROL_BLOCK PrimaryTemplate;
 extern EDIT_SCREEN_CONTROL_BLOCK edit_screen;
 extern KEYBOARD_SCREEN_CONTROL_BLOCK keyboard_screen;
 extern DATETIME_SCREEN_CONTROL_BLOCK DateTime_screen;
@@ -320,9 +336,9 @@ VOID _gx_synergy_jpeg_draw (GX_DRAW_CONTEXT *p_context, INT x, INT y, GX_PIXELMA
 
 /* Declare event process functions, draw functions, and callback functions     */
 
+UINT HHP_Start_Screen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT Main_User_Screen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 VOID Main_User_Screen_draw_function(GX_WINDOW *widget);
-UINT Template_event_function(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT EditScreenEventHandler(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT keyboard_frame_event_handler(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT input_field_event_process(GX_SINGLE_LINE_TEXT_INPUT *widget, GX_EVENT *event_ptr);
