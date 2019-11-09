@@ -27,7 +27,8 @@
 
 #include "DigitalControl.h"
 //#include "r_ioport_api.h"
-#include "my_guix_specifications.h"
+//#include "my_guix_specifications.h"
+#include "ASL_HHP_Display_GUIX_specifications.h"
 
 //****************************************************************************
 // Macros
@@ -169,7 +170,7 @@ void Read_Arrow_Buttons(void)
         if (g_ArrowState == (UP_ARROW_BTN | DOWN_ARROW_BTN))
         {
             ++g_BothArrowCounter;
-            if (g_BothArrowCounter > 500)      // 10 seconds
+            if (g_BothArrowCounter > 200)      // 10 seconds in 10 millisecond increments
             {
                 gxe.gx_event_type = GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED);
                 gxe.gx_event_sender = GX_ID_NONE;

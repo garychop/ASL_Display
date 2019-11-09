@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include "tx_api.h"
 #include "gx_api.h"
-#include "my_guix_resources.h"
-#include "my_guix_specifications.h"
+//#include "my_guix_resources.h"
+#include "ASL_HHP_Display_GUIX_resources.h"
+//#include "my_guix_specifications.h"
+#include "ASL_HHP_Display_GUIX_specifications.h"
 #include "hal_data.h"
 #include "my_gui_thread.h"
 #include <my_gui_thread_entry.h>
