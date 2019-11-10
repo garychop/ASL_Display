@@ -19,11 +19,14 @@ GX_CHAR version_string3[10]     		 	=  "V0.0.1";
 
 enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PAD_ACTIVE_TIMER_ID};
 
-//#define UP_ARROW_BTN_ID 2           // Temp
-//#define DOWN_ARROW_BTN_ID 0         // Temp
-#define LONG_PRESS_BUTTON_ID 1      // Temp
+//#define UP_ARROW_BTN_ID 2
+//#define DOWN_ARROW_BTN_ID 0
+#define LONG_PRESS_BUTTON_ID 1
 
 #define min(a,b)   ((a < b) ? a : b)
+
+#define GRAPH_CENTER_PT_XPOS 139    // From Left of screen
+#define GRAPH_CENTER_PT_YPOS 130    // From Top of screen
 
 //-------------------------------------------------------------------------
 // Local variables
@@ -54,8 +57,25 @@ GX_RECTANGLE g_FeatureLocation[] = {
     {30, 166, 290, 198},
     {0,0,0,0}};
 
+GX_RECTANGLE g_PadDirectionLocation[] = {
+    {28, 55, 28+88, 55+70},
+    {205, 55, 205+88, 55+70},
+    {116, 150, 116+88, 150+70},
+    {0,0,0,0}};
+
+GX_RECTANGLE g_CalibrationPadLocations[] = {
+    {36, 32, 36+62, 32+98},         // Left Pad location
+    {184, 32, 184+62, 32+98},       // Right Pad location
+    {67, 140, 67+145, 140+42},      // Center Pad Location
+    {0,0,0,0}};
+GX_RECTANGLE g_CalibrationPromptLocations[] = {
+    {20, 4, 38+239, 4+33},          // Max and Min Prompt location
+    {GRAPH_CENTER_PT_XPOS-25, GRAPH_CENTER_PT_YPOS-26-60, GRAPH_CENTER_PT_XPOS-25+50, GRAPH_CENTER_PT_YPOS-26-60+26},       // Pad Value prompt location
+    {0,0,0,0}};
+
 int g_ChangeScreen_WIP;
 GX_WINDOW *g_GoBackScreen = GX_NULL;
+GX_WINDOW *g_CalibrationScreen = GX_NULL;
 
 // Timeout information
 int g_TimeoutValue;
@@ -70,7 +90,7 @@ GX_PIXELMAP_BUTTON *g_TimeoutIcons[] = {
     &UserSettingsScreen.UserSettingsScreen_Timer_50_Button,
     GX_NULL};
 GX_RECTANGLE g_TimeoutValueLocation[] = {
-    {50, 82, 50+88, 82+70},
+    {140, 60, 140+88, 60+70},
     {0,0,0,0}};
 
 
@@ -99,6 +119,10 @@ struct PadInfoStruct
 } g_PadSettings[3];
 
 int g_SettingsChanged;
+int g_CalibrationPadNumber;
+int g_CalibrationStepNumber;
+int g_PadValue;
+int g_DeltaValue;
 
 //-------------------------------------------------------------------------
 extern GX_PROMPT * time_infor_pmpt_text;
@@ -119,12 +143,18 @@ static void guix_test_send_touch_message(sf_touch_panel_payload_t * p_payload);
 static void reset_check(void);
 #endif
 
-UINT DisplayMainScreenActiveFeatures ();
-UINT ShowHidePad (GX_EVENT *event_ptr);
 UINT SettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
+UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
+UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
+UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
+
+UINT DisplayMainScreenActiveFeatures ();
+UINT ShowHidePad (GX_EVENT *event_ptr);
+void ShowPadTypes (void);
 void ShowActiveFeatures (void);
+void ShowUserSettingsItems (void);
 
 //-------------------------------------------------------------------------
 /* Gui Test App Thread entry function */
@@ -260,6 +290,8 @@ void my_gui_thread_entry(void)
 //    status = gx_studio_named_widget_create("HHP_Start_Screen", (GX_WIDGET *)p_window_root, &HHP_Start_Screen_Widget);
 
     gx_studio_named_widget_create("SetPadDirectionScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("SetPadTypeScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("PadCalibrationScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("PadOptionsSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("SettingsScreen", GX_NULL, GX_NULL);
@@ -448,7 +480,6 @@ UINT DisplayMainScreenActiveFeatures ()
 {
     int activeCount;
     int feature;
-    UINT myErr = GX_SUCCESS;
 
     // Count the number of active items so we can populate appropriately.
     // Hide the Non-Active features.
@@ -457,8 +488,8 @@ UINT DisplayMainScreenActiveFeatures ()
     {
         if (g_ScreenPrompts[feature].m_Active == FALSE)
         {
-            myErr = gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
-            myErr = gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_HiddenRectangle);
+            gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
+            gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_HiddenRectangle);
             ++activeCount;
         }
     }
@@ -471,27 +502,27 @@ UINT DisplayMainScreenActiveFeatures ()
             switch (g_ScreenPrompts[feature].m_Location)
             {
             case 0: // Show the first line
-                myErr = gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_FeatureLocation[0]);
-                myErr = gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_HiddenRectangle);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_FeatureLocation[0]);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_HiddenRectangle);
                 break;
             case 1: // Show second line item
-                myErr = gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[1]);
-                myErr = gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[1]);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
                 break;
             case 2: // Process third line item, move to the 2nd line
                 // Hide Large Icon, show small icon
-                myErr = gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[2]);
-                myErr = gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[2]);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
                 break;
             case 3: // Process fourth line item, move to the 3rd line.
                 // Hide Large Icon, show small icon
-                myErr = gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[3]);
-                myErr = gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[3]);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
                 break;
             }
         }
     }
-    return myErr;
+    return GX_SUCCESS;
 }
 
 
@@ -510,7 +541,6 @@ VOID Main_User_Screen_draw_function(GX_WINDOW *window)
 
 UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
-    UINT myErr = 0;
     UINT feature;
     int activeCount;
 
@@ -519,24 +549,25 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_EVENT_TIMER:
         if (event_ptr->gx_event_payload.gx_event_timer_id == ARROW_PUSHED_TIMER_ID)
         {
-            myErr = gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
-            myErr = gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
+            gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
+            gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
             g_ChangeScreen_WIP = TRUE;
         }
         break;
-    case GX_EVENT_PEN_DOWN: // We are going to determine if the Up or Down arrow buttons have been held for a
-                            // ... long time (2 seconds) and goto Programming if so.
-
-        if ((event_ptr->gx_event_target->gx_widget_name == "DownArrowButton") || (event_ptr->gx_event_target->gx_widget_name == "UpArrowButton"))
-        {
-            gx_system_timer_start(window, ARROW_PUSHED_TIMER_ID, 100, 0);
-            g_ChangeScreen_WIP = FALSE;
-        }
-        break;
-    case GX_EVENT_PEN_UP:
-            gx_system_timer_stop(window, ARROW_PUSHED_TIMER_ID);
-        break;
-
+//    case GX_EVENT_PEN_DOWN: // We are going to determine if the Up or Down arrow buttons have been held for a
+//                            // ... long time (2 seconds) and goto Programming if so.
+//
+//        if ((event_ptr->gx_event_target->gx_widget_id == DOWN_ARROW_ID))
+//        if ((event_ptr->gx_event_target->gx_widget_name == "DownArrowButton") || (event_ptr->gx_event_target->gx_widget_name == "UpArrowButton"))
+//        {
+//            gx_system_timer_start(window, ARROW_PUSHED_TIMER_ID, 100, 0);
+//            g_ChangeScreen_WIP = FALSE;
+//        }
+//        break;
+//    case GX_EVENT_PEN_UP:
+//            gx_system_timer_stop(window, ARROW_PUSHED_TIMER_ID);
+//        break;
+//
     case GX_EVENT_SHOW:
         g_GoBackScreen = window;        // Set the going back window.
         DisplayMainScreenActiveFeatures();
@@ -611,14 +642,8 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         break;
 
     case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        myErr = gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
-        if (myErr)
-            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
-
-        myErr = gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
-        if (myErr)
-            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
-
+        gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
+        gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
         g_ChangeScreen_WIP = TRUE;
         break;
 
@@ -673,7 +698,6 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
 UINT ShowHidePad (GX_EVENT *event_ptr)
 {
-    UINT myError = GX_SUCCESS;
     int pad;
 //  GX_WIDGET *myWidget;
     GX_VALUE xPos, yPos;
@@ -700,21 +724,21 @@ UINT ShowHidePad (GX_EVENT *event_ptr)
             {
                 // Determine if we show the Proportional (Orange) or Digital (Green)
                 if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
-                    myError = gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
+                    gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
                 else
-                    myError = gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
+                    gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
             }
             else // PEN UP
             {
                 // Now we are going to hide it.
                 if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
-                    myError = gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
+                    gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
                 else
-                    myError = gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_HiddenRectangle);
+                    gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_HiddenRectangle);
             }
         } // endif !OFF
     } // end while
-    return (myError);
+    return (GX_SUCCESS);
 }
 
 //*************************************************************************************
@@ -813,8 +837,8 @@ UINT PadOptionsSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_
         break;
 
     case GX_SIGNAL(GOTO_PAD_TYPE_BTN_ID, GX_EVENT_CLICKED):
-//        gx_widget_attach (p_window_root, (GX_WIDGET*) &SetPadTypeScreen);
-//        gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen);
+        gx_widget_attach (p_window_root, (GX_WIDGET*) &SetPadTypeScreen);
+        gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen);
         break;
 
     case GX_SIGNAL(GOTO_PAD_DIRECTIONS_BTN_ID, GX_EVENT_CLICKED):
@@ -829,36 +853,140 @@ UINT PadOptionsSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_
 }
 
 //*************************************************************************************
+// Function Name: SetPadDirectionScreen_event_process
+//
+// Description: This functions process the event of the Set Pad Direction screen.
+//
+//*************************************************************************************
+
+UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    UINT pads, icons;
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_EVENT_SHOW:
+        // Show correct settings for LEFT pad. Off, Right, Forward or Left.
+        // First let's hide all choices for all pads.
+        for (pads = 0; pads < 3; ++pads)
+        {
+            for (icons = 0; icons < 4; ++icons)
+            {
+                gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[icons], &g_HiddenRectangle);
+            }
+            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[g_PadSettings[pads].m_PadDirection], &g_PadDirectionLocation[pads]);
+        }
+        break;
+
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_attach (p_window_root, (GX_WIDGET*) &PadOptionsSettingsScreen);
+        gx_widget_show ((GX_WIDGET*) &PadOptionsSettingsScreen);
+        break;
+    // Process LEFT button pushes
+    case GX_SIGNAL(LEFT_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
+        g_PadSettings[LEFT_PAD].m_PadDirection = LEFT_DIRECTION;
+        break;
+    case GX_SIGNAL(LEFT_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
+        g_PadSettings[LEFT_PAD].m_PadDirection = FORWARD_DIRECTION;
+        break;
+    case GX_SIGNAL(LEFT_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
+        g_PadSettings[LEFT_PAD].m_PadDirection = RIGHT_DIRECTION;
+        break;
+    case GX_SIGNAL(LEFT_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
+        g_PadSettings[LEFT_PAD].m_PadDirection = OFF_DIRECTION;
+        break;
+    // Process RIGHT button pushes
+    case GX_SIGNAL(RIGHT_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
+        g_PadSettings[RIGHT_PAD].m_PadDirection = LEFT_DIRECTION;
+        break;
+    case GX_SIGNAL(RIGHT_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
+        g_PadSettings[RIGHT_PAD].m_PadDirection = FORWARD_DIRECTION;
+        break;
+    case GX_SIGNAL(RIGHT_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
+        g_PadSettings[RIGHT_PAD].m_PadDirection = RIGHT_DIRECTION;
+        break;
+    case GX_SIGNAL(RIGHT_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
+        g_PadSettings[RIGHT_PAD].m_PadDirection = OFF_DIRECTION;
+        break;
+    // Process CENTER PAD button pushes
+    case GX_SIGNAL(CENTER_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
+        g_PadSettings[CENTER_PAD].m_PadDirection = LEFT_DIRECTION;
+        break;
+    case GX_SIGNAL(CENTER_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
+        g_PadSettings[CENTER_PAD].m_PadDirection = FORWARD_DIRECTION;
+        break;
+    case GX_SIGNAL(CENTER_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
+        g_PadSettings[CENTER_PAD].m_PadDirection = RIGHT_DIRECTION;
+        break;
+    case GX_SIGNAL(CENTER_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
+        g_PadSettings[CENTER_PAD].m_PadDirection = OFF_DIRECTION;
+        break;
+
+    }
+
+    gx_window_event_process(window, event_ptr);
+
+    return GX_SUCCESS;
+}
+
+//*************************************************************************************
 // Function Name: UserSettingsScreen_event_process
 //
 // Description: This handles the User Settings Screen messages
 //
 //*************************************************************************************
 
-UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+void ShowUserSettingsItems (void)
 {
     int feature;
+
+    if (g_ClicksActive)
+    {
+        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_ActiveIcon);
+        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_InactiveIcon);
+    }
+    else
+    {
+        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_InactiveIcon);
+        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_ActiveIcon);
+    }
+    // Show the Timeout Value
+    for (feature = 0; g_TimeoutIcons[feature] != GX_NULL; ++feature)
+    {
+        gx_widget_resize ((GX_WIDGET*) g_TimeoutIcons[feature], &g_TimeoutValueLocation[1]);
+    }
+    gx_widget_resize ((GX_WIDGET*) g_TimeoutIcons[g_TimeoutValue], &g_TimeoutValueLocation[0]);
+}
+
+UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
 
     switch (event_ptr->gx_event_type)
     {
     case GX_EVENT_SHOW:
-        // Clicks status
-        if (g_ClicksActive)
-        {
-            gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_ActiveIcon);
-            gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_InactiveIcon);
-        }
-        else
-        {
-            gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_InactiveIcon);
-            gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_ActiveIcon);
-        }
-        // Show the Timeout Value
-        for (feature = 0; g_TimeoutIcons[feature] != GX_NULL; ++feature)
-        {
-            gx_widget_resize ((GX_WIDGET*) g_TimeoutIcons[feature], &g_TimeoutValueLocation[1]);
-        }
-        gx_widget_resize ((GX_WIDGET*) g_TimeoutIcons[g_TimeoutValue], &g_TimeoutValueLocation[0]);
         break;
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
@@ -868,14 +996,8 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
         // Click (Audio) Feature handling
     case GX_SIGNAL(CLICKS_INACTIVE_ICON, GX_EVENT_CLICKED):
-        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_ActiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_InactiveIcon);
-        g_ClicksActive = TRUE;
-        break;
     case GX_SIGNAL(CLICKS_ACTIVE_ICON, GX_EVENT_CLICKED):
-        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_InactiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_ActiveIcon);
-        g_ClicksActive = FALSE;
+        g_ClicksActive = (g_ClicksActive == TRUE ? FALSE : TRUE);
         break;
 
     case GX_SIGNAL(TIMER_OFF_BTN_ID, GX_EVENT_CLICKED):
@@ -893,6 +1015,8 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         gx_widget_resize ((GX_WIDGET*) g_TimeoutIcons[g_TimeoutValue], &g_TimeoutValueLocation[0]);
         break;
     }
+
+    ShowUserSettingsItems();
 
     gx_window_event_process(window, event_ptr);
 
@@ -1027,6 +1151,307 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
     return GX_SUCCESS;
 }
 
+
+//*************************************************************************************
+// Function Name: SetPadTypeScreen_event_process
+//
+// Description: This handles the Set Pad Screen messages
+//
+//*************************************************************************************
+void ShowPadTypes (void)
+{
+    if (g_PadSettings[LEFT_PAD].m_PadType)  // Digital?
+    {
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
+        gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
+    }
+    else
+    {
+        gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
+    }
+    if (g_PadSettings[RIGHT_PAD].m_PadType) // Digital?
+    {
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
+        gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
+    }
+    else
+    {
+        gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
+    }
+    if (g_PadSettings[CENTER_PAD].m_PadType)    // Digital?
+    {
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadProportional_Button);
+        gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
+    }
+    else
+    {
+        gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadProportional_Button);
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
+    }
+}
+UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_EVENT_SHOW:
+        g_ChangeScreen_WIP = FALSE;
+        break;
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        gx_widget_attach (p_window_root, (GX_WIDGET*) &PadOptionsSettingsScreen);
+        gx_widget_show ((GX_WIDGET*) &PadOptionsSettingsScreen);
+        break;
+    case GX_SIGNAL(RIGHT_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
+        if (!g_ChangeScreen_WIP)
+        {
+//            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
+//            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
+            g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+        }
+        break;
+    case GX_SIGNAL(RIGHT_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
+        if (!g_ChangeScreen_WIP)
+        {
+//            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
+//            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
+            g_PadSettings[RIGHT_PAD].m_PadType = DIGITAL_PADTYPE;
+        }
+        break;
+    case GX_SIGNAL(LEFT_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
+        if (!g_ChangeScreen_WIP)
+        {
+//            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
+//            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
+            g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+        }
+        break;
+    case GX_SIGNAL(LEFT_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
+        if (!g_ChangeScreen_WIP)
+        {
+//            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
+//            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
+            g_PadSettings[LEFT_PAD].m_PadType = DIGITAL_PADTYPE;
+        }
+        break;
+    case GX_SIGNAL(CENTER_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
+        if (!g_ChangeScreen_WIP)
+        {
+ //           gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
+ //           gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadProportional_Button);
+            g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+        }
+        break;
+    case GX_SIGNAL(CENTER_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
+        if (!g_ChangeScreen_WIP)
+        {
+//            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadProportional_Button);
+//            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
+            g_PadSettings[CENTER_PAD].m_PadType = DIGITAL_PADTYPE;
+        }
+        break;
+
+    case GX_EVENT_TIMER:
+        if (event_ptr->gx_event_payload.gx_event_timer_id == CALIBRATION_TIMER_ID)
+        {
+            gx_system_timer_stop(window, CALIBRATION_TIMER_ID);
+            gx_widget_attach (p_window_root, (GX_WIDGET*) &PadCalibrationScreen);
+            gx_widget_show ((GX_WIDGET*) &PadCalibrationScreen);
+            g_ChangeScreen_WIP = TRUE;
+        }
+        break;
+    case GX_EVENT_PEN_DOWN: // We are going to determine if the Up or Down arrow buttons have been held for a
+                            // ... long time (2 seconds) and goto calibration if so.
+
+        if (event_ptr->gx_event_target->gx_widget_id == CENTER_PAD_PROPORTIONAL_BTN_ID)
+        {
+            g_CalibrationPadNumber = CENTER_PAD;
+            gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
+        }
+        else if (event_ptr->gx_event_target->gx_widget_id == LEFT_PAD_PROPORTIONAL_BTN_ID)
+        {
+            g_CalibrationPadNumber = LEFT_PAD;
+            gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
+        }
+        else if (event_ptr->gx_event_target->gx_widget_id == RIGHT_PAD_PROPORTIONAL_BTN_ID)
+        {
+            g_CalibrationPadNumber = RIGHT_PAD;
+            gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
+        }
+        break;
+    case GX_EVENT_PEN_UP:
+            gx_system_timer_stop(window, CALIBRATION_TIMER_ID);
+        break;
+
+    }
+
+    ShowPadTypes();
+
+    gx_window_event_process(window, event_ptr);
+
+    return GX_SUCCESS;
+}
+
+
+//*************************************************************************************
+// Function Name: CalibrationScreen_draw
+//
+// Description: This callback function is called when Drawing is required by GUIX.
+//      This function draws the Guage.
+//
+//*************************************************************************************
+
+VOID CalibrationScreen_draw (GX_WINDOW *window)
+{
+    GX_BRUSH *brush;
+    GX_BRUSH originalBrush;
+    INT raw100, pieSide;
+
+    gx_window_draw(window);
+
+    gx_context_brush_get(&brush);
+    originalBrush = *brush;
+
+    // Draw the background
+    brush->gx_brush_line_color = GX_COLOR_LIGHTGRAY;
+    brush->gx_brush_width = 3;
+    brush->gx_brush_fill_color = GX_COLOR_DARKGRAY;
+    gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 55, -5, 185);
+
+    // Draw the Pad pie
+    if (g_PadValue > 0)             // Anything less than 175-180 is too small of a pie to see; if it's 180 it draws a full circle.
+    {
+        raw100 = 100 - g_PadValue;
+        raw100 *= 100;                  // Integer math, yuch!
+        raw100 *= 18;                   // This converts the percentage to degrees which is a factor of 1.8
+        pieSide = raw100 / 1000;        // This is includes the decimal shift.
+        brush->gx_brush_width = 2;
+        brush->gx_brush_fill_color = GX_COLOR_GREEN;
+        gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 54, pieSide, 180);
+    }
+
+    // Draw the minimum pie
+    // Calculate the position of the upper side of the pie.
+    // The arc is drawn as follows:
+    //       0 degrees = 3:00 clock time
+    //      90 degrees = 12:00 noon clock time
+    //      180 degrees = 9:00 clock time
+    //      270 degrees = 6:00 clock time.
+    raw100 = 100 - g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue;
+    raw100 *= 100;                  // Integer math, yuch!
+    raw100 *= 18;                   // This converts the percentage to degrees which is a factor of 1.8
+    pieSide = raw100 / 1000;        // This is includes the decimal shift.
+    if (pieSide > 175)              // Anything less than 175-180 is too small of a pie to see.
+        pieSide = 175;
+    brush->gx_brush_fill_color = GX_COLOR_YELLOW;   // Draw in yellow.
+    //brush->gx_brush_line_color = GX_COLOR_BLACK;
+    //brush->gx_brush_style = GX_BRUSH_OUTLINE;
+    brush->gx_brush_width = 1;
+    gx_context_brush_set(brush);        // Not really required. It seems to change the color to yellow without this call.
+    gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 40, pieSide, 180);
+
+    // Draw the Maximum Pie
+    raw100 = 100 - g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue;      // Integer math, yuch!
+    raw100 *= 100;
+    raw100 *= 18;                   // This converts the percentage to degrees which is a factor of 1.8
+    pieSide = raw100 / 1000;        // This is includes the decimal shift.
+    if (pieSide < 5)                        // Anything less than 0-5 is too small of a sliver to see.
+        pieSide = 5;
+    brush->gx_brush_fill_color = 0xff6a00;  // Orange
+    gx_context_brush_set(brush);        // Not really required. It seems to change the color to yellow without this call.
+    gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 40, 0, pieSide);
+
+    *brush = originalBrush;
+}
+
+//*************************************************************************************
+// Function Name: CalibrationScreen_event_process
+//
+// Description: This handles the Set Pad Screen messages
+//
+//*************************************************************************************
+
+UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_EVENT_SHOW:
+        gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_MaximumInstructionsText, &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_MinimumInstructionsText, &g_CalibrationPromptLocations[0]);
+        g_CalibrationStepNumber = 0;
+
+        gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
+
+        // show the PAD under calibration and hide the other PADs.
+        gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_CenterPadON_Button, &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_LeftPadON_Button, &g_HiddenRectangle);
+        gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_RightPadON_Button, &g_HiddenRectangle);
+        switch (g_CalibrationPadNumber)
+        {
+        case LEFT_PAD:
+            gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_LeftPadON_Button, &g_CalibrationPadLocations[0]);
+            break;
+        case RIGHT_PAD:
+            gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_RightPadON_Button, &g_CalibrationPadLocations[1]);
+            break;
+        case CENTER_PAD:
+            gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_CenterPadON_Button, &g_CalibrationPadLocations[2]);
+            break;
+        } // end switch (g_CalibrationPadNumber)
+
+        g_CalibrationScreen = window;       // Store for use by screen update process.
+        break;
+
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        if (g_CalibrationStepNumber == 0)           // Let's do maximum calibration
+        {
+            gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_MaximumInstructionsText, &g_CalibrationPromptLocations[0]);
+            gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_MinimumInstructionsText, &g_HiddenRectangle);
+            gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
+            ++g_CalibrationStepNumber;
+        }
+        else if (g_CalibrationStepNumber == 1)
+        {
+            gx_widget_attach (p_window_root, (GX_WIDGET*) &SetPadTypeScreen);
+            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen);
+        }
+        break;
+    case GX_SIGNAL(DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        if (g_CalibrationStepNumber == 0)       // We are doing minimum
+        {
+            if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue > 4)
+                g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue -= 5;
+            gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
+        }
+        else if (g_CalibrationStepNumber == 1)  // Doing maximum
+        {
+            if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue > 4)
+                g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue -= 5;
+            gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
+        }
+        gx_system_dirty_mark(g_CalibrationScreen);      // This forces the gauge to be updated and redrawn
+        break;
+    case GX_SIGNAL(UP_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        if (g_CalibrationStepNumber == 0)       // We are doing minimum
+        {
+            if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue < 100)
+                g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue += 5;
+            gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
+        }
+        else if (g_CalibrationStepNumber == 1)  // Doing maximum
+        {
+            if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue < 100)
+                g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue += 5;
+            gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
+        }
+        gx_system_dirty_mark(g_CalibrationScreen);      // This forces the gauge to be updated and redrawn
+        break;
+
+    }
+    gx_window_event_process(window, event_ptr);
+
+    return GX_SUCCESS;
+}
 
 //-------------------------------------------------------------------------
 void  g_timer0_callback(timer_callback_args_t * p_args) //25ms

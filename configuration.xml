@@ -753,10 +753,10 @@
     <context id="rtos.threadx.thread.1086088343">
       <property id="_symbol" value="my_gui_thread"/>
       <property id="rtos.threadx.thread.name" value="My Gui Thread"/>
-      <property id="rtos.threadx.thread.stack" value="1024"/>
+      <property id="rtos.threadx.thread.stack" value="2048"/>
       <property id="rtos.threadx.thread.priority" value="10"/>
       <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
-      <property id="rtos.threadx.thread.timeslice" value="1"/>
+      <property id="rtos.threadx.thread.timeslice" value="2"/>
       <stack module="module.el.gx.841395795">
         <stack module="module.framework.sf_el_gx.982981904" requires="module.el.gx.requires.sf_el_gx">
           <stack module="module.driver.display_on_glcd.1729015777" requires="module.framework.sf_el_gx.requires.display"/>
