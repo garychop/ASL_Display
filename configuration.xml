@@ -805,6 +805,14 @@
       <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
       <property id="rtos.threadx.thread.timeslice" value="23"/>
     </context>
+    <context id="rtos.threadx.thread.190632509">
+      <property id="_symbol" value="HeadArray_CommunicationThread"/>
+      <property id="rtos.threadx.thread.name" value="HeadArray_CommunicationThread"/>
+      <property id="rtos.threadx.thread.stack" value="1024"/>
+      <property id="rtos.threadx.thread.priority" value="1"/>
+      <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
+      <property id="rtos.threadx.thread.timeslice" value="1"/>
+    </context>
     <config id="config.driver.jpeg_decode">
       <property id="config.driver.jpeg_decode.param_checking_enable" value="config.driver.jpeg_decode.param_checking_enable.enabled"/>
     </config>

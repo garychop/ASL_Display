@@ -830,6 +830,14 @@ Synergy Configuration
     Auto start: Enabled
     Time slicing interval (ticks): 23
     
+  Thread "HeadArray_CommunicationThread"
+    Symbol: HeadArray_CommunicationThread
+    Name: HeadArray_CommunicationThread
+    Stack size (bytes): 1024
+    Priority: 1
+    Auto start: Enabled
+    Time slicing interval (ticks): 1
+    
   Messaging
     Subscriber "My Gui Thread" 0 0
       Event Class "Touch"
