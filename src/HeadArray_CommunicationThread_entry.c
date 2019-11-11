@@ -26,6 +26,7 @@ static void write_i2c_byte(uint8_t i2cbyte);
 static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len);
 static uint8_t read_i2c_byte(void);
 static uint8_t read_i2c_package(void);
+uint8_t ExecuteHeartBeat(void);
 
 //******************************************************************************
 // sending sequence: D7, D6, D5, ... , D0
@@ -71,22 +72,89 @@ static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len)
 
     TX_DISABLE;             // Turn off interrupts
 
-    //set_tris_e(0x30);    // io(bit0), clk(bit1), cs(bit2): output; res(bit4): input
-    //set i2c_io, i2c_clk to output and HIGH
     g_ioport_on_ioport.pinCfg( i2c_io,(IOPORT_CFG_DRIVE_MID | IOPORT_CFG_PORT_DIRECTION_OUTPUT | IOPORT_LEVEL_HIGH) );
     g_ioport_on_ioport.pinCfg( i2c_clk,(IOPORT_CFG_DRIVE_MID | IOPORT_CFG_PORT_DIRECTION_OUTPUT | IOPORT_LEVEL_HIGH) );
-    //output_high(i2c_io);
-    //output_high(i2c_clk);
 
-    //R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS); //new add
-    g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_LOW);  //output_low(i2c_cs);
+    //R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);
+    g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_LOW);
 
     // Wait for the i2c_res goes LOW
     wait = 46000;   //(104ms)
     do
     {    // if i2c_res == 1, wait
         g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
-        if(wait == 0)
+        if(wait < 2)
+        {
+            //set_tris_e(0x33);
+            g_ioport_on_ioport.pinDirectionSet(i2c_io, IOPORT_DIRECTION_INPUT);
+            g_ioport_on_ioport.pinDirectionSet(i2c_clk, IOPORT_DIRECTION_INPUT);
+
+            //output_high(i2c_cs);
+            g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH);
+
+            TX_RESTORE;             // turn interrupts back on
+            return 1;    // time out error
+        }
+
+        R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS);
+        wait--;
+    } while(pin_state == IOPORT_LEVEL_HIGH);
+
+    // Wait for the i2c_res goes LOW
+    wait = 46000;   //(104ms)
+    do
+    {    // if i2c_res == 1, wait
+        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
+        if(wait < 2)
+        {
+            //set_tris_e(0x33);
+            g_ioport_on_ioport.pinDirectionSet(i2c_io, IOPORT_DIRECTION_INPUT);
+            g_ioport_on_ioport.pinDirectionSet(i2c_clk, IOPORT_DIRECTION_INPUT);
+
+            //output_high(i2c_cs);
+            g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH);
+
+            TX_RESTORE;             // turn interrupts back on
+            return 1;    // time out error
+        }
+
+        R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS);
+        wait--;
+    } while(pin_state == IOPORT_LEVEL_LOW);
+
+    //debug
+    //g_ioport.p_api->pinWrite(TEST_PIN, IOPORT_LEVEL_LOW);
+
+    //issue i2c start
+//    g_ioport_on_ioport.pinWrite(i2c_io, IOPORT_LEVEL_LOW);  //output_low(i2c_io);
+//    R_BSP_SoftwareDelay(5, BSP_DELAY_UNITS_MICROSECONDS);   //delay_us(5);
+//    g_ioport_on_ioport.pinWrite(i2c_clk, IOPORT_LEVEL_LOW); //output_low(i2c_clk);
+
+    //send data
+    //  delay_us(20);
+    //R_BSP_SoftwareDelay(5, BSP_DELAY_UNITS_MICROSECONDS);
+    for(i = 0; i < pack_len; i++)
+    {
+        write_i2c_byte(i2c_pack[i]);
+        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);  //delay_us(10);
+    }
+
+    g_ioport_on_ioport.pinWrite(i2c_io, IOPORT_LEVEL_HIGH);
+    //R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);
+    g_ioport_on_ioport.pinWrite(i2c_clk, IOPORT_LEVEL_HIGH);
+    //R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);
+
+    g_ioport_on_ioport.pinDirectionSet(i2c_io, IOPORT_DIRECTION_INPUT);
+    g_ioport_on_ioport.pinDirectionSet(i2c_clk, IOPORT_DIRECTION_INPUT);
+
+    g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH);
+
+    // Wait for the i2c_res goes LOW
+    wait = 46000;   //(104ms)
+    do
+    {    // if i2c_res == 1, wait
+        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
+        if(wait < 2)
         {
             //set_tris_e(0x33);
             g_ioport_on_ioport.pinDirectionSet(i2c_io, IOPORT_DIRECTION_INPUT);
@@ -102,37 +170,6 @@ static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len)
         R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS);   //add
         wait--;
     } while(pin_state == IOPORT_LEVEL_HIGH);
-
-    //debug
-    //g_ioport.p_api->pinWrite(TEST_PIN, IOPORT_LEVEL_LOW);
-
-    //issue i2c start
-    g_ioport_on_ioport.pinWrite(i2c_io, IOPORT_LEVEL_LOW);  //output_low(i2c_io);
-    R_BSP_SoftwareDelay(5, BSP_DELAY_UNITS_MICROSECONDS);   //delay_us(5);
-    g_ioport_on_ioport.pinWrite(i2c_clk, IOPORT_LEVEL_LOW); //output_low(i2c_clk);
-
-    //send data
-    //  delay_us(20);
-    //R_BSP_SoftwareDelay(5, BSP_DELAY_UNITS_MICROSECONDS); //new add
-    for(i = 0; i < pack_len; i++)
-    {
-        write_i2c_byte(i2c_pack[i]);
-        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);  //delay_us(10);
-    }
-
-    //issue i2c stop
-    //output_high(i2c_io);
-    //output_high(i2c_clk);
-    g_ioport_on_ioport.pinWrite(i2c_io, IOPORT_LEVEL_HIGH);
-    //R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS); //new add
-    g_ioport_on_ioport.pinWrite(i2c_clk, IOPORT_LEVEL_HIGH);
-    //R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS); //new add
-
-    //set_tris_e(0x33); // set io & clk as input
-    g_ioport_on_ioport.pinDirectionSet(i2c_io, IOPORT_DIRECTION_INPUT);
-    g_ioport_on_ioport.pinDirectionSet(i2c_clk, IOPORT_DIRECTION_INPUT);
-
-    g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH); //output_high(i2c_cs);
 
     return 0;
 }
@@ -487,16 +524,100 @@ uint8_t get_PROP_version(void)
    return 1;      // error
 }
 
+
+//-------------------------------------------------------------------------
+uint8_t ExecuteHeartBeat(void)
+{
+
+   uint8_t s_dat[] = {4, 0x38, 0x00, 0x00};
+//   uint16_t wait;
+//   ioport_level_t pin_state;
+
+   send_i2c_package(s_dat, sizeof(s_dat));
+
+//   g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_LOW);  //output_high(i2c_cs);
+//
+//   // Wait for the slave to set i2c_res line LOW
+//    wait = 20; // GC 53000;  //520ms
+//    do
+//    {    // if i2c_res == 0, can not send package
+//        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
+//        if (--wait < 2)
+//        {
+//            return 1;    // time out error
+//        }
+//        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
+//    } while(pin_state == IOPORT_LEVEL_HIGH);
+//
+//    // Wait for slave to set the i2c_res HIGH
+//    wait = 20; // GC 53000;  //520ms
+//    do
+//    {    // if i2c_res == 0, can not send package
+//        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
+//        if (--wait < 2)
+//        {
+//            return 1;    // time out error
+//        }
+//        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
+//    } while(pin_state == IOPORT_LEVEL_LOW);
+//
+//
+//   if( send_i2c_package(s_dat, sizeof(s_dat)) )
+//       return 1;
+//
+//    // now wait and check response
+//       if(read_i2c_package()==0)
+//       {
+//          if(i2c_data[0]!=6)
+//              return 1;     // length error
+//          if(i2c_data[1]!=0x74)
+//              return 1;  //cmd error or setup fail (NACK)
+//          if( i2c_data[5] != (uint8_t)(i2c_data[0]+i2c_data[1]+i2c_data[2]+i2c_data[3]+i2c_data[4]) )
+//              return 1;     // crc error
+//          prop_ver1 = i2c_data[2];
+//          prop_ver2 = i2c_data[3];
+//          prop_ver3 = i2c_data[4];
+//
+//          return 0;
+//       }
+//
+   return 1;      // error
+}
+
+
 //-------------------------------------------------------------------------
 
 
 /* HeadArray_CommunicationThread entry function */
 void HeadArray_CommunicationThread_entry(void)
 {
-    /* TODO: add your own code here */
+
+    uint8_t pin_state;
+
     while (1)
     {
-        get_PROP_version();
+        g_ioport_on_ioport.pinRead(i2c_clk, &pin_state);
+
+        if (pin_state)
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);       // Turn off LED
+        else
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
+
+        g_ioport_on_ioport.pinRead(i2c_io, &pin_state);
+
+        if (pin_state)
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);       // Turn off LED
+        else
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
+
+        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
+
+        if (pin_state)
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);       // Turn off LED
+        else
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
+
+//        ExecuteHeartBeat();
         tx_thread_sleep (1);
     }
 }
