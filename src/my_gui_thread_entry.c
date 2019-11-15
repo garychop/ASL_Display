@@ -377,20 +377,20 @@ void my_gui_thread_entry(void)
 //	//Start the WDT by refreshing it
 // 	g_wdt.p_api->refresh(g_wdt.p_ctrl);
   
-  	i = 0;
-  	do {
-  		test_num = get_PROP_version();
-  		
-    	//GC Replace the following with a tx_thread_sleep
-  		//GC    R_BSP_SoftwareDelay(30, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(30);
-  		tx_thread_sleep(10);
-    	//Start the WDT by refreshing it
-// 	  	g_wdt.p_api->refresh(g_wdt.p_ctrl);
-    	if(i > 5)
-    	    break;
-    	i++;
-  	} while(test_num != 0);
-
+//  	i = 0;
+//  	do {
+//  		test_num = get_PROP_version();
+//
+//    	//GC Replace the following with a tx_thread_sleep
+//  		//GC    R_BSP_SoftwareDelay(30, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(30);
+//  		tx_thread_sleep(10);
+//    	//Start the WDT by refreshing it
+//// 	  	g_wdt.p_api->refresh(g_wdt.p_ctrl);
+//    	if(i > 5)
+//    	    break;
+//    	i++;
+//  	} while(test_num != 0);
+//
   	if (i > 5)
   	{
     	while(1)

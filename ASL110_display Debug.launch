@@ -20,7 +20,7 @@
 <stringAttribute key="com.renesas.cdt.core.secondGDBExe" value="green_dsp-elf-gdb"/>
 <booleanAttribute key="com.renesas.cdt.core.secondGDBSupport" value="false"/>
 <intAttribute key="com.renesas.cdt.core.secondGdbPortNumber" value="61237"/>
-<stringAttribute key="com.renesas.cdt.core.serverParam" value="-g SEGGERJLINKARM -t R7FS7G27H  -uSelect= USB -uJLinkSetting= ${workspace_loc:/${ProjName}}/${LaunchConfigName}.jlink -uLowPower= 0 -uInteface= SWD -uIfSpeed= 4000 -uNoReset= 1 -uResetPreRun= 1 -uIdCodeBytes=  FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF -uResetCon= 1 -uSWOcoreClock= 0 -uresetOnReload= 1 -n 0 -uFlashBp= 1 -uSimulation= 0 -uOSRestriction= 0 -uCPUFrequency= 0 -uCECycle= 1"/>
+<stringAttribute key="com.renesas.cdt.core.serverParam" value="-g SEGGERJLINKARM -t R7FS7G27H  -uSelect= USB -uJLinkSetting= ${workspace_loc:/${ProjName}}/${LaunchConfigName}.jlink -uLowPower= 0 -uInteface= SWD -uIfSpeed= 4000 -uNoReset= 1 -uResetPreRun= 1 -uIdCodeBytes=  FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF -uResetCon= 1 -uSWOcoreClock= 0 -uresetOnReload= 1 -n 0 -uFlashBp= 0 -uSimulation= 0 -uOSRestriction= 0 -uCPUFrequency= 0 -uCECycle= 1"/>
 <booleanAttribute key="com.renesas.cdt.core.setResume" value="true"/>
 <booleanAttribute key="com.renesas.cdt.core.startServer" value="true"/>
 <stringAttribute key="com.renesas.cdt.core.targetDevice" value="R7FS7G27H"/>
@@ -71,7 +71,7 @@
 <intAttribute key="org.eclipse.cdt.debug.gdbjtag.core.delay" value="3"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.doHalt" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.doReset" value="false"/>
-<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageFileName" value="C:\ASL\ASL110_display\Debug\ASL110_display.elf"/>
+<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageFileName" value="C:\Repos\Invacare\ASL_Display\Debug\ASL110_display.elf"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageOffset" value=""/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.initCommands" value=""/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadImage" value="true"/>
@@ -82,7 +82,7 @@
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setResume" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setStopAt" value="true"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.stopAt" value="main"/>
-<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsFileName" value="C:\ASL\ASL110_display\Debug\ASL110_display.elf"/>
+<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsFileName" value="C:\Repos\Invacare\ASL_Display\Debug\ASL110_display.elf"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsOffset" value=""/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.useFileForImage" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.useFileForSymbols" value="false"/>
