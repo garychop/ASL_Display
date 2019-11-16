@@ -161,7 +161,6 @@ void ShowUserSettingsItems (void);
 void my_gui_thread_entry(void)
 {
     ssp_err_t err;
-    sf_message_header_t * p_message = NULL;
     UINT status = TX_SUCCESS;
     uint8_t i, test_num;
     
@@ -171,7 +170,7 @@ void my_gui_thread_entry(void)
     
     g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH);
   	g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
-		g_ioport.p_api->pinWrite(beep_out, IOPORT_LEVEL_LOW);
+	g_ioport.p_api->pinWrite(beep_out, IOPORT_LEVEL_LOW);
 
     /* Initializes GUIX. */
     status = gx_system_initialize();
@@ -282,10 +281,6 @@ void my_gui_thread_entry(void)
     //gx_studio_named_widget_create("DateTime_screen", GX_NULL, GX_NULL);
     //gx_studio_named_widget_create("popup_screen", GX_NULL, GX_NULL);
 
-  #ifdef using_keyboard   
-//    gx_studio_named_widget_create("keyboard_screen", GX_NULL, GX_NULL);
-	#endif
-		
 //	gx_studio_named_widget_create("information_screen", GX_NULL, GX_NULL);
 //    status = gx_studio_named_widget_create("HHP_Start_Screen", (GX_WIDGET *)p_window_root, &HHP_Start_Screen_Widget);
 
@@ -335,41 +330,21 @@ void my_gui_thread_entry(void)
 		g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
 
 
-    /** Setup the ILI9341V **/
+    // Setup the ILI9341V LCD Driver and Touchscreen.
     ILI9341V_Init();
 		
 	InitializeSys();
 
-  	LCD_ON();
-		
-	chk_status_timeout = 14; //(14+2)*25 = 400ms
-	//debug_timer0_flag = 0;
+	g_ioport.p_api->pinWrite(BACKLIGHT_EN, IOPORT_LEVEL_HIGH);      // Turn on the backlight
+
 	err = g_timer0.p_api->open(g_timer0.p_ctrl, g_timer0.p_cfg);
 	if (err != SSP_SUCCESS)
 	{
 		g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);	//Error
 	}
 		
-	// version of firmware
-	status = gx_prompt_text_set(firmware_ver_text, version_string);
-	if (GX_SUCCESS != status)
-    {
-    	g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
-    }
-    
-//    status = gx_prompt_text_set(first_pmpt_text, "Init...");
-//	if (GX_SUCCESS != status)
-//    {
-//    	g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
-//    }
-    
-	Process_Touches();
+	Process_Touches();      // This accepts the Touch screen information and sends it to the GUIX process.
 
-// Removed the RTCC.
-//	init_rtcc();
-
-    //delay 4.5s	
-//    R_BSP_SoftwareDelay(4500, BSP_DELAY_UNITS_MILLISECONDS);
     R_BSP_SoftwareDelay(100, BSP_DELAY_UNITS_MILLISECONDS);
  	
 //    //Open WDT; 4.46s; PCLKB 30MHz
@@ -378,14 +353,12 @@ void my_gui_thread_entry(void)
 // 	g_wdt.p_api->refresh(g_wdt.p_ctrl);
   
   	i = 0;
-  	do {
+  	do
+  	{
   		test_num = get_PROP_version();
   		
-    	//GC Replace the following with a tx_thread_sleep
-  		//GC    R_BSP_SoftwareDelay(30, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(30);
   		tx_thread_sleep(10);
-    	//Start the WDT by refreshing it
-// 	  	g_wdt.p_api->refresh(g_wdt.p_ctrl);
+  		//g_wdt.p_api->refresh(g_wdt.p_ctrl);        //Start the WDT by refreshing it
     	if(i > 5)
     	    break;
     	i++;
@@ -401,71 +374,9 @@ void my_gui_thread_entry(void)
     	}
   	}
  	
-  	//beep
-//	beep_set(3, 300);
-  	
-  	Shut_down_display_timeout = shut_down_timer1;
-  	
-  	chk_status_timeout = 20;	//delay about 550ms
-  	
     //Open WDT; 4.46s; PCLKB 30MHz
  	//  g_wdt.p_api->open(g_wdt.p_ctrl, g_wdt.p_cfg);
-		//Start the WDT by refreshing it
- 	//  g_wdt.p_api->refresh(g_wdt.p_ctrl);
-
-  	
-    while(1)
-    {
-        err = g_sf_message0.p_api->pend(g_sf_message0.p_ctrl, &my_gui_thread_message_queue, (sf_message_header_t **) &p_message, 10); //TX_WAIT_FOREVER); //
-        if(!err)
-        {
-            switch (p_message->event_b.class_code)
-            {
-                case SF_MESSAGE_EVENT_CLASS_TOUCH:
-                    if (SF_MESSAGE_EVENT_NEW_DATA == p_message->event_b.code)
-                    {
-                        //sf_touch_panel_payload_t * p_touch_message = (sf_touch_panel_payload_t *) p_message;
-
-                        // Translate a touch event into a GUIX event 
-                        guix_test_send_touch_message((sf_touch_panel_payload_t *) p_message);
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-
-            //Message is processed, so release buffer.
-            err = g_sf_message0.p_api->bufferRelease(g_sf_message0.p_ctrl, (sf_message_header_t *) p_message, SF_MESSAGE_RELEASE_OPTION_NONE);
-            if (err)
-                {
-                    g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
-                }
-
-        }
-
-        if( chk_status_timeout == 0 && LCD_off_flag == 0 )
-        { //adding LCD_off_flag check is for clear 'sigma_dat1_get'
-        
-          get_PROP_version();//chk_sigma_status();
-          chk_status_timeout = 20;	//delay about 550ms
-          
-          Process_Touches();
-        }
-        
-        if(LCD_off_flag == 1)
-            main_menu();
-        
-        if(Shut_down_display_timeout == 0 && Shut_down_display_timeout2 == 0 && LCD_off_flag == 0)
-        {
-          BackLight(OFF);
-          LCD_off_flag = 1;
-        }
-
-        //Refresh WDT
- 	  	g_wdt.p_api->refresh(g_wdt.p_ctrl);
-
-    }
+ 	//  g_wdt.p_api->refresh(g_wdt.p_ctrl);     //Start the WDT by refreshing it
 }
 
 //*************************************************************************************
@@ -1463,8 +1374,6 @@ void  g_timer0_callback(timer_callback_args_t * p_args) //25ms
 
   if(Shut_down_display_timeout2 != 0) Shut_down_display_timeout2--;
 
-  if(chk_status_timeout != 0) chk_status_timeout--;
-
   if(LongHoldtmr != 0) LongHoldtmr--;
 
   if(chk_date_time_timeout != 0) chk_date_time_timeout--;
@@ -1612,38 +1521,4 @@ void Process_Touches (void)
 
 }
 
-//-------------------------------------------------------------------------
-#ifdef OK_TO_USE_RESET
-
-static void reset_check(void)
-{
-    UINT status = TX_SUCCESS;
-
-
-  switch(get_sw()) {
-    case sw_fwd_rev:
-            status = gx_prompt_text_set(first_pmpt_text, "Reset Device");
-                if (GX_SUCCESS != status)
-            {
-                g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
-            }
-
-                Process_Touches();
-
-
-//GC            R_BSP_SoftwareDelay(1500, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(1500);
-
-            //reset the System
-        NVIC_SystemReset();
-            //can't come here
-        while(get_sw() == sw_fwd_rev);
-        break;
-
-    default:
-//GC            R_BSP_SoftwareDelay(100, BSP_DELAY_UNITS_MILLISECONDS);//delay_ms(100);
-        break;
-  }
-
-}
-#endif
 

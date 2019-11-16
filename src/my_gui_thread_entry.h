@@ -81,7 +81,6 @@ typedef struct SETTING_DATA_STRUCT {
 
 uint8_t i2c_data[30],i2c_data_read;//, i2c_get_len;
 
-uint8_t chk_status_timeout;
 uint16_t Shut_down_display_timeout;
 uint16_t Shut_down_display_timeout2; //use in setting mode
 

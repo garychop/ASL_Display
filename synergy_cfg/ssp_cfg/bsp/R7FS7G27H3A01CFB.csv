@@ -357,7 +357,7 @@ OPS0: GTOWUP
 SCI3: SDA
 SCI3: TXD_MOSI
 USBFS0: EXICEN"
-"P410","33","SCI0_RXD_MISO","","Low","None","Peripheral mode","CMOS","None","AGT1: AGTOB
+"P410","33","SCI0_RXD_MISO","","Low","None","Peripheral mode","CMOS","input pull-up","AGT1: AGTOB
 CTSU0: TS06
 ETHERC0: ERXD0
 ETHERC0: RXD1

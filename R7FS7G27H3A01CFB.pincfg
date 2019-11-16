@@ -390,4 +390,6 @@
     <v1:connectionSetting altId="p412.sci0.sck"/>
   </v1:configSetting>
   <v1:configSetting configurationId="sci0.pairing" altId="sci0.pairing.free"/>
+  <v1:configSetting configurationId="p410.gpio_pupd" altId="p410.gpio_pupd.gpio_pupd_ip_up"/>
+  <v1:configSetting configurationId="p501.gpio_pupd" altId="p501.gpio_pupd.gpio_pupd_no_ip_pull"/>
 </v1:pinSettings>
