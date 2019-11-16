@@ -162,7 +162,7 @@ void my_gui_thread_entry(void)
 {
     ssp_err_t err;
     UINT status = TX_SUCCESS;
-    uint8_t i, test_num;
+    //uint8_t i, test_num;
     
 		//debug pins
     g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);
@@ -352,20 +352,6 @@ void my_gui_thread_entry(void)
 //	//Start the WDT by refreshing it
 // 	g_wdt.p_api->refresh(g_wdt.p_ctrl);
   
-<<<<<<< HEAD
-  	i = 0;
-  	do
-  	{
-  		test_num = get_PROP_version();
-  		
-  		tx_thread_sleep(10);
-  		//g_wdt.p_api->refresh(g_wdt.p_ctrl);        //Start the WDT by refreshing it
-    	if(i > 5)
-    	    break;
-    	i++;
-  	} while(test_num != 0);
-
-=======
 //  	i = 0;
 //  	do {
 //  		test_num = get_PROP_version();
@@ -380,16 +366,12 @@ void my_gui_thread_entry(void)
 //    	i++;
 //  	} while(test_num != 0);
 //
->>>>>>> 133b993f8d17f46bd01b68fc121aeb85d9af1ea1
-  	if (i > 5)
-  	{
-    	while(1)
-    	{
-    	    Process_Touches();
-    		//reset_check();
-    		tx_thread_sleep (2);
-    	}
-  	}
+    while(1)
+    {
+        Process_Touches();
+        //reset_check();
+        tx_thread_sleep (2);
+    }
  	
     //Open WDT; 4.46s; PCLKB 30MHz
  	//  g_wdt.p_api->open(g_wdt.p_ctrl, g_wdt.p_cfg);
@@ -454,7 +436,6 @@ UINT DisplayMainScreenActiveFeatures ()
 }
 
 
-
 //*************************************************************************************
 // Function Name: Main_User_Screen_event_process
 //
@@ -464,7 +445,6 @@ UINT DisplayMainScreenActiveFeatures ()
 VOID Main_User_Screen_draw_function(GX_WINDOW *window)
 {
     gx_window_draw(window);
-
 }
 
 UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)

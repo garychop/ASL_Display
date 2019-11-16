@@ -28,11 +28,7 @@
 #define HEARTBEAT_CMD 0x44
 
 //******************************************************************************
-<<<<<<< HEAD
-// Forward declarations
-=======
 // Forward Declarations
->>>>>>> 133b993f8d17f46bd01b68fc121aeb85d9af1ea1
 //******************************************************************************
 
 static void write_i2c_byte(uint8_t i2cbyte);
@@ -40,7 +36,6 @@ static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len);
 static uint8_t read_i2c_byte(void);
 static uint8_t read_i2c_package(void);
 uint8_t ExecuteHeartBeat(void);
-<<<<<<< HEAD
 uint8_t CalculateChecksum (uint8_t *, uint8_t);
 
 //******************************************************************************
@@ -53,19 +48,7 @@ uint8_t g_HeartBeatCounter = 0;
 // Function:CalculateChecksum
 // Description: Calculates the checks and populates the array.
 //******************************************************************************
-=======
-uint8_t DoHeartBeat(void);
-uint8_t CalculateChecksum (uint8_t *data, uint8_t msgLen);
 
-
-uint8_t g_HeartBeatCounter = 0;
-
-//******************************************************************************
-// Function:CalculateChecksum
-// Description: Calculates the checks and populates the array.
-//******************************************************************************
-
->>>>>>> 133b993f8d17f46bd01b68fc121aeb85d9af1ea1
 uint8_t CalculateChecksum (uint8_t *data, uint8_t msgLen)
 {
     uint8_t cs;
@@ -80,15 +63,11 @@ uint8_t CalculateChecksum (uint8_t *data, uint8_t msgLen)
     }
     return cs;
 }
-<<<<<<< HEAD
+
 //******************************************************************************
 //
-=======
-
->>>>>>> 133b993f8d17f46bd01b68fc121aeb85d9af1ea1
 //******************************************************************************
 
-//******************************************************************************
 static void write_i2c_byte(uint8_t i2cbyte)
 {
     uint8_t i;
@@ -584,76 +563,9 @@ uint8_t get_PROP_version(void)
    return 1;      // error
 }
 
-<<<<<<< HEAD
-uint8_t ExecuteHeartBeat(void)
-{
-
-   uint8_t s_dat[4];
-   uint8_t cs;
-//   ioport_level_t pin_state;
-
-   s_dat[0] = 0x04;     // msg length
-   s_dat[1] = HEARTBEAT_CMD;
-   s_dat[2] = ++g_HeartBeatCounter;
-   cs = CalculateChecksum(s_dat, sizeof (s_dat)-1);
-   s_dat[3] = cs;
-   send_i2c_package(s_dat, sizeof(s_dat));
-
-//   g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_LOW);  //output_high(i2c_cs);
-//
-//   // Wait for the slave to set i2c_res line LOW
-//    wait = 20; // GC 53000;  //520ms
-//    do
-//    {    // if i2c_res == 0, can not send package
-//        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
-//        if (--wait < 2)
-//        {
-//            return 1;    // time out error
-//        }
-//        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
-//    } while(pin_state == IOPORT_LEVEL_HIGH);
-//
-//    // Wait for slave to set the i2c_res HIGH
-//    wait = 20; // GC 53000;  //520ms
-//    do
-//    {    // if i2c_res == 0, can not send package
-//        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
-//        if (--wait < 2)
-//        {
-//            return 1;    // time out error
-//        }
-//        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
-//    } while(pin_state == IOPORT_LEVEL_LOW);
-//
-//
-//   if( send_i2c_package(s_dat, sizeof(s_dat)) )
-//       return 1;
-//
-//    // now wait and check response
-//       if(read_i2c_package()==0)
-//       {
-//          if(i2c_data[0]!=6)
-//              return 1;     // length error
-//          if(i2c_data[1]!=0x74)
-//              return 1;  //cmd error or setup fail (NACK)
-//          if( i2c_data[5] != (uint8_t)(i2c_data[0]+i2c_data[1]+i2c_data[2]+i2c_data[3]+i2c_data[4]) )
-//              return 1;     // crc error
-//          prop_ver1 = i2c_data[2];
-//          prop_ver2 = i2c_data[3];
-//          prop_ver3 = i2c_data[4];
-//
-//          return 0;
-//       }
-//
-   return 1;      // error
-}
-=======
-
 //-------------------------------------------------------------------------
 uint8_t ExecuteHeartBeat(void)
 {
->>>>>>> 133b993f8d17f46bd01b68fc121aeb85d9af1ea1
-
    uint8_t s_dat[4];
    uint8_t cs;
 //   ioport_level_t pin_state;
@@ -721,16 +633,6 @@ uint8_t ExecuteHeartBeat(void)
 //
 //******************************************************************************
 
-<<<<<<< HEAD
-//******************************************************************************
-// Function: HeadArray_CommunicationThread_entry
-//  Created by Synergy software
-// Description: This is the thread to handle communication to the ASL110 Head Array
-//
-//******************************************************************************
-
-=======
->>>>>>> 133b993f8d17f46bd01b68fc121aeb85d9af1ea1
 void HeadArray_CommunicationThread_entry(void)
 {
     g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH);
@@ -742,8 +644,6 @@ void HeadArray_CommunicationThread_entry(void)
         tx_thread_sleep (10);
     }
 
-<<<<<<< HEAD
-=======
 //    uint8_t pin_state;
 //
 //    while (1)
@@ -774,5 +674,6 @@ void HeadArray_CommunicationThread_entry(void)
 ////        ExecuteHeartBeat();
 //        tx_thread_sleep (1);
 //    }
->>>>>>> 133b993f8d17f46bd01b68fc121aeb85d9af1ea1
 }
+
+
