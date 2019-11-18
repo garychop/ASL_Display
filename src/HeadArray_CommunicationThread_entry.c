@@ -640,40 +640,9 @@ void HeadArray_CommunicationThread_entry(void)
     while (1)
     {
         ExecuteHeartBeat();
-        read_i2c_package();
+//        read_i2c_package();
         tx_thread_sleep (10);
     }
-
-//    uint8_t pin_state;
-//
-//    while (1)
-//    {
-//        g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_LOW);  //output_high(i2c_cs);
-//
-//        g_ioport_on_ioport.pinRead(i2c_clk, &pin_state);
-//
-//        if (pin_state)
-//            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);       // Turn off LED
-//        else
-//            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
-//
-//        g_ioport_on_ioport.pinRead(i2c_io, &pin_state);
-//
-//        if (pin_state)
-//            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);       // Turn off LED
-//        else
-//            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
-//
-//        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
-//
-//        if (pin_state)
-//            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);       // Turn off LED
-//        else
-//            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
-//
-////        ExecuteHeartBeat();
-//        tx_thread_sleep (1);
-//    }
 }
 
 

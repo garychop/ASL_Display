@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 15.11.2019   Time (hh:mm): 13:22                        */
+/*  Date (dd.mm.yyyy): 18.11.2019   Time (hh:mm): 10:13                        */
 /*******************************************************************************/
 
 
@@ -104,21 +104,6 @@ extern   "C" {
 #define UP_ARROW_BTN_ID 80
 #define DOWN_ARROW_BTN_ID 81
 #define BOTH_ARROW_BTN_ID 82
-#define ID_EDIT_SCREEN_R_BTN 83
-#define ID_BTN_LeftPad 84
-#define ID_BTN_rightPad 85
-#define ID_BTN_CenterPad 86
-#define ID_BTN_Power 87
-#define ID_BTN_DateTime 88
-#define ID_BTN_Sound 89
-#define ID_INPUT_FIELD 90
-#define IDB_BACKSPACE 91
-#define ID_DATETIME_SCREEN_R_BTN 92
-#define ID_DATETIME_SAVE 93
-#define ID_DATETIME_LIST 94
-#define ID_DATETIME_PGUP_BTN 95
-#define ID_DATETIME_PGDN_BTN 96
-#define ID_SETTING_FUNCTION_BTN 97
 
 
 /* Define animation ids                                                        */
@@ -213,23 +198,6 @@ typedef struct
 {
     GX_RESOURCE_ID wallpaper_id;
 } GX_WINDOW_PROPERTIES;
-
-typedef struct
-{
-    GX_RESOURCE_ID wallpaper_id;
-    VOID (*callback)(GX_VERTICAL_LIST *, GX_WIDGET *, INT);
-    int total_rows;
-} GX_VERTICAL_LIST_PROPERTIES;
-
-typedef struct
-{
-    GX_RESOURCE_ID string_id;
-    GX_RESOURCE_ID font_id;
-    GX_RESOURCE_ID normal_text_color_id;
-    GX_RESOURCE_ID selected_text_color_id;
-    GX_CHAR *buffer;
-    UINT buffer_size;
-} GX_SINGLE_LINE_TEXT_INPUT_PROPERTIES;
 
 
 /* Declare top-level control blocks                                            */
@@ -383,78 +351,6 @@ typedef struct MAIN_USER_SCREEN_CONTROL_BLOCK_STRUCT
     GX_TEXT_BUTTON Main_User_Screen_BothButton;
 } MAIN_USER_SCREEN_CONTROL_BLOCK;
 
-typedef struct EDIT_SCREEN_CONTROL_BLOCK_STRUCT
-{
-    GX_WINDOW_MEMBERS_DECLARE
-    GX_PIXELMAP_BUTTON edit_screen_edit_screen_r_btn;
-    GX_PROMPT edit_screen_EditPrompt;
-    GX_TEXT_BUTTON edit_screen_btn_LeftPad;
-    GX_TEXT_BUTTON edit_screen_btn_rightPad;
-    GX_TEXT_BUTTON edit_screen_btn_CenterPad;
-    GX_TEXT_BUTTON edit_screen_btn_Power;
-    GX_TEXT_BUTTON edit_screen_btn_DateTime;
-    GX_TEXT_BUTTON edit_screen_btn_Sound;
-} EDIT_SCREEN_CONTROL_BLOCK;
-
-typedef struct KEYBOARD_SCREEN_CONTROL_BLOCK_STRUCT
-{
-    GX_WINDOW_MEMBERS_DECLARE
-    GX_SINGLE_LINE_TEXT_INPUT keyboard_screen_keyboard_input_field;
-    GX_PIXELMAP_BUTTON keyboard_screen_backspace_btn;
-    GX_PROMPT keyboard_screen_KeyboardPrompt;
-} KEYBOARD_SCREEN_CONTROL_BLOCK;
-
-typedef struct DATETIME_SCREEN_CONTROL_BLOCK_STRUCT
-{
-    GX_WINDOW_MEMBERS_DECLARE
-    GX_PIXELMAP_BUTTON DateTime_screen_DateTime_screen_r_btn;
-    GX_TEXT_BUTTON DateTime_screen_DateTime_save;
-    GX_VERTICAL_LIST DateTime_screen_DateTime_list;
-    GX_PROMPT DateTime_screen_DateTime_list_pos0;
-    GX_PROMPT DateTime_screen_DateTime_list_pos1;
-    GX_PROMPT DateTime_screen_DateTime_list_pos2;
-    GX_PROMPT DateTime_screen_DateTime_list_pos3;
-    GX_PROMPT DateTime_screen_DateTimePrompt;
-    GX_PROMPT DateTime_screen_DateTime_prmpt_pos0;
-    GX_PROMPT DateTime_screen_DateTime_prmpt_pos1;
-    GX_PROMPT DateTime_screen_DateTime_prmpt_pos2;
-    GX_PROMPT DateTime_screen_DateTime_prmpt_pos3;
-    GX_PIXELMAP_BUTTON DateTime_screen_DateTime_PgUp_button;
-    GX_PIXELMAP_BUTTON DateTime_screen_DateTime_PgDn_button;
-} DATETIME_SCREEN_CONTROL_BLOCK;
-
-typedef struct INFORMATION_SCREEN_CONTROL_BLOCK_STRUCT
-{
-    GX_WINDOW_MEMBERS_DECLARE
-    GX_PROMPT information_screen_TimePrmpt;
-    GX_WINDOW information_screen_LeftPadW;
-    GX_PROMPT information_screen_LeftPadPrompt1;
-    GX_PROMPT information_screen_LeftPadPrompt1_1;
-    GX_WINDOW information_screen_LeftPadW_1;
-    GX_PROMPT information_screen_LeftPadPrompt1_2;
-    GX_PROMPT information_screen_LeftPadPrompt1_3;
-    GX_WINDOW information_screen_LeftPadW_2;
-    GX_PROMPT information_screen_LeftPadPrompt1_4;
-    GX_PROMPT information_screen_LeftPadPrompt1_5;
-    GX_WINDOW information_screen_LeftPadW_3;
-    GX_PROMPT information_screen_LeftPadPrompt1_6;
-    GX_PROMPT information_screen_LeftPadPrompt1_7;
-    GX_PROMPT information_screen_LeftPadPrompt1_8;
-    GX_TEXT_BUTTON information_screen_SettingFunctionButton;
-    GX_PROMPT information_screen_TimePrmpt_1;
-    GX_PROMPT information_screen_TimePrmpt_2;
-    GX_PROMPT information_screen_PropVersionPrompt;
-    GX_PROMPT information_screen_HhpVersionPrompt;
-} INFORMATION_SCREEN_CONTROL_BLOCK;
-
-typedef struct INIT_SCREEN_CONTROL_BLOCK_STRUCT
-{
-    GX_WINDOW_MEMBERS_DECLARE
-    GX_PROMPT init_screen_InitPrmpt2;
-    GX_PROMPT init_screen_InitPrmpt3;
-    GX_WINDOW init_screen_window;
-} INIT_SCREEN_CONTROL_BLOCK;
-
 
 /* extern statically defined control blocks                                    */
 
@@ -469,11 +365,6 @@ extern SETPADDIRECTIONSCREEN_CONTROL_BLOCK SetPadDirectionScreen;
 extern DIAGNOSTICSCREEN_CONTROL_BLOCK DiagnosticScreen;
 extern HHP_START_SCREEN_CONTROL_BLOCK HHP_Start_Screen;
 extern MAIN_USER_SCREEN_CONTROL_BLOCK Main_User_Screen;
-extern EDIT_SCREEN_CONTROL_BLOCK edit_screen;
-extern KEYBOARD_SCREEN_CONTROL_BLOCK keyboard_screen;
-extern DATETIME_SCREEN_CONTROL_BLOCK DateTime_screen;
-extern INFORMATION_SCREEN_CONTROL_BLOCK information_screen;
-extern INIT_SCREEN_CONTROL_BLOCK init_screen;
 #endif
 
 /* Prototype Synergy display driver specific functions                         */
@@ -550,12 +441,6 @@ UINT DiagnosticScreen_event_handler(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT HHP_Start_Screen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT Main_User_Screen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 VOID Main_User_Screen_draw_function(GX_WINDOW *widget);
-UINT EditScreenEventHandler(GX_WINDOW *widget, GX_EVENT *event_ptr);
-UINT keyboard_frame_event_handler(GX_WINDOW *widget, GX_EVENT *event_ptr);
-UINT input_field_event_process(GX_SINGLE_LINE_TEXT_INPUT *widget, GX_EVENT *event_ptr);
-UINT DateTimeScreenEventHandler(GX_WINDOW *widget, GX_EVENT *event_ptr);
-UINT InformationScreenEventHandler(GX_WINDOW *widget, GX_EVENT *event_ptr);
-UINT InitScreenEventHandler(GX_WINDOW *widget, GX_EVENT *event_ptr);
 
 /* Declare the GX_STUDIO_DISPLAY_INFO structure                                */
 
@@ -587,8 +472,6 @@ UINT gx_studio_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control
 UINT gx_studio_numeric_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_pixelmap_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_window_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
-UINT gx_studio_vertical_list_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
-UINT gx_studio_text_input_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 GX_WIDGET *gx_studio_widget_create(GX_BYTE *storage, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
 UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **new_widget);
 UINT gx_studio_display_configure(USHORT display, UINT (*driver)(GX_DISPLAY *), USHORT language, USHORT theme, GX_WINDOW_ROOT **return_root);

@@ -129,8 +129,6 @@ extern GX_PROMPT * time_infor_pmpt_text;
 
 //-------------------------------------------------------------------------
 GX_WINDOW_ROOT * p_window_root;
-GX_PROMPT * firmware_ver_text = &init_screen.init_screen_InitPrmpt2;
-GX_PROMPT * first_pmpt_text = &init_screen.init_screen_InitPrmpt3;
 
 //-------------------------------------------------------------------------
 // Forward declarations.
@@ -281,7 +279,6 @@ void my_gui_thread_entry(void)
     //gx_studio_named_widget_create("DateTime_screen", GX_NULL, GX_NULL);
     //gx_studio_named_widget_create("popup_screen", GX_NULL, GX_NULL);
 
-//	gx_studio_named_widget_create("information_screen", GX_NULL, GX_NULL);
 //    status = gx_studio_named_widget_create("HHP_Start_Screen", (GX_WIDGET *)p_window_root, &HHP_Start_Screen_Widget);
 
     gx_studio_named_widget_create("SetPadDirectionScreen", GX_NULL, GX_NULL);
@@ -333,7 +330,7 @@ void my_gui_thread_entry(void)
     // Setup the ILI9341V LCD Driver and Touchscreen.
     ILI9341V_Init();
 		
-	InitializeSys();
+	// InitializeSys();
 
 	g_ioport.p_api->pinWrite(BACKLIGHT_EN, IOPORT_LEVEL_HIGH);      // Turn on the backlight
 
@@ -1371,8 +1368,6 @@ void  g_timer0_callback(timer_callback_args_t * p_args) //25ms
 
   if(Shut_down_display_timeout2 != 0) Shut_down_display_timeout2--;
 
-  if(LongHoldtmr != 0) LongHoldtmr--;
-
   if(chk_date_time_timeout != 0) chk_date_time_timeout--;
 
 }
@@ -1484,16 +1479,6 @@ void Process_Touches (void)
     ssp_err_t err;
 
     sf_message_header_t * p_message = NULL;
-
-#ifdef USE_OLD_CODE
-    GX_EVENT gxe;
-
-    gxe.gx_event_sender = GX_ID_NONE;
-    gxe.gx_event_target = 0;
-    gxe.gx_event_display_handle = 0;
-    gxe.gx_event_type = UPDATE_DISPLAY_EVENT;
-    gx_system_event_send(&gxe);
-#endif
 
     err = g_sf_message0.p_api->pend(g_sf_message0.p_ctrl, &my_gui_thread_message_queue, (sf_message_header_t **) &p_message, 1); //TX_WAIT_FOREVER); //
     if(!err)

@@ -11,24 +11,6 @@ V0.0.1 Jul22, 2019
 
 
 //-------------------------------------------------------------------------
-#define using_keyboard
-												 
-//-------------------------------------------------------------------------
-//define EVENT
-//#define COMMUNCATION_ERROR_HAPPENED (GX_FIRST_APP_EVENT + 1)
-#define UPDATE_DISPLAY_EVENT        (GX_FIRST_APP_EVENT + 2)
-#define Display_Information_Screen  (GX_FIRST_APP_EVENT + 3)
-#define KEY_PRESS_EVENT          		(GX_FIRST_APP_EVENT + 4)
-#define ATT_DEFALT_EVENT          	(GX_FIRST_APP_EVENT + 5)
-#define C505_DEFALT_EVENT          	(GX_FIRST_APP_EVENT + 6)
-#define Return_InforScr_Event     	(GX_FIRST_APP_EVENT + 7)
-#define Return_SettingScr_Event    	(GX_FIRST_APP_EVENT + 8)
-#define Single_Page_Event    				(GX_FIRST_APP_EVENT + 9)
-
-//define others
-#define GX_KEY_RETURN_PREV_PAGE    0x1111
-
-//-------------------------------------------------------------------------
 #define DEC_TO_BCD(N) (uint8_t)( (N/10)*16 + N%10 )
 #define BCD_TO_DEC(N) (uint8_t)( ((N&0xF0)/16)*10 + (N&0x0F) )
 											
@@ -84,15 +66,13 @@ uint8_t i2c_data[30],i2c_data_read;//, i2c_get_len;
 uint16_t Shut_down_display_timeout;
 uint16_t Shut_down_display_timeout2; //use in setting mode
 
-uint8_t LongHoldtmr;
+//uint8_t LongHoldtmr;
  
 unsigned int interrupt_save;
 
 GX_CHAR text_temp[8][4];
 GX_CHAR itos_string[14];
 GX_CHAR time_string[14];
-
-uint8_t page_information_screen_flag;	
 
 uint8_t date_time_page_num;
 uint8_t date_time_disp_num;
@@ -109,20 +89,15 @@ bool LCD_off_flag;
 bool flonghold;
 bool beep_on_flag;
 
-#ifdef using_keyboard
-bool populate_keyboard_flag;
-#endif
-
 bool change_flag;
 bool do_not_save;
 
 bool function_set_flag;
 
 //-------------------------------------------------------------------------
-void InitializeSys(void);
+//void InitializeSys(void);
 void BackLight(int ONOFF);
 void LCD_ON(void);
-void main_menu(void);
 void Process_Touches (void);
 
 uint8_t m250_pwr_on(uint8_t on_off);
