@@ -11,9 +11,6 @@
 //-------------------------------------------------------------------------
 extern GX_WINDOW_ROOT * p_window_root;
 
-extern GX_CHAR version_string3[];
-
-
 //-------------------------------------------------------------------------
 UINT show_window(GX_WINDOW * p_new, GX_WIDGET * p_widget, bool detach_old)
 {

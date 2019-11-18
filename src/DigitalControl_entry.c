@@ -26,8 +26,6 @@
 //****************************************************************************
 
 #include "DigitalControl.h"
-//#include "r_ioport_api.h"
-//#include "my_guix_specifications.h"
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 //****************************************************************************

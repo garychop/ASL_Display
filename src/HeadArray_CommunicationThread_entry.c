@@ -358,167 +358,7 @@ static uint8_t read_i2c_package(void)
 //   request: from HHP
 //   response:from ASL-PROP
 //
-//   cmd:     0x30:   8.1 Pad Assignment command
-//                     <LEN><MAP CMD><PHYSCIAL PAD><LOGICAL PAD><SENSOR TYPE><CHKSUM>
-//                    <LEN><ACK/NAK><CHKSUM>
-//
-//                     request:  6+0x30+"L or R or C"+"L or R or C"+"D or A"+crc
-//                    response: 3+0x60+0x63 or 3+0x61+0x64
-//               ??    "D or A" -- "D or P"
-//
-//            0x31:   8.3 Pad Calibration (Start)
-//                     <LEN><CALIBRATE START CMD><PHYSICAL PAD><CHKSUM>
-//                    <LEN><ACK/NAK><CHKSUM>
-//
-//                     request:  4+0x31+"L or R or C"+crc
-//                    response: 3+0x60+0x63 or 3+0x61+0x64
-//
-//            0x32:    8.3 Pad Calibration (Stop)
-//                     <LEN><CALIBRATE STOP CMD><CHKSUM>
-//                    <LEN><ACK/NAK><CHKSUM>
-//
-//                     request:  3+0x32+0x35
-//                    response: 3+0x60+0x63 or 3+0x61+0x64
-//
-//            0x33:   8.4  Pad Diagnostics/Values
-//                     <LEN><REQUEST PAD DATA CMD><PHYSICAL PAD><CHKSUM>
-//                    <LEN>< PAD DATA RESPONSE><PHYSICAL PAD><LOGICAL PAD><TYPE><RAW DATA><ADJUSTED DATA><STATUS><CHKSUM>
-//
-//                     request:  4+0x33+"L or R or C"+crc
-//                    response: 9+0x73+"L or R or C"+"L or R or C"+"D or P"+'RAW DATA'+'ADJUSTED DATA'+"0x00 or 0x01"+crc
-//               ??    "D or A" -- "D or P"
-//
-//            0x34:   8.5  Version Information
-//                     <LEN><REQUEST_VERSION_CMD><CHKSUM>
-//                    <LEN><VERSION_RESPONSE><MAJOR><MINOR><BUILD><CHKSUM>
-//
-//                     request:  3+0x34+0x37
-//                    response: 6+0x74+'MAJOR'+'MINOR'+'BUILD'+crc
-//
-//            0x35:   8.6  Power On Setting
-//                     <LEN><REQUEST POWER SETTNG CMD><CHKSUM>
-//                    <LEN><POWER SETTING RESPONSE><VALUE><CHKSUM>
-//              ??    "VALUE"
-//
-//                     request:  3+0x35+0x38
-//                    response: 4+0x75+'VALUE'+crc
-//
-//            0x36:   8.7  Sound Setting
-//                     <LEN><REQUEST SOUND SETTNG CMD><CHKSUM>
-//                    <LEN><SOUND SETTING RESPONSE><VALUE><CHKSUM>
-//
-//                     request:  3+0x36+0x39
-//                    response: 4+0x76+"0x01 or 0x02"+crc
-//
-//
-//            ????:   8.2  Calibration Range (ON HOLD)
-//                     <LEN><REQUEST CALIBRATE RANGE CMD><CHKSUM>
-//                    <LEN><CALIBRATE RANGE RESPONSE><MIN VALUE><MAX VALUE><CHKSUM>
-//
 //*******************************************************************************/
-
-uint8_t m250_pwr_on(uint8_t on_off)
-{
-    uint8_t s_dat[10];
-    uint16_t wait;
-    ioport_level_t pin_state;
-
-    g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH); //output_high(i2c_cs);
-
-    // Wait for the i2c_res line goes HIGH
-    wait = 53000;  //520ms
-    do {    // if i2c_res == 0, can not send package
-        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
-
-        if(wait == 0)
-        {
-            return 1;    // time out error
-        }
-
-        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
-        wait--;
-
-    } while(pin_state == IOPORT_LEVEL_LOW);
-
-    s_dat[0] = 3;           // Set command length
-
-    if(on_off == 1)         // DO we want to turn on the system.
-    { // pwr on
-        s_dat[1] = 0x30;
-        s_dat[2] = 0x33;
-        if( send_i2c_package(s_dat, 3) )
-            return 1;   // send package
-    }
-    else
-    {         // pwr off
-        s_dat[1] = 0x31;
-        s_dat[2] = 0x34;
-        if( send_i2c_package(s_dat, 3) )
-            return 2;   // send package
-   }
-
-   // now wait and check response
-   if(read_i2c_package() == 0) {
-      if(i2c_data[0]!=3) return 3;     // length error
-      if(i2c_data[1]!=0x60) return 4;  //cmd error
-     // if(i2c_data[2]!=0x63) return 1;     // crc error; i don't care
-      return 0;
-   }
-   return 5;      // error
-
-}
-
-//-------------------------------------------------------------------------
-
-// return 0: ok; 1: error
-uint8_t m250_setup_mode(uint8_t on_off)
-{
-   uint8_t s_dat[10];
-   uint16_t wait;
-   ioport_level_t pin_state;
-
-
-   g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH);  //output_high(i2c_cs);
-
-
-  wait = 53000;  //520ms
-  do {    // if i2c_res == 0, can not send package
-    g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
-
-    if(wait == 0) {
-      return 1;    // time out error
-    }
-
-    R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
-    wait--;
-
-  } while(pin_state == IOPORT_LEVEL_LOW);
-
-
-   s_dat[0] = 3;
-
-   if(on_off == 1) { // setup_mode on
-      s_dat[1] = 0x34;
-      s_dat[2] = 0x37;
-      if( send_i2c_package(s_dat, 3) ) return 1;   // send package
-   }
-
-   else {         // setup_mode off
-      s_dat[1] = 0x35;
-      s_dat[2] = 0x38;
-      if( send_i2c_package(s_dat, 3) ) return 1;   // send package
-   }
-
-   // now wait and check response
-   if(read_i2c_package()==0) {
-      if(i2c_data[0]!=3) return 1;     // length error
-      if(i2c_data[1]!=0x60) return 1;  //cmd error or fail (NACK)
-      //if(i2c_data[2]!=0x63) return 1;     // crc error; i don't care
-      return 0;
-   }
-   return 1;      // error
-
-}
 
 //-------------------------------------------------------------------------
 uint8_t get_PROP_version(void)
@@ -553,9 +393,9 @@ uint8_t get_PROP_version(void)
             return 1;  //cmd error or setup fail (NACK)
         if( i2c_data[5] != (uint8_t)(i2c_data[0]+i2c_data[1]+i2c_data[2]+i2c_data[3]+i2c_data[4]) )
             return 1;     // crc error
-        prop_ver1 = i2c_data[2];
-        prop_ver2 = i2c_data[3];
-        prop_ver3 = i2c_data[4];
+        g_HA_MajorVersion = i2c_data[2];
+        g_HA_MinorVersion = i2c_data[3];
+        g_HA_BuildVersion = i2c_data[4];
 
         return 0;
     }
@@ -577,53 +417,7 @@ uint8_t ExecuteHeartBeat(void)
    s_dat[3] = cs;
    send_i2c_package(s_dat, sizeof(s_dat));
 
-//   g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_LOW);  //output_high(i2c_cs);
-//
-//   // Wait for the slave to set i2c_res line LOW
-//    wait = 20; // GC 53000;  //520ms
-//    do
-//    {    // if i2c_res == 0, can not send package
-//        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
-//        if (--wait < 2)
-//        {
-//            return 1;    // time out error
-//        }
-//        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
-//    } while(pin_state == IOPORT_LEVEL_HIGH);
-//
-//    // Wait for slave to set the i2c_res HIGH
-//    wait = 20; // GC 53000;  //520ms
-//    do
-//    {    // if i2c_res == 0, can not send package
-//        g_ioport_on_ioport.pinRead(i2c_res, &pin_state);
-//        if (--wait < 2)
-//        {
-//            return 1;    // time out error
-//        }
-//        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
-//    } while(pin_state == IOPORT_LEVEL_LOW);
-//
-//
-//   if( send_i2c_package(s_dat, sizeof(s_dat)) )
-//       return 1;
-//
-//    // now wait and check response
-//       if(read_i2c_package()==0)
-//       {
-//          if(i2c_data[0]!=6)
-//              return 1;     // length error
-//          if(i2c_data[1]!=0x74)
-//              return 1;  //cmd error or setup fail (NACK)
-//          if( i2c_data[5] != (uint8_t)(i2c_data[0]+i2c_data[1]+i2c_data[2]+i2c_data[3]+i2c_data[4]) )
-//              return 1;     // crc error
-//          prop_ver1 = i2c_data[2];
-//          prop_ver2 = i2c_data[3];
-//          prop_ver3 = i2c_data[4];
-//
-//          return 0;
-//       }
-//
-   return 1;      // error
+   return 0;    // All OK
 }
 
 //******************************************************************************

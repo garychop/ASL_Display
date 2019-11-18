@@ -23,7 +23,7 @@ V0.0.1 Jul22, 2019
 
 #define beep_out  			IOPORT_PORT_03_PIN_08	//beep Control
 
-#define BACKLIGHT_EN  	IOPORT_PORT_03_PIN_10
+#define BACKLIGHT_CONTROL_PIN  	IOPORT_PORT_03_PIN_10
 
 #define GRNLED_PORT        	IOPORT_PORT_07_PIN_10	//IOPORT_PORT_06_PIN_00
 
@@ -41,8 +41,6 @@ V0.0.1 Jul22, 2019
 #define TRUE 1
 #define FALSE 0
 
-//#define FLASHRATE  20 //15
-
 #define kbd_fwd         5
 #define kbd_rev         6
 
@@ -51,65 +49,25 @@ V0.0.1 Jul22, 2019
 #define sw_fwd_rev      21
 
 #define shut_down_timer1	800  	//20s
-
 #define shut_down_timer2	2400	//60s
-
-
-//-------------------------------------------------------------------------
-typedef struct SETTING_DATA_STRUCT {
-    GX_CHAR *name;
-} SETTING_DATA;
-
 
 uint8_t i2c_data[30],i2c_data_read;//, i2c_get_len;
 
-uint16_t Shut_down_display_timeout;
-uint16_t Shut_down_display_timeout2; //use in setting mode
-
-//uint8_t LongHoldtmr;
- 
+//*****************************************************************************************************
+// This is need to preserve the status of the Interrups when macro TX_DISABLE and TX_RESTORE are used.
 unsigned int interrupt_save;
 
-GX_CHAR text_temp[8][4];
-GX_CHAR itos_string[14];
-GX_CHAR time_string[14];
+//*****************************************************************************************************
+// This holds the Major, Minor and Build #'s of the ASL110 Head Array
+uint8_t g_HA_MajorVersion, g_HA_MinorVersion, g_HA_BuildVersion;
 
-uint8_t date_time_page_num;
-uint8_t date_time_disp_num;
-uint8_t date_time_row_num;
-uint8_t rtcc_data[16];		//Normally, rtcc_data[0]:init addr; rtcc_data[1]~rtcc_data[7] -> Sec,Min,Hr,WD,Date,Ms,Yr
-uint8_t chk_date_time_timeout;
+//*****************************************************************************************************
+// Beeping information
+bool g_BeepControlFlag;     // NonZero means we are beeping locally; 0 = No beeping.
+ioport_level_t g_BeepPortStatus;
 
-ioport_level_t beep_level;
-
-uint8_t prop_ver1, prop_ver2, prop_ver3;
-
-//----------------------------
-bool LCD_off_flag;
-bool flonghold;
-bool beep_on_flag;
-
-bool change_flag;
-bool do_not_save;
-
-bool function_set_flag;
-
-//-------------------------------------------------------------------------
-//void InitializeSys(void);
-void BackLight(int ONOFF);
-void LCD_ON(void);
+//*****************************************************************************************************
 void Process_Touches (void);
-
-uint8_t m250_pwr_on(uint8_t on_off);
-uint8_t m250_setup_mode(uint8_t on_off);
-
-uint8_t kbhit_sw(void);
-uint8_t get_sw_code(void);
-uint8_t get_sw(void);
-void show_info_scrn(void);
-void return_info_scrn(void);
-
-void beep_set(uint8_t beepType, uint32_t beepPeriod);
 
 UINT show_window(GX_WINDOW * p_new, GX_WIDGET * p_widget, bool detach_old);
 

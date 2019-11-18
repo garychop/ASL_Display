@@ -4,14 +4,12 @@
 #include <my_gui_thread_entry.h>
 #include <stdio.h>
 #include "gx_api.h"
-//#include "my_guix_resources.h"
 #include "ASL_HHP_Display_GUIX_resources.h"
-//#include "my_guix_specifications.h"
 #include "ASL_HHP_Display_GUIX_specifications.h"
+
 //-------------------------------------------------------------------------
 GX_CHAR version_string[16]     = "Version: 0.0.1a";
 GX_CHAR version_string2[20] = "Attendant: V0.0.1";
-GX_CHAR version_string3[10]     		 	=  "V0.0.1";
 
 //-------------------------------------------------------------------------
 // Typdefs and defines
@@ -19,8 +17,6 @@ GX_CHAR version_string3[10]     		 	=  "V0.0.1";
 
 enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PAD_ACTIVE_TIMER_ID};
 
-//#define UP_ARROW_BTN_ID 2
-//#define DOWN_ARROW_BTN_ID 0
 #define LONG_PRESS_BUTTON_ID 1
 
 #define min(a,b)   ((a < b) ? a : b)
@@ -330,9 +326,7 @@ void my_gui_thread_entry(void)
     // Setup the ILI9341V LCD Driver and Touchscreen.
     ILI9341V_Init();
 		
-	// InitializeSys();
-
-	g_ioport.p_api->pinWrite(BACKLIGHT_EN, IOPORT_LEVEL_HIGH);      // Turn on the backlight
+	g_ioport.p_api->pinWrite(BACKLIGHT_CONTROL_PIN, IOPORT_LEVEL_HIGH);      // Turn on the backlight
 
 	err = g_timer0.p_api->open(g_timer0.p_ctrl, g_timer0.p_cfg);
 	if (err != SSP_SUCCESS)
@@ -1361,14 +1355,7 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 //-------------------------------------------------------------------------
 void  g_timer0_callback(timer_callback_args_t * p_args) //25ms
 {
-  (void)p_args;
-
-
-  if(Shut_down_display_timeout != 0) Shut_down_display_timeout--;
-
-  if(Shut_down_display_timeout2 != 0) Shut_down_display_timeout2--;
-
-  if(chk_date_time_timeout != 0) chk_date_time_timeout--;
+    (void)p_args;
 
 }
 
@@ -1378,10 +1365,10 @@ void  g_timer1_callback(timer_callback_args_t * p_args) //1612us
   (void)p_args;
 
 
-  if(beep_level == IOPORT_LEVEL_LOW) beep_level = IOPORT_LEVEL_HIGH;
-  else beep_level = IOPORT_LEVEL_LOW;
+  if(g_BeepPortStatus == IOPORT_LEVEL_LOW) g_BeepPortStatus = IOPORT_LEVEL_HIGH;
+  else g_BeepPortStatus = IOPORT_LEVEL_LOW;
 
-  g_ioport.p_api->pinWrite(beep_out, beep_level);
+  g_ioport.p_api->pinWrite(beep_out, g_BeepPortStatus);
 
 }
 
@@ -1391,10 +1378,10 @@ void  g_timer2_callback(timer_callback_args_t * p_args) //819us
   (void)p_args;
 
 
-  if(beep_level == IOPORT_LEVEL_LOW) beep_level = IOPORT_LEVEL_HIGH;
-  else beep_level = IOPORT_LEVEL_LOW;
+  if(g_BeepPortStatus == IOPORT_LEVEL_LOW) g_BeepPortStatus = IOPORT_LEVEL_HIGH;
+  else g_BeepPortStatus = IOPORT_LEVEL_LOW;
 
-  g_ioport.p_api->pinWrite(beep_out, beep_level);
+  g_ioport.p_api->pinWrite(beep_out, g_BeepPortStatus);
 
 }
 
