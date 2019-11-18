@@ -162,7 +162,7 @@ void my_gui_thread_entry(void)
     g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);
     g_ioport.p_api->pinWrite(TEST_PIN, IOPORT_LEVEL_LOW);
     
-    g_ioport_on_ioport.pinWrite(i2c_cs, IOPORT_LEVEL_HIGH);
+//    g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
   	g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
 	g_ioport.p_api->pinWrite(beep_out, IOPORT_LEVEL_LOW);
 

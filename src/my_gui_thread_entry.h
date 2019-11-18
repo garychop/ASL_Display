@@ -16,10 +16,10 @@ V0.0.1 Jul22, 2019
 											
 //-------------------------------------------------------------------------
 
-#define i2c_cs         	IOPORT_PORT_05_PIN_01	//IOPORT_PORT_04_PIN_10
-#define i2c_res        	IOPORT_PORT_05_PIN_02	//IOPORT_PORT_04_PIN_11
-#define i2c_io         	IOPORT_PORT_05_PIN_03	//IOPORT_PORT_04_PIN_12
-#define i2c_clk        	IOPORT_PORT_05_PIN_04	//IOPORT_PORT_04_PIN_13
+#define I2C_CS_PIN      IOPORT_PORT_05_PIN_01	//IOPORT_PORT_04_PIN_10
+#define I2C_RES_PIN    	IOPORT_PORT_05_PIN_02	//IOPORT_PORT_04_PIN_11
+#define I2C_IO_PIN     	IOPORT_PORT_05_PIN_03	//IOPORT_PORT_04_PIN_12
+#define I2C_CLK_PIN    	IOPORT_PORT_05_PIN_04	//IOPORT_PORT_04_PIN_13
 
 #define beep_out  			IOPORT_PORT_03_PIN_08	//beep Control
 
