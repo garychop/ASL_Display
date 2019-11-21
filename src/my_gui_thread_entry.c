@@ -74,6 +74,7 @@ GX_RECTANGLE g_CalibrationPromptLocations[] = {
 int g_ChangeScreen_WIP;
 GX_WINDOW *g_GoBackScreen = GX_NULL;
 GX_WINDOW *g_CalibrationScreen = GX_NULL;
+GX_WIDGET *g_ActiveScreen = GX_NULL;
 
 // Timeout information
 int g_TimeoutValue;
@@ -156,7 +157,8 @@ void my_gui_thread_entry(void)
     UINT status = TX_SUCCESS;
     HHP_HA_MSG_STRUCT HeadArrayMsg;
     uint32_t qStatus;
-    
+    GX_EVENT gxe;
+
 		//debug pins
     g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);
     g_ioport.p_api->pinWrite(TEST_PIN, IOPORT_LEVEL_LOW);
@@ -265,17 +267,6 @@ void my_gui_thread_entry(void)
     /* Create the widgets we have defined with the GUIX data structures and resources. */
     GX_WIDGET * p_first_screen = NULL;
     
-		
-		/* Create the screens. */
-    // gx_studio_named_widget_create("edit_screen", (GX_WIDGET *)p_window_root, &p_first_screen);
-    // gx_studio_named_widget_create("DateTime_screen", (GX_WIDGET *)p_window_root, &p_first_screen);
-    //gx_studio_named_widget_create("edit_screen", GX_NULL, GX_NULL);
-    //gx_studio_named_widget_create("popup_screen2", GX_NULL, GX_NULL);
-    //gx_studio_named_widget_create("DateTime_screen", GX_NULL, GX_NULL);
-    //gx_studio_named_widget_create("popup_screen", GX_NULL, GX_NULL);
-
-//    status = gx_studio_named_widget_create("HHP_Start_Screen", (GX_WIDGET *)p_window_root, &HHP_Start_Screen_Widget);
-
     gx_studio_named_widget_create("SetPadDirectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("SetPadTypeScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("PadCalibrationScreen", GX_NULL, GX_NULL);
@@ -285,13 +276,16 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("DiagnosticScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("UserSettingsScreen", GX_NULL, GX_NULL);
 	gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("Main_User_Screen", (GX_WIDGET *)p_window_root, &p_first_screen);    // Create and show first startup screen.
+    gx_studio_named_widget_create("Main_User_Screen", GX_NULL, GX_NULL);    // Create and show first startup screen.
+    gx_studio_named_widget_create("StartupSplashScreen", (GX_WIDGET *)p_window_root, &p_first_screen);    // Create and show first startup screen.
 
     /* Attach the first screen to the root so we can see it when the root is shown */
     gx_widget_attach(p_window_root, p_first_screen);
 
     /* Shows the root window to make it and patients screen visible. */
     gx_widget_show(p_window_root);
+
+    g_ActiveScreen = (GX_WIDGET*)&StartupSplashScreen;     // Save we can determine who's got control of the screen.
 
     /* Lets GUIX run. */
     gx_system_start();
@@ -356,6 +350,7 @@ void my_gui_thread_entry(void)
 //    	i++;
 //  	} while(test_num != 0);
 //
+
     while(1)
     {
         Process_Touches();          // Process the GUI touches and the Front Panel Arrows Pushes.
@@ -364,6 +359,31 @@ void my_gui_thread_entry(void)
         if (qStatus == TX_SUCCESS)
             g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);        // Turn off LED
 
+        if (HeadArrayMsg.m_MsgType == HHP_HA_HEART_BEAT)
+        {
+            if (HeadArrayMsg.HeartBeatMsg.m_HB_OK)
+            {
+                if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
+                {
+                    gxe.gx_event_type = GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED);
+                    gxe.gx_event_sender = GX_ID_NONE;
+                    gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                    gxe.gx_event_display_handle = 0;
+                    gx_system_event_send(&gxe);
+                }
+            }
+            else    // Failed Heart Beat
+            {
+                if (g_ActiveScreen->gx_widget_id == MAIN_USER_SCREEN_ID)
+                {
+                    gxe.gx_event_type = GX_SIGNAL (HB_TIMEOUT_ID, GX_EVENT_CLICKED);
+                    gxe.gx_event_sender = GX_ID_NONE;
+                    gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                    gxe.gx_event_display_handle = 0;
+                    gx_system_event_send(&gxe);
+                }
+            }
+        }
         tx_thread_sleep (2);
     }
  	
@@ -431,6 +451,32 @@ UINT DisplayMainScreenActiveFeatures ()
 
 
 //*************************************************************************************
+// Startup Screen
+//*************************************************************************************
+
+VOID StartupSplashScreen_draw_function (GX_WINDOW *window)
+{
+    g_ActiveScreen = (GX_WIDGET*) window;
+
+    gx_window_draw(window);
+}
+
+UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    gx_window_event_process(window, event_ptr);
+
+    switch (event_ptr->gx_event_type)
+    {
+        case GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED):
+            gx_widget_attach (p_window_root, (GX_WIDGET*) &Main_User_Screen);
+            gx_widget_show ((GX_WIDGET*) &Main_User_Screen);
+            break;
+    } // end switch
+
+    return GX_SUCCESS;
+}
+
+//*************************************************************************************
 // Function Name: Main_User_Screen_event_process
 //
 // Description: This handles the User Screen messages.
@@ -438,6 +484,8 @@ UINT DisplayMainScreenActiveFeatures ()
 //*************************************************************************************
 VOID Main_User_Screen_draw_function(GX_WINDOW *window)
 {
+    g_ActiveScreen = (GX_WIDGET*) window;
+
     gx_window_draw(window);
 }
 
@@ -549,6 +597,10 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         g_ChangeScreen_WIP = TRUE;
         break;
 
+    case GX_SIGNAL (HB_TIMEOUT_ID, GX_EVENT_CLICKED):
+        gx_widget_attach (p_window_root, (GX_WIDGET*) &StartupSplashScreen);
+        gx_widget_show ((GX_WIDGET*) &StartupSplashScreen);
+        break;
     }
 
     DisplayMainScreenActiveFeatures();  // Remove this when more of the previous code is "undefinded".

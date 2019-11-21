@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 18.11.2019   Time (hh:mm): 10:13                        */
+/*  Date (dd.mm.yyyy): 21.11.2019   Time (hh:mm): 16:47                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+STARTUPSPLASHSCREEN_CONTROL_BLOCK StartupSplashScreen;
 PADCALIBRATIONSCREEN_CONTROL_BLOCK PadCalibrationScreen;
 SETPADTYPESCREEN_CONTROL_BLOCK SetPadTypeScreen;
 USERSETTINGSSCREEN_CONTROL_BLOCK UserSettingsScreen;
@@ -29,6 +30,14 @@ MAIN_USER_SCREEN_CONTROL_BLOCK Main_User_Screen;
 GX_DISPLAY main_display_control_block;
 GX_WINDOW_ROOT main_display_root_window;
 GX_CANVAS  main_display_canvas_control_block;
+
+UINT gx_studio_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent)
+{
+    UINT status;
+    GX_BUTTON *button = (GX_BUTTON *) control_block;
+    status = gx_button_create(button, info->widget_name, parent, info->style, info->widget_id, &info->size);
+    return status;
+}
 
 UINT gx_studio_text_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent)
 {
@@ -134,6 +143,138 @@ UINT gx_studio_window_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control
     }
     return status;
 }
+GX_WINDOW_PROPERTIES StartupSplashScreen_properties =
+{
+    GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_FLATTEN  /* wallpaper pixelmap id        */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES StartupSplashScreen_pixelmap_button_properties =
+{
+    GX_PIXELMAP_ID_FUSIONLOGO,               /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PROMPT_PROPERTIES StartupSplashScreen_StatusPrompt_properties =
+{
+    GX_STRING_ID_STRING_9,                   /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_HB_TimeoutButton_define =
+{
+    "HB_TimeoutButton",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    HB_TIMEOUT_ID,                           /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED,   /* style flags                  */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {320, 50, 399, 73},                      /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_HB_TimeoutButton), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
+};
+
+GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_HB_OK_Button_define =
+{
+    "HB_OK_Button",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    HB_OK_ID,                                /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED,   /* style flags                  */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {320, 5, 399, 28},                       /* widget size                    */
+    &StartupSplashScreen_HB_TimeoutButton_define, /* next widget definition    */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_HB_OK_Button), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
+};
+
+GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_StatusPrompt_define =
+{
+    "StatusPrompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    STATUS_PROMPT_ID,                        /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {72, 112, 301, 141},                     /* widget size                    */
+    &StartupSplashScreen_HB_OK_Button_define, /* next widget definition        */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_StatusPrompt), /* control block */
+    (void *) &StartupSplashScreen_StatusPrompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_pixelmap_button_define =
+{
+    "pixelmap_button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT,   /* style flags                */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {64, 15, 250, 115},                      /* widget size                    */
+    &StartupSplashScreen_StatusPrompt_define, /* next widget definition        */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_pixelmap_button), /* control block */
+    (void *) &StartupSplashScreen_pixelmap_button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_define =
+{
+    "StartupSplashScreen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    STARTUP_SPLASH_SCREEN_ID,                /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(STARTUPSPLASHSCREEN_CONTROL_BLOCK), /* control block size           */
+    GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    (VOID (*)(GX_WIDGET *)) StartupSplashScreen_draw_function, /* drawing function override */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) StartupSplashScreen_event_process, /* event function override */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &StartupSplashScreen_pixelmap_button_define, /* child widget               */
+    0,                                       /* control block                  */
+    (void *) &StartupSplashScreen_properties /* extended properties            */
+};
 GX_WINDOW_PROPERTIES PadCalibrationScreen_properties =
 {
     GX_PIXELMAP_ID_HEADARRAY003              /* wallpaper pixelmap id          */
@@ -2953,7 +3094,7 @@ GX_PIXELMAP_PROMPT_PROPERTIES Main_User_Screen_ProfileNextLargePrompt_properties
 };
 GX_PIXELMAP_PROMPT_PROPERTIES Main_User_Screen_PowerSmallPrompt_properties =
 {
-    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_STRING_ID_STRING_14,                  /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SLIDER_NEEDLE_LINE2,         /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT,               /* selected text color            */
@@ -2966,7 +3107,7 @@ GX_PIXELMAP_PROMPT_PROPERTIES Main_User_Screen_PowerSmallPrompt_properties =
 };
 GX_PIXELMAP_PROMPT_PROPERTIES Main_User_Screen_PowerLargePrompt_properties =
 {
-    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_STRING_ID_STRING_14,                  /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT,               /* selected text color            */
@@ -3387,6 +3528,7 @@ GX_CONST GX_STUDIO_WIDGET Main_User_Screen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
+    { &StartupSplashScreen_define, (GX_WIDGET *) &StartupSplashScreen },
     { &PadCalibrationScreen_define, (GX_WIDGET *) &PadCalibrationScreen },
     { &SetPadTypeScreen_define, (GX_WIDGET *) &SetPadTypeScreen },
     { &UserSettingsScreen_define, (GX_WIDGET *) &UserSettingsScreen },

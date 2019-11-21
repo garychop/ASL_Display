@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 18.11.2019   Time (hh:mm): 10:13                        */
+/*  Date (dd.mm.yyyy): 21.11.2019   Time (hh:mm): 16:47                        */
 /*******************************************************************************/
 
 
@@ -22,88 +22,92 @@ extern   "C" {
 
 /* Define widget ids                                                           */
 
-#define CENTER_PAD_ON_BTN_ID 1
-#define MINIMUM_INSTRUCT_PROMPT_ID 2
-#define LEFT_PAD_ON_BTN_ID 3
-#define OK_BTN_ID 4
-#define RIGHT_PAD_ON_BTN_ID 5
-#define MAXIMUM_INSTRUCT_PROMPT_ID 6
-#define VALUE_PROMPT_ID 7
-#define PAD_VALUE_PROMPT_ID 8
-#define CENTER_PAD_DIGITAL_BTN_ID 9
-#define CENTER_PAD_PROPORTIONAL_BTN_ID 10
-#define LEFT_PAD_DIGITAL_BTN_ID 11
-#define LEFT_PAD_PROPORTIONAL_BTN_ID 12
-#define RIGHT_PAD_DIGITAL_BTN_ID 13
-#define RIGHT_PAD_PROPORTIONAL_BTN_ID 14
-#define SETTING_PROMPT01_ID 15
-#define CLICKS_BTN_ID 16
-#define CLICKS_PROMPT_ID 17
-#define CLICKS_ACTIVE_ICON 18
-#define CLICKS_INACTIVE_ICON 19
-#define TIMER_OFF_BTN_ID 20
-#define TIMER_10_BTN_ID 21
-#define TIMER_15_BTN_ID 22
-#define TIMER_20_BTN_ID 23
-#define TIMER_25_BTN_ID 24
-#define TIMER_30_BTN_ID 25
-#define TIMER_40_BTN_ID 26
-#define TIMER_50_BTN_ID 27
-#define POWER_BTN_ID 28
-#define POWER_PROMPT_ID 29
-#define POWER_ACTIVE_ICON 30
-#define POWER_INACTIVE_ICON 31
-#define BLUETOOTH_PROMPT_ID 32
-#define BLUETOOTH_BTN_ID 33
-#define BLUETOOTH_ACTIVE_ICON 34
-#define BLUETOOTH_INACTIVE_ICON 35
-#define NEXT_FUNCTION_PROMPT_ID 36
-#define NEXT_FUNCTION_BTN_ID 37
-#define NEXT_FUNCTION_ACTIVE_ICON 38
-#define NEXT_FUNCTION_INACTIVE_ICON 39
-#define NEXT_PROFILE_PROMPT_ID 40
-#define NEXT_PROFILE_BTN_ID 41
-#define NEXT_PROFILE_ACTIVE_ICON 42
-#define NEXT_PROFILE_INACTIVE_ICON 43
-#define GOTO_PAD_TYPE_BTN_ID 44
-#define GOTO_PAD_DIRECTIONS_BTN_ID 45
-#define GOTO_PAD_SETTINGS_BTN_ID 46
-#define GOTO_USER_SETTINGS_BTN_ID 47
-#define FEATURES_SETTINGS_BTN_ID 48
-#define CENTER_PAD_FORWARD_ARROW_BTN_ID 49
-#define LEFT_PAD_LEFT_ARROW_BTN_ID 50
-#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 51
-#define LEFT_PAD_RIGHT_ARROW_BTN_ID 52
-#define LEFT_PAD_FORWARD_ARROW_BTN_ID 53
-#define LEFT_PAD_OFF_BTN_ID 54
-#define RIGHT_PAD_LEFT_ARROW_BTN_ID 55
-#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 56
-#define RIGHT_PAD_OFF_BTN_ID 57
-#define CENTER_PAD_LEFT_ARROW_BTN_ID 58
-#define CENTER_PAD_RIGHT_ARROW_BTN_ID 59
-#define CENTER_PAD_OFF_BTN_ID 60
-#define INSTRUCT_PROMPT_ID 61
-#define CENTER_PAD_PROP_BTN_ID 62
-#define LEFT_PAD_PROP_BTN_ID 63
-#define RIGHT_PAD_PROP_BTN_ID 64
-#define DIAGNOSTIC_BTN_ID 65
-#define SETTINGS_BTN_ID 66
-#define VERSION_PROMPT_ID 67
-#define VERSION_PROMPT1l_ID 68
-#define MAIN_USER_SCREEN_ID 69
-#define RIGHT_PAD_OFF_ID 70
-#define PROFILE_NEXT_SMALL_PROMPT_ID 71
-#define PROFILE_NEXT_LARGE_PROMPT_ID 72
-#define POWER_SMALL_PROMPT_ID 73
-#define POWER_LARGE_PROMPT_ID 74
-#define FUNCTION_NEXT_SMALL_PROMPT_ID 75
-#define FUNCITON_NET_LARGE_PROMPT_ID 76
-#define CENTER_PAD_ON_ID 77
-#define BLUETOOTH_LARGE_PROMPT_ID 78
-#define BLUETOOTH_SMALL_PROMPT_ID 79
-#define UP_ARROW_BTN_ID 80
-#define DOWN_ARROW_BTN_ID 81
-#define BOTH_ARROW_BTN_ID 82
+#define STARTUP_SPLASH_SCREEN_ID 1
+#define STATUS_PROMPT_ID 2
+#define HB_OK_ID 3
+#define HB_TIMEOUT_ID 4
+#define CENTER_PAD_ON_BTN_ID 5
+#define MINIMUM_INSTRUCT_PROMPT_ID 6
+#define LEFT_PAD_ON_BTN_ID 7
+#define OK_BTN_ID 8
+#define RIGHT_PAD_ON_BTN_ID 9
+#define MAXIMUM_INSTRUCT_PROMPT_ID 10
+#define VALUE_PROMPT_ID 11
+#define PAD_VALUE_PROMPT_ID 12
+#define CENTER_PAD_DIGITAL_BTN_ID 13
+#define CENTER_PAD_PROPORTIONAL_BTN_ID 14
+#define LEFT_PAD_DIGITAL_BTN_ID 15
+#define LEFT_PAD_PROPORTIONAL_BTN_ID 16
+#define RIGHT_PAD_DIGITAL_BTN_ID 17
+#define RIGHT_PAD_PROPORTIONAL_BTN_ID 18
+#define SETTING_PROMPT01_ID 19
+#define CLICKS_BTN_ID 20
+#define CLICKS_PROMPT_ID 21
+#define CLICKS_ACTIVE_ICON 22
+#define CLICKS_INACTIVE_ICON 23
+#define TIMER_OFF_BTN_ID 24
+#define TIMER_10_BTN_ID 25
+#define TIMER_15_BTN_ID 26
+#define TIMER_20_BTN_ID 27
+#define TIMER_25_BTN_ID 28
+#define TIMER_30_BTN_ID 29
+#define TIMER_40_BTN_ID 30
+#define TIMER_50_BTN_ID 31
+#define POWER_BTN_ID 32
+#define POWER_PROMPT_ID 33
+#define POWER_ACTIVE_ICON 34
+#define POWER_INACTIVE_ICON 35
+#define BLUETOOTH_PROMPT_ID 36
+#define BLUETOOTH_BTN_ID 37
+#define BLUETOOTH_ACTIVE_ICON 38
+#define BLUETOOTH_INACTIVE_ICON 39
+#define NEXT_FUNCTION_PROMPT_ID 40
+#define NEXT_FUNCTION_BTN_ID 41
+#define NEXT_FUNCTION_ACTIVE_ICON 42
+#define NEXT_FUNCTION_INACTIVE_ICON 43
+#define NEXT_PROFILE_PROMPT_ID 44
+#define NEXT_PROFILE_BTN_ID 45
+#define NEXT_PROFILE_ACTIVE_ICON 46
+#define NEXT_PROFILE_INACTIVE_ICON 47
+#define GOTO_PAD_TYPE_BTN_ID 48
+#define GOTO_PAD_DIRECTIONS_BTN_ID 49
+#define GOTO_PAD_SETTINGS_BTN_ID 50
+#define GOTO_USER_SETTINGS_BTN_ID 51
+#define FEATURES_SETTINGS_BTN_ID 52
+#define CENTER_PAD_FORWARD_ARROW_BTN_ID 53
+#define LEFT_PAD_LEFT_ARROW_BTN_ID 54
+#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 55
+#define LEFT_PAD_RIGHT_ARROW_BTN_ID 56
+#define LEFT_PAD_FORWARD_ARROW_BTN_ID 57
+#define LEFT_PAD_OFF_BTN_ID 58
+#define RIGHT_PAD_LEFT_ARROW_BTN_ID 59
+#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 60
+#define RIGHT_PAD_OFF_BTN_ID 61
+#define CENTER_PAD_LEFT_ARROW_BTN_ID 62
+#define CENTER_PAD_RIGHT_ARROW_BTN_ID 63
+#define CENTER_PAD_OFF_BTN_ID 64
+#define INSTRUCT_PROMPT_ID 65
+#define CENTER_PAD_PROP_BTN_ID 66
+#define LEFT_PAD_PROP_BTN_ID 67
+#define RIGHT_PAD_PROP_BTN_ID 68
+#define DIAGNOSTIC_BTN_ID 69
+#define SETTINGS_BTN_ID 70
+#define VERSION_PROMPT_ID 71
+#define VERSION_PROMPT1l_ID 72
+#define MAIN_USER_SCREEN_ID 73
+#define RIGHT_PAD_OFF_ID 74
+#define PROFILE_NEXT_SMALL_PROMPT_ID 75
+#define PROFILE_NEXT_LARGE_PROMPT_ID 76
+#define POWER_SMALL_PROMPT_ID 77
+#define POWER_LARGE_PROMPT_ID 78
+#define FUNCTION_NEXT_SMALL_PROMPT_ID 79
+#define FUNCITON_NET_LARGE_PROMPT_ID 80
+#define CENTER_PAD_ON_ID 81
+#define BLUETOOTH_LARGE_PROMPT_ID 82
+#define BLUETOOTH_SMALL_PROMPT_ID 83
+#define UP_ARROW_BTN_ID 84
+#define DOWN_ARROW_BTN_ID 85
+#define BOTH_ARROW_BTN_ID 86
 
 
 /* Define animation ids                                                        */
@@ -201,6 +205,15 @@ typedef struct
 
 
 /* Declare top-level control blocks                                            */
+
+typedef struct STARTUPSPLASHSCREEN_CONTROL_BLOCK_STRUCT
+{
+    GX_WINDOW_MEMBERS_DECLARE
+    GX_PIXELMAP_BUTTON StartupSplashScreen_pixelmap_button;
+    GX_PROMPT StartupSplashScreen_StatusPrompt;
+    GX_BUTTON StartupSplashScreen_HB_OK_Button;
+    GX_BUTTON StartupSplashScreen_HB_TimeoutButton;
+} STARTUPSPLASHSCREEN_CONTROL_BLOCK;
 
 typedef struct PADCALIBRATIONSCREEN_CONTROL_BLOCK_STRUCT
 {
@@ -355,6 +368,7 @@ typedef struct MAIN_USER_SCREEN_CONTROL_BLOCK_STRUCT
 /* extern statically defined control blocks                                    */
 
 #ifndef GUIX_STUDIO_GENERATED_FILE
+extern STARTUPSPLASHSCREEN_CONTROL_BLOCK StartupSplashScreen;
 extern PADCALIBRATIONSCREEN_CONTROL_BLOCK PadCalibrationScreen;
 extern SETPADTYPESCREEN_CONTROL_BLOCK SetPadTypeScreen;
 extern USERSETTINGSSCREEN_CONTROL_BLOCK UserSettingsScreen;
@@ -429,6 +443,8 @@ VOID _gx_synergy_jpeg_draw (GX_DRAW_CONTEXT *p_context, INT x, INT y, GX_PIXELMA
 
 /* Declare event process functions, draw functions, and callback functions     */
 
+UINT StartupSplashScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
+VOID StartupSplashScreen_draw_function(GX_WINDOW *widget);
 UINT CalibrationScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 VOID CalibrationScreen_draw(GX_WINDOW *widget);
 UINT SetPadTypeScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
@@ -466,6 +482,7 @@ typedef struct GX_STUDIO_DISPLAY_INFO_STRUCT
 
 /* Declare Studio-generated functions for creating top-level widgets           */
 
+UINT gx_studio_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_text_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_pixelmap_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);

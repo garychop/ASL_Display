@@ -413,6 +413,8 @@ uint8_t ExecuteHeartBeat(void)
 //
 //******************************************************************************
 
+#define FORCE_OK_FOR_GUI_DEBUGGING
+
 void HeadArray_CommunicationThread_entry(void)
 {
     uint8_t heartBeatStatus;
@@ -421,6 +423,8 @@ void HeadArray_CommunicationThread_entry(void)
 
     g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
 
+    HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
+    HeadArrayMsg.HeartBeatMsg.HB_Count = 1;
     while (1)
     {
         heartBeatStatus = ExecuteHeartBeat();
@@ -434,6 +438,13 @@ void HeadArray_CommunicationThread_entry(void)
             HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
         }
         ++HeadArrayMsg.HeartBeatMsg.HB_Count;
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+        if (HeadArrayMsg.HeartBeatMsg.HB_Count > 50)
+        {
+            HeadArrayMsg.HeartBeatMsg.m_HB_OK = true;
+        }
+
+#endif
         // Send message to.... let's say... the GUI task.
         qStatus = tx_queue_send(&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
         if (qStatus == TX_SUCCESS)
