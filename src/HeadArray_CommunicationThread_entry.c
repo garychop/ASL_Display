@@ -21,9 +21,14 @@
 
 #include "HeadArray_CommunicationThread.h"
 
+#include "QueueDefinition.h"
+
 //******************************************************************************
 // Defines and Macros
 //******************************************************************************
+#define MSG_OK  0                   // Indicates message as processed OK.
+#define MSG_STATUS_TIMEOUT 1        // indicates message processing failed to receive proper status, i.e. NO I/O Line or CS
+#define MSG_INVALID_FORMAT 2        // Indicates message was formatted improperly or invalid data.
 
 #define HEARTBEAT_CMD 0x44
 
@@ -31,10 +36,10 @@
 // Forward Declarations
 //******************************************************************************
 
-static void write_i2c_byte(uint8_t i2cbyte);
-static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len);
-static uint8_t read_i2c_byte(void);
-static uint8_t read_i2c_package(void);
+static void Write_I2C_Byte(uint8_t i2cbyte);
+static uint8_t Send_I2C_Package (uint8_t *i2c_pack, uint8_t pack_len);
+static uint8_t Read_I2C_Byte (uint8_t *);
+static uint8_t Read_I2C_Package(uint8_t *);
 uint8_t ExecuteHeartBeat(void);
 uint8_t CalculateChecksum (uint8_t *, uint8_t);
 
@@ -59,7 +64,7 @@ uint8_t CalculateChecksum (uint8_t *data, uint8_t msgLen)
     for (counter = 0; counter < msgLen; ++counter)
     {
         myData = data[counter];
-        cs += (uint8_t) myData;
+        cs += myData;
     }
     return cs;
 }
@@ -68,34 +73,38 @@ uint8_t CalculateChecksum (uint8_t *data, uint8_t msgLen)
 //
 //******************************************************************************
 
-static void write_i2c_byte(uint8_t i2cbyte)
+static void Write_I2C_Byte(uint8_t i2cbyte)
 {
     uint8_t i;
 
     // Send a bit at a time.
     for(i = 0; i < 8; i++)
     {
+        // Set Data (IO) Pin based upon bit in byte.
         if( (i2cbyte<<i) & 0x80 )
         {
-            g_ioport_on_ioport.pinWrite(I2C_IO_PIN, IOPORT_LEVEL_HIGH); //output_high(I2C_IO_PIN);
+            g_ioport_on_ioport.pinWrite(I2C_IO_PIN, IOPORT_LEVEL_HIGH);
         }
         else
         {
-            g_ioport_on_ioport.pinWrite(I2C_IO_PIN, IOPORT_LEVEL_LOW);  //output_low(I2C_IO_PIN);
+            g_ioport_on_ioport.pinWrite(I2C_IO_PIN, IOPORT_LEVEL_LOW);
         }
-        R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);   //delay_us(1);  //2
-        g_ioport_on_ioport.pinWrite(I2C_CLK_PIN, IOPORT_LEVEL_HIGH);    //output_high(I2C_CLK_PIN);
-        R_BSP_SoftwareDelay(50, BSP_DELAY_UNITS_MICROSECONDS);   //delay_us(3); //5
-        g_ioport_on_ioport.pinWrite(I2C_CLK_PIN, IOPORT_LEVEL_LOW); //output_low(I2C_CLK_PIN);
-        R_BSP_SoftwareDelay(50, BSP_DELAY_UNITS_MICROSECONDS);   //delay_us(1);  //2
+        R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);           // Delay are short period of time
+        g_ioport_on_ioport.pinWrite(I2C_CLK_PIN, IOPORT_LEVEL_HIGH);
+        R_BSP_SoftwareDelay(50, BSP_DELAY_UNITS_MICROSECONDS);          // Delay about 50 microseconds so Head Array will recongize it.
+        g_ioport_on_ioport.pinWrite(I2C_CLK_PIN, IOPORT_LEVEL_LOW);
+        R_BSP_SoftwareDelay(50, BSP_DELAY_UNITS_MICROSECONDS);          // Delay about 50 microseconds so Head Array will recongize it.
     }
 }
 
 //******************************************************************************
-
+// Function: Send_I2C_Package
+// Description: This function processes the I/O signals so as to send
+//      an entire packet to the ASL110 Head Array.
+// Returns: MSG_OK or MSG_STATUS_TIMEOUT
 //******************************************************************************
 
-static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len)
+static uint8_t Send_I2C_Package(uint8_t *i2c_pack, uint8_t pack_len)
 {
     uint8_t i;
     uint16_t wait;
@@ -105,12 +114,10 @@ static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len)
 
     g_ioport_on_ioport.pinCfg( I2C_IO_PIN,(IOPORT_CFG_DRIVE_MID | IOPORT_CFG_PORT_DIRECTION_OUTPUT | IOPORT_LEVEL_HIGH) );
     g_ioport_on_ioport.pinCfg( I2C_CLK_PIN,(IOPORT_CFG_DRIVE_MID | IOPORT_CFG_PORT_DIRECTION_OUTPUT | IOPORT_LEVEL_HIGH) );
-
-    //R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);
     g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_LOW);
 
     // Wait for the I2C_RES_PIN goes LOW
-    wait = 46000;   //(104ms)
+    wait = 5000;     // Was 46000 but 5000 should be 10 milliseconds in 2 microsecond increments.
     do
     {    // if I2C_RES_PIN == 1, wait
         g_ioport_on_ioport.pinRead(I2C_RES_PIN, &pin_state);
@@ -124,7 +131,7 @@ static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len)
             g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
 
             TX_RESTORE;             // turn interrupts back on
-            return 1;    // time out error
+            return MSG_STATUS_TIMEOUT;    // time out error
         }
 
         R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);
@@ -132,7 +139,7 @@ static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len)
     } while(pin_state == IOPORT_LEVEL_HIGH);
 
     // Wait for the I2C_RES_PIN goes LOW
-    wait = 46000;   //(104ms)
+    wait = 500;   // This should be a 1 millisecond wait.
     do
     {    // if I2C_RES_PIN == 1, wait
         g_ioport_on_ioport.pinRead(I2C_RES_PIN, &pin_state);
@@ -153,20 +160,10 @@ static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len)
         wait--;
     } while(pin_state == IOPORT_LEVEL_LOW);
 
-    //debug
-    //g_ioport.p_api->pinWrite(TEST_PIN, IOPORT_LEVEL_LOW);
-
-    //issue i2c start
-//    g_ioport_on_ioport.pinWrite(I2C_IO_PIN, IOPORT_LEVEL_LOW);  //output_low(I2C_IO_PIN);
-//    R_BSP_SoftwareDelay(5, BSP_DELAY_UNITS_MICROSECONDS);   //delay_us(5);
-//    g_ioport_on_ioport.pinWrite(I2C_CLK_PIN, IOPORT_LEVEL_LOW); //output_low(I2C_CLK_PIN);
-
     //send data
-    //  delay_us(20);
-    //R_BSP_SoftwareDelay(5, BSP_DELAY_UNITS_MICROSECONDS);
     for(i = 0; i < pack_len; i++)
     {
-        write_i2c_byte(i2c_pack[i]);
+        Write_I2C_Byte(i2c_pack[i]);
         R_BSP_SoftwareDelay(50, BSP_DELAY_UNITS_MICROSECONDS);  //delay_us(10);
     }
 
@@ -178,195 +175,171 @@ static uint8_t send_i2c_package(uint8_t *i2c_pack, uint8_t pack_len)
     g_ioport_on_ioport.pinDirectionSet(I2C_IO_PIN, IOPORT_DIRECTION_INPUT);
     g_ioport_on_ioport.pinDirectionSet(I2C_CLK_PIN, IOPORT_DIRECTION_INPUT);
 
-    g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
-
     // Wait for the I2C_RES_PIN goes LOW
-    wait = 46000;   //(104ms)
+    wait = 500;   // This should be a 1 millisecond wait.
     do
-    {    // if I2C_RES_PIN == 1, wait
+    {
         g_ioport_on_ioport.pinRead(I2C_RES_PIN, &pin_state);
         if(wait < 2)
         {
-            //set_tris_e(0x33);
-            g_ioport_on_ioport.pinDirectionSet(I2C_IO_PIN, IOPORT_DIRECTION_INPUT);
-            g_ioport_on_ioport.pinDirectionSet(I2C_CLK_PIN, IOPORT_DIRECTION_INPUT);
-
-            //output_high(I2C_CS_PIN);
             g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
 
-            TX_RESTORE;             // turn interrupts back on
-            return 1;    // time out error
+            TX_RESTORE;                     // turn interrupts back on
+            return MSG_STATUS_TIMEOUT;      // time out error
         }
 
         R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);   //add
         wait--;
     } while(pin_state == IOPORT_LEVEL_HIGH);
 
-    return 0;
+    // If this far, we may as well set the CS pin high.
+    g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
+
+    return MSG_OK;
 }
 
 //******************************************************************************
-// before receiving data, must set I2C_IO_PIN and I2C_CLK_PIN as input
-//first wait CLK=1
-//while CLK=1; check if IO =0; at the same time check time out
-//if IO = 0; then we get the start bite; else failed
-// if we get the start bit, must wait CLK low
-//-------------------------------------------------------------------------
-// read data is in globle para i2c_data_read
-// function return 0 : time out
+// Function: Read_I2C_Byte
+// Description: Read a byte into the passed parameter
+//      Wait for clock to go high then low. Data is available on High-to-low transition.
+// Returns: MSG_OK if byte is read.
+//      else MSG_STATUS_TIMEOUT if clock input did not change in time.
 //******************************************************************************
 
-static uint8_t read_i2c_byte(void)
+static uint8_t Read_I2C_Byte(uint8_t *readByte)
 {
-    uint8_t i, wait;
+    uint8_t i, wait, myData;
     ioport_level_t pin_state;
 
-    i2c_data_read = 0;
+    *readByte = 0;
+    myData = 0;     // this is stored locally until all 8 bits are read, the transferred back to the calling procedure.
 
     for(i = 0; i < 8; i++)
     {
-        wait = 200; //max waiting about 45us
+        // Wait for clock to go high.
+        wait = 200; //max waiting about 200 us
         do
-        {    // wait clk high
-            g_ioport_on_ioport.pinRead(I2C_CLK_PIN, &pin_state);
-            R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS);   //add
+        {
+            g_ioport_on_ioport.pinRead(I2C_CLK_PIN, &pin_state);        // Get Port state
+            R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS);       // This about 1 microsecond
             wait--;
-            if(wait == 0)
-                return 1;
+            if(wait < 1)
+                return MSG_STATUS_TIMEOUT;
         } while(pin_state == IOPORT_LEVEL_LOW);
 
-        //delay_us(1);
-        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);   //add
-        wait = 200; //max waiting about 45us
+        // Wait for Clock to go low.
+        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
+        wait = 200; //max waiting about 200 us
         do
-        { // wait clk low
+        {
             g_ioport_on_ioport.pinRead(I2C_CLK_PIN, &pin_state);
-            R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS);   //add
+            R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS);
             wait--;
-            if(wait == 0)
-                return 1;    // time out
+            if(wait < 1)
+                return MSG_STATUS_TIMEOUT;    // time out
         } while(pin_state == IOPORT_LEVEL_HIGH);    //input(I2C_CLK_PIN) == 1
-        //if(input(I2C_IO_PIN))
+
         g_ioport_on_ioport.pinRead(I2C_IO_PIN, &pin_state);
         if(pin_state == IOPORT_LEVEL_HIGH)
-            i2c_data_read = ( (uint8_t)(i2c_data_read<<1)|0x01 );
+            myData = ( (uint8_t)(myData<<1)|0x01 );
         else
-            i2c_data_read = ( (uint8_t)(i2c_data_read<<1)&0xfe );
-
+            myData = ( (uint8_t)(myData<<1)&0xfe );
     }
-    return 0;
+
+    *readByte = myData;     // returned process byte
+
+    return MSG_OK;
 }
 
 //******************************************************************************
 
 //******************************************************************************
 
-static uint8_t read_i2c_package(void)
+static uint8_t Read_I2C_Package(uint8_t *responseMsg)
 {
-    uint8_t i, i2c_get_len;
+    uint8_t i, msgLength, myByte;
     uint16_t wait;
     ioport_level_t pin_state;
+    uint8_t myCS;
 
     i2c_data[0] = 0;
 
     // Wait for the RES line to go LOW
-    wait = 40000;  //max waiting about 88ms  //(1000 max waiting about 2.2ms)
+    wait = 2500;       // wait about 50 milliseconds.
     do
     {    // if I2C_RES_PIN == 0, can not receive package
         g_ioport_on_ioport.pinRead(I2C_RES_PIN, &pin_state);
         if(wait == 0)
         {
             TX_RESTORE;
-            return 1;    // time out error
+            return MSG_STATUS_TIMEOUT;    // time out error
         }
-        R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS);
+        R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);
         wait--;
     } while(pin_state == IOPORT_LEVEL_HIGH);
 
     // We need the CLK and DATA lines to be HIGH at this point
     g_ioport_on_ioport.pinRead(I2C_CLK_PIN, &pin_state);
     if(pin_state == IOPORT_LEVEL_LOW)
-    {   //input(I2C_CLK_PIN) == 0
+    {
         TX_RESTORE;
-        return 1;    // error
+        return MSG_STATUS_TIMEOUT;
     }
     g_ioport_on_ioport.pinRead(I2C_IO_PIN, &pin_state);
     if(pin_state == IOPORT_LEVEL_LOW)
-    {   //input(I2C_CLK_PIN) == 0
-        TX_RESTORE;
-        return 1;    // error
-    }
-
-//    // Wait for the clock to go HIGH
-//    wait = 90; //max waiting about 200us
-//    do
-//    { //wait I2C_IO_PIN = 0
-//        g_ioport_on_ioport.pinRead(I2C_IO_PIN, &pin_state);
-//        if(wait == 0)
-//        {
-//            TX_RESTORE;
-//            return 2;    // time out error
-//        }
-//        R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS);   //add
-//        wait--;
-//        //R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS); //delay_us(1);
-//    } while(pin_state == IOPORT_LEVEL_LOW);
-//
-//    wait = 45; //max waiting about 100us
-//    do
-//    {  //wait I2C_CLK_PIN = 0
-//        g_ioport_on_ioport.pinRead(I2C_CLK_PIN, &pin_state);
-//        if(wait == 0)
-//        {
-//            TX_RESTORE;
-//            return 2;    // time out error
-//        }
-//        R_BSP_SoftwareDelay(1, BSP_DELAY_UNITS_MICROSECONDS);   //add
-//        wait--;
-//    } while(pin_state == IOPORT_LEVEL_HIGH);
-
-    if(read_i2c_byte() != 0)
     {
         TX_RESTORE;
-        return 1;    // error
+        return MSG_STATUS_TIMEOUT;
     }
 
-    i2c_get_len = i2c_data_read;
-    i2c_data[0] = i2c_get_len;
-
-    for(i = 0; i < i2c_get_len-1; i++)
+    // First byte is the message length.
+    if(Read_I2C_Byte(&msgLength) != MSG_OK)
     {
-        if(read_i2c_byte() != 0)
+        TX_RESTORE;
+        return MSG_INVALID_FORMAT;
+    }
+    responseMsg[0] = msgLength;
+
+    // Read the rest of the bytes.
+    for(i = 0; i < msgLength-1; i++)
+    {
+        myByte = 0;
+        if(Read_I2C_Byte(&myByte) != MSG_OK)
         {
             TX_RESTORE;
-            return 1;    // error
+            return MSG_INVALID_FORMAT;
         }
         else
         {
-            i2c_data[i+1] = i2c_data_read;
+            responseMsg[i+1] = myByte;
         }
     }
 
-    TX_RESTORE;
-  return 0;
+    TX_RESTORE;             // Turn on ThreadX interrupts
+
+    // Determine if Checksum is correct and return error if not.
+    myCS = 0;
+    for(i = 0; i < msgLength-2; i++)
+    {
+        myCS += responseMsg[i+1];
+    }
+    if (myCS != responseMsg[msgLength])
+        return MSG_INVALID_FORMAT;
+
+    return MSG_OK;
 }
 
 //******************************************************************************
-//    cmd package format: length+cmd+data+crc; all hex bytes
-//
-//   length:  length of whole package, including length byte and crc byte
-//   request: from HHP
-//   response:from ASL-PROP
 //
 //*******************************************************************************/
 
-//-------------------------------------------------------------------------
 uint8_t get_PROP_version(void)
 {
 
    uint8_t s_dat[3] = {3, 0x34, 0x37};
    uint16_t wait;
    ioport_level_t pin_state;
+   uint8_t myVersionData[10];
 
    g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);  //output_high(I2C_CS_PIN);
 
@@ -381,26 +354,26 @@ uint8_t get_PROP_version(void)
         R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
     } while(pin_state == IOPORT_LEVEL_LOW);
 
-    if( send_i2c_package(s_dat, 3) )
+    if( Send_I2C_Package(s_dat, 3) )
         return 1;
 
     // now wait and check response
-    if(read_i2c_package()==0)
+    if(Read_I2C_Package(myVersionData) == MSG_OK)
     {
-        if(i2c_data[0]!=6)
-            return 1;     // length error
-        if(i2c_data[1]!=0x74)
-            return 1;  //cmd error or setup fail (NACK)
-        if( i2c_data[5] != (uint8_t)(i2c_data[0]+i2c_data[1]+i2c_data[2]+i2c_data[3]+i2c_data[4]) )
-            return 1;     // crc error
-        g_HA_MajorVersion = i2c_data[2];
-        g_HA_MinorVersion = i2c_data[3];
-        g_HA_BuildVersion = i2c_data[4];
+        if(myVersionData[0]!=6)
+            return MSG_INVALID_FORMAT;     // length error
+        if(myVersionData[1]!=0x74)
+            return MSG_INVALID_FORMAT;  //cmd error or setup fail (NACK)
+        if( myVersionData[5] != (uint8_t)(myVersionData[0]+myVersionData[1]+myVersionData[2]+myVersionData[3]+myVersionData[4]) )
+            return MSG_INVALID_FORMAT;     // crc error
+        g_HA_MajorVersion = myVersionData[2];
+        g_HA_MinorVersion = myVersionData[3];
+        g_HA_BuildVersion = myVersionData[4];
 
-        return 0;
+        return MSG_OK;
     }
 
-   return 1;      // error
+   return MSG_INVALID_FORMAT;      // error
 }
 
 //******************************************************************************
@@ -416,17 +389,21 @@ uint8_t ExecuteHeartBeat(void)
 {
     uint8_t HB_Message[4];
     uint8_t cs;
+    uint8_t msgStatus;
+    uint8_t HB_Response[4];
 
     HB_Message[0] = 0x04;     // msg length
     HB_Message[1] = HEARTBEAT_CMD;
     HB_Message[2] = ++g_HeartBeatCounter;
     cs = CalculateChecksum(HB_Message, sizeof (HB_Message)-1);
     HB_Message[3] = cs;
-    send_i2c_package(HB_Message, sizeof(HB_Message));
+    msgStatus = Send_I2C_Package(HB_Message, sizeof(HB_Message));
 
-    read_i2c_package();
-
-    return 0;    // All OK
+    if (msgStatus == MSG_OK)
+    {
+        msgStatus = Read_I2C_Package(HB_Response);
+    }
+    return msgStatus;
 }
 
 //******************************************************************************
@@ -438,11 +415,30 @@ uint8_t ExecuteHeartBeat(void)
 
 void HeadArray_CommunicationThread_entry(void)
 {
+    uint8_t heartBeatStatus;
+    HHP_HA_MSG_STRUCT HeadArrayMsg;
+    uint32_t qStatus;
+
     g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
 
     while (1)
     {
-        ExecuteHeartBeat();
+        heartBeatStatus = ExecuteHeartBeat();
+        HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;
+        if (heartBeatStatus == MSG_OK)
+        {
+            HeadArrayMsg.HeartBeatMsg.m_HB_OK = true;
+        }
+        else
+        {
+            HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
+        }
+        ++HeadArrayMsg.HeartBeatMsg.HB_Count;
+        // Send message to.... let's say... the GUI task.
+        qStatus = tx_queue_send(&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
+        if (qStatus == TX_SUCCESS)
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
+
         tx_thread_sleep (10);
     }
 }

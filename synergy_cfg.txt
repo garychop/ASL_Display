@@ -300,8 +300,8 @@ Synergy Configuration
   Thread "My Gui Thread"
     Symbol: my_gui_thread
     Name: My Gui Thread
-    Stack size (bytes): 2048
-    Priority: 10
+    Stack size (bytes): 1024
+    Priority: 20
     Auto start: Enabled
     Time slicing interval (ticks): 2
     
@@ -825,7 +825,7 @@ Synergy Configuration
   Thread "Digital Control"
     Symbol: DigitalControl
     Name: Digital Control
-    Stack size (bytes): 1024
+    Stack size (bytes): 2048
     Priority: 23
     Auto start: Enabled
     Time slicing interval (ticks): 23
@@ -833,12 +833,20 @@ Synergy Configuration
   Thread "HeadArray_CommunicationThread"
     Symbol: HeadArray_CommunicationThread
     Name: HeadArray_CommunicationThread
-    Stack size (bytes): 1024
+    Stack size (bytes): 2048
     Priority: 1
     Auto start: Enabled
     Time slicing interval (ticks): 1
     
+    Object "q_HeadArrayCommunicationQueue Queue"
+      Name: New Queue
+      Symbol: q_HeadArrayCommunicationQueue
+      Message Size (Words): 16
+      Queue Size (Bytes): 1600
+      
   Messaging
     Subscriber "My Gui Thread" 0 0
       Event Class "Touch"
+      
+    Subscriber "HeadArray_CommunicationThread" 0 0
       

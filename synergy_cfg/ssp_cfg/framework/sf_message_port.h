@@ -10,5 +10,6 @@ typedef enum e_sf_message_event
     SF_MESSAGE_EVENT_UNUSED, /* Unused */
     SF_MESSAGE_EVENT_NEW_DATA, /* New Data */
 } sf_message_event_t;
+extern TX_QUEUE HeadArray_CommunicationThread_message_queue;
 extern TX_QUEUE my_gui_thread_message_queue;
 #endif /* SF_MESSAGE_PORT_H_ */

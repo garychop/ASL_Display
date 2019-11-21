@@ -3,6 +3,8 @@
 #ifndef SF_MESSAGE_CFG_QUEUE_SIZE
 #define SF_MESSAGE_CFG_QUEUE_SIZE (16)
 #endif
+TX_QUEUE HeadArray_CommunicationThread_message_queue;
+static uint8_t queue_memory_HeadArray_CommunicationThread_message_queue[SF_MESSAGE_CFG_QUEUE_SIZE];
 TX_QUEUE my_gui_thread_message_queue;
 static uint8_t queue_memory_my_gui_thread_message_queue[SF_MESSAGE_CFG_QUEUE_SIZE];
 static sf_message_subscriber_t my_gui_thread_message_queue_0_0 =
@@ -18,6 +20,10 @@ sf_message_subscriber_list_t *p_subscriber_lists[] =
 void g_message_init(void);
 void g_message_init(void)
 {
+    tx_queue_create (&HeadArray_CommunicationThread_message_queue,
+                     (CHAR *) "HeadArray_CommunicationThread Message Queue", 1,
+                     &queue_memory_HeadArray_CommunicationThread_message_queue,
+                     sizeof(queue_memory_HeadArray_CommunicationThread_message_queue));
     tx_queue_create (&my_gui_thread_message_queue, (CHAR *) "My Gui Thread Message Queue", 1,
                      &queue_memory_my_gui_thread_message_queue, sizeof(queue_memory_my_gui_thread_message_queue));
 }

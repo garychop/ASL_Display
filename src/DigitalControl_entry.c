@@ -157,10 +157,10 @@ void Read_Arrow_Buttons(void)
         gx_system_event_send(&gxe);
 
         g_OldArrowState = g_ArrowState;
-        if ((g_ArrowState &= (UP_ARROW_BTN | DOWN_ARROW_BTN)) == 0x00)
-            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);       // Turn off LED
-        else
-            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
+//        if ((g_ArrowState &= (UP_ARROW_BTN | DOWN_ARROW_BTN)) == 0x00)
+//            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);       // Turn off LED
+//        else
+//            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
     }
     else
     {

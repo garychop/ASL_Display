@@ -6,6 +6,8 @@
 #include "gx_api.h"
 #include "ASL_HHP_Display_GUIX_resources.h"
 #include "ASL_HHP_Display_GUIX_specifications.h"
+#include "QueueDefinition.h"
+#include "HeadArray_CommunicationThread.h"
 
 //-------------------------------------------------------------------------
 GX_CHAR version_string[16]     = "Version: 0.0.1a";
@@ -120,10 +122,6 @@ int g_CalibrationStepNumber;
 int g_PadValue;
 int g_DeltaValue;
 
-//-------------------------------------------------------------------------
-extern GX_PROMPT * time_infor_pmpt_text;
-
-//-------------------------------------------------------------------------
 GX_WINDOW_ROOT * p_window_root;
 
 //-------------------------------------------------------------------------
@@ -156,7 +154,8 @@ void my_gui_thread_entry(void)
 {
     ssp_err_t err;
     UINT status = TX_SUCCESS;
-    //uint8_t i, test_num;
+    HHP_HA_MSG_STRUCT HeadArrayMsg;
+    uint32_t qStatus;
     
 		//debug pins
     g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);
@@ -359,8 +358,12 @@ void my_gui_thread_entry(void)
 //
     while(1)
     {
-        Process_Touches();
-        //reset_check();
+        Process_Touches();          // Process the GUI touches and the Front Panel Arrows Pushes.
+
+        qStatus = tx_queue_receive (&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
+        if (qStatus == TX_SUCCESS)
+            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);        // Turn off LED
+
         tx_thread_sleep (2);
     }
  	

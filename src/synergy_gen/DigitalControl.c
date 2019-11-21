@@ -4,7 +4,7 @@
 TX_THREAD DigitalControl;
 void DigitalControl_create(void);
 static void DigitalControl_func(ULONG thread_input);
-static uint8_t DigitalControl_stack[1024] BSP_PLACE_IN_SECTION_V2(".stack.DigitalControl") BSP_ALIGN_VARIABLE_V2(BSP_STACK_ALIGNMENT);
+static uint8_t DigitalControl_stack[2048] BSP_PLACE_IN_SECTION_V2(".stack.DigitalControl") BSP_ALIGN_VARIABLE_V2(BSP_STACK_ALIGNMENT);
 void tx_startup_err_callback(void *p_instance, void *p_data);
 void tx_startup_common_init(void);
 extern bool g_ssp_common_initialized;
@@ -20,7 +20,7 @@ void DigitalControl_create(void)
 
     UINT err;
     err = tx_thread_create (&DigitalControl, (CHAR *) "Digital Control", DigitalControl_func, (ULONG) NULL,
-                            &DigitalControl_stack, 1024, 23, 23, 23, TX_AUTO_START);
+                            &DigitalControl_stack, 2048, 23, 23, 23, TX_AUTO_START);
     if (TX_SUCCESS != err)
     {
         tx_startup_err_callback (&DigitalControl, 0);

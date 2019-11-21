@@ -218,6 +218,7 @@
     <subscriber context="rtos.threadx.thread.1086088343" end="0" id="subscriber.23312605" start="0">
       <subscribe eventClass="module.framework.sf_touch_panel.eventClass.eventClassTouch"/>
     </subscriber>
+    <subscriber context="rtos.threadx.thread.190632509" end="0" id="subscriber.238906398" start="0"/>
   </synergyMessagingConfiguration>
   <synergyModuleConfiguration>
     <module id="module.driver.cgc_on_cgc.0">
@@ -753,8 +754,8 @@
     <context id="rtos.threadx.thread.1086088343">
       <property id="_symbol" value="my_gui_thread"/>
       <property id="rtos.threadx.thread.name" value="My Gui Thread"/>
-      <property id="rtos.threadx.thread.stack" value="2048"/>
-      <property id="rtos.threadx.thread.priority" value="10"/>
+      <property id="rtos.threadx.thread.stack" value="1024"/>
+      <property id="rtos.threadx.thread.priority" value="20"/>
       <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
       <property id="rtos.threadx.thread.timeslice" value="2"/>
       <stack module="module.el.gx.841395795">
@@ -800,7 +801,7 @@
     <context id="rtos.threadx.thread.58019536">
       <property id="_symbol" value="DigitalControl"/>
       <property id="rtos.threadx.thread.name" value="Digital Control"/>
-      <property id="rtos.threadx.thread.stack" value="1024"/>
+      <property id="rtos.threadx.thread.stack" value="2048"/>
       <property id="rtos.threadx.thread.priority" value="23"/>
       <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
       <property id="rtos.threadx.thread.timeslice" value="23"/>
@@ -808,10 +809,16 @@
     <context id="rtos.threadx.thread.190632509">
       <property id="_symbol" value="HeadArray_CommunicationThread"/>
       <property id="rtos.threadx.thread.name" value="HeadArray_CommunicationThread"/>
-      <property id="rtos.threadx.thread.stack" value="1024"/>
+      <property id="rtos.threadx.thread.stack" value="2048"/>
       <property id="rtos.threadx.thread.priority" value="1"/>
       <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
       <property id="rtos.threadx.thread.timeslice" value="1"/>
+      <object id="rtos.threadx.object.queue.1199863324">
+        <property id="rtos.threadx.object.queue.name" value="New Queue"/>
+        <property id="rtos.threadx.object.queue.symbol" value="q_HeadArrayCommunicationQueue"/>
+        <property id="rtos.threadx.object.queue.msg_size" value="16"/>
+        <property id="rtos.threadx.object.queue.queue_size" value="1600"/>
+      </object>
     </context>
     <config id="config.driver.jpeg_decode">
       <property id="config.driver.jpeg_decode.param_checking_enable" value="config.driver.jpeg_decode.param_checking_enable.enabled"/>
