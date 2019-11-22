@@ -11,6 +11,9 @@
 #ifndef QUEUEDEFINITION_H_
 #define QUEUEDEFINITION_H_
 
+#include <stdio.h>
+#include "tx_api.h"
+
 //*************************************************************************
 // Typedefs
 //*************************************************************************
@@ -39,12 +42,13 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_HEART_BEAT_RESPONSE = 0x45
 } HHP_HA_MESSAGES_ENUM;
 
+// This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
 {
-    uint32_t m_MsgType;         // Use the above mentioned enum.
+    HHP_HA_MESSAGES_ENUM m_MsgType;         // Use the above mentioned enum.
     union
     {
-        struct
+        struct hb_msg
         {
             uint32_t m_HB_OK;   // Non0 if Heart Beat is OK, 0 = failed.
             uint32_t HB_Count;  // number that increments with each successful heart beat.
@@ -53,8 +57,30 @@ typedef struct HHP_HA_MSG_S
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
+        struct
+        {
+            char m_PhysicalPadNumber;
+            char m_LogicalDirection;
+        } PadAssignmentResponsMsg;
     };
 } HHP_HA_MSG_STRUCT;
 
+typedef struct GUI_MSG_S
+{
+    HHP_HA_MESSAGES_ENUM m_MsgType;         // Use the above mentioned enum.
+    union
+    {
+        struct
+        {
+            char m_PhysicalPadNumber;
+        } PadAssignmentRequestMsg;
+        struct
+        {
+            uint32_t m_MsgArray[15];
+        } WholeMsg;
+    };
+} GUI_MSG_STRUCT;
+
+extern void SendPadAssignmentRequestMsg (char pad, TX_QUEUE *queue);
 
 #endif /* QUEUEDEFINITION_H_ */

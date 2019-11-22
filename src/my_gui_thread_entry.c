@@ -96,7 +96,7 @@ GX_RECTANGLE g_TimeoutValueLocation[] = {
 // The following hold the Digital (non0) vs Proportional (0) setting for each pad.
 //UINT g_LeftPadSetting = 0, g_RightPadSetting = 0, g_CenterPadSetting = 0;
 enum PAD_DESIGNATION {LEFT_PAD, RIGHT_PAD, CENTER_PAD};
-enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION};
+enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, NO_DIRECTION};
 enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE};
 
 int g_ClicksActive = FALSE;
@@ -114,7 +114,7 @@ struct PadInfoStruct
     int m_DiagnosticProportional_ID;
     GX_PIXELMAP_BUTTON *m_DiagnosticProportional_Widget;
     GX_RECTANGLE m_DiagnosticWidigetLocation;
-    GX_PIXELMAP_BUTTON *m_DirectionIcons[4];
+    GX_PIXELMAP_BUTTON *m_DirectionIcons[5];
 } g_PadSettings[3];
 
 int g_SettingsChanged;
@@ -124,6 +124,7 @@ int g_PadValue;
 int g_DeltaValue;
 
 GX_WINDOW_ROOT * p_window_root;
+bool g_UseNewPrompt = false;
 
 //-------------------------------------------------------------------------
 // Forward declarations.
@@ -222,6 +223,7 @@ void my_gui_thread_entry(void)
     g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_RightArrow_Button;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_LeftArrow_Button;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_ForwardArrow_Button;
+    g_PadSettings[LEFT_PAD].m_DirectionIcons[NO_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Question_Button;
     g_PadSettings[LEFT_PAD].m_PadMinimumCalibrationValue = 0;
     g_PadSettings[LEFT_PAD].m_PadMaximumCalibrationValue = 100;
     g_PadSettings[LEFT_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[LEFT_PAD];
@@ -238,6 +240,7 @@ void my_gui_thread_entry(void)
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_RightArrow_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_LeftArrow_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_ForwardArrow_Button;
+    g_PadSettings[RIGHT_PAD].m_DirectionIcons[NO_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Question_Button;
     g_PadSettings[RIGHT_PAD].m_PadMinimumCalibrationValue = 5;
     g_PadSettings[RIGHT_PAD].m_PadMaximumCalibrationValue = 95;
     g_PadSettings[RIGHT_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[RIGHT_PAD];
@@ -254,6 +257,7 @@ void my_gui_thread_entry(void)
     g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_RightArrow_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_LeftArrow_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_ForwardArrow_Button;
+    g_PadSettings[CENTER_PAD].m_DirectionIcons[NO_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Question_Button;
     g_PadSettings[CENTER_PAD].m_PadMinimumCalibrationValue = 10;
     g_PadSettings[CENTER_PAD].m_PadMaximumCalibrationValue = 90;
     g_PadSettings[CENTER_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[CENTER_PAD];
@@ -383,6 +387,15 @@ void my_gui_thread_entry(void)
                     gx_system_event_send(&gxe);
                 }
             }
+//            if (HeadArrayMsg.HeartBeatMsg.HB_Count == 25)
+//            {
+//                gxe.gx_event_type = GX_EVENT_REDRAW;
+//                gxe.gx_event_sender = GX_ID_NONE;
+//                gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+//                gxe.gx_event_display_handle = 0;
+//                gx_system_event_send(&gxe);
+//                g_UseNewPrompt = true;
+//            }
         }
         tx_thread_sleep (2);
     }
@@ -454,9 +467,16 @@ UINT DisplayMainScreenActiveFeatures ()
 // Startup Screen
 //*************************************************************************************
 
+//const char g_NewPrompt[] = "New Prompt";
+
 VOID StartupSplashScreen_draw_function (GX_WINDOW *window)
 {
+    UINT myErr;
+
     g_ActiveScreen = (GX_WIDGET*) window;
+
+//    if (g_UseNewPrompt)
+//        myErr = gx_prompt_text_set ((GX_PROMPT*)&StartupSplashScreen.StartupSplashScreen_StatusPrompt, g_NewPrompt);
 
     gx_window_draw(window);
 }
@@ -482,6 +502,7 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 // Description: This handles the User Screen messages.
 //
 //*************************************************************************************
+
 VOID Main_User_Screen_draw_function(GX_WINDOW *window)
 {
     g_ActiveScreen = (GX_WIDGET*) window;
@@ -813,6 +834,22 @@ UINT PadOptionsSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_
 //
 //*************************************************************************************
 
+VOID SetPadDirectionScreen_draw_function (GX_WINDOW *window)
+{
+    UINT pads, icons;
+
+//    for (pads = 0; pads < 3; ++pads)
+//    {
+//        for (icons = 0; icons < 4; ++icons)
+//        {
+//            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[icons], &g_HiddenRectangle);
+//        }
+//        gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[g_PadSettings[pads].m_PadDirection], &g_PadDirectionLocation[pads]);
+//    }
+
+    gx_window_draw(window);
+}
+
 UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     UINT pads, icons;
@@ -827,8 +864,11 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
             {
                 gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[icons], &g_HiddenRectangle);
             }
-            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[g_PadSettings[pads].m_PadDirection], &g_PadDirectionLocation[pads]);
+            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[NO_DIRECTION], &g_PadDirectionLocation[pads]);
         }
+        SendPadAssignmentRequestMsg('L', &g_GUI_queue);
+        SendPadAssignmentRequestMsg('R', &g_GUI_queue);
+        SendPadAssignmentRequestMsg('C', &g_GUI_queue);
         break;
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):

@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 21.11.2019   Time (hh:mm): 16:47                        */
+/*  Date (dd.mm.yyyy): 22.11.2019   Time (hh:mm): 11:33                        */
 /*******************************************************************************/
 
 
@@ -2156,6 +2156,93 @@ GX_PIXELMAP_BUTTON_PROPERTIES SetPadDirectionScreen_CenterPad_Off_Button_propert
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };
+GX_PIXELMAP_BUTTON_PROPERTIES SetPadDirectionScreen_CenterPad_Question_Button_properties =
+{
+    GX_PIXELMAP_ID_YELLOWQUESTION,           /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES SetPadDirectionScreen_LeftPad_Question_Button_properties =
+{
+    GX_PIXELMAP_ID_YELLOWQUESTION,           /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES SetPadDirectionScreen_RightPad_Question_Button_properties =
+{
+    GX_PIXELMAP_ID_YELLOWQUESTION,           /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+
+GX_CONST GX_STUDIO_WIDGET SetPadDirectionScreen_RightPad_Question_Button_define =
+{
+    "RightPad_Question_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    RIGHT_PAD_QUESTION_BTN_ID,               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THICK|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {205, 55, 292, 124},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(SETPADDIRECTIONSCREEN_CONTROL_BLOCK, SetPadDirectionScreen_RightPad_Question_Button), /* control block */
+    (void *) &SetPadDirectionScreen_RightPad_Question_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET SetPadDirectionScreen_LeftPad_Question_Button_define =
+{
+    "LeftPad_Question_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    LEFT_PAD_QUESTION_BTN_ID,                /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {28, 55, 115, 124},                      /* widget size                    */
+    &SetPadDirectionScreen_RightPad_Question_Button_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(SETPADDIRECTIONSCREEN_CONTROL_BLOCK, SetPadDirectionScreen_LeftPad_Question_Button), /* control block */
+    (void *) &SetPadDirectionScreen_LeftPad_Question_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET SetPadDirectionScreen_CenterPad_Question_Button_define =
+{
+    "CenterPad_Question_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    CENTER_PAD_QUESTION_BTN_ID,              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {116, 150, 203, 219},                    /* widget size                    */
+    &SetPadDirectionScreen_LeftPad_Question_Button_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(SETPADDIRECTIONSCREEN_CONTROL_BLOCK, SetPadDirectionScreen_CenterPad_Question_Button), /* control block */
+    (void *) &SetPadDirectionScreen_CenterPad_Question_Button_properties /* extended properties */
+};
 
 GX_CONST GX_STUDIO_WIDGET SetPadDirectionScreen_CenterPad_Off_Button_define =
 {
@@ -2174,7 +2261,7 @@ GX_CONST GX_STUDIO_WIDGET SetPadDirectionScreen_CenterPad_Off_Button_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {116, 150, 203, 219},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &SetPadDirectionScreen_CenterPad_Question_Button_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(SETPADDIRECTIONSCREEN_CONTROL_BLOCK, SetPadDirectionScreen_CenterPad_Off_Button), /* control block */
     (void *) &SetPadDirectionScreen_CenterPad_Off_Button_properties /* extended properties */
@@ -2516,7 +2603,7 @@ GX_CONST GX_STUDIO_WIDGET SetPadDirectionScreen_define =
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
     GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
     gx_studio_window_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
+    (VOID (*)(GX_WIDGET *)) SetPadDirectionScreen_draw_function, /* drawing function override */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) SetPadDirectionScreen_event_process, /* event function override */
     {0, 0, 319, 239},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */

@@ -42,12 +42,14 @@ static uint8_t Read_I2C_Byte (uint8_t *);
 static uint8_t Read_I2C_Package(uint8_t *);
 uint8_t ExecuteHeartBeat(void);
 uint8_t CalculateChecksum (uint8_t *, uint8_t);
+uint32_t Process_GUI_Messages (GUI_MSG_STRUCT);
 
 //******************************************************************************
 // Global Variables
 //******************************************************************************
 
 uint8_t g_HeartBeatCounter = 0;
+void (*g_MyState)(void);
 
 //******************************************************************************
 // Function:CalculateChecksum
@@ -385,12 +387,16 @@ uint8_t get_PROP_version(void)
 //      If Not successful, an event is sent to the main task.
 //
 //******************************************************************************
+
+#define FORCE_OK_FOR_GUI_DEBUGGING
+
 uint8_t ExecuteHeartBeat(void)
 {
     uint8_t HB_Message[4];
     uint8_t cs;
     uint8_t msgStatus;
     uint8_t HB_Response[4];
+    HHP_HA_MSG_STRUCT HeadArrayMsg;
 
     HB_Message[0] = 0x04;     // msg length
     HB_Message[1] = HEARTBEAT_CMD;
@@ -403,7 +409,44 @@ uint8_t ExecuteHeartBeat(void)
     {
         msgStatus = Read_I2C_Package(HB_Response);
     }
+
+    // Prepare and send Heart Message to GUI.
+    HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
+    HeadArrayMsg.HeartBeatMsg.HB_Count = g_HeartBeatCounter;
+    HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;
+    if (msgStatus == MSG_OK)
+        HeadArrayMsg.HeartBeatMsg.m_HB_OK = true;
+    else
+        HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
+    ++HeadArrayMsg.HeartBeatMsg.HB_Count;
+
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+    if (HeadArrayMsg.HeartBeatMsg.HB_Count > 20)
+    {
+        HeadArrayMsg.HeartBeatMsg.m_HB_OK = true;
+    }
+#endif
+
+    // Send message to.... let's say... the GUI task.
+    tx_queue_send(&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
+
+//    qStatus = tx_queue_send(&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
+//    if (qStatus == TX_SUCCESS)
+//        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
+
     return msgStatus;
+}
+
+//******************************************************************************
+// Function: Process_GUI_Messages
+// Description: This function processes messages sent by the GUI.
+//
+//******************************************************************************
+
+uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
+{
+
+    return false;
 }
 
 //******************************************************************************
@@ -413,42 +456,28 @@ uint8_t ExecuteHeartBeat(void)
 //
 //******************************************************************************
 
-#define FORCE_OK_FOR_GUI_DEBUGGING
-
 void HeadArray_CommunicationThread_entry(void)
 {
-    uint8_t heartBeatStatus;
-    HHP_HA_MSG_STRUCT HeadArrayMsg;
-    uint32_t qStatus;
+    GUI_MSG_STRUCT GUI_Msg;
+    uint32_t msgSent;
+    ULONG numMsgs;
 
     g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
 
-    HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
-    HeadArrayMsg.HeartBeatMsg.HB_Count = 1;
     while (1)
     {
-        heartBeatStatus = ExecuteHeartBeat();
-        HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;
-        if (heartBeatStatus == MSG_OK)
+        // Process requests from the GUI.
+        tx_queue_info_get (&g_GUI_queue, NULL, &numMsgs, NULL, NULL, NULL, NULL);
+        if (numMsgs)
         {
-            HeadArrayMsg.HeartBeatMsg.m_HB_OK = true;
+            tx_queue_receive (&g_GUI_queue, &GUI_Msg, TX_NO_WAIT);
+            msgSent = Process_GUI_Messages (GUI_Msg);
         }
         else
-        {
-            HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
-        }
-        ++HeadArrayMsg.HeartBeatMsg.HB_Count;
-#ifdef FORCE_OK_FOR_GUI_DEBUGGING
-        if (HeadArrayMsg.HeartBeatMsg.HB_Count > 50)
-        {
-            HeadArrayMsg.HeartBeatMsg.m_HB_OK = true;
-        }
+            msgSent = false;
 
-#endif
-        // Send message to.... let's say... the GUI task.
-        qStatus = tx_queue_send(&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
-        if (qStatus == TX_SUCCESS)
-            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
+        if (msgSent == false)
+            ExecuteHeartBeat();
 
         tx_thread_sleep (10);
     }

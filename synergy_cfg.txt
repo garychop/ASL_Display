@@ -822,6 +822,12 @@ Synergy Configuration
       Symbol: g_my_gui_semaphore
       Initial count: 0
       
+    Object "g_GUI_queue Queue"
+      Name: GUI Queue
+      Symbol: g_GUI_queue
+      Message Size (Words): 16
+      Queue Size (Bytes): 160
+      
   Thread "Digital Control"
     Symbol: DigitalControl
     Name: Digital Control

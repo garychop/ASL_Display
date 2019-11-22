@@ -797,6 +797,12 @@
         <property id="rtos.threadx.object.semaphore.symbol" value="g_my_gui_semaphore"/>
         <property id="rtos.threadx.object.semaphore.count" value="0"/>
       </object>
+      <object id="rtos.threadx.object.queue.230346532">
+        <property id="rtos.threadx.object.queue.name" value="GUI Queue"/>
+        <property id="rtos.threadx.object.queue.symbol" value="g_GUI_queue"/>
+        <property id="rtos.threadx.object.queue.msg_size" value="16"/>
+        <property id="rtos.threadx.object.queue.queue_size" value="160"/>
+      </object>
     </context>
     <context id="rtos.threadx.thread.58019536">
       <property id="_symbol" value="DigitalControl"/>

@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 21.11.2019   Time (hh:mm): 16:47                        */
+/*  Date (dd.mm.yyyy): 22.11.2019   Time (hh:mm): 11:33                        */
 /*******************************************************************************/
 
 
@@ -86,28 +86,31 @@ extern   "C" {
 #define CENTER_PAD_LEFT_ARROW_BTN_ID 62
 #define CENTER_PAD_RIGHT_ARROW_BTN_ID 63
 #define CENTER_PAD_OFF_BTN_ID 64
-#define INSTRUCT_PROMPT_ID 65
-#define CENTER_PAD_PROP_BTN_ID 66
-#define LEFT_PAD_PROP_BTN_ID 67
-#define RIGHT_PAD_PROP_BTN_ID 68
-#define DIAGNOSTIC_BTN_ID 69
-#define SETTINGS_BTN_ID 70
-#define VERSION_PROMPT_ID 71
-#define VERSION_PROMPT1l_ID 72
-#define MAIN_USER_SCREEN_ID 73
-#define RIGHT_PAD_OFF_ID 74
-#define PROFILE_NEXT_SMALL_PROMPT_ID 75
-#define PROFILE_NEXT_LARGE_PROMPT_ID 76
-#define POWER_SMALL_PROMPT_ID 77
-#define POWER_LARGE_PROMPT_ID 78
-#define FUNCTION_NEXT_SMALL_PROMPT_ID 79
-#define FUNCITON_NET_LARGE_PROMPT_ID 80
-#define CENTER_PAD_ON_ID 81
-#define BLUETOOTH_LARGE_PROMPT_ID 82
-#define BLUETOOTH_SMALL_PROMPT_ID 83
-#define UP_ARROW_BTN_ID 84
-#define DOWN_ARROW_BTN_ID 85
-#define BOTH_ARROW_BTN_ID 86
+#define CENTER_PAD_QUESTION_BTN_ID 65
+#define LEFT_PAD_QUESTION_BTN_ID 66
+#define RIGHT_PAD_QUESTION_BTN_ID 67
+#define INSTRUCT_PROMPT_ID 68
+#define CENTER_PAD_PROP_BTN_ID 69
+#define LEFT_PAD_PROP_BTN_ID 70
+#define RIGHT_PAD_PROP_BTN_ID 71
+#define DIAGNOSTIC_BTN_ID 72
+#define SETTINGS_BTN_ID 73
+#define VERSION_PROMPT_ID 74
+#define VERSION_PROMPT1l_ID 75
+#define MAIN_USER_SCREEN_ID 76
+#define RIGHT_PAD_OFF_ID 77
+#define PROFILE_NEXT_SMALL_PROMPT_ID 78
+#define PROFILE_NEXT_LARGE_PROMPT_ID 79
+#define POWER_SMALL_PROMPT_ID 80
+#define POWER_LARGE_PROMPT_ID 81
+#define FUNCTION_NEXT_SMALL_PROMPT_ID 82
+#define FUNCITON_NET_LARGE_PROMPT_ID 83
+#define CENTER_PAD_ON_ID 84
+#define BLUETOOTH_LARGE_PROMPT_ID 85
+#define BLUETOOTH_SMALL_PROMPT_ID 86
+#define UP_ARROW_BTN_ID 87
+#define DOWN_ARROW_BTN_ID 88
+#define BOTH_ARROW_BTN_ID 89
 
 
 /* Define animation ids                                                        */
@@ -318,6 +321,9 @@ typedef struct SETPADDIRECTIONSCREEN_CONTROL_BLOCK_STRUCT
     GX_PIXELMAP_BUTTON SetPadDirectionScreen_CenterPad_LeftArrow_Button;
     GX_PIXELMAP_BUTTON SetPadDirectionScreen_CenterPad_RightArrow_Button;
     GX_PIXELMAP_BUTTON SetPadDirectionScreen_CenterPad_Off_Button;
+    GX_PIXELMAP_BUTTON SetPadDirectionScreen_CenterPad_Question_Button;
+    GX_PIXELMAP_BUTTON SetPadDirectionScreen_LeftPad_Question_Button;
+    GX_PIXELMAP_BUTTON SetPadDirectionScreen_RightPad_Question_Button;
 } SETPADDIRECTIONSCREEN_CONTROL_BLOCK;
 
 typedef struct DIAGNOSTICSCREEN_CONTROL_BLOCK_STRUCT
@@ -453,6 +459,7 @@ UINT FeatureSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr)
 UINT PadOptionsSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT SettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT SetPadDirectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
+VOID SetPadDirectionScreen_draw_function(GX_WINDOW *widget);
 UINT DiagnosticScreen_event_handler(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT HHP_Start_Screen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT Main_User_Screen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
