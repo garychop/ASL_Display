@@ -95,9 +95,9 @@ GX_RECTANGLE g_TimeoutValueLocation[] = {
 
 // The following hold the Digital (non0) vs Proportional (0) setting for each pad.
 //UINT g_LeftPadSetting = 0, g_RightPadSetting = 0, g_CenterPadSetting = 0;
-enum PAD_DESIGNATION {LEFT_PAD, RIGHT_PAD, CENTER_PAD};
-enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, NO_DIRECTION};
-enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE};
+typedef enum PAD_DESIGNATION {LEFT_PAD, RIGHT_PAD, CENTER_PAD} PAD_DESIGNATION_ENUM;
+typedef enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, NO_DIRECTION} PAD_DIRECTION_ENUM;
+typedef enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE} PAD_TYPE_ENUM;
 
 int g_ClicksActive = FALSE;
 
@@ -150,15 +150,14 @@ void ShowPadTypes (void);
 void ShowActiveFeatures (void);
 void ShowUserSettingsItems (void);
 
+void ProcessCommunicationMsgs ();
+
 //-------------------------------------------------------------------------
 /* Gui Test App Thread entry function */
 void my_gui_thread_entry(void)
 {
     ssp_err_t err;
     UINT status = TX_SUCCESS;
-    HHP_HA_MSG_STRUCT HeadArrayMsg;
-    uint32_t qStatus;
-    GX_EVENT gxe;
 
 		//debug pins
     g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);
@@ -217,7 +216,7 @@ void my_gui_thread_entry(void)
     g_ScreenPrompts[3].m_SmallPrompt = &Main_User_Screen.Main_User_Screen_ProfileNextSmallPrompt;
 
     // Populate the default Pad settings.
-    g_PadSettings[LEFT_PAD].m_PadDirection = LEFT_DIRECTION;
+    g_PadSettings[LEFT_PAD].m_PadDirection = NO_DIRECTION;
     g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Off_Button;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_RightArrow_Button;
@@ -234,7 +233,7 @@ void my_gui_thread_entry(void)
     g_PadSettings[LEFT_PAD].m_DiagnosticProportional_Widget = &DiagnosticScreen.DiagnosticScreen_LeftPadProp_Button;
     g_PadSettings[LEFT_PAD].m_DiagnosticDigital_Widget = &DiagnosticScreen.DiagnosticScreen_LeftPadDigital_Button;
 
-    g_PadSettings[RIGHT_PAD].m_PadDirection = RIGHT_DIRECTION;
+    g_PadSettings[RIGHT_PAD].m_PadDirection = NO_DIRECTION;
     g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Off_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_RightArrow_Button;
@@ -251,7 +250,7 @@ void my_gui_thread_entry(void)
     g_PadSettings[RIGHT_PAD].m_DiagnosticProportional_Widget = &DiagnosticScreen.DiagnosticScreen_RightPadProp_Button;
     g_PadSettings[RIGHT_PAD].m_DiagnosticDigital_Widget = &DiagnosticScreen.DiagnosticScreen_RightPadDigital_Button;
 
-    g_PadSettings[CENTER_PAD].m_PadDirection = FORWARD_DIRECTION;
+    g_PadSettings[CENTER_PAD].m_PadDirection = NO_DIRECTION;
     g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Off_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_RightArrow_Button;
@@ -359,12 +358,44 @@ void my_gui_thread_entry(void)
     {
         Process_Touches();          // Process the GUI touches and the Front Panel Arrows Pushes.
 
-        qStatus = tx_queue_receive (&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
-        if (qStatus == TX_SUCCESS)
-            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);        // Turn off LED
+        ProcessCommunicationMsgs ();    // Process any messages from the Head Array Comm process.
 
-        if (HeadArrayMsg.m_MsgType == HHP_HA_HEART_BEAT)
-        {
+        tx_thread_sleep (2);
+    }
+
+    //Open WDT; 4.46s; PCLKB 30MHz
+ 	//  g_wdt.p_api->open(g_wdt.p_ctrl, g_wdt.p_cfg);
+ 	//  g_wdt.p_api->refresh(g_wdt.p_ctrl);     //Start the WDT by refreshing it
+}
+
+//*************************************************************************************
+// Function: Process_Communication_Msgs
+//
+//*************************************************************************************
+
+void ProcessCommunicationMsgs ()
+{
+    GX_EVENT gxe;
+    uint32_t qStatus;
+    HHP_HA_MSG_STRUCT HeadArrayMsg;
+    ULONG numMsgs;
+    PAD_DESIGNATION_ENUM myPad;
+
+    // Is there anything to process, i.e. Is there anything from the Head Array Comm Process?
+    tx_queue_info_get (&q_HeadArrayCommunicationQueue, NULL, &numMsgs, NULL, NULL, NULL, NULL);
+    if (numMsgs == 0)
+    {
+        return;
+    }
+
+    // Get message or return if error.
+    qStatus = tx_queue_receive (&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
+    if (qStatus != TX_SUCCESS)
+        return;
+
+    switch (HeadArrayMsg.m_MsgType)
+    {
+        case HHP_HA_HEART_BEAT:
             if (HeadArrayMsg.HeartBeatMsg.m_HB_OK)
             {
                 if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
@@ -387,22 +418,25 @@ void my_gui_thread_entry(void)
                     gx_system_event_send(&gxe);
                 }
             }
-//            if (HeadArrayMsg.HeartBeatMsg.HB_Count == 25)
-//            {
-//                gxe.gx_event_type = GX_EVENT_REDRAW;
-//                gxe.gx_event_sender = GX_ID_NONE;
-//                gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
-//                gxe.gx_event_display_handle = 0;
-//                gx_system_event_send(&gxe);
-//                g_UseNewPrompt = true;
-//            }
-        }
-        tx_thread_sleep (2);
-    }
- 	
-    //Open WDT; 4.46s; PCLKB 30MHz
- 	//  g_wdt.p_api->open(g_wdt.p_ctrl, g_wdt.p_cfg);
- 	//  g_wdt.p_api->refresh(g_wdt.p_ctrl);     //Start the WDT by refreshing it
+    //            if (HeadArrayMsg.HeartBeatMsg.HB_Count == 25)
+    //            {
+    //                gxe.gx_event_type = GX_EVENT_REDRAW;
+    //                gxe.gx_event_sender = GX_ID_NONE;
+    //                gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+    //                gxe.gx_event_display_handle = 0;
+    //                gx_system_event_send(&gxe);
+    //                g_UseNewPrompt = true;
+    //            }
+            break;
+        case HHP_HA_PAD_ASSIGMENT_GET_RESPONSE:
+            if (HeadArrayMsg.PadAssignmentResponsMsg.m_LogicalDirection == 'L')
+                myPad = LEFT_PAD;
+            if (HeadArrayMsg.PadAssignmentResponsMsg.m_PhysicalPadNumber == 'L')
+                g_PadSettings[myPad].m_PadDirection = LEFT_DIRECTION;
+            break;
+        default:
+            break;
+    } // end switch
 }
 
 //*************************************************************************************
@@ -471,7 +505,7 @@ UINT DisplayMainScreenActiveFeatures ()
 
 VOID StartupSplashScreen_draw_function (GX_WINDOW *window)
 {
-    UINT myErr;
+//    UINT myErr;
 
     g_ActiveScreen = (GX_WIDGET*) window;
 
@@ -838,14 +872,14 @@ VOID SetPadDirectionScreen_draw_function (GX_WINDOW *window)
 {
     UINT pads, icons;
 
-//    for (pads = 0; pads < 3; ++pads)
-//    {
-//        for (icons = 0; icons < 4; ++icons)
-//        {
-//            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[icons], &g_HiddenRectangle);
-//        }
-//        gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[g_PadSettings[pads].m_PadDirection], &g_PadDirectionLocation[pads]);
-//    }
+    for (pads = 0; pads < 3; ++pads)
+    {
+        for (icons = 0; icons < 4; ++icons)
+        {
+            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[icons], &g_HiddenRectangle);
+        }
+        gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[g_PadSettings[pads].m_PadDirection], &g_PadDirectionLocation[pads]);
+    }
 
     gx_window_draw(window);
 }

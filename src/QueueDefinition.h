@@ -82,5 +82,6 @@ typedef struct GUI_MSG_S
 } GUI_MSG_STRUCT;
 
 extern void SendPadAssignmentRequestMsg (char pad, TX_QUEUE *queue);
+extern void SendPadAssignmentResponse (char physicalPad, char assignment, TX_QUEUE *queue);
 
 #endif /* QUEUEDEFINITION_H_ */

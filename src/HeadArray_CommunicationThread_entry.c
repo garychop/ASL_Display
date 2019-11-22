@@ -66,7 +66,7 @@ uint8_t CalculateChecksum (uint8_t *data, uint8_t msgLen)
     for (counter = 0; counter < msgLen; ++counter)
     {
         myData = data[counter];
-        cs += myData;
+        cs = (uint8_t)(myData + cs);
     }
     return cs;
 }
@@ -155,7 +155,7 @@ static uint8_t Send_I2C_Package(uint8_t *i2c_pack, uint8_t pack_len)
             g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
 
             TX_RESTORE;             // turn interrupts back on
-            return 1;    // time out error
+            return MSG_STATUS_TIMEOUT;    // time out error
         }
 
         R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);
@@ -323,7 +323,7 @@ static uint8_t Read_I2C_Package(uint8_t *responseMsg)
     myCS = 0;
     for(i = 0; i < msgLength-2; i++)
     {
-        myCS += responseMsg[i+1];
+        myCS = (uint8_t)(responseMsg[i+1] + myCS);
     }
     if (myCS != responseMsg[msgLength])
         return MSG_INVALID_FORMAT;
@@ -445,8 +445,38 @@ uint8_t ExecuteHeartBeat(void)
 
 uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
 {
+    uint32_t msgSent = true;
+    uint8_t HA_Msg[16];
+    uint8_t msgStatus, cs;
+    uint8_t HB_Response[16];
 
-    return false;
+    switch (GUI_Msg.m_MsgType)
+    {
+        case HHP_HA_PAD_ASSIGMENT_GET:
+            HA_Msg[0] = 0x04;     // msg length
+            HA_Msg[1] = HHP_HA_PAD_ASSIGMENT_GET;
+            HA_Msg[2] = (uint8_t) GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[3] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+            }
+
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+            // Regardless of what happens above.
+            if (msgStatus != MSG_OK)
+            {
+                SendPadAssignmentResponse ('L', 'L', &q_HeadArrayCommunicationQueue);
+            }
+#endif
+            break;
+        default:
+            msgSent = false;
+    } // end switch
+
+    return msgSent;
 }
 
 //******************************************************************************
