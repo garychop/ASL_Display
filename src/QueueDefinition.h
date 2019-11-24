@@ -18,6 +18,10 @@
 // Typedefs
 //*************************************************************************
 
+typedef enum PAD_DESIGNATION {LEFT_PAD, RIGHT_PAD, CENTER_PAD, INVALID_PAD} PAD_DESIGNATION_ENUM;
+typedef enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, INVALID_DIRECTION} PAD_DIRECTION_ENUM;
+typedef enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE, INVALID_PAD_TYPE} PAD_TYPE_ENUM;
+
 typedef enum HHP_HA_MESSAGES_E
 {
     HHP_HA_PAD_ASSIGMENT_GET = 0x30,
@@ -83,5 +87,6 @@ typedef struct GUI_MSG_S
 
 extern void SendPadAssignmentRequestMsg (char pad, TX_QUEUE *queue);
 extern void SendPadAssignmentResponse (char physicalPad, char assignment, TX_QUEUE *queue);
+extern PAD_DESIGNATION_ENUM TranslatePad (char pad);
 
 #endif /* QUEUEDEFINITION_H_ */

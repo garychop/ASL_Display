@@ -93,12 +93,6 @@ GX_RECTANGLE g_TimeoutValueLocation[] = {
     {0,0,0,0}};
 
 
-// The following hold the Digital (non0) vs Proportional (0) setting for each pad.
-//UINT g_LeftPadSetting = 0, g_RightPadSetting = 0, g_CenterPadSetting = 0;
-typedef enum PAD_DESIGNATION {LEFT_PAD, RIGHT_PAD, CENTER_PAD} PAD_DESIGNATION_ENUM;
-typedef enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, NO_DIRECTION} PAD_DIRECTION_ENUM;
-typedef enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE} PAD_TYPE_ENUM;
-
 int g_ClicksActive = FALSE;
 
 struct PadInfoStruct
@@ -216,13 +210,13 @@ void my_gui_thread_entry(void)
     g_ScreenPrompts[3].m_SmallPrompt = &Main_User_Screen.Main_User_Screen_ProfileNextSmallPrompt;
 
     // Populate the default Pad settings.
-    g_PadSettings[LEFT_PAD].m_PadDirection = NO_DIRECTION;
+    g_PadSettings[LEFT_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Off_Button;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_RightArrow_Button;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_LeftArrow_Button;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_ForwardArrow_Button;
-    g_PadSettings[LEFT_PAD].m_DirectionIcons[NO_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Question_Button;
+    g_PadSettings[LEFT_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Question_Button;
     g_PadSettings[LEFT_PAD].m_PadMinimumCalibrationValue = 0;
     g_PadSettings[LEFT_PAD].m_PadMaximumCalibrationValue = 100;
     g_PadSettings[LEFT_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[LEFT_PAD];
@@ -233,13 +227,13 @@ void my_gui_thread_entry(void)
     g_PadSettings[LEFT_PAD].m_DiagnosticProportional_Widget = &DiagnosticScreen.DiagnosticScreen_LeftPadProp_Button;
     g_PadSettings[LEFT_PAD].m_DiagnosticDigital_Widget = &DiagnosticScreen.DiagnosticScreen_LeftPadDigital_Button;
 
-    g_PadSettings[RIGHT_PAD].m_PadDirection = NO_DIRECTION;
+    g_PadSettings[RIGHT_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Off_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_RightArrow_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_LeftArrow_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_ForwardArrow_Button;
-    g_PadSettings[RIGHT_PAD].m_DirectionIcons[NO_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Question_Button;
+    g_PadSettings[RIGHT_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Question_Button;
     g_PadSettings[RIGHT_PAD].m_PadMinimumCalibrationValue = 5;
     g_PadSettings[RIGHT_PAD].m_PadMaximumCalibrationValue = 95;
     g_PadSettings[RIGHT_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[RIGHT_PAD];
@@ -250,13 +244,13 @@ void my_gui_thread_entry(void)
     g_PadSettings[RIGHT_PAD].m_DiagnosticProportional_Widget = &DiagnosticScreen.DiagnosticScreen_RightPadProp_Button;
     g_PadSettings[RIGHT_PAD].m_DiagnosticDigital_Widget = &DiagnosticScreen.DiagnosticScreen_RightPadDigital_Button;
 
-    g_PadSettings[CENTER_PAD].m_PadDirection = NO_DIRECTION;
+    g_PadSettings[CENTER_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Off_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_RightArrow_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_LeftArrow_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_ForwardArrow_Button;
-    g_PadSettings[CENTER_PAD].m_DirectionIcons[NO_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Question_Button;
+    g_PadSettings[CENTER_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Question_Button;
     g_PadSettings[CENTER_PAD].m_PadMinimumCalibrationValue = 10;
     g_PadSettings[CENTER_PAD].m_PadMaximumCalibrationValue = 90;
     g_PadSettings[CENTER_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[CENTER_PAD];
@@ -429,10 +423,10 @@ void ProcessCommunicationMsgs ()
     //            }
             break;
         case HHP_HA_PAD_ASSIGMENT_GET_RESPONSE:
-            if (HeadArrayMsg.PadAssignmentResponsMsg.m_LogicalDirection == 'L')
-                myPad = LEFT_PAD;
-            if (HeadArrayMsg.PadAssignmentResponsMsg.m_PhysicalPadNumber == 'L')
-                g_PadSettings[myPad].m_PadDirection = LEFT_DIRECTION;
+            myPad = TranslatePad (HeadArrayMsg.PadAssignmentResponsMsg.m_PhysicalPadNumber);
+            if (myPad != INVALID_PAD)
+                if (HeadArrayMsg.PadAssignmentResponsMsg.m_PhysicalPadNumber == 'L')
+                    g_PadSettings[myPad].m_PadDirection = LEFT_DIRECTION;
             break;
         default:
             break;
@@ -874,7 +868,7 @@ VOID SetPadDirectionScreen_draw_function (GX_WINDOW *window)
 
     for (pads = 0; pads < 3; ++pads)
     {
-        for (icons = 0; icons < 4; ++icons)
+        for (icons = 0; icons < 5; ++icons)
         {
             gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[icons], &g_HiddenRectangle);
         }
@@ -894,11 +888,11 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
         // First let's hide all choices for all pads.
         for (pads = 0; pads < 3; ++pads)
         {
-            for (icons = 0; icons < 4; ++icons)
+            for (icons = 0; icons < 5; ++icons)
             {
                 gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[icons], &g_HiddenRectangle);
             }
-            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[NO_DIRECTION], &g_PadDirectionLocation[pads]);
+            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[INVALID_DIRECTION], &g_PadDirectionLocation[pads]);
         }
         SendPadAssignmentRequestMsg('L', &g_GUI_queue);
         SendPadAssignmentRequestMsg('R', &g_GUI_queue);
