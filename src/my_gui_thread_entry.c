@@ -425,8 +425,13 @@ void ProcessCommunicationMsgs ()
         case HHP_HA_PAD_ASSIGMENT_GET_RESPONSE:
             myPad = TranslatePad (HeadArrayMsg.PadAssignmentResponsMsg.m_PhysicalPadNumber);
             if (myPad != INVALID_PAD)
-                if (HeadArrayMsg.PadAssignmentResponsMsg.m_PhysicalPadNumber == 'L')
-                    g_PadSettings[myPad].m_PadDirection = LEFT_DIRECTION;
+                g_PadSettings[myPad].m_PadDirection = TranslatePadDirection (HeadArrayMsg.PadAssignmentResponsMsg.m_LogicalDirection);
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
             break;
         default:
             break;

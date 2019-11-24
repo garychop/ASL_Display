@@ -300,7 +300,7 @@ Synergy Configuration
   Thread "My Gui Thread"
     Symbol: my_gui_thread
     Name: My Gui Thread
-    Stack size (bytes): 1024
+    Stack size (bytes): 2048
     Priority: 20
     Auto start: Enabled
     Time slicing interval (ticks): 2

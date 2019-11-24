@@ -754,7 +754,7 @@
     <context id="rtos.threadx.thread.1086088343">
       <property id="_symbol" value="my_gui_thread"/>
       <property id="rtos.threadx.thread.name" value="My Gui Thread"/>
-      <property id="rtos.threadx.thread.stack" value="1024"/>
+      <property id="rtos.threadx.thread.stack" value="2048"/>
       <property id="rtos.threadx.thread.priority" value="20"/>
       <property id="rtos.threadx.thread.autostart" value="rtos.threadx.thread.autostart.enabled"/>
       <property id="rtos.threadx.thread.timeslice" value="2"/>

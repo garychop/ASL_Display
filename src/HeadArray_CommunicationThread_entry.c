@@ -443,6 +443,8 @@ uint8_t ExecuteHeartBeat(void)
 //
 //******************************************************************************
 
+char myPadDirection = 'L';
+
 uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
 {
     uint32_t msgSent = true;
@@ -468,7 +470,15 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             // Regardless of what happens above.
             if (msgStatus != MSG_OK)
             {
-                SendPadAssignmentResponse ('L', 'L', &q_HeadArrayCommunicationQueue);
+                SendPadAssignmentResponse ((char)GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber, myPadDirection, &q_HeadArrayCommunicationQueue);
+                switch (myPadDirection)
+                {
+                    case 'L': myPadDirection = 'R'; break;
+                    case 'R': myPadDirection = 'F'; break;
+                    case 'F': myPadDirection = 'O'; break;
+                    case 'O': myPadDirection = 'L'; break;
+                    default: myPadDirection = 'L'; break;
+                }
             }
 #endif
             break;

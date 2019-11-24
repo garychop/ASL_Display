@@ -50,6 +50,33 @@ PAD_DESIGNATION_ENUM TranslatePad (char pad)
 
 //****************************************************************************
 
+PAD_DIRECTION_ENUM TranslatePadDirection (char padDirection)
+{
+    PAD_DIRECTION_ENUM myDir = INVALID_DIRECTION;
+
+    switch (padDirection)
+    {
+        case 'L':
+            myDir = LEFT_DIRECTION;
+            break;
+        case 'R':
+            myDir = RIGHT_DIRECTION;
+            break;
+        case 'F':
+            myDir = FORWARD_DIRECTION;
+            break;
+//        case 'B':
+//            myDir = REVERSE_DIRECTION;
+//            break;
+        case 'O':
+            myDir = OFF_DIRECTION;
+            break;
+    }
+    return myDir;
+}
+
+//****************************************************************************
+
 void SendPadAssignmentRequestMsg (char pad, TX_QUEUE *queue)
 {
     GUI_MSG_STRUCT msg;
