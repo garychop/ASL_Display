@@ -13,7 +13,7 @@ extern void HeadArray_CommunicationThread_entry(void);
 extern "C"
 {
 #endif
-extern TX_QUEUE q_HeadArrayCommunicationQueue;
+extern TX_QUEUE q_COMM_to_GUI_Queue;
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

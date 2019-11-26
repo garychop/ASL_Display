@@ -377,14 +377,14 @@ void ProcessCommunicationMsgs ()
     PAD_DESIGNATION_ENUM myPad;
 
     // Is there anything to process, i.e. Is there anything from the Head Array Comm Process?
-    tx_queue_info_get (&q_HeadArrayCommunicationQueue, NULL, &numMsgs, NULL, NULL, NULL, NULL);
+    tx_queue_info_get (&q_COMM_to_GUI_Queue, NULL, &numMsgs, NULL, NULL, NULL, NULL);
     if (numMsgs == 0)
     {
         return;
     }
 
     // Get message or return if error.
-    qStatus = tx_queue_receive (&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
+    qStatus = tx_queue_receive (&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
     if (qStatus != TX_SUCCESS)
         return;
 
@@ -624,7 +624,7 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 else if (g_ScreenPrompts[feature].m_Location == 1)
                 {
                     g_ScreenPrompts[feature].m_Location = 0;
-                    SendModeChangeCommand (feature, &g_GUI_queue);  // We have a new active feature, tell the Head Array
+                    SendModeChangeCommand (feature, &g_GUI_to_COMM_queue);  // We have a new active feature, tell the Head Array
                 }
                 else if (g_ScreenPrompts[feature].m_Location == 2)
                     g_ScreenPrompts[feature].m_Location = min (1, activeCount-1);
@@ -665,7 +665,7 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 else if (g_ScreenPrompts[feature].m_Location == 3)
                 {
                     g_ScreenPrompts[feature].m_Location = 0;
-                    SendModeChangeCommand (feature, &g_GUI_queue);  // We have a new active feature, tell the Head Array
+                    SendModeChangeCommand (feature, &g_GUI_to_COMM_queue);  // We have a new active feature, tell the Head Array
                 }
                 if (g_ScreenPrompts[feature].m_Location == activeCount)
                     g_ScreenPrompts[feature].m_Location = 0;
@@ -928,9 +928,9 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
             }
             gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[INVALID_DIRECTION], &g_PadDirectionLocation[pads]);
         }
-        SendPadAssignmentRequestMsg('L', &g_GUI_queue);
-        SendPadAssignmentRequestMsg('R', &g_GUI_queue);
-        SendPadAssignmentRequestMsg('C', &g_GUI_queue);
+        SendPadAssignmentRequestMsg('L', &g_GUI_to_COMM_queue);
+        SendPadAssignmentRequestMsg('R', &g_GUI_to_COMM_queue);
+        SendPadAssignmentRequestMsg('C', &g_GUI_to_COMM_queue);
         break;
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):

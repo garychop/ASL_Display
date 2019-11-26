@@ -490,8 +490,8 @@ void sf_touch_panel_i2c_init0(void)
     }
 }
 TX_SEMAPHORE g_my_gui_semaphore;
-TX_QUEUE g_GUI_queue;
-static uint8_t queue_memory_g_GUI_queue[160];
+TX_QUEUE g_GUI_to_COMM_queue;
+static uint8_t queue_memory_g_GUI_to_COMM_queue[320];
 
 extern bool g_ssp_common_initialized;
 extern uint32_t g_ssp_common_thread_count;
@@ -509,12 +509,13 @@ void my_gui_thread_create(void)
     {
         tx_startup_err_callback (&g_my_gui_semaphore, 0);
     }
-    UINT err_g_GUI_queue;
-    err_g_GUI_queue = tx_queue_create (&g_GUI_queue, (CHAR *) "GUI Queue", 16, &queue_memory_g_GUI_queue,
-                                       sizeof(queue_memory_g_GUI_queue));
-    if (TX_SUCCESS != err_g_GUI_queue)
+    UINT err_g_GUI_to_COMM_queue;
+    err_g_GUI_to_COMM_queue = tx_queue_create (&g_GUI_to_COMM_queue, (CHAR *) "GUI Queue", 16,
+                                               &queue_memory_g_GUI_to_COMM_queue,
+                                               sizeof(queue_memory_g_GUI_to_COMM_queue));
+    if (TX_SUCCESS != err_g_GUI_to_COMM_queue)
     {
-        tx_startup_err_callback (&g_GUI_queue, 0);
+        tx_startup_err_callback (&g_GUI_to_COMM_queue, 0);
     }
 
     UINT err;

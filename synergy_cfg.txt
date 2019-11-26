@@ -822,11 +822,11 @@ Synergy Configuration
       Symbol: g_my_gui_semaphore
       Initial count: 0
       
-    Object "g_GUI_queue Queue"
+    Object "g_GUI_to_COMM_queue Queue"
       Name: GUI Queue
-      Symbol: g_GUI_queue
+      Symbol: g_GUI_to_COMM_queue
       Message Size (Words): 16
-      Queue Size (Bytes): 160
+      Queue Size (Bytes): 320
       
   Thread "Digital Control"
     Symbol: DigitalControl
@@ -844,11 +844,11 @@ Synergy Configuration
     Auto start: Enabled
     Time slicing interval (ticks): 1
     
-    Object "q_HeadArrayCommunicationQueue Queue"
+    Object "q_COMM_to_GUI_Queue Queue"
       Name: New Queue
-      Symbol: q_HeadArrayCommunicationQueue
+      Symbol: q_COMM_to_GUI_Queue
       Message Size (Words): 16
-      Queue Size (Bytes): 1600
+      Queue Size (Bytes): 320
       
   Messaging
     Subscriber "My Gui Thread" 0 0

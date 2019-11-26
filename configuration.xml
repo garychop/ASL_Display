@@ -799,9 +799,9 @@
       </object>
       <object id="rtos.threadx.object.queue.230346532">
         <property id="rtos.threadx.object.queue.name" value="GUI Queue"/>
-        <property id="rtos.threadx.object.queue.symbol" value="g_GUI_queue"/>
+        <property id="rtos.threadx.object.queue.symbol" value="g_GUI_to_COMM_queue"/>
         <property id="rtos.threadx.object.queue.msg_size" value="16"/>
-        <property id="rtos.threadx.object.queue.queue_size" value="160"/>
+        <property id="rtos.threadx.object.queue.queue_size" value="320"/>
       </object>
     </context>
     <context id="rtos.threadx.thread.58019536">
@@ -821,9 +821,9 @@
       <property id="rtos.threadx.thread.timeslice" value="1"/>
       <object id="rtos.threadx.object.queue.1199863324">
         <property id="rtos.threadx.object.queue.name" value="New Queue"/>
-        <property id="rtos.threadx.object.queue.symbol" value="q_HeadArrayCommunicationQueue"/>
+        <property id="rtos.threadx.object.queue.symbol" value="q_COMM_to_GUI_Queue"/>
         <property id="rtos.threadx.object.queue.msg_size" value="16"/>
-        <property id="rtos.threadx.object.queue.queue_size" value="1600"/>
+        <property id="rtos.threadx.object.queue.queue_size" value="320"/>
       </object>
     </context>
     <config id="config.driver.jpeg_decode">

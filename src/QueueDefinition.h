@@ -80,18 +80,18 @@ typedef struct GUI_MSG_S
     HHP_HA_MESSAGES_ENUM m_MsgType;         // Use the above mentioned enum.
     union
     {
-        struct
+        struct  // Used for HHP_HA_PAD_ASSIGMENT_GET msg send by GUI to COMM Task to retrieve Physical Directional setup.
         {
             char m_PhysicalPadNumber;
         } PadAssignmentRequestMsg;
+        struct  // Used for HHP_HA_MODE_CHANGE_SET send by GUI to COMM task to set new User Mode.
+        {
+            uint8_t m_Mode;     // 0x01 = Power On/Off, 0x02=Bluetooth, 0x04 = Next Function, 0x05 = Next Profile
+        } ModeChangeMsg;
         struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
-        struct
-        {
-            uint8_t m_Mode;     // 0x01 = Power On/Off, 0x02=Bluetooth, 0x04 = Next Function, 0x05 = Next Profile
-        } ModeChangeMsg;
     };
 } GUI_MSG_STRUCT;
 
@@ -99,6 +99,7 @@ typedef struct GUI_MSG_S
 extern void SendPadAssignmentRequestMsg (char pad, TX_QUEUE *queue);
 extern void SendPadAssignmentResponse (char physicalPad, char assignment, TX_QUEUE *queue);
 extern void SendModeChangeCommand (uint8_t newMode, TX_QUEUE *queue);
+extern void SendPadAssignmentSetCommand (char pad, char direction, TX_QUEUE *queue);
 
 // Helper functions
 extern PAD_DESIGNATION_ENUM TranslatePad (char pad);

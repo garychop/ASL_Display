@@ -437,9 +437,9 @@ uint8_t ExecuteHeartBeat(void)
 #endif
 
     // Send message to.... let's say... the GUI task.
-    tx_queue_send(&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
 
-//    qStatus = tx_queue_send(&q_HeadArrayCommunicationQueue, &HeadArrayMsg, TX_NO_WAIT);
+//    qStatus = tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
 //    if (qStatus == TX_SUCCESS)
 //        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
 
@@ -471,13 +471,17 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             if (msgStatus == MSG_OK)
             {
                 msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    SendPadAssignmentResponse ((char) HB_Response[2], (char) HB_Response[3], &q_COMM_to_GUI_Queue);
+                }
             }
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
             // Regardless of what happens above.
             if (msgStatus != MSG_OK)
             {
-                SendPadAssignmentResponse ((char)GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber, myPadDirection, &q_HeadArrayCommunicationQueue);
+                SendPadAssignmentResponse ((char)GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber, myPadDirection, &q_COMM_to_GUI_Queue);
                 switch (myPadDirection)
                 {
                     case 'L': myPadDirection = 'R'; break;
@@ -488,6 +492,8 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 }
             }
 #endif
+            break;
+
         case HHP_HA_MODE_CHANGE_SET:
             HA_Msg[0] = 0x04;     // msg length
             HA_Msg[1] = HHP_HA_MODE_CHANGE_SET;
@@ -530,10 +536,10 @@ void HeadArray_CommunicationThread_entry(void)
     while (1)
     {
         // Process requests from the GUI.
-        tx_queue_info_get (&g_GUI_queue, NULL, &numMsgs, NULL, NULL, NULL, NULL);
+        tx_queue_info_get (&g_GUI_to_COMM_queue, NULL, &numMsgs, NULL, NULL, NULL, NULL);
         if (numMsgs)
         {
-            tx_queue_receive (&g_GUI_queue, &GUI_Msg, TX_NO_WAIT);
+            tx_queue_receive (&g_GUI_to_COMM_queue, &GUI_Msg, TX_NO_WAIT);
             msgSent = Process_GUI_Messages (GUI_Msg);
         }
         else

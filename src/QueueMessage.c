@@ -90,6 +90,12 @@ void SendPadAssignmentRequestMsg (char pad, TX_QUEUE *queue)
 }
 
 //****************************************************************************
+void SendPadAssignmentSetCommand (char pad, char direction, TX_QUEUE *queue)
+{
+
+}
+
+//****************************************************************************
 void SendPadAssignmentResponse (char physicalPad, char assignment, TX_QUEUE *queue)
 {
     HHP_HA_MSG_STRUCT HHP_Msg;
