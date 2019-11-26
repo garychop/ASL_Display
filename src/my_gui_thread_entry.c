@@ -93,8 +93,6 @@ GX_RECTANGLE g_TimeoutValueLocation[] = {
     {0,0,0,0}};
 
 
-int g_ClicksActive = FALSE;
-
 struct PadInfoStruct
 {
     enum PAD_TYPE m_PadType;
@@ -116,6 +114,8 @@ int g_CalibrationPadNumber;
 int g_CalibrationStepNumber;
 int g_PadValue;
 int g_DeltaValue;
+int g_ClicksActive = FALSE;
+FEATURE_ID_ENUM g_ActiveFeature = POWER_ONOFF_ID;     // this indicates the active feature.
 
 GX_WINDOW_ROOT * p_window_root;
 bool g_UseNewPrompt = false;
@@ -140,6 +140,7 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 
 UINT DisplayMainScreenActiveFeatures ();
 UINT ShowHidePad (GX_EVENT *event_ptr);
+void AdjustActiveFeature (uint8_t newMode);
 void ShowPadTypes (void);
 void ShowActiveFeatures (void);
 void ShowUserSettingsItems (void);
@@ -316,7 +317,7 @@ void my_gui_thread_entry(void)
     // Setup the ILI9341V LCD Driver and Touchscreen.
     ILI9341V_Init();
 		
-	g_ioport.p_api->pinWrite(BACKLIGHT_CONTROL_PIN, IOPORT_LEVEL_HIGH);      // Turn on the backlight
+	g_ioport.p_api->pinWrite(BACKLIGHT_CONTROL_PIN, IOPORT_LEVEL_HIGH);      // Turn off the backlight
 
 	err = g_timer0.p_api->open(g_timer0.p_ctrl, g_timer0.p_cfg);
 	if (err != SSP_SUCCESS)
@@ -400,6 +401,8 @@ void ProcessCommunicationMsgs ()
                     gxe.gx_event_display_handle = 0;
                     gx_system_event_send(&gxe);
                 }
+                if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
+                    AdjustActiveFeature (HeadArrayMsg.HeartBeatMsg.m_ActiveMode);
             }
             else    // Failed Heart Beat
             {
@@ -438,63 +441,6 @@ void ProcessCommunicationMsgs ()
     } // end switch
 }
 
-//*************************************************************************************
-// Function Name: DisplayMainScreenActiveFeatures
-//
-// Description: This displays the features that are active in the order specificed
-//  in the Screen Prompts "objects".
-//
-//*************************************************************************************
-
-UINT DisplayMainScreenActiveFeatures ()
-{
-    int activeCount;
-    int feature;
-
-    // Count the number of active items so we can populate appropriately.
-    // Hide the Non-Active features.
-    activeCount = 0;
-    for (feature = 0; feature < 4; ++feature)
-    {
-        if (g_ScreenPrompts[feature].m_Active == FALSE)
-        {
-            gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
-            gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_HiddenRectangle);
-            ++activeCount;
-        }
-    }
-
-    // Locate the first feature to display
-    for (feature = 0; feature < 4; ++feature)
-    {
-        if (g_ScreenPrompts[feature].m_Active)
-        {
-            switch (g_ScreenPrompts[feature].m_Location)
-            {
-            case 0: // Show the first line
-                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_FeatureLocation[0]);
-                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_HiddenRectangle);
-                break;
-            case 1: // Show second line item
-                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[1]);
-                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
-                break;
-            case 2: // Process third line item, move to the 2nd line
-                // Hide Large Icon, show small icon
-                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[2]);
-                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
-                break;
-            case 3: // Process fourth line item, move to the 3rd line.
-                // Hide Large Icon, show small icon
-                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[3]);
-                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
-                break;
-            }
-        }
-    }
-    return GX_SUCCESS;
-}
-
 
 //*************************************************************************************
 // Startup Screen
@@ -530,6 +476,82 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 }
 
 //*************************************************************************************
+// Function Name: DisplayMainScreenActiveFeatures
+//
+// Description: This displays the features that are active in the order specificed
+//  in the Screen Prompts "objects".
+//
+//*************************************************************************************
+void AdjustActiveFeature (uint8_t newMode)
+{
+    uint8_t featureCount, myMode;
+
+    if (newMode > 3)
+        return;
+
+    g_ActiveFeature = newMode;
+    myMode = newMode;
+
+    for (featureCount = 0; featureCount < 4; ++featureCount)
+    {
+        g_ScreenPrompts[myMode].m_Location = featureCount;
+        ++myMode;
+        if (myMode > 3)
+            myMode = 0;
+    }
+}
+
+UINT DisplayMainScreenActiveFeatures ()
+{
+    uint8_t activeCount;
+    uint8_t feature;
+
+    // Count the number of active items so we can populate appropriately.
+    // Hide the Non-Active features.
+    activeCount = 0;
+    for (feature = 0; feature < 4; ++feature)
+    {
+        if (g_ScreenPrompts[feature].m_Active == FALSE)
+        {
+            gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
+            gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_HiddenRectangle);
+            ++activeCount;
+        }
+    }
+
+    // Locate the first feature to display
+    for (feature = 0; feature < 4; ++feature)
+    {
+        if (g_ScreenPrompts[feature].m_Active)
+        {
+            switch (g_ScreenPrompts[feature].m_Location)
+            {
+            case 0: // Show the first line
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_FeatureLocation[0]);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_HiddenRectangle);
+                // Send the Mode to the Head Array.
+                break;
+            case 1: // Show second line item
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[1]);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
+                break;
+            case 2: // Process third line item, move to the 2nd line
+                // Hide Large Icon, show small icon
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[2]);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
+                break;
+            case 3: // Process fourth line item, move to the 3rd line.
+                // Hide Large Icon, show small icon
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_SmallPrompt, &g_FeatureLocation[3]);
+                gx_widget_resize ((GX_WIDGET*) g_ScreenPrompts[feature].m_LargePrompt, &g_HiddenRectangle);
+                break;
+            }
+        }
+    }
+    return GX_SUCCESS;
+}
+
+//*************************************************************************************
 // Function Name: Main_User_Screen_event_process
 //
 // Description: This handles the User Screen messages.
@@ -545,7 +567,7 @@ VOID Main_User_Screen_draw_function(GX_WINDOW *window)
 
 UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
-    UINT feature;
+    uint8_t feature;
     int activeCount;
 
     switch (event_ptr->gx_event_type)
@@ -600,13 +622,17 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 if (g_ScreenPrompts[feature].m_Location == 0)
                     g_ScreenPrompts[feature].m_Location = activeCount-1;
                 else if (g_ScreenPrompts[feature].m_Location == 1)
+                {
                     g_ScreenPrompts[feature].m_Location = 0;
+                    SendModeChangeCommand (feature, &g_GUI_queue);  // We have a new active feature, tell the Head Array
+                }
                 else if (g_ScreenPrompts[feature].m_Location == 2)
                     g_ScreenPrompts[feature].m_Location = min (1, activeCount-1);
                 else if (g_ScreenPrompts[feature].m_Location == 3)
                     g_ScreenPrompts[feature].m_Location = min (2, activeCount-1);
             }
         }
+
         DisplayMainScreenActiveFeatures();
         break;
 
@@ -637,7 +663,10 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 else if (g_ScreenPrompts[feature].m_Location == 2)
                     g_ScreenPrompts[feature].m_Location = min (3, activeCount);
                 else if (g_ScreenPrompts[feature].m_Location == 3)
+                {
                     g_ScreenPrompts[feature].m_Location = 0;
+                    SendModeChangeCommand (feature, &g_GUI_queue);  // We have a new active feature, tell the Head Array
+                }
                 if (g_ScreenPrompts[feature].m_Location == activeCount)
                     g_ScreenPrompts[feature].m_Location = 0;
             }
@@ -657,7 +686,7 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         break;
     }
 
-    DisplayMainScreenActiveFeatures();  // Remove this when more of the previous code is "undefinded".
+   // DisplayMainScreenActiveFeatures();  // Remove this when more of the previous code is "undefinded".
 
     gx_window_event_process(window, event_ptr);
 

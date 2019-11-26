@@ -21,6 +21,7 @@
 typedef enum PAD_DESIGNATION {LEFT_PAD, RIGHT_PAD, CENTER_PAD, INVALID_PAD} PAD_DESIGNATION_ENUM;
 typedef enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, INVALID_DIRECTION} PAD_DIRECTION_ENUM;
 typedef enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE, INVALID_PAD_TYPE} PAD_TYPE_ENUM;
+typedef enum FEATURE_ID {POWER_ONOFF_ID, BLUETOOTH_ID, NEXT_FUNCTION_ID, NEXT_PROFILE_ID, INVALID_FEATURE_ID} FEATURE_ID_ENUM;
 
 typedef enum HHP_HA_MESSAGES_E
 {
@@ -56,6 +57,7 @@ typedef struct HHP_HA_MSG_S
         {
             uint32_t m_HB_OK;   // Non0 if Heart Beat is OK, 0 = failed.
             uint32_t HB_Count;  // number that increments with each successful heart beat.
+            uint8_t m_ActiveMode;   // 1=Power On/Off, 2=Bluetooh, 3=Next Function 4=Next Profile
         } HeartBeatMsg;
         struct
         {
@@ -66,6 +68,10 @@ typedef struct HHP_HA_MSG_S
             char m_PhysicalPadNumber;
             char m_LogicalDirection;
         } PadAssignmentResponsMsg;
+        struct
+        {
+            uint8_t m_Mode;     // 0x01 = Power On/Off, 0x02=Bluetooth, 0x04 = Next Function, 0x05 = Next Profile
+        } ModeChangeMsg;
     };
 } HHP_HA_MSG_STRUCT;
 
@@ -82,11 +88,19 @@ typedef struct GUI_MSG_S
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
+        struct
+        {
+            uint8_t m_Mode;     // 0x01 = Power On/Off, 0x02=Bluetooth, 0x04 = Next Function, 0x05 = Next Profile
+        } ModeChangeMsg;
     };
 } GUI_MSG_STRUCT;
 
+// Support functions that format and send the command to the Head Array.
 extern void SendPadAssignmentRequestMsg (char pad, TX_QUEUE *queue);
 extern void SendPadAssignmentResponse (char physicalPad, char assignment, TX_QUEUE *queue);
+extern void SendModeChangeCommand (uint8_t newMode, TX_QUEUE *queue);
+
+// Helper functions
 extern PAD_DESIGNATION_ENUM TranslatePad (char pad);
 extern PAD_DIRECTION_ENUM TranslatePadDirection (char padDirection);
 

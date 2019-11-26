@@ -89,6 +89,7 @@ void SendPadAssignmentRequestMsg (char pad, TX_QUEUE *queue)
     }
 }
 
+//****************************************************************************
 void SendPadAssignmentResponse (char physicalPad, char assignment, TX_QUEUE *queue)
 {
     HHP_HA_MSG_STRUCT HHP_Msg;
@@ -100,5 +101,26 @@ void SendPadAssignmentResponse (char physicalPad, char assignment, TX_QUEUE *que
     {
         tx_queue_send(queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
     }
+}
 
+//****************************************************************************
+
+void SendModeChangeCommand (uint8_t newMode, TX_QUEUE *queue)
+{
+    HHP_HA_MSG_STRUCT HHP_Msg;
+    uint8_t myMode = 0x00;
+
+    HHP_Msg.m_MsgType = HHP_HA_MODE_CHANGE_SET;
+    switch (newMode)
+    {   // This translate the array position into the command data.
+        case 0: myMode = 0x01; break;   // Power On/Off
+        case 1: myMode = 0x02; break;   // Bluetooth
+        case 2: myMode = 0x03; break;   // Next Function
+        case 3: myMode = 0x04; break;   // Next Profile
+    }
+    HHP_Msg.ModeChangeMsg.m_Mode = myMode;
+    if (queue != NULL)
+    {
+        tx_queue_send(queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+    }
 }

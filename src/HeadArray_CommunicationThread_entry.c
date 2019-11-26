@@ -23,14 +23,15 @@
 
 #include "QueueDefinition.h"
 
+#define FORCE_OK_FOR_GUI_DEBUGGING
+
+
 //******************************************************************************
 // Defines and Macros
 //******************************************************************************
 #define MSG_OK  0                   // Indicates message as processed OK.
 #define MSG_STATUS_TIMEOUT 1        // indicates message processing failed to receive proper status, i.e. NO I/O Line or CS
 #define MSG_INVALID_FORMAT 2        // Indicates message was formatted improperly or invalid data.
-
-#define HEARTBEAT_CMD 0x44
 
 //******************************************************************************
 // Forward Declarations
@@ -50,6 +51,11 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT);
 
 uint8_t g_HeartBeatCounter = 0;
 void (*g_MyState)(void);
+
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+char myPadDirection = 'L';
+uint8_t g_myMode;
+#endif
 
 //******************************************************************************
 // Function:CalculateChecksum
@@ -388,8 +394,6 @@ uint8_t get_PROP_version(void)
 //
 //******************************************************************************
 
-#define FORCE_OK_FOR_GUI_DEBUGGING
-
 uint8_t ExecuteHeartBeat(void)
 {
     uint8_t HB_Message[4];
@@ -399,7 +403,7 @@ uint8_t ExecuteHeartBeat(void)
     HHP_HA_MSG_STRUCT HeadArrayMsg;
 
     HB_Message[0] = 0x04;     // msg length
-    HB_Message[1] = HEARTBEAT_CMD;
+    HB_Message[1] = HHP_HA_HEART_BEAT;
     HB_Message[2] = ++g_HeartBeatCounter;
     cs = CalculateChecksum(HB_Message, sizeof (HB_Message)-1);
     HB_Message[3] = cs;
@@ -408,11 +412,15 @@ uint8_t ExecuteHeartBeat(void)
     if (msgStatus == MSG_OK)
     {
         msgStatus = Read_I2C_Package(HB_Response);
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+        HB_Response[3] = g_myMode;
+#endif
     }
 
     // Prepare and send Heart Message to GUI.
     HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
     HeadArrayMsg.HeartBeatMsg.HB_Count = g_HeartBeatCounter;
+    HeadArrayMsg.HeartBeatMsg.m_ActiveMode = HB_Response[3];
     HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;
     if (msgStatus == MSG_OK)
         HeadArrayMsg.HeartBeatMsg.m_HB_OK = true;
@@ -423,6 +431,7 @@ uint8_t ExecuteHeartBeat(void)
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
     if (HeadArrayMsg.HeartBeatMsg.HB_Count > 20)
     {
+        g_HeartBeatCounter = 20;
         HeadArrayMsg.HeartBeatMsg.m_HB_OK = true;
     }
 #endif
@@ -442,8 +451,6 @@ uint8_t ExecuteHeartBeat(void)
 // Description: This function processes messages sent by the GUI.
 //
 //******************************************************************************
-
-char myPadDirection = 'L';
 
 uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
 {
@@ -481,9 +488,25 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 }
             }
 #endif
+        case HHP_HA_MODE_CHANGE_SET:
+            HA_Msg[0] = 0x04;     // msg length
+            HA_Msg[1] = HHP_HA_MODE_CHANGE_SET;
+            HA_Msg[2] = (uint8_t) GUI_Msg.ModeChangeMsg.m_Mode;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[3] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+            }
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+            g_myMode = (uint8_t) GUI_Msg.ModeChangeMsg.m_Mode;
+#endif
             break;
+
         default:
             msgSent = false;
+            break;
     } // end switch
 
     return msgSent;
