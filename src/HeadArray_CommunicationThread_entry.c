@@ -412,12 +412,14 @@ uint8_t ExecuteHeartBeat(void)
     if (msgStatus == MSG_OK)
     {
         msgStatus = Read_I2C_Package(HB_Response);
-#ifdef FORCE_OK_FOR_GUI_DEBUGGING
-        HB_Response[3] = g_myMode;
-#endif
     }
 
-    // Prepare and send Heart Message to GUI.
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+    HB_Response[3] = g_myMode;
+#endif
+    --HB_Response[3];           // Translate from COMM protocol to GUI Array position.
+
+        // Prepare and send Heart Message to GUI.
     HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
     HeadArrayMsg.HeartBeatMsg.HB_Count = g_HeartBeatCounter;
     HeadArrayMsg.HeartBeatMsg.m_ActiveMode = HB_Response[3];
@@ -506,7 +508,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = Read_I2C_Package(HB_Response);
             }
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-            g_myMode = (uint8_t) GUI_Msg.ModeChangeMsg.m_Mode;
+            g_myMode = (uint8_t) GUI_Msg.ModeChangeMsg.m_Mode;  // Set global data for debugging. Refer to Heart Beat msg processing.
 #endif
             break;
 

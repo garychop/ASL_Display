@@ -401,8 +401,17 @@ void ProcessCommunicationMsgs ()
                     gxe.gx_event_display_handle = 0;
                     gx_system_event_send(&gxe);
                 }
-                if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
-                    AdjustActiveFeature (HeadArrayMsg.HeartBeatMsg.m_ActiveMode);
+                else
+                {
+                    // This triggers redrawing the main screen if the mode changes.
+                    if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
+                        AdjustActiveFeature (HeadArrayMsg.HeartBeatMsg.m_ActiveMode);
+                    gxe.gx_event_type = GX_EVENT_REDRAW;
+                    gxe.gx_event_sender = GX_ID_NONE;
+                    gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                    gxe.gx_event_display_handle = 0;
+                    gx_system_event_send(&gxe);
+                }
             }
             else    // Failed Heart Beat
             {
@@ -424,6 +433,7 @@ void ProcessCommunicationMsgs ()
     //                gx_system_event_send(&gxe);
     //                g_UseNewPrompt = true;
     //            }
+
             break;
         case HHP_HA_PAD_ASSIGMENT_GET_RESPONSE:
             myPad = TranslatePad (HeadArrayMsg.PadAssignmentResponsMsg.m_PhysicalPadNumber);
@@ -478,7 +488,7 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 //*************************************************************************************
 // Function Name: DisplayMainScreenActiveFeatures
 //
-// Description: This displays the features that are active in the order specificed
+// Description: This displays the features that are active in the order specified
 //  in the Screen Prompts "objects".
 //
 //*************************************************************************************
@@ -486,7 +496,7 @@ void AdjustActiveFeature (uint8_t newMode)
 {
     uint8_t featureCount, myMode;
 
-    if (newMode > 3)
+    if (newMode > 3)    // Check for valid mode
         return;
 
     g_ActiveFeature = newMode;
@@ -562,6 +572,8 @@ VOID Main_User_Screen_draw_function(GX_WINDOW *window)
 {
     g_ActiveScreen = (GX_WIDGET*) window;
 
+    DisplayMainScreenActiveFeatures();  // Redraw the items.
+
     gx_window_draw(window);
 }
 
@@ -619,21 +631,12 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         {
             if (g_ScreenPrompts[feature].m_Active)
             {
-                if (g_ScreenPrompts[feature].m_Location == 0)
-                    g_ScreenPrompts[feature].m_Location = activeCount-1;
-                else if (g_ScreenPrompts[feature].m_Location == 1)
+                if (g_ScreenPrompts[feature].m_Location == 1)
                 {
-                    g_ScreenPrompts[feature].m_Location = 0;
                     SendModeChangeCommand (feature, &g_GUI_to_COMM_queue);  // We have a new active feature, tell the Head Array
                 }
-                else if (g_ScreenPrompts[feature].m_Location == 2)
-                    g_ScreenPrompts[feature].m_Location = min (1, activeCount-1);
-                else if (g_ScreenPrompts[feature].m_Location == 3)
-                    g_ScreenPrompts[feature].m_Location = min (2, activeCount-1);
             }
         }
-
-        DisplayMainScreenActiveFeatures();
         break;
 
     case GX_SIGNAL(UP_ARROW_BTN_ID, GX_EVENT_CLICKED):
@@ -656,22 +659,12 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         {
             if (g_ScreenPrompts[feature].m_Active)
             {
-                if (g_ScreenPrompts[feature].m_Location == 0)
-                    g_ScreenPrompts[feature].m_Location = min (1, activeCount);
-                else if (g_ScreenPrompts[feature].m_Location == 1)
-                    g_ScreenPrompts[feature].m_Location = min (2, activeCount);
-                else if (g_ScreenPrompts[feature].m_Location == 2)
-                    g_ScreenPrompts[feature].m_Location = min (3, activeCount);
-                else if (g_ScreenPrompts[feature].m_Location == 3)
+                if (g_ScreenPrompts[feature].m_Location == 3)
                 {
-                    g_ScreenPrompts[feature].m_Location = 0;
                     SendModeChangeCommand (feature, &g_GUI_to_COMM_queue);  // We have a new active feature, tell the Head Array
                 }
-                if (g_ScreenPrompts[feature].m_Location == activeCount)
-                    g_ScreenPrompts[feature].m_Location = 0;
             }
         }
-        DisplayMainScreenActiveFeatures();
         break;
 
     case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
