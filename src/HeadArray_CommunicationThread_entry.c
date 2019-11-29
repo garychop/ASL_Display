@@ -475,7 +475,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = Read_I2C_Package(HB_Response);
                 if (msgStatus == MSG_OK)
                 {
-                    SendPadAssignmentResponse ((char) HB_Response[2], (char) HB_Response[3], &q_COMM_to_GUI_Queue);
+                    SendPadAssignmentResponse ((char) HB_Response[2], (char) HB_Response[3]);
                 }
             }
 
@@ -483,7 +483,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             // Regardless of what happens above.
             if (msgStatus != MSG_OK)
             {
-                SendPadAssignmentResponse ((char)GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber, myPadDirection, &q_COMM_to_GUI_Queue);
+                SendPadAssignmentResponse ((char)GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber, myPadDirection);
                 switch (myPadDirection)
                 {
                     case 'L': myPadDirection = 'R'; break;

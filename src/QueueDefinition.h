@@ -53,25 +53,25 @@ typedef struct HHP_HA_MSG_S
     HHP_HA_MESSAGES_ENUM m_MsgType;         // Use the above mentioned enum.
     union
     {
-        struct hb_msg
+        struct hb_msg   // Supports the HHP_HA_HEART_BEAT_RESPONSE message from the Head Array
         {
             uint32_t m_HB_OK;   // Non0 if Heart Beat is OK, 0 = failed.
             uint32_t HB_Count;  // number that increments with each successful heart beat.
             uint8_t m_ActiveMode;   // 1=Power On/Off, 2=Bluetooh, 3=Next Function 4=Next Profile
         } HeartBeatMsg;
+        struct          // Supports the HHP_HA_PAD_ASSIGMENT_GET_RESPONSE message from the Head Array
+        {
+            char m_PhysicalPadNumber;
+            char m_LogicalDirection;
+        } PadAssignmentResponseMsg;
+        struct          // This supports the
+        {
+            uint8_t m_Mode;     // 0x01 = Power On/Off, 0x02=Bluetooth, 0x04 = Next Function, 0x05 = Next Profile
+        } ModeChangeMsg;
         struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
-        struct
-        {
-            char m_PhysicalPadNumber;
-            char m_LogicalDirection;
-        } PadAssignmentResponsMsg;
-        struct
-        {
-            uint8_t m_Mode;     // 0x01 = Power On/Off, 0x02=Bluetooth, 0x04 = Next Function, 0x05 = Next Profile
-        } ModeChangeMsg;
     };
 } HHP_HA_MSG_STRUCT;
 
@@ -88,6 +88,11 @@ typedef struct GUI_MSG_S
         {
             uint8_t m_Mode;     // 0x01 = Power On/Off, 0x02=Bluetooth, 0x04 = Next Function, 0x05 = Next Profile
         } ModeChangeMsg;
+        struct          // Supports the HHP_HA_PAD_ASSIGMENT_SET message from the GUI to the Head Array
+        {
+            char m_PhysicalPadNumber;
+            char m_LogicalDirection;
+        } PadAssignmentSetMsg;
         struct
         {
             uint32_t m_MsgArray[15];
@@ -96,10 +101,10 @@ typedef struct GUI_MSG_S
 } GUI_MSG_STRUCT;
 
 // Support functions that format and send the command to the Head Array.
-extern void SendPadAssignmentRequestMsg (char pad, TX_QUEUE *queue);
-extern void SendPadAssignmentResponse (char physicalPad, char assignment, TX_QUEUE *queue);
-extern void SendModeChangeCommand (uint8_t newMode, TX_QUEUE *queue);
-extern void SendPadAssignmentSetCommand (char pad, char direction, TX_QUEUE *queue);
+extern void SendPadAssignmentRequestMsg (char pad);
+extern void SendPadAssignmentResponse (char physicalPad, char assignment);
+extern void SendModeChangeCommand (uint8_t newMode);
+extern void SendPadAssignmentSetCommand (char pad, char direction);
 
 // Helper functions
 extern PAD_DESIGNATION_ENUM TranslatePad (char pad);

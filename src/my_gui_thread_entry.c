@@ -436,9 +436,9 @@ void ProcessCommunicationMsgs ()
 
             break;
         case HHP_HA_PAD_ASSIGMENT_GET_RESPONSE:
-            myPad = TranslatePad (HeadArrayMsg.PadAssignmentResponsMsg.m_PhysicalPadNumber);
+            myPad = TranslatePad (HeadArrayMsg.PadAssignmentResponseMsg.m_PhysicalPadNumber);
             if (myPad != INVALID_PAD)
-                g_PadSettings[myPad].m_PadDirection = TranslatePadDirection (HeadArrayMsg.PadAssignmentResponsMsg.m_LogicalDirection);
+                g_PadSettings[myPad].m_PadDirection = TranslatePadDirection (HeadArrayMsg.PadAssignmentResponseMsg.m_LogicalDirection);
             // Redraw the current window.
             gxe.gx_event_type = GX_EVENT_REDRAW;
             gxe.gx_event_sender = GX_ID_NONE;
@@ -633,7 +633,7 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             {
                 if (g_ScreenPrompts[feature].m_Location == 1)
                 {
-                    SendModeChangeCommand (feature, &g_GUI_to_COMM_queue);  // We have a new active feature, tell the Head Array
+                    SendModeChangeCommand (feature);  // We have a new active feature, tell the Head Array
                 }
             }
         }
@@ -661,7 +661,7 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             {
                 if (g_ScreenPrompts[feature].m_Location == 3)
                 {
-                    SendModeChangeCommand (feature, &g_GUI_to_COMM_queue);  // We have a new active feature, tell the Head Array
+                    SendModeChangeCommand (feature);  // We have a new active feature, tell the Head Array
                 }
             }
         }
@@ -921,9 +921,9 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
             }
             gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[INVALID_DIRECTION], &g_PadDirectionLocation[pads]);
         }
-        SendPadAssignmentRequestMsg('L', &g_GUI_to_COMM_queue);
-        SendPadAssignmentRequestMsg('R', &g_GUI_to_COMM_queue);
-        SendPadAssignmentRequestMsg('C', &g_GUI_to_COMM_queue);
+        SendPadAssignmentRequestMsg('L');
+        SendPadAssignmentRequestMsg('R');
+        SendPadAssignmentRequestMsg('C');
         break;
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
@@ -935,63 +935,75 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
         g_PadSettings[LEFT_PAD].m_PadDirection = LEFT_DIRECTION;
+        SendPadAssignmentSetCommand (LEFT_PAD, LEFT_DIRECTION);
         break;
     case GX_SIGNAL(LEFT_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
         g_PadSettings[LEFT_PAD].m_PadDirection = FORWARD_DIRECTION;
+        SendPadAssignmentSetCommand (LEFT_PAD, FORWARD_DIRECTION);
         break;
     case GX_SIGNAL(LEFT_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
         g_PadSettings[LEFT_PAD].m_PadDirection = RIGHT_DIRECTION;
+        SendPadAssignmentSetCommand (LEFT_PAD, RIGHT_DIRECTION);
         break;
     case GX_SIGNAL(LEFT_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
         g_PadSettings[LEFT_PAD].m_PadDirection = OFF_DIRECTION;
+        SendPadAssignmentSetCommand (LEFT_PAD, OFF_DIRECTION);
         break;
     // Process RIGHT button pushes
     case GX_SIGNAL(RIGHT_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
         g_PadSettings[RIGHT_PAD].m_PadDirection = LEFT_DIRECTION;
+        SendPadAssignmentSetCommand (RIGHT_PAD, LEFT_DIRECTION);
         break;
     case GX_SIGNAL(RIGHT_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
         g_PadSettings[RIGHT_PAD].m_PadDirection = FORWARD_DIRECTION;
+        SendPadAssignmentSetCommand (RIGHT_PAD, FORWARD_DIRECTION);
         break;
     case GX_SIGNAL(RIGHT_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
         g_PadSettings[RIGHT_PAD].m_PadDirection = RIGHT_DIRECTION;
+        SendPadAssignmentSetCommand (RIGHT_PAD, RIGHT_DIRECTION);
         break;
     case GX_SIGNAL(RIGHT_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
         g_PadSettings[RIGHT_PAD].m_PadDirection = OFF_DIRECTION;
+        SendPadAssignmentSetCommand (RIGHT_PAD, OFF_DIRECTION);
         break;
     // Process CENTER PAD button pushes
     case GX_SIGNAL(CENTER_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
         g_PadSettings[CENTER_PAD].m_PadDirection = LEFT_DIRECTION;
+        SendPadAssignmentSetCommand (CENTER_PAD, LEFT_DIRECTION);
         break;
     case GX_SIGNAL(CENTER_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
         g_PadSettings[CENTER_PAD].m_PadDirection = FORWARD_DIRECTION;
+        SendPadAssignmentSetCommand (CENTER_PAD, FORWARD_DIRECTION);
         break;
     case GX_SIGNAL(CENTER_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
         g_PadSettings[CENTER_PAD].m_PadDirection = RIGHT_DIRECTION;
+        SendPadAssignmentSetCommand (LEFT_PAD, RIGHT_DIRECTION);
         break;
     case GX_SIGNAL(CENTER_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
         g_PadSettings[CENTER_PAD].m_PadDirection = OFF_DIRECTION;
+        SendPadAssignmentSetCommand (CENTER_PAD, OFF_DIRECTION);
         break;
 
     }

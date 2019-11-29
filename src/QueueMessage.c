@@ -22,7 +22,9 @@
 // Project Includes
 //****************************************************************************
 
+#include "my_gui_thread.h"
 #include "QueueDefinition.h"
+#include "HeadArray_CommunicationThread.h"
 #include "tx_api.h"
 
 //****************************************************************************
@@ -77,46 +79,54 @@ PAD_DIRECTION_ENUM TranslatePadDirection (char padDirection)
 
 //****************************************************************************
 
-void SendPadAssignmentRequestMsg (char pad, TX_QUEUE *queue)
+void SendPadAssignmentRequestMsg (char pad)
 {
     GUI_MSG_STRUCT msg;
 
     msg.m_MsgType = HHP_HA_PAD_ASSIGMENT_GET;
     msg.PadAssignmentRequestMsg.m_PhysicalPadNumber = pad;
-    if (queue != NULL)
-    {
-        tx_queue_send(queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
-    }
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 
 //****************************************************************************
-void SendPadAssignmentSetCommand (char pad, char direction, TX_QUEUE *queue)
+void SendPadAssignmentSetCommand (char pad, char direction)
 {
+    GUI_MSG_STRUCT msg;
 
+    msg.m_MsgType = HHP_HA_PAD_ASSIGMENT_SET;
+    msg.PadAssignmentSetMsg.m_PhysicalPadNumber = pad;
+    msg.PadAssignmentSetMsg.m_LogicalDirection = direction;
+
+    tx_queue_send(&q_COMM_to_GUI_Queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+
+    SendPadAssignmentRequestMsg (pad);      // This allows the system to retrieve the currently set directional settings from the Head Array.
 }
 
 //****************************************************************************
-void SendPadAssignmentResponse (char physicalPad, char assignment, TX_QUEUE *queue)
+void SendPadAssignmentResponse (char physicalPad, char assignment)
 {
     HHP_HA_MSG_STRUCT HHP_Msg;
 
     HHP_Msg.m_MsgType = HHP_HA_PAD_ASSIGMENT_GET_RESPONSE;
-    HHP_Msg.PadAssignmentResponsMsg.m_PhysicalPadNumber = physicalPad;
-    HHP_Msg.PadAssignmentResponsMsg.m_LogicalDirection = assignment;
-    if (queue != NULL)
-    {
-        tx_queue_send(queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
-    }
+    HHP_Msg.PadAssignmentResponseMsg.m_PhysicalPadNumber = physicalPad;
+    HHP_Msg.PadAssignmentResponseMsg.m_LogicalDirection = assignment;
+
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 
 //****************************************************************************
+// Function: SendModeChangeCommand
+// Description: This function sends a message to the COMM Task to be sent to the Head Array
+//  This message is to Change the Mode.
+//****************************************************************************
 
-void SendModeChangeCommand (uint8_t newMode, TX_QUEUE *queue)
+void SendModeChangeCommand (uint8_t newMode)
 {
-    HHP_HA_MSG_STRUCT HHP_Msg;
+    GUI_MSG_STRUCT q_Msg;
     uint8_t myMode = 0x00;
 
-    HHP_Msg.m_MsgType = HHP_HA_MODE_CHANGE_SET;
+    q_Msg.m_MsgType = HHP_HA_MODE_CHANGE_SET;
     switch (newMode)
     {   // This translate the array position into the command data.
         case 0: myMode = 0x01; break;   // Power On/Off
@@ -124,9 +134,8 @@ void SendModeChangeCommand (uint8_t newMode, TX_QUEUE *queue)
         case 2: myMode = 0x03; break;   // Next Function
         case 3: myMode = 0x04; break;   // Next Profile
     }
-    HHP_Msg.ModeChangeMsg.m_Mode = myMode;
-    if (queue != NULL)
-    {
-        tx_queue_send(queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
-    }
+    q_Msg.ModeChangeMsg.m_Mode = myMode;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+
 }
