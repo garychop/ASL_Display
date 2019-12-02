@@ -3750,7 +3750,7 @@
 <right>319</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>WINDOW_FILL</normal_fill_color>
@@ -3891,7 +3891,7 @@
 <right>320</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>SCROLL_BUTTON</normal_fill_color>
@@ -4092,7 +4092,7 @@
 <right>319</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>SCROLL_BUTTON</normal_fill_color>
@@ -4304,7 +4304,7 @@
 <right>319</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>SCROLL_BUTTON</normal_fill_color>
@@ -4615,7 +4615,7 @@
 <right>319</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>SCROLL_BUTTON</normal_fill_color>
@@ -4995,7 +4995,7 @@
 <right>319</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>SCROLL_BUTTON</normal_fill_color>
@@ -5087,7 +5087,7 @@
 <right>319</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>SCROLL_BUTTON</normal_fill_color>
@@ -5203,7 +5203,7 @@
 <right>319</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>SCROLL_BUTTON</normal_fill_color>
@@ -5596,7 +5596,7 @@
 <right>319</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>SCROLL_BUTTON</normal_fill_color>
@@ -5844,7 +5844,7 @@
 <right>319</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>SCROLL_BUTTON</normal_fill_color>
@@ -5984,7 +5984,7 @@
 <right>319</right>
 <bottom>239</bottom>
 </size>
-<style>1073741828</style>
+<style>1073741824</style>
 <allocation>0</allocation>
 <accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>WINDOW_FILL</normal_fill_color>

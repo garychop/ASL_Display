@@ -54,7 +54,7 @@ void (*g_MyState)(void);
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
 char myPadDirection = 'L';
-uint8_t g_myMode;
+uint8_t g_myMode = 1;
 uint8_t g_HeadArray_Status;
 #endif
 
@@ -419,13 +419,13 @@ uint8_t ExecuteHeartBeat(void)
     HB_Response[1] = HB_Message[2];     // Heart Beat incrementing value.
     HB_Response[2] = g_myMode;
     HB_Response[3] = g_HeadArray_Status;
-#elif
-    --HB_Response[2];           // Translate the Active Feature from COMM protocol (1-based) to GUI Array position (0-based).
 #endif
 
-        // Prepare and send Heart Message to GUI.
+    --HB_Response[2];           // Translate the Active Feature from COMM protocol (1-based) to GUI Array position (0-based).
+
+    // Prepare and send Heart Message to GUI.
     HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
-    HeadArrayMsg.HeartBeatMsg.m_HB_Count = g_HeartBeatCounter;
+    HeadArrayMsg.HeartBeatMsg.m_HB_Count = HB_Response[1];
     HeadArrayMsg.HeartBeatMsg.m_ActiveMode = HB_Response[2];
     HeadArrayMsg.HeartBeatMsg.m_HA_Status = HB_Response[3];
 
@@ -443,12 +443,12 @@ uint8_t ExecuteHeartBeat(void)
         g_HeadArray_Status = 0x01;
         HeadArrayMsg.HeartBeatMsg.m_HA_Status = g_HeadArray_Status;
     }
-    else if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 40)
-    {
-        //g_HeartBeatCounter = 40;
-        g_HeadArray_Status = 0x00;
-        HeadArrayMsg.HeartBeatMsg.m_HA_Status = g_HeadArray_Status;
-    }
+//    else if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 40)
+//    {
+//        //g_HeartBeatCounter = 40;
+//        g_HeadArray_Status = 0x00;
+//        HeadArrayMsg.HeartBeatMsg.m_HA_Status = g_HeadArray_Status;
+//    }
     if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 20)
     {
         //g_HeartBeatCounter = 20;
@@ -552,7 +552,7 @@ void HeadArray_CommunicationThread_entry(void)
     ULONG numMsgs;
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-    g_HeadArray_Status = 0x01;
+    g_HeadArray_Status = 0x00;
 #endif
 
     g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);

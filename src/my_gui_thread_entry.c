@@ -19,8 +19,6 @@ GX_CHAR version_string2[20] = "Attendant: V0.0.1";
 
 enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PAD_ACTIVE_TIMER_ID};
 
-#define LONG_PRESS_BUTTON_ID 1
-
 #define min(a,b)   ((a < b) ? a : b)
 
 #define GRAPH_CENTER_PT_XPOS 139    // From Left of screen
@@ -406,6 +404,9 @@ void ProcessCommunicationMsgs ()
                 {
                     if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x01)   // Bit0 = 1 if Head Array in "Ready", Power On mode.
                     {
+                        // Needs to translate from HA-HHP protocol to GUI mode reference.
+                        //--HeadArrayMsg.HeartBeatMsg.m_ActiveMode;   // HA-HHP is 1-based, GUI is 0-based.
+
                         // This triggers redrawing the main screen if the mode changes.
                         if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
                         {
@@ -641,7 +642,6 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         break;
 
     case GX_SIGNAL (DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):
-    case GX_SIGNAL (LONG_PRESS_BUTTON_ID, GX_EVENT_CLICKED):
         // This is necessary to prevent the subsequent "Clicked" message from advancing the feature when we are changing to the Programming screen.
         if (g_ChangeScreen_WIP)
         {

@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  2.12.2019   Time (hh:mm): 13:38                        */
+/*  Date (dd.mm.yyyy):  2.12.2019   Time (hh:mm): 15:33                        */
 /*******************************************************************************/
 
 
@@ -401,7 +401,7 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(STARTUPSPLASHSCREEN_CONTROL_BLOCK), /* control block size           */
     GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
@@ -669,7 +669,7 @@ GX_CONST GX_STUDIO_WIDGET PadCalibrationScreen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(PADCALIBRATIONSCREEN_CONTROL_BLOCK), /* control block size          */
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
@@ -960,7 +960,7 @@ GX_CONST GX_STUDIO_WIDGET SetPadTypeScreen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(SETPADTYPESCREEN_CONTROL_BLOCK),  /* control block size             */
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
@@ -1396,7 +1396,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(USERSETTINGSSCREEN_CONTROL_BLOCK), /* control block size            */
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
@@ -1921,7 +1921,7 @@ GX_CONST GX_STUDIO_WIDGET FeatureSettingsScreen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(FEATURESETTINGSSCREEN_CONTROL_BLOCK), /* control block size         */
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
@@ -2038,7 +2038,7 @@ GX_CONST GX_STUDIO_WIDGET PadOptionsSettingsScreen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK), /* control block size      */
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
@@ -2185,7 +2185,7 @@ GX_CONST GX_STUDIO_WIDGET SettingsScreen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(SETTINGSSCREEN_CONTROL_BLOCK),    /* control block size             */
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
@@ -2737,7 +2737,7 @@ GX_CONST GX_STUDIO_WIDGET SetPadDirectionScreen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(SETPADDIRECTIONSCREEN_CONTROL_BLOCK), /* control block size         */
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
@@ -3085,7 +3085,7 @@ GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(DIAGNOSTICSCREEN_CONTROL_BLOCK),  /* control block size             */
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
@@ -3262,7 +3262,7 @@ GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(HHP_START_SCREEN_CONTROL_BLOCK),  /* control block size             */
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
@@ -3739,7 +3739,7 @@ GX_CONST GX_STUDIO_WIDGET Main_User_Screen_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
     GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(MAIN_USER_SCREEN_CONTROL_BLOCK),  /* control block size             */
     GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
