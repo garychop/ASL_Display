@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 22.11.2019   Time (hh:mm): 11:33                        */
+/*  Date (dd.mm.yyyy):  2.12.2019   Time (hh:mm): 13:38                        */
 /*******************************************************************************/
 
 
@@ -63,7 +63,8 @@
 #define GX_COLOR_ID_BLACK 29
 #define GX_COLOR_ID_DARK_GRAY 30
 #define GX_COLOR_ID_WHITE 31
-#define MAIN_DISPLAY_COLOR_TABLE_SIZE 32
+#define GX_COLOR_ID_BRIGHT_ORANGE 32
+#define MAIN_DISPLAY_COLOR_TABLE_SIZE 33
 
 /* Font ID definitions                                                         */
 
@@ -116,26 +117,27 @@
 #define GX_PIXELMAP_ID_PAGEUP2 31
 #define GX_PIXELMAP_ID_POWERICON_30X30 32
 #define GX_PIXELMAP_ID_POWERICON_LARGE 33
-#define GX_PIXELMAP_ID_PROFILENEXT_30X30 34
-#define GX_PIXELMAP_ID_PROFILENEXT_70X70 35
-#define GX_PIXELMAP_ID_PROPCENTERPADACTIVE 36
-#define GX_PIXELMAP_ID_PROPLEFTRIGHTPADACTIVE 37
-#define GX_PIXELMAP_ID_PROPORTIONAL_INDICATOR_ORANGE 38
-#define GX_PIXELMAP_ID_RIGHTWHITEARROW 39
-#define GX_PIXELMAP_ID_SECOND_10 40
-#define GX_PIXELMAP_ID_SECOND_15 41
-#define GX_PIXELMAP_ID_SECOND_20 42
-#define GX_PIXELMAP_ID_SECOND_25 43
-#define GX_PIXELMAP_ID_SECOND_30 44
-#define GX_PIXELMAP_ID_SECOND_40 45
-#define GX_PIXELMAP_ID_SECOND_50 46
-#define GX_PIXELMAP_ID_SWITCH_ACTIVE 47
-#define GX_PIXELMAP_ID_SWITCH_BG 48
-#define GX_PIXELMAP_ID_SWITCH_DISACTIVE 49
-#define GX_PIXELMAP_ID_UPARROW 50
-#define GX_PIXELMAP_ID_UPWHITEARROW 51
-#define GX_PIXELMAP_ID_YELLOWQUESTION 52
-#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 53
+#define GX_PIXELMAP_ID_POWERICON_ORANGE_LARGE 34
+#define GX_PIXELMAP_ID_PROFILENEXT_30X30 35
+#define GX_PIXELMAP_ID_PROFILENEXT_70X70 36
+#define GX_PIXELMAP_ID_PROPCENTERPADACTIVE 37
+#define GX_PIXELMAP_ID_PROPLEFTRIGHTPADACTIVE 38
+#define GX_PIXELMAP_ID_PROPORTIONAL_INDICATOR_ORANGE 39
+#define GX_PIXELMAP_ID_RIGHTWHITEARROW 40
+#define GX_PIXELMAP_ID_SECOND_10 41
+#define GX_PIXELMAP_ID_SECOND_15 42
+#define GX_PIXELMAP_ID_SECOND_20 43
+#define GX_PIXELMAP_ID_SECOND_25 44
+#define GX_PIXELMAP_ID_SECOND_30 45
+#define GX_PIXELMAP_ID_SECOND_40 46
+#define GX_PIXELMAP_ID_SECOND_50 47
+#define GX_PIXELMAP_ID_SWITCH_ACTIVE 48
+#define GX_PIXELMAP_ID_SWITCH_BG 49
+#define GX_PIXELMAP_ID_SWITCH_DISACTIVE 50
+#define GX_PIXELMAP_ID_UPARROW 51
+#define GX_PIXELMAP_ID_UPWHITEARROW 52
+#define GX_PIXELMAP_ID_YELLOWQUESTION 53
+#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 54
 
 /* String Ids                                                                  */
 
@@ -200,6 +202,8 @@
 #define GX_STRING_ID_STRING_9 59
 #define GX_STRING_ID_STRING_12 60
 #define GX_STRING_ID_STRING_14 61
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 62
+#define GX_STRING_ID_STRING_39 62
+#define GX_STRING_ID_STRING_38 63
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 64
 
 #endif                                       /* sentry                         */

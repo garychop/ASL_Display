@@ -275,6 +275,7 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("UserSettingsScreen", GX_NULL, GX_NULL);
 	gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("Main_User_Screen", GX_NULL, GX_NULL);    // Create and show first startup screen.
+    gx_studio_named_widget_create("ReadyScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
     gx_studio_named_widget_create("StartupSplashScreen", (GX_WIDGET *)p_window_root, &p_first_screen);    // Create and show first startup screen.
 
     /* Attach the first screen to the root so we can see it when the root is shown */
@@ -401,16 +402,40 @@ void ProcessCommunicationMsgs ()
                     gxe.gx_event_display_handle = 0;
                     gx_system_event_send(&gxe);
                 }
-                else
+                else if (g_ActiveScreen->gx_widget_id == MAIN_USER_SCREEN_ID)
                 {
-                    // This triggers redrawing the main screen if the mode changes.
-                    if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
-                        AdjustActiveFeature (HeadArrayMsg.HeartBeatMsg.m_ActiveMode);
-                    gxe.gx_event_type = GX_EVENT_REDRAW;
-                    gxe.gx_event_sender = GX_ID_NONE;
-                    gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
-                    gxe.gx_event_display_handle = 0;
-                    gx_system_event_send(&gxe);
+                    if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x01)   // Bit0 = 1 if Head Array in "Ready", Power On mode.
+                    {
+                        // This triggers redrawing the main screen if the mode changes.
+                        if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
+                        {
+                            AdjustActiveFeature (HeadArrayMsg.HeartBeatMsg.m_ActiveMode);
+                            gxe.gx_event_type = GX_EVENT_REDRAW;
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
+                    }
+                    else // Bit 0 = 0; means Head Array in Power Off, Idle Mode, we are recommending to change screens.
+                    {
+                        gxe.gx_event_type = GX_SIGNAL (POWER_OFF_ID, GX_EVENT_CLICKED);
+                        gxe.gx_event_sender = GX_ID_NONE;
+                        gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                        gxe.gx_event_display_handle = 0;
+                        gx_system_event_send(&gxe);
+                    }
+                }
+                else if (g_ActiveScreen->gx_widget_id == READY_SCREEN_ID)
+                {
+                    if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x01)   // Bit0 = 1 if Head Array in "Ready", Power On mode.
+                    {
+                        gxe.gx_event_type = GX_SIGNAL (POWER_ON_ID, GX_EVENT_CLICKED);
+                        gxe.gx_event_sender = GX_ID_NONE;
+                        gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                        gxe.gx_event_display_handle = 0;
+                        gx_system_event_send(&gxe);
+                    }
                 }
             }
             else    // Failed Heart Beat
@@ -469,6 +494,8 @@ VOID StartupSplashScreen_draw_function (GX_WINDOW *window)
 
     gx_window_draw(window);
 }
+
+//*************************************************************************************
 
 UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
@@ -577,6 +604,8 @@ VOID Main_User_Screen_draw_function(GX_WINDOW *window)
     gx_window_draw(window);
 }
 
+//*************************************************************************************
+
 UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     uint8_t feature;
@@ -677,6 +706,12 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         gx_widget_attach (p_window_root, (GX_WIDGET*) &StartupSplashScreen);
         gx_widget_show ((GX_WIDGET*) &StartupSplashScreen);
         break;
+
+    case GX_SIGNAL (POWER_OFF_ID, GX_EVENT_CLICKED):
+        gx_widget_attach (p_window_root, (GX_WIDGET*) &ReadyScreen);
+        gx_widget_show ((GX_WIDGET*) &ReadyScreen);
+        break;
+
     }
 
    // DisplayMainScreenActiveFeatures();  // Remove this when more of the previous code is "undefinded".
@@ -686,6 +721,36 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     return GX_SUCCESS;
 }
 
+//*************************************************************************************
+// Function Name: Ready_Screen_event_process
+//
+// Description: This handles the Ready Screen messages, this screen is the one
+//      that indicates that the "System is Powered off, please hit switch".
+//
+//*************************************************************************************
+VOID Ready_Screen_draw_function(GX_WINDOW *window)
+{
+    g_ActiveScreen = (GX_WIDGET*) window;
+
+    gx_window_draw(window);
+}
+
+//*************************************************************************************
+
+UINT Ready_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_SIGNAL(POWER_ON_ID, GX_EVENT_CLICKED):
+        gx_widget_attach (p_window_root, (GX_WIDGET*) &Main_User_Screen);
+        gx_widget_show ((GX_WIDGET*) &Main_User_Screen);
+        break;
+    } // end switch
+
+    gx_window_event_process(window, event_ptr);
+
+    return GX_SUCCESS;
+}
 //*************************************************************************************
 // Function Name: HHP_Start_Screen_event_process
 //

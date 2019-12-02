@@ -55,6 +55,7 @@ void (*g_MyState)(void);
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
 char myPadDirection = 'L';
 uint8_t g_myMode;
+uint8_t g_HeadArray_Status;
 #endif
 
 //******************************************************************************
@@ -415,25 +416,42 @@ uint8_t ExecuteHeartBeat(void)
     }
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-    HB_Response[3] = g_myMode;
+    HB_Response[1] = HB_Message[2];     // Heart Beat incrementing value.
+    HB_Response[2] = g_myMode;
+    HB_Response[3] = g_HeadArray_Status;
+#elif
+    --HB_Response[2];           // Translate the Active Feature from COMM protocol (1-based) to GUI Array position (0-based).
 #endif
-    --HB_Response[3];           // Translate from COMM protocol to GUI Array position.
 
         // Prepare and send Heart Message to GUI.
     HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
-    HeadArrayMsg.HeartBeatMsg.HB_Count = g_HeartBeatCounter;
-    HeadArrayMsg.HeartBeatMsg.m_ActiveMode = HB_Response[3];
+    HeadArrayMsg.HeartBeatMsg.m_HB_Count = g_HeartBeatCounter;
+    HeadArrayMsg.HeartBeatMsg.m_ActiveMode = HB_Response[2];
+    HeadArrayMsg.HeartBeatMsg.m_HA_Status = HB_Response[3];
+
     HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;
     if (msgStatus == MSG_OK)
         HeadArrayMsg.HeartBeatMsg.m_HB_OK = true;
     else
         HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
-    ++HeadArrayMsg.HeartBeatMsg.HB_Count;
+    ++HeadArrayMsg.HeartBeatMsg.m_HB_Count;
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-    if (HeadArrayMsg.HeartBeatMsg.HB_Count > 20)
+    if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 60)
     {
-        g_HeartBeatCounter = 20;
+        g_HeartBeatCounter = 25;
+        g_HeadArray_Status = 0x01;
+        HeadArrayMsg.HeartBeatMsg.m_HA_Status = g_HeadArray_Status;
+    }
+    else if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 40)
+    {
+        //g_HeartBeatCounter = 40;
+        g_HeadArray_Status = 0x00;
+        HeadArrayMsg.HeartBeatMsg.m_HA_Status = g_HeadArray_Status;
+    }
+    if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 20)
+    {
+        //g_HeartBeatCounter = 20;
         HeadArrayMsg.HeartBeatMsg.m_HB_OK = true;
     }
 #endif
@@ -532,6 +550,10 @@ void HeadArray_CommunicationThread_entry(void)
     GUI_MSG_STRUCT GUI_Msg;
     uint32_t msgSent;
     ULONG numMsgs;
+
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+    g_HeadArray_Status = 0x01;
+#endif
 
     g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
 

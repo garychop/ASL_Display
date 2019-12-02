@@ -56,8 +56,13 @@ typedef struct HHP_HA_MSG_S
         struct hb_msg   // Supports the HHP_HA_HEART_BEAT_RESPONSE message from the Head Array
         {
             uint32_t m_HB_OK;   // Non0 if Heart Beat is OK, 0 = failed.
-            uint32_t HB_Count;  // number that increments with each successful heart beat.
+            uint32_t m_HB_Count;  // number that increments with each successful heart beat.
             uint8_t m_ActiveMode;   // 1=Power On/Off, 2=Bluetooh, 3=Next Function 4=Next Profile
+            uint8_t m_HA_Status;    // bit0, Head Array Ready Status, 0 = idle, 1 = Ready
+                                    // bit1, Left Pad, 0 = Disconnected, 1 = connected.
+                                    // bit2, right pad, 0 = Disconnected, 1 = connected.
+                                    // bit3, center pad, 0 = Disconnected, 1 = connected.
+                                    // bit4, Out of neutral, 0 = OK, 1 = Out of Neutral
         } HeartBeatMsg;
         struct          // Supports the HHP_HA_PAD_ASSIGMENT_GET_RESPONSE message from the Head Array
         {

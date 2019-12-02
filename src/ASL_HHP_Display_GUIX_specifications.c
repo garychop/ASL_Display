@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 22.11.2019   Time (hh:mm): 11:33                        */
+/*  Date (dd.mm.yyyy):  2.12.2019   Time (hh:mm): 13:38                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+READYSCREEN_CONTROL_BLOCK ReadyScreen;
 STARTUPSPLASHSCREEN_CONTROL_BLOCK StartupSplashScreen;
 PADCALIBRATIONSCREEN_CONTROL_BLOCK PadCalibrationScreen;
 SETPADTYPESCREEN_CONTROL_BLOCK SetPadTypeScreen;
@@ -143,6 +144,99 @@ UINT gx_studio_window_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control
     }
     return status;
 }
+GX_WINDOW_PROPERTIES ReadyScreen_properties =
+{
+    GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_FLATTEN  /* wallpaper pixelmap id        */
+};
+GX_PIXELMAP_PROMPT_PROPERTIES ReadyScreen_PowerLargeOrangePrompt_properties =
+{
+    GX_STRING_ID_STRING_39,                  /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT,               /* selected text color            */
+    GX_PIXELMAP_ID_POWERICON_ORANGE_LARGE,   /* left pixelmap id               */
+    0,                                       /* fill pixelmap id               */
+    0,                                       /* right pixelmap id              */
+    0,                                       /* selected left pixelmap id      */
+    0,                                       /* selected fill pixelmap id      */
+    0                                        /* selected right pixelmap id     */
+};
+GX_PROMPT_PROPERTIES ReadyScreen_PressSwitchPrompt_properties =
+{
+    GX_STRING_ID_STRING_38,                  /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET ReadyScreen_PressSwitchPrompt_define =
+{
+    "PressSwitchPrompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    PRESS_SWITCH_PROMPT_ID,                  /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_SHADOW,                      /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {30, 162, 206, 195},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(READYSCREEN_CONTROL_BLOCK, ReadyScreen_PressSwitchPrompt), /* control block */
+    (void *) &ReadyScreen_PressSwitchPrompt_properties /* extended properties  */
+};
+
+GX_CONST GX_STUDIO_WIDGET ReadyScreen_PowerLargeOrangePrompt_define =
+{
+    "PowerLargeOrangePrompt",
+    GX_TYPE_PIXELMAP_PROMPT,                 /* widget type                    */
+    POWER_LARGE_ORANGE_PROMPT_ID,            /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_LEFT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_PROMPT),              /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_pixelmap_prompt_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {10, 16, 309, 85},                       /* widget size                    */
+    &ReadyScreen_PressSwitchPrompt_define,   /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(READYSCREEN_CONTROL_BLOCK, ReadyScreen_PowerLargeOrangePrompt), /* control block */
+    (void *) &ReadyScreen_PowerLargeOrangePrompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ReadyScreen_define =
+{
+    "ReadyScreen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    READY_SCREEN_ID,                         /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(READYSCREEN_CONTROL_BLOCK),       /* control block size             */
+    GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    (VOID (*)(GX_WIDGET *)) Ready_Screen_draw_function, /* drawing function override */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) Ready_Screen_event_process, /* event function override */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &ReadyScreen_PowerLargeOrangePrompt_define, /* child widget                */
+    0,                                       /* control block                  */
+    (void *) &ReadyScreen_properties         /* extended properties            */
+};
 GX_WINDOW_PROPERTIES StartupSplashScreen_properties =
 {
     GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_FLATTEN  /* wallpaper pixelmap id        */
@@ -159,6 +253,52 @@ GX_PROMPT_PROPERTIES StartupSplashScreen_StatusPrompt_properties =
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_PowerOnButton_define =
+{
+    "PowerOnButton",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    POWER_ON_ID,                             /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED,   /* style flags                  */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {157, 117, 161, 121},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_PowerOnButton), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
+};
+
+GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_PowerOffButton_define =
+{
+    "PowerOffButton",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    POWER_OFF_ID,                            /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED,   /* style flags                  */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {-50, 5, -46, 9},                        /* widget size                    */
+    &StartupSplashScreen_PowerOnButton_define, /* next widget definition       */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_PowerOffButton), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
 };
 
 GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_HB_TimeoutButton_define =
@@ -178,7 +318,7 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_HB_TimeoutButton_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {320, 50, 399, 73},                      /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &StartupSplashScreen_PowerOffButton_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_HB_TimeoutButton), /* control block */
     (void *) GX_NULL                         /* no extended properties         */
@@ -3615,6 +3755,7 @@ GX_CONST GX_STUDIO_WIDGET Main_User_Screen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
+    { &ReadyScreen_define, (GX_WIDGET *) &ReadyScreen },
     { &StartupSplashScreen_define, (GX_WIDGET *) &StartupSplashScreen },
     { &PadCalibrationScreen_define, (GX_WIDGET *) &PadCalibrationScreen },
     { &SetPadTypeScreen_define, (GX_WIDGET *) &SetPadTypeScreen },
