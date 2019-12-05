@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  2.12.2019   Time (hh:mm): 15:33                        */
+/*  Date (dd.mm.yyyy):  5.12.2019   Time (hh:mm): 16:58                        */
 /*******************************************************************************/
 
 
@@ -966,7 +966,7 @@ GX_CONST GX_STUDIO_WIDGET SetPadTypeScreen_define =
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
     GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
     gx_studio_window_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
+    (VOID (*)(GX_WIDGET *)) SetPadTypeScreen_Draw_Function, /* drawing function override */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) SetPadTypeScreen_event_process, /* event function override */
     {0, 0, 319, 239},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
@@ -3431,6 +3431,36 @@ GX_TEXT_BUTTON_PROPERTIES Main_User_Screen_BothButton_properties =
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
+GX_PROMPT_PROPERTIES Main_User_Screen_Version_Prompt_properties =
+{
+    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_FONT_ID_MINSIZE,                      /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET Main_User_Screen_Version_Prompt_define =
+{
+    "Version_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    VERSION_PROMPT_ID,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {203, 218, 312, 236},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_Version_Prompt), /* control block */
+    (void *) &Main_User_Screen_Version_Prompt_properties /* extended properties */
+};
 
 GX_CONST GX_STUDIO_WIDGET Main_User_Screen_BothButton_define =
 {
@@ -3449,7 +3479,7 @@ GX_CONST GX_STUDIO_WIDGET Main_User_Screen_BothButton_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {340, 108, 419, 131},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &Main_User_Screen_Version_Prompt_define, /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_BothButton), /* control block */
     (void *) &Main_User_Screen_BothButton_properties /* extended properties    */

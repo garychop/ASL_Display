@@ -10,8 +10,8 @@
 #include "HeadArray_CommunicationThread.h"
 
 //-------------------------------------------------------------------------
-GX_CHAR version_string[16]     = "Version: 0.0.1a";
-GX_CHAR version_string2[20] = "Attendant: V0.0.1";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "Version: 0.0.1a";
+GX_CHAR version_string2[] = "Attendant: V0.0.1";
 
 //-------------------------------------------------------------------------
 // Typdefs and defines
@@ -604,6 +604,7 @@ VOID Main_User_Screen_draw_function(GX_WINDOW *window)
     g_ActiveScreen = (GX_WIDGET*) window;
 
     DisplayMainScreenActiveFeatures();  // Redraw the items.
+    gx_prompt_text_set ((GX_PROMPT*)&Main_User_Screen.Main_User_Screen_Version_Prompt, ASL110_DISPLAY_VERSION_STRING);
 
     gx_window_draw(window);
 }
@@ -1302,7 +1303,7 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 //*************************************************************************************
 void ShowPadTypes (void)
 {
-    if (g_PadSettings[LEFT_PAD].m_PadType)  // Digital?
+    if (g_PadSettings[LEFT_PAD].m_PadType == DIGITAL_PADTYPE)  // Digital?
     {
         gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
         gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
@@ -1312,7 +1313,7 @@ void ShowPadTypes (void)
         gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
         gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
     }
-    if (g_PadSettings[RIGHT_PAD].m_PadType) // Digital?
+    if (g_PadSettings[RIGHT_PAD].m_PadType == DIGITAL_PADTYPE) // Digital?
     {
         gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
         gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
@@ -1322,7 +1323,7 @@ void ShowPadTypes (void)
         gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
         gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
     }
-    if (g_PadSettings[CENTER_PAD].m_PadType)    // Digital?
+    if (g_PadSettings[CENTER_PAD].m_PadType == DIGITAL_PADTYPE)    // Digital?
     {
         gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadProportional_Button);
         gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
@@ -1333,12 +1334,30 @@ void ShowPadTypes (void)
         gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
     }
 }
+
+VOID SetPadTypeScreen_Draw_Function (GX_WINDOW *window)
+{
+    ShowPadTypes();
+
+    gx_window_draw(window);
+}
+
 UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
     {
     case GX_EVENT_SHOW:
         g_ChangeScreen_WIP = FALSE;
+        // Hide all buttons/icons. THe "Get Pad Assignment" response will issue a "redraw" this screen after it gets the current settings from the Head Array.
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadProportional_Button);
+        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
+        SendGetPadAssignmentMsg (LEFT_PAD);
+        SendGetPadAssignmentMsg (RIGHT_PAD);
+        SendGetPadAssignmentMsg (CENTER_PAD);
         break;
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_attach (p_window_root, (GX_WIDGET*) &PadOptionsSettingsScreen);
@@ -1347,49 +1366,49 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_SIGNAL(RIGHT_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
         if (!g_ChangeScreen_WIP)
         {
-//            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
-//            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
             g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (RIGHT_PAD);
         }
         break;
     case GX_SIGNAL(RIGHT_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
         if (!g_ChangeScreen_WIP)
         {
-//            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
-//            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
             g_PadSettings[RIGHT_PAD].m_PadType = DIGITAL_PADTYPE;
+            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (RIGHT_PAD);
         }
         break;
     case GX_SIGNAL(LEFT_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
         if (!g_ChangeScreen_WIP)
         {
-//            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
-//            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
             g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (LEFT_PAD);
         }
         break;
     case GX_SIGNAL(LEFT_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
         if (!g_ChangeScreen_WIP)
         {
-//            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
-//            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
             g_PadSettings[LEFT_PAD].m_PadType = DIGITAL_PADTYPE;
+            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (LEFT_PAD);
         }
         break;
     case GX_SIGNAL(CENTER_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
         if (!g_ChangeScreen_WIP)
         {
- //           gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
- //           gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadProportional_Button);
             g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
+            SendGetPadAssignmentMsg (CENTER_PAD);
         }
         break;
     case GX_SIGNAL(CENTER_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
         if (!g_ChangeScreen_WIP)
         {
-//            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadProportional_Button);
-//            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
             g_PadSettings[CENTER_PAD].m_PadType = DIGITAL_PADTYPE;
+            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
+            SendGetPadAssignmentMsg (CENTER_PAD);
         }
         break;
 
@@ -1427,7 +1446,7 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     }
 
-    ShowPadTypes();
+//    ShowPadTypes();
 
     gx_window_event_process(window, event_ptr);
 

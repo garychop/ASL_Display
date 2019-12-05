@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  2.12.2019   Time (hh:mm): 15:33                        */
+/*  Date (dd.mm.yyyy):  5.12.2019   Time (hh:mm): 16:58                        */
 /*******************************************************************************/
 
 
@@ -382,6 +382,7 @@ typedef struct MAIN_USER_SCREEN_CONTROL_BLOCK_STRUCT
     GX_TEXT_BUTTON Main_User_Screen_UpArrowBtn;
     GX_TEXT_BUTTON Main_User_Screen_DownArrowBtn;
     GX_TEXT_BUTTON Main_User_Screen_BothButton;
+    GX_PROMPT Main_User_Screen_Version_Prompt;
 } MAIN_USER_SCREEN_CONTROL_BLOCK;
 
 
@@ -471,6 +472,7 @@ VOID StartupSplashScreen_draw_function(GX_WINDOW *widget);
 UINT CalibrationScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 VOID CalibrationScreen_draw(GX_WINDOW *widget);
 UINT SetPadTypeScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
+VOID SetPadTypeScreen_Draw_Function(GX_WINDOW *widget);
 UINT UserSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT FeatureSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT PadOptionsSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
