@@ -53,9 +53,10 @@ uint8_t g_HeartBeatCounter = 0;
 void (*g_MyState)(void);
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-char myPadDirection = 'L';
-uint8_t g_myMode = 1;
+PAD_DIRECTION_ENUM myPadDirection[] = {LEFT_DIRECTION, RIGHT_DIRECTION, FORWARD_DIRECTION};
+FEATURE_ID_ENUM g_myMode = POWER_ONOFF_ID;
 uint8_t g_HeadArray_Status;
+PAD_TYPE_ENUM g_MyPadTypes[] = {PROPORTIONAL_PADTYPE, PROPORTIONAL_PADTYPE, PROPORTIONAL_PADTYPE};
 #endif
 
 //******************************************************************************
@@ -417,16 +418,16 @@ uint8_t ExecuteHeartBeat(void)
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
     HB_Response[1] = HB_Message[2];     // Heart Beat incrementing value.
-    HB_Response[2] = g_myMode;
+    HB_Response[2] = (uint8_t) TranslateFeature_EnumToChar (g_myMode);
     HB_Response[3] = g_HeadArray_Status;
 #endif
 
-    --HB_Response[2];           // Translate the Active Feature from COMM protocol (1-based) to GUI Array position (0-based).
+    //--HB_Response[2];           // Translate the Active Feature from COMM protocol (1-based) to GUI Array position (0-based).
 
     // Prepare and send Heart Message to GUI.
     HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
     HeadArrayMsg.HeartBeatMsg.m_HB_Count = HB_Response[1];
-    HeadArrayMsg.HeartBeatMsg.m_ActiveMode = HB_Response[2];
+    HeadArrayMsg.HeartBeatMsg.m_ActiveMode = TranslateFeature_CharToEnum ((char) HB_Response[2]);
     HeadArrayMsg.HeartBeatMsg.m_HA_Status = HB_Response[3];
 
     HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;
@@ -459,10 +460,6 @@ uint8_t ExecuteHeartBeat(void)
     // Send message to.... let's say... the GUI task.
     tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
 
-//    qStatus = tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
-//    if (qStatus == TX_SUCCESS)
-//        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
-
     return msgStatus;
 }
 
@@ -478,13 +475,16 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
     uint8_t HA_Msg[16];
     uint8_t msgStatus, cs;
     uint8_t HB_Response[16];
+    uint8_t padType;
+    uint8_t physicalPad;
+    uint8_t padDirection;
 
     switch (GUI_Msg.m_MsgType)
     {
         case HHP_HA_PAD_ASSIGMENT_GET:
             HA_Msg[0] = 0x04;     // msg length
             HA_Msg[1] = HHP_HA_PAD_ASSIGMENT_GET;
-            HA_Msg[2] = (uint8_t) GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber;
+            HA_Msg[2] = (uint8_t) TranslatePad_EnumToChar (GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber);
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[3] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
@@ -493,7 +493,10 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = Read_I2C_Package(HB_Response);
                 if (msgStatus == MSG_OK)
                 {
-                    SendPadAssignmentResponse ((char) HB_Response[2], (char) HB_Response[3]);
+                    physicalPad = TranslatePad_CharToEnum ((char) HB_Response[2]);
+                    padDirection = TranslatePadDirection_CharToEnum ((char) HB_Response[3]);
+                    padType = TranslatePadType_CharToEnum ((char) HB_Response[4]);
+                    SendPadGetResponse (physicalPad, padDirection, padType);
                 }
             }
 
@@ -501,23 +504,16 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             // Regardless of what happens above.
             if (msgStatus != MSG_OK)
             {
-                SendPadAssignmentResponse ((char)GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber, myPadDirection);
-                switch (myPadDirection)
-                {
-                    case 'L': myPadDirection = 'R'; break;
-                    case 'R': myPadDirection = 'F'; break;
-                    case 'F': myPadDirection = 'O'; break;
-                    case 'O': myPadDirection = 'L'; break;
-                    default: myPadDirection = 'L'; break;
-                }
+                physicalPad = GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber;
+                SendPadGetResponse (physicalPad, myPadDirection[physicalPad], g_MyPadTypes[physicalPad]);
             }
 #endif
             break;
 
-        case HHP_HA_MODE_CHANGE_SET:
+        case HHP_HA_ACTIVE_FEATURE_SET:
             HA_Msg[0] = 0x04;     // msg length
-            HA_Msg[1] = HHP_HA_MODE_CHANGE_SET;
-            HA_Msg[2] = (uint8_t) GUI_Msg.ModeChangeMsg.m_Mode;
+            HA_Msg[1] = HHP_HA_ACTIVE_FEATURE_SET;
+            HA_Msg[2] = (uint8_t) TranslateFeature_EnumToChar (GUI_Msg.ModeChangeMsg.m_Mode);
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[3] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
@@ -527,6 +523,26 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             }
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
             g_myMode = (uint8_t) GUI_Msg.ModeChangeMsg.m_Mode;  // Set global data for debugging. Refer to Heart Beat msg processing.
+#endif
+            break;
+
+        case HHP_HA_PAD_ASSIGMENT_SET:
+            HA_Msg[0] = 0x06;     // msg length
+            HA_Msg[1] = HHP_HA_PAD_ASSIGMENT_SET;
+            HA_Msg[2] = (uint8_t) TranslatePad_EnumToChar (GUI_Msg.PadAssignmentSetMsg.m_PhysicalPadNumber);
+            HA_Msg[3] = (uint8_t) TranslatePadDirection_EnumToChar (GUI_Msg.PadAssignmentSetMsg.m_LogicalDirection);
+            HA_Msg[4] = (uint8_t) TranslatePadType_EnumToChar (GUI_Msg.PadAssignmentSetMsg.m_PadType);
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[5] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);  // This is either an ACK or NAK
+            }
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+            physicalPad = GUI_Msg.PadAssignmentSetMsg.m_PhysicalPadNumber;
+            myPadDirection[physicalPad] = GUI_Msg.PadAssignmentSetMsg.m_LogicalDirection;
+            g_MyPadTypes[physicalPad] = GUI_Msg.PadAssignmentSetMsg.m_PadType;
 #endif
             break;
 
