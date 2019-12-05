@@ -23,7 +23,7 @@
 
 #include "QueueDefinition.h"
 
-#define FORCE_OK_FOR_GUI_DEBUGGING
+//#define FORCE_OK_FOR_GUI_DEBUGGING
 
 
 //******************************************************************************
@@ -185,6 +185,9 @@ static uint8_t Send_I2C_Package(uint8_t *i2c_pack, uint8_t pack_len)
     g_ioport_on_ioport.pinDirectionSet(I2C_IO_PIN, IOPORT_DIRECTION_INPUT);
     g_ioport_on_ioport.pinDirectionSet(I2C_CLK_PIN, IOPORT_DIRECTION_INPUT);
 
+    // If this far, we may as well set the CS pin high.
+    g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
+
     // Wait for the I2C_RES_PIN goes LOW
     wait = 500;   // This should be a 1 millisecond wait.
     do
@@ -201,9 +204,6 @@ static uint8_t Send_I2C_Package(uint8_t *i2c_pack, uint8_t pack_len)
         R_BSP_SoftwareDelay(2, BSP_DELAY_UNITS_MICROSECONDS);   //add
         wait--;
     } while(pin_state == IOPORT_LEVEL_HIGH);
-
-    // If this far, we may as well set the CS pin high.
-    g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
 
     return MSG_OK;
 }
@@ -329,11 +329,11 @@ static uint8_t Read_I2C_Package(uint8_t *responseMsg)
 
     // Determine if Checksum is correct and return error if not.
     myCS = 0;
-    for(i = 0; i < msgLength-2; i++)
+    for(i = 0; i < msgLength-1; i++)
     {
-        myCS = (uint8_t)(responseMsg[i+1] + myCS);
+        myCS = (uint8_t)(responseMsg[i] + myCS);
     }
-    if (myCS != responseMsg[msgLength])
+    if (myCS != responseMsg[msgLength-1])
         return MSG_INVALID_FORMAT;
 
     return MSG_OK;
@@ -398,18 +398,18 @@ uint8_t get_PROP_version(void)
 
 uint8_t ExecuteHeartBeat(void)
 {
-    uint8_t HB_Message[4];
+    uint8_t HB_Message[16];
     uint8_t cs;
     uint8_t msgStatus;
-    uint8_t HB_Response[4];
+    uint8_t HB_Response[16];
     HHP_HA_MSG_STRUCT HeadArrayMsg;
 
     HB_Message[0] = 0x04;     // msg length
     HB_Message[1] = HHP_HA_HEART_BEAT;
     HB_Message[2] = ++g_HeartBeatCounter;
-    cs = CalculateChecksum(HB_Message, sizeof (HB_Message)-1);
+    cs = CalculateChecksum(HB_Message, (uint8_t) (HB_Message[0]-1));
     HB_Message[3] = cs;
-    msgStatus = Send_I2C_Package(HB_Message, sizeof(HB_Message));
+    msgStatus = Send_I2C_Package(HB_Message, HB_Message[0]);
 
     if (msgStatus == MSG_OK)
     {
