@@ -23,7 +23,7 @@
 
 #include "QueueDefinition.h"
 
-//#define FORCE_OK_FOR_GUI_DEBUGGING
+#define FORCE_OK_FOR_GUI_DEBUGGING
 
 
 //******************************************************************************
@@ -543,6 +543,26 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             physicalPad = GUI_Msg.PadAssignmentSetMsg.m_PhysicalPadNumber;
             myPadDirection[physicalPad] = GUI_Msg.PadAssignmentSetMsg.m_LogicalDirection;
             g_MyPadTypes[physicalPad] = GUI_Msg.PadAssignmentSetMsg.m_PadType;
+#endif
+            break;
+
+        case HHP_HA_VERSION_GET:
+            HA_Msg[0] = 0x03;     // msg length
+            HA_Msg[1] = HHP_HA_VERSION_GET;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[2] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                SendVersionToGUI (HB_Response[1], HB_Response[2], HB_Response[3]);
+            }
+
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+            if (msgStatus != MSG_OK)    // Just in case the message WAS received.
+            {
+                SendVersionToGUI (0,1,0);
+            }
 #endif
             break;
 

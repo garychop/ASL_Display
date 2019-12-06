@@ -10,8 +10,9 @@
 #include "HeadArray_CommunicationThread.h"
 
 //-------------------------------------------------------------------------
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "Version: 0.0.1a";
-GX_CHAR version_string2[] = "Attendant: V0.0.1";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ATT: 0.0.1a";
+GX_CHAR g_HeadArrayVersionString[20] = "";
+uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build;
 
 //-------------------------------------------------------------------------
 // Typdefs and defines
@@ -475,6 +476,22 @@ void ProcessCommunicationMsgs ()
             gxe.gx_event_display_handle = 0;
             gx_system_event_send(&gxe);
             break;
+
+        case HHP_HA_VERSION_GET:
+            sprintf (g_HeadArrayVersionString, "ASL110: %d.%d.%d", HeadArrayMsg.Version.m_Major, HeadArrayMsg.Version.m_Minor, HeadArrayMsg.Version.m_Build);
+            g_HA_Version_Major = HeadArrayMsg.Version.m_Major;
+            g_HA_Version_Minor = HeadArrayMsg.Version.m_Minor;
+            g_HA_Version_Build = HeadArrayMsg.Version.m_Build;
+
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            break;
+
+
         default:
             break;
     } // end switch
@@ -489,11 +506,9 @@ void ProcessCommunicationMsgs ()
 
 VOID StartupSplashScreen_draw_function (GX_WINDOW *window)
 {
-//    UINT myErr;
 
     g_ActiveScreen = (GX_WIDGET*) window;
 
-//    if (g_UseNewPrompt)
 //        myErr = gx_prompt_text_set ((GX_PROMPT*)&StartupSplashScreen.StartupSplashScreen_StatusPrompt, g_NewPrompt);
 
     gx_window_draw(window);
@@ -510,6 +525,7 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         case GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED):
             gx_widget_attach (p_window_root, (GX_WIDGET*) &Main_User_Screen);
             gx_widget_show ((GX_WIDGET*) &Main_User_Screen);
+            SendGetVersionCommand ();
             break;
     } // end switch
 
@@ -605,6 +621,7 @@ VOID Main_User_Screen_draw_function(GX_WINDOW *window)
 
     DisplayMainScreenActiveFeatures();  // Redraw the items.
     gx_prompt_text_set ((GX_PROMPT*)&Main_User_Screen.Main_User_Screen_Version_Prompt, ASL110_DISPLAY_VERSION_STRING);
+    gx_prompt_text_set ((GX_PROMPT*)&Main_User_Screen.Main_User_Screen_HeadArray_Version_Prompt, g_HeadArrayVersionString);
 
     gx_window_draw(window);
 }

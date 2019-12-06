@@ -72,6 +72,7 @@ extern void SendSetPadAssignmentCommand (PHYSICAL_PAD_ENUM pad, PAD_DIRECTION_EN
 extern void SendModeChangeCommand (uint8_t newMode);
 extern void SendCalibrationStartCommand (void);
 extern void SendCalibrationStopCommand (void);
+extern void SendGetVersionCommand (void);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -102,6 +103,12 @@ typedef struct HHP_HA_MSG_S
         } ModeChangeMsg;
         struct
         {
+            uint8_t m_Major;
+            uint8_t m_Minor;
+            uint8_t m_Build;
+        } Version;
+        struct
+        {
             uint32_t m_MsgArray[15];
         } WholeMsg;
     };
@@ -109,6 +116,7 @@ typedef struct HHP_HA_MSG_S
 
 // Functions that send the command from the Head Array Communication Task to the GUI task.
 extern void SendPadGetResponse (PHYSICAL_PAD_ENUM physicalPad, PAD_DIRECTION_ENUM direction, PAD_TYPE_ENUM padType);
+extern void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t buildVersion);
 
 
 // Helper functions

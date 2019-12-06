@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  5.12.2019   Time (hh:mm): 16:58                        */
+/*  Date (dd.mm.yyyy):  6.12.2019   Time (hh:mm): 17:50                        */
 /*******************************************************************************/
 
 
@@ -3438,6 +3438,36 @@ GX_PROMPT_PROPERTIES Main_User_Screen_Version_Prompt_properties =
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
 };
+GX_PROMPT_PROPERTIES Main_User_Screen_HeadArray_Version_Prompt_properties =
+{
+    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_FONT_ID_MINSIZE,                      /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET Main_User_Screen_HeadArray_Version_Prompt_define =
+{
+    "HeadArray_Version_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    HEAD_ARRAY_VERSION_PROMPT_ID,            /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {30, 218, 139, 237},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_HeadArray_Version_Prompt), /* control block */
+    (void *) &Main_User_Screen_HeadArray_Version_Prompt_properties /* extended properties */
+};
 
 GX_CONST GX_STUDIO_WIDGET Main_User_Screen_Version_Prompt_define =
 {
@@ -3455,8 +3485,8 @@ GX_CONST GX_STUDIO_WIDGET Main_User_Screen_Version_Prompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {203, 218, 312, 236},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    {202, 218, 311, 237},                    /* widget size                    */
+    &Main_User_Screen_HeadArray_Version_Prompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_Version_Prompt), /* control block */
     (void *) &Main_User_Screen_Version_Prompt_properties /* extended properties */

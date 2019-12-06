@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  5.12.2019   Time (hh:mm): 16:58                        */
+/*  Date (dd.mm.yyyy):  6.12.2019   Time (hh:mm): 17:50                        */
 /*******************************************************************************/
 
 
@@ -116,6 +116,7 @@ extern   "C" {
 #define UP_ARROW_BTN_ID 92
 #define DOWN_ARROW_BTN_ID 93
 #define BOTH_ARROW_BTN_ID 94
+#define HEAD_ARRAY_VERSION_PROMPT_ID 95
 
 
 /* Define animation ids                                                        */
@@ -383,6 +384,7 @@ typedef struct MAIN_USER_SCREEN_CONTROL_BLOCK_STRUCT
     GX_TEXT_BUTTON Main_User_Screen_DownArrowBtn;
     GX_TEXT_BUTTON Main_User_Screen_BothButton;
     GX_PROMPT Main_User_Screen_Version_Prompt;
+    GX_PROMPT Main_User_Screen_HeadArray_Version_Prompt;
 } MAIN_USER_SCREEN_CONTROL_BLOCK;
 
 
