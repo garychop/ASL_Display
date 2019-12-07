@@ -10,7 +10,7 @@
 #include "HeadArray_CommunicationThread.h"
 
 //-------------------------------------------------------------------------
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ATT: 0.0.1a";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ATT: 0.0.2";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build;
 

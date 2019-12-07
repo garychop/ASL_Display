@@ -23,7 +23,7 @@
 
 #include "QueueDefinition.h"
 
-#define FORCE_OK_FOR_GUI_DEBUGGING
+//#define FORCE_OK_FOR_GUI_DEBUGGING
 
 
 //******************************************************************************
@@ -545,10 +545,13 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = Read_I2C_Package(HB_Response);
                 if (msgStatus == MSG_OK)
                 {
-                    physicalPad = TranslatePad_CharToEnum ((char) HB_Response[2]);
-                    padDirection = TranslatePadDirection_CharToEnum ((char) HB_Response[3]);
-                    padType = TranslatePadType_CharToEnum ((char) HB_Response[4]);
-                    SendPadGetResponse (physicalPad, padDirection, padType);
+                    if (HB_Response[1] != NAK)
+                    {
+                        physicalPad = GUI_Msg.PadAssignmentRequestMsg.m_PhysicalPadNumber;         // I have to use data from the Request and not the response.
+                        padDirection = TranslatePadDirection_CharToEnum ((char) HB_Response[1]);
+                        padType = TranslatePadType_CharToEnum ((char) HB_Response[2]);
+                        SendPadGetResponse (physicalPad, padDirection, padType);
+                    }
                 }
             }
 
