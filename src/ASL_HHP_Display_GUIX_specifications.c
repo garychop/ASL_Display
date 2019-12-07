@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  6.12.2019   Time (hh:mm): 17:50                        */
+/*  Date (dd.mm.yyyy):  6.12.2019   Time (hh:mm): 19:08                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+DIAGNOSTICSCREEN_CONTROL_BLOCK DiagnosticScreen;
 READYSCREEN_CONTROL_BLOCK ReadyScreen;
 STARTUPSPLASHSCREEN_CONTROL_BLOCK StartupSplashScreen;
 PADCALIBRATIONSCREEN_CONTROL_BLOCK PadCalibrationScreen;
@@ -25,7 +26,6 @@ FEATURESETTINGSSCREEN_CONTROL_BLOCK FeatureSettingsScreen;
 PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK PadOptionsSettingsScreen;
 SETTINGSSCREEN_CONTROL_BLOCK SettingsScreen;
 SETPADDIRECTIONSCREEN_CONTROL_BLOCK SetPadDirectionScreen;
-DIAGNOSTICSCREEN_CONTROL_BLOCK DiagnosticScreen;
 HHP_START_SCREEN_CONTROL_BLOCK HHP_Start_Screen;
 MAIN_USER_SCREEN_CONTROL_BLOCK Main_User_Screen;
 GX_DISPLAY main_display_control_block;
@@ -144,6 +144,534 @@ UINT gx_studio_window_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control
     }
     return status;
 }
+GX_WINDOW_PROPERTIES DiagnosticScreen_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY003              /* wallpaper pixelmap id          */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadDigital_Button_properties =
+{
+    GX_PIXELMAP_ID_DIAGCENTERPADACTIVE,      /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PROMPT_PROPERTIES DiagnosticScreen_InstructionsText_properties =
+{
+    GX_STRING_ID_STRING_15,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_LeftPadDigital_Button_properties =
+{
+    GX_PIXELMAP_ID_DIAGLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_TEXT_BUTTON_PROPERTIES DiagnosticScreen_OK_Button_properties =
+{
+    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_RightPadDigital_Button_properties =
+{
+    GX_PIXELMAP_ID_DIAGLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadProp_Button_properties =
+{
+    GX_PIXELMAP_ID_PROPCENTERPADACTIVE,      /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_LeftPadProp_Button_properties =
+{
+    GX_PIXELMAP_ID_PROPLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_RightPadProp_Button_properties =
+{
+    GX_PIXELMAP_ID_PROPLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadOff_Button_properties =
+{
+    GX_PIXELMAP_ID_CENTERPAD_DIAGNOSTIC_OFF, /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_LeftPadOff_Button_properties =
+{
+    GX_PIXELMAP_ID_LEFTRIGHTPAD_DIAGNOSTIC_OFF, /* normal pixelmap id          */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_RightPadOff_Button_properties =
+{
+    GX_PIXELMAP_ID_LEFTRIGHTPAD_DIAGNOSTIC_OFF, /* normal pixelmap id          */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PROMPT_PROPERTIES DiagnosticScreen_LeftPad_RawValue_Prompt_properties =
+{
+    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_FONT_ID_MINSIZE,                      /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+GX_PROMPT_PROPERTIES DiagnosticScreen_RightPad_RawValue_Prompt_properties =
+{
+    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_FONT_ID_MINSIZE,                      /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+GX_PROMPT_PROPERTIES DiagnosticScreen_CenterPad_RawValue_Prompt_properties =
+{
+    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_FONT_ID_MINSIZE,                      /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+GX_PROMPT_PROPERTIES DiagnosticScreen_LeftPad_Adjusted_Prompt_properties =
+{
+    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+GX_PROMPT_PROPERTIES DiagnosticScreen_RightPad_Adjusted_Prompt_properties =
+{
+    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+GX_PROMPT_PROPERTIES DiagnosticScreen_CenterPad_Adjusted_Prompt_properties =
+{
+    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_CenterPad_Adjusted_Prompt_define =
+{
+    "CenterPad_Adjusted_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    CENTER_PAD_ADJUSTED_PROMPT,              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {126, 123, 155, 142},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_CenterPad_Adjusted_Prompt), /* control block */
+    (void *) &DiagnosticScreen_CenterPad_Adjusted_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_RightPad_Adjusted_Prompt_define =
+{
+    "RightPad_Adjusted_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    RIGHT_PAD_ADJUSTED_PROMPT,               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {153, 72, 182, 91},                      /* widget size                    */
+    &DiagnosticScreen_CenterPad_Adjusted_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_RightPad_Adjusted_Prompt), /* control block */
+    (void *) &DiagnosticScreen_RightPad_Adjusted_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_LeftPad_Adjusted_Prompt_define =
+{
+    "LeftPad_Adjusted_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    LEFT_PAD_ADJUSTED_PROMPT,                /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {96, 72, 125, 91},                       /* widget size                    */
+    &DiagnosticScreen_RightPad_Adjusted_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_LeftPad_Adjusted_Prompt), /* control block */
+    (void *) &DiagnosticScreen_LeftPad_Adjusted_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_CenterPad_RawValue_Prompt_define =
+{
+    "CenterPad_RawValue_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    CENTER_PAD_RAW_VALUE_PROMPT,             /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {122, 210, 159, 229},                    /* widget size                    */
+    &DiagnosticScreen_LeftPad_Adjusted_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_CenterPad_RawValue_Prompt), /* control block */
+    (void *) &DiagnosticScreen_CenterPad_RawValue_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_RightPad_RawValue_Prompt_define =
+{
+    "RightPad_RawValue_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    RIGHT_PAD_RAW_VALUE_PROMPT,              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {159, 210, 196, 229},                    /* widget size                    */
+    &DiagnosticScreen_CenterPad_RawValue_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_RightPad_RawValue_Prompt), /* control block */
+    (void *) &DiagnosticScreen_RightPad_RawValue_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_LeftPad_RawValue_Prompt_define =
+{
+    "LeftPad_RawValue_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    LEFT_PAD_RAW_VALUE_PROMPT,               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {84, 210, 121, 229},                     /* widget size                    */
+    &DiagnosticScreen_RightPad_RawValue_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_LeftPad_RawValue_Prompt), /* control block */
+    (void *) &DiagnosticScreen_LeftPad_RawValue_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_RightPadOff_Button_define =
+{
+    "RightPadOff_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    RIGHT_PAD_OFF_BTN_ID,                    /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {184, 32, 245, 129},                     /* widget size                    */
+    &DiagnosticScreen_LeftPad_RawValue_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_RightPadOff_Button), /* control block */
+    (void *) &DiagnosticScreen_RightPadOff_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_LeftPadOff_Button_define =
+{
+    "LeftPadOff_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    LEFT_PAD_OFF_BTN_ID,                     /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {35, 32, 96, 129},                       /* widget size                    */
+    &DiagnosticScreen_RightPadOff_Button_define, /* next widget definition     */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_LeftPadOff_Button), /* control block */
+    (void *) &DiagnosticScreen_LeftPadOff_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_CenterPadOff_Button_define =
+{
+    "CenterPadOff_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    CENTER_PAD_OFF_BTN_ID,                   /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {67, 140, 211, 181},                     /* widget size                    */
+    &DiagnosticScreen_LeftPadOff_Button_define, /* next widget definition      */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_CenterPadOff_Button), /* control block */
+    (void *) &DiagnosticScreen_CenterPadOff_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_RightPadProp_Button_define =
+{
+    "RightPadProp_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    RIGHT_PAD_PROP_BTN_ID,                   /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {184, 32, 245, 129},                     /* widget size                    */
+    &DiagnosticScreen_CenterPadOff_Button_define, /* next widget definition    */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_RightPadProp_Button), /* control block */
+    (void *) &DiagnosticScreen_RightPadProp_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_LeftPadProp_Button_define =
+{
+    "LeftPadProp_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    LEFT_PAD_PROP_BTN_ID,                    /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {35, 32, 96, 129},                       /* widget size                    */
+    &DiagnosticScreen_RightPadProp_Button_define, /* next widget definition    */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_LeftPadProp_Button), /* control block */
+    (void *) &DiagnosticScreen_LeftPadProp_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_CenterPadProp_Button_define =
+{
+    "CenterPadProp_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    CENTER_PAD_PROP_BTN_ID,                  /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {67, 140, 211, 181},                     /* widget size                    */
+    &DiagnosticScreen_LeftPadProp_Button_define, /* next widget definition     */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_CenterPadProp_Button), /* control block */
+    (void *) &DiagnosticScreen_CenterPadProp_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_RightPadDigital_Button_define =
+{
+    "RightPadDigital_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    RIGHT_PAD_DIGITAL_BTN_ID,                /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {184, 32, 245, 129},                     /* widget size                    */
+    &DiagnosticScreen_CenterPadProp_Button_define, /* next widget definition   */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_RightPadDigital_Button), /* control block */
+    (void *) &DiagnosticScreen_RightPadDigital_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_OK_Button_define =
+{
+    "OK_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    OK_BTN_ID,                               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {231, 164, 310, 227},                    /* widget size                    */
+    &DiagnosticScreen_RightPadDigital_Button_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_OK_Button), /* control block */
+    (void *) &DiagnosticScreen_OK_Button_properties /* extended properties     */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_LeftPadDigital_Button_define =
+{
+    "LeftPadDigital_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    LEFT_PAD_DIGITAL_BTN_ID,                 /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {35, 32, 96, 129},                       /* widget size                    */
+    &DiagnosticScreen_OK_Button_define,      /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_LeftPadDigital_Button), /* control block */
+    (void *) &DiagnosticScreen_LeftPadDigital_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_InstructionsText_define =
+{
+    "InstructionsText",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    INSTRUCT_PROMPT_ID,                      /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {55, 4, 238, 36},                        /* widget size                    */
+    &DiagnosticScreen_LeftPadDigital_Button_define, /* next widget definition  */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_InstructionsText), /* control block */
+    (void *) &DiagnosticScreen_InstructionsText_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_CenterPadDigital_Button_define =
+{
+    "CenterPadDigital_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    CENTER_PAD_DIGITAL_BTN_ID,               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {67, 140, 211, 181},                     /* widget size                    */
+    &DiagnosticScreen_InstructionsText_define, /* next widget definition       */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_CenterPadDigital_Button), /* control block */
+    (void *) &DiagnosticScreen_CenterPadDigital_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_define =
+{
+    "DiagnosticScreen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(DIAGNOSTICSCREEN_CONTROL_BLOCK),  /* control block size             */
+    GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
+    GX_COLOR_ID_SCROLL_BUTTON,               /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    (VOID (*)(GX_WIDGET *)) DiagnosticScreen_draw_event, /* drawing function override */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) DiagnosticScreen_event_handler, /* event function override */
+    {1, 0, 320, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &DiagnosticScreen_CenterPadDigital_Button_define, /* child widget          */
+    0,                                       /* control block                  */
+    (void *) &DiagnosticScreen_properties    /* extended properties            */
+};
 GX_WINDOW_PROPERTIES ReadyScreen_properties =
 {
     GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_FLATTEN  /* wallpaper pixelmap id        */
@@ -2751,354 +3279,6 @@ GX_CONST GX_STUDIO_WIDGET SetPadDirectionScreen_define =
     0,                                       /* control block                  */
     (void *) &SetPadDirectionScreen_properties /* extended properties          */
 };
-GX_WINDOW_PROPERTIES DiagnosticScreen_properties =
-{
-    GX_PIXELMAP_ID_HEADARRAY003              /* wallpaper pixelmap id          */
-};
-GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadDigital_Button_properties =
-{
-    GX_PIXELMAP_ID_DIAGCENTERPADACTIVE,      /* normal pixelmap id             */
-    0,                                       /* selected pixelmap id           */
-    0                                        /* disabled pixelmap id           */
-};
-GX_PROMPT_PROPERTIES DiagnosticScreen_InstructionsText_properties =
-{
-    GX_STRING_ID_STRING_15,                  /* string id                      */
-    GX_FONT_ID_PROMPT,                       /* font id                        */
-    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
-    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
-};
-GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_LeftPadDigital_Button_properties =
-{
-    GX_PIXELMAP_ID_DIAGLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
-    0,                                       /* selected pixelmap id           */
-    0                                        /* disabled pixelmap id           */
-};
-GX_TEXT_BUTTON_PROPERTIES DiagnosticScreen_OK_Button_properties =
-{
-    GX_STRING_ID_STRING_24,                  /* string id                      */
-    GX_FONT_ID_ASC24PT,                      /* font id                        */
-    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
-    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
-};
-GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_RightPadDigital_Button_properties =
-{
-    GX_PIXELMAP_ID_DIAGLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
-    0,                                       /* selected pixelmap id           */
-    0                                        /* disabled pixelmap id           */
-};
-GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadProp_Button_properties =
-{
-    GX_PIXELMAP_ID_PROPCENTERPADACTIVE,      /* normal pixelmap id             */
-    0,                                       /* selected pixelmap id           */
-    0                                        /* disabled pixelmap id           */
-};
-GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_LeftPadProp_Button_properties =
-{
-    GX_PIXELMAP_ID_PROPLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
-    0,                                       /* selected pixelmap id           */
-    0                                        /* disabled pixelmap id           */
-};
-GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_RightPadProp_Button_properties =
-{
-    GX_PIXELMAP_ID_PROPLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
-    0,                                       /* selected pixelmap id           */
-    0                                        /* disabled pixelmap id           */
-};
-GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadOff_Button_properties =
-{
-    GX_PIXELMAP_ID_CENTERPAD_DIAGNOSTIC_OFF, /* normal pixelmap id             */
-    0,                                       /* selected pixelmap id           */
-    0                                        /* disabled pixelmap id           */
-};
-GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_LeftPadOff_Button_properties =
-{
-    GX_PIXELMAP_ID_LEFTRIGHTPAD_DIAGNOSTIC_OFF, /* normal pixelmap id          */
-    0,                                       /* selected pixelmap id           */
-    0                                        /* disabled pixelmap id           */
-};
-GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_RightPadOff_Button_properties =
-{
-    GX_PIXELMAP_ID_LEFTRIGHTPAD_DIAGNOSTIC_OFF, /* normal pixelmap id          */
-    0,                                       /* selected pixelmap id           */
-    0                                        /* disabled pixelmap id           */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_RightPadOff_Button_define =
-{
-    "RightPadOff_Button",
-    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
-    RIGHT_PAD_OFF_BTN_ID,                    /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE,                    /* style flags                    */
-    0,                                       /* status flags                   */
-    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_pixelmap_button_create,        /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {183, 32, 244, 129},                     /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_RightPadOff_Button), /* control block */
-    (void *) &DiagnosticScreen_RightPadOff_Button_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_LeftPadOff_Button_define =
-{
-    "LeftPadOff_Button",
-    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
-    LEFT_PAD_OFF_BTN_ID,                     /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE,                    /* style flags                    */
-    0,                                       /* status flags                   */
-    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_pixelmap_button_create,        /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {35, 32, 96, 129},                       /* widget size                    */
-    &DiagnosticScreen_RightPadOff_Button_define, /* next widget definition     */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_LeftPadOff_Button), /* control block */
-    (void *) &DiagnosticScreen_LeftPadOff_Button_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_CenterPadOff_Button_define =
-{
-    "CenterPadOff_Button",
-    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
-    CENTER_PAD_OFF_BTN_ID,                   /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE,                    /* style flags                    */
-    0,                                       /* status flags                   */
-    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_pixelmap_button_create,        /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {66, 140, 210, 181},                     /* widget size                    */
-    &DiagnosticScreen_LeftPadOff_Button_define, /* next widget definition      */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_CenterPadOff_Button), /* control block */
-    (void *) &DiagnosticScreen_CenterPadOff_Button_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_RightPadProp_Button_define =
-{
-    "RightPadProp_Button",
-    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
-    RIGHT_PAD_PROP_BTN_ID,                   /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE,                    /* style flags                    */
-    0,                                       /* status flags                   */
-    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_pixelmap_button_create,        /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {183, 32, 244, 129},                     /* widget size                    */
-    &DiagnosticScreen_CenterPadOff_Button_define, /* next widget definition    */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_RightPadProp_Button), /* control block */
-    (void *) &DiagnosticScreen_RightPadProp_Button_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_LeftPadProp_Button_define =
-{
-    "LeftPadProp_Button",
-    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
-    LEFT_PAD_PROP_BTN_ID,                    /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE,                    /* style flags                    */
-    0,                                       /* status flags                   */
-    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_pixelmap_button_create,        /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {34, 32, 95, 129},                       /* widget size                    */
-    &DiagnosticScreen_RightPadProp_Button_define, /* next widget definition    */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_LeftPadProp_Button), /* control block */
-    (void *) &DiagnosticScreen_LeftPadProp_Button_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_CenterPadProp_Button_define =
-{
-    "CenterPadProp_Button",
-    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
-    CENTER_PAD_PROP_BTN_ID,                  /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE,                    /* style flags                    */
-    0,                                       /* status flags                   */
-    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_pixelmap_button_create,        /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {66, 140, 210, 181},                     /* widget size                    */
-    &DiagnosticScreen_LeftPadProp_Button_define, /* next widget definition     */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_CenterPadProp_Button), /* control block */
-    (void *) &DiagnosticScreen_CenterPadProp_Button_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_RightPadDigital_Button_define =
-{
-    "RightPadDigital_Button",
-    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
-    RIGHT_PAD_DIGITAL_BTN_ID,                /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE,                    /* style flags                    */
-    0,                                       /* status flags                   */
-    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_pixelmap_button_create,        /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {183, 32, 244, 129},                     /* widget size                    */
-    &DiagnosticScreen_CenterPadProp_Button_define, /* next widget definition   */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_RightPadDigital_Button), /* control block */
-    (void *) &DiagnosticScreen_RightPadDigital_Button_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_OK_Button_define =
-{
-    "OK_Button",
-    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
-    OK_BTN_ID,                               /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
-    0,                                       /* status flags                   */
-    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
-    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
-    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
-    gx_studio_text_button_create,            /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {230, 164, 309, 227},                    /* widget size                    */
-    &DiagnosticScreen_RightPadDigital_Button_define, /* next widget definition */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_OK_Button), /* control block */
-    (void *) &DiagnosticScreen_OK_Button_properties /* extended properties     */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_LeftPadDigital_Button_define =
-{
-    "LeftPadDigital_Button",
-    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
-    LEFT_PAD_DIGITAL_BTN_ID,                 /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE,                    /* style flags                    */
-    0,                                       /* status flags                   */
-    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_pixelmap_button_create,        /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {34, 32, 95, 129},                       /* widget size                    */
-    &DiagnosticScreen_OK_Button_define,      /* next widget definition         */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_LeftPadDigital_Button), /* control block */
-    (void *) &DiagnosticScreen_LeftPadDigital_Button_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_InstructionsText_define =
-{
-    "InstructionsText",
-    GX_TYPE_PROMPT,                          /* widget type                    */
-    INSTRUCT_PROMPT_ID,                      /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
-    0,                                       /* status flags                   */
-    sizeof(GX_PROMPT),                       /* control block size             */
-    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
-    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
-    gx_studio_prompt_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {54, 4, 237, 36},                        /* widget size                    */
-    &DiagnosticScreen_LeftPadDigital_Button_define, /* next widget definition  */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_InstructionsText), /* control block */
-    (void *) &DiagnosticScreen_InstructionsText_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_CenterPadDigital_Button_define =
-{
-    "CenterPadDigital_Button",
-    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
-    CENTER_PAD_DIGITAL_BTN_ID,               /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE,                    /* style flags                    */
-    0,                                       /* status flags                   */
-    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_pixelmap_button_create,        /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {66, 140, 210, 181},                     /* widget size                    */
-    &DiagnosticScreen_InstructionsText_define, /* next widget definition       */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_CenterPadDigital_Button), /* control block */
-    (void *) &DiagnosticScreen_CenterPadDigital_Button_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_define =
-{
-    "DiagnosticScreen",
-    GX_TYPE_WINDOW,                          /* widget type                    */
-    GX_ID_NONE,                              /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
-    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
-    sizeof(DIAGNOSTICSCREEN_CONTROL_BLOCK),  /* control block size             */
-    GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
-    GX_COLOR_ID_SCROLL_BUTTON,               /* selected color id              */
-    gx_studio_window_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    (UINT (*)(GX_WIDGET *, GX_EVENT *)) DiagnosticScreen_event_handler, /* event function override */
-    {0, 0, 319, 239},                        /* widget size                    */
-    GX_NULL,                                 /* next widget                    */
-    &DiagnosticScreen_CenterPadDigital_Button_define, /* child widget          */
-    0,                                       /* control block                  */
-    (void *) &DiagnosticScreen_properties    /* extended properties            */
-};
 GX_WINDOW_PROPERTIES HHP_Start_Screen_properties =
 {
     GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
@@ -3815,6 +3995,7 @@ GX_CONST GX_STUDIO_WIDGET Main_User_Screen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
+    { &DiagnosticScreen_define, (GX_WIDGET *) &DiagnosticScreen },
     { &ReadyScreen_define, (GX_WIDGET *) &ReadyScreen },
     { &StartupSplashScreen_define, (GX_WIDGET *) &StartupSplashScreen },
     { &PadCalibrationScreen_define, (GX_WIDGET *) &PadCalibrationScreen },
@@ -3824,7 +4005,6 @@ GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
     { &PadOptionsSettingsScreen_define, (GX_WIDGET *) &PadOptionsSettingsScreen },
     { &SettingsScreen_define, (GX_WIDGET *) &SettingsScreen },
     { &SetPadDirectionScreen_define, (GX_WIDGET *) &SetPadDirectionScreen },
-    { &DiagnosticScreen_define, (GX_WIDGET *) &DiagnosticScreen },
     { &HHP_Start_Screen_define, (GX_WIDGET *) &HHP_Start_Screen },
     { &Main_User_Screen_define, (GX_WIDGET *) &Main_User_Screen },
     {GX_NULL, GX_NULL}

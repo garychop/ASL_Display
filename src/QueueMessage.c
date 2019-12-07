@@ -196,7 +196,24 @@ void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t build
 }
 
 //****************************************************************************
-// Funtion: Send_GetPadAssignmentMsg
+// Funtion: SendGetDataCommand
+// Description: This function creates a msg to tell the COMM task to
+//      Start sending "Data Get" msgs to the Head Array and don't stop
+//      until this sends a stop message.
+//****************************************************************************
+void SendGetDataCommand (PHYSICAL_PAD_ENUM padID, uint8_t start)
+{
+    GUI_MSG_STRUCT msg;
+
+    msg.m_MsgType = HHP_HA_PAD_DATA_GET;
+    msg.GetDataMsg.m_Start = start;   // non0 = Start getting data, 0 = Stop getting data.
+    msg.GetDataMsg.m_PadID = padID;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+//****************************************************************************
+// Function: Send_GetPadAssignmentMsg
 // Description: This creates a queue msg. Translates the Pad ENUM to char and
 //      sends the packet to the queue.
 //****************************************************************************

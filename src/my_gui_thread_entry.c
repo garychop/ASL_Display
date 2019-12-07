@@ -106,6 +106,14 @@ struct PadInfoStruct
     GX_PIXELMAP_BUTTON *m_DiagnosticProportional_Widget;
     GX_RECTANGLE m_DiagnosticWidigetLocation;
     GX_PIXELMAP_BUTTON *m_DirectionIcons[5];
+    GX_PROMPT *m_RawValuePrompt;
+    GX_PROMPT *m_AdjustedValuePrompt;
+    uint16_t m_Proportional_RawValue;
+    uint16_t m_Proportional_DriveDemand;
+    GX_CHAR m_DriveDemandString[8];         // Unfortunately, I have to use a "Global" or "Const" string with the gx_prompt_text_set function instead
+    GX_CHAR m_RawValueString[8];            // of a local string variable in this function. It actually sends a pointer to the function and
+                                            // not a copy of the string. That means that the last information is applied to all
+                                            // gx_prompt_text_set calls.
 } g_PadSettings[3];
 
 int g_SettingsChanged;
@@ -226,6 +234,13 @@ void my_gui_thread_entry(void)
     g_PadSettings[LEFT_PAD].m_DiagnosticOff_Widget = &DiagnosticScreen.DiagnosticScreen_LeftPadOff_Button;
     g_PadSettings[LEFT_PAD].m_DiagnosticProportional_Widget = &DiagnosticScreen.DiagnosticScreen_LeftPadProp_Button;
     g_PadSettings[LEFT_PAD].m_DiagnosticDigital_Widget = &DiagnosticScreen.DiagnosticScreen_LeftPadDigital_Button;
+    g_PadSettings[LEFT_PAD].m_RawValuePrompt = &DiagnosticScreen.DiagnosticScreen_LeftPad_RawValue_Prompt;
+    g_PadSettings[LEFT_PAD].m_AdjustedValuePrompt = &DiagnosticScreen.DiagnosticScreen_LeftPad_Adjusted_Prompt;
+    g_PadSettings[LEFT_PAD].m_Proportional_RawValue = 0;
+    g_PadSettings[LEFT_PAD].m_Proportional_DriveDemand = 0;
+    strcpy (g_PadSettings[LEFT_PAD].m_RawValueString, "");
+    strcpy (g_PadSettings[LEFT_PAD].m_DriveDemandString, "");
+
 
     g_PadSettings[RIGHT_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
@@ -243,6 +258,13 @@ void my_gui_thread_entry(void)
     g_PadSettings[RIGHT_PAD].m_DiagnosticOff_Widget = &DiagnosticScreen.DiagnosticScreen_RightPadOff_Button;
     g_PadSettings[RIGHT_PAD].m_DiagnosticProportional_Widget = &DiagnosticScreen.DiagnosticScreen_RightPadProp_Button;
     g_PadSettings[RIGHT_PAD].m_DiagnosticDigital_Widget = &DiagnosticScreen.DiagnosticScreen_RightPadDigital_Button;
+    g_PadSettings[RIGHT_PAD].m_RawValuePrompt = &DiagnosticScreen.DiagnosticScreen_RightPad_RawValue_Prompt;
+    g_PadSettings[RIGHT_PAD].m_AdjustedValuePrompt = &DiagnosticScreen.DiagnosticScreen_RightPad_Adjusted_Prompt;
+    g_PadSettings[RIGHT_PAD].m_Proportional_RawValue = 0;
+    g_PadSettings[RIGHT_PAD].m_Proportional_DriveDemand = 0;
+    strcpy (g_PadSettings[RIGHT_PAD].m_RawValueString, "");
+    strcpy (g_PadSettings[RIGHT_PAD].m_DriveDemandString, "");
+
 
     g_PadSettings[CENTER_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
@@ -260,6 +282,12 @@ void my_gui_thread_entry(void)
     g_PadSettings[CENTER_PAD].m_DiagnosticOff_Widget = &DiagnosticScreen.DiagnosticScreen_CenterPadOff_Button;
     g_PadSettings[CENTER_PAD].m_DiagnosticProportional_Widget = &DiagnosticScreen.DiagnosticScreen_CenterPadProp_Button;
     g_PadSettings[CENTER_PAD].m_DiagnosticDigital_Widget = &DiagnosticScreen.DiagnosticScreen_CenterPadDigital_Button;
+    g_PadSettings[CENTER_PAD].m_RawValuePrompt = &DiagnosticScreen.DiagnosticScreen_CenterPad_RawValue_Prompt;
+    g_PadSettings[CENTER_PAD].m_AdjustedValuePrompt = &DiagnosticScreen.DiagnosticScreen_CenterPad_Adjusted_Prompt;
+    g_PadSettings[CENTER_PAD].m_Proportional_RawValue = 0;
+    g_PadSettings[CENTER_PAD].m_Proportional_DriveDemand = 0;
+    strcpy (g_PadSettings[CENTER_PAD].m_RawValueString, "");
+    strcpy (g_PadSettings[CENTER_PAD].m_DriveDemandString, "");
 
     /* Create the widgets we have defined with the GUIX data structures and resources. */
     GX_WIDGET * p_first_screen = NULL;
@@ -355,7 +383,7 @@ void my_gui_thread_entry(void)
 
         ProcessCommunicationMsgs ();    // Process any messages from the Head Array Comm process.
 
-        tx_thread_sleep (2);
+        tx_thread_sleep (1);
     }
 
     //Open WDT; 4.46s; PCLKB 30MHz
@@ -491,6 +519,20 @@ void ProcessCommunicationMsgs ()
             gx_system_event_send(&gxe);
             break;
 
+        case HHP_HA_PAD_DATA_GET:
+            myPad = HeadArrayMsg.GetDataMsg.m_PadID;        // Get Physical Pad ID
+            if (myPad < INVALID_PAD)
+            {
+                g_PadSettings[myPad].m_Proportional_RawValue = HeadArrayMsg.GetDataMsg.m_RawData;
+                g_PadSettings[myPad].m_Proportional_DriveDemand = HeadArrayMsg.GetDataMsg.m_DriveDemand;
+            }
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            break;
 
         default:
             break;
@@ -840,7 +882,10 @@ UINT ShowHidePad (GX_EVENT *event_ptr)
             {
                 // Determine if we show the Proportional (Orange) or Digital (Green)
                 if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
+                {
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
+                    SendGetDataCommand (pad, START_SENDING_DATA);
+                }
                 else
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
             }
@@ -848,7 +893,10 @@ UINT ShowHidePad (GX_EVENT *event_ptr)
             {
                 // Now we are going to hide it.
                 if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
+                {
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
+                    SendGetDataCommand (pad, STOP_SENDING_DATA);
+                }
                 else
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_HiddenRectangle);
             }
@@ -862,6 +910,45 @@ UINT ShowHidePad (GX_EVENT *event_ptr)
 //
 // Description: This handles the Diagnostic Screen messages
 //
+//*************************************************************************************
+
+bool nextTIme = true;
+
+VOID DiagnosticScreen_draw_event (GX_WINDOW *window)
+{
+    uint8_t i;
+
+    if (nextTIme)
+    {
+        for (i=0; i<3; ++i)
+        {
+            if (g_PadSettings[i].m_PadType == PROPORTIONAL_PADTYPE)
+            {
+                // Unfortunately, I have to use a "Global" or "Const" string with the gx_prompt_text_set function instead
+                // of a local string variable in this function. It actually sends a pointer to the function and
+                // not a copy of the string. That means that the last information is applied to all
+                // gx_prompt_text_set calls.
+                sprintf (g_PadSettings[i].m_RawValueString, "%3d", g_PadSettings[i].m_Proportional_RawValue);
+                gx_prompt_text_set (g_PadSettings[i].m_RawValuePrompt, g_PadSettings[i].m_RawValueString);
+                sprintf (g_PadSettings[i].m_DriveDemandString, "%3d", g_PadSettings[i].m_Proportional_DriveDemand);
+                gx_prompt_text_set (g_PadSettings[i].m_AdjustedValuePrompt, g_PadSettings[i].m_DriveDemandString);
+            }
+            else
+            {
+                gx_prompt_text_set (g_PadSettings[i].m_RawValuePrompt, "DIG");
+                gx_prompt_text_set (g_PadSettings[i].m_AdjustedValuePrompt, "");
+            }
+        }
+        nextTIme = false;
+    }
+    else
+    {
+        nextTIme = true;
+    }
+
+    gx_window_draw(window);
+}
+
 //*************************************************************************************
 
 UINT DiagnosticScreen_event_handler(GX_WINDOW *window, GX_EVENT *event_ptr)

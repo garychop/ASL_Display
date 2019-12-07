@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  6.12.2019   Time (hh:mm): 17:50                        */
+/*  Date (dd.mm.yyyy):  6.12.2019   Time (hh:mm): 19:08                        */
 /*******************************************************************************/
 
 
@@ -204,6 +204,7 @@
 #define GX_STRING_ID_STRING_14 61
 #define GX_STRING_ID_STRING_39 62
 #define GX_STRING_ID_STRING_38 63
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 64
+#define GX_STRING_ID_STRING_21 64
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 65
 
 #endif                                       /* sentry                         */

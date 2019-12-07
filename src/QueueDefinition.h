@@ -22,6 +22,7 @@ typedef enum PHYSICAL_PAD {LEFT_PAD, RIGHT_PAD, CENTER_PAD, INVALID_PAD} PHYSICA
 typedef enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, INVALID_DIRECTION} PAD_DIRECTION_ENUM;
 typedef enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE, INVALID_PAD_TYPE} PAD_TYPE_ENUM;
 typedef enum FEATURE_ID {POWER_ONOFF_ID, BLUETOOTH_ID, NEXT_FUNCTION_ID, NEXT_PROFILE_ID, INVALID_FEATURE_ID} FEATURE_ID_ENUM;
+typedef enum SEND_DATA_BOOL {STOP_SENDING_DATA = 0, START_SENDING_DATA} SEND_DATA_ENUM;
 
 typedef enum HHP_HA_MESSAGES_E
 {
@@ -59,6 +60,11 @@ typedef struct GUI_MSG_S
             PAD_DIRECTION_ENUM m_LogicalDirection;
             PAD_TYPE_ENUM m_PadType;     // Digital vs Proportional, "D" or "P"
         } PadAssignmentSetMsg;
+        struct          // Use this struct to start and stop data from being read.
+        {
+            SEND_DATA_ENUM m_Start;    // non0 = Start, 0 = Stop
+            PHYSICAL_PAD_ENUM m_PadID;
+        } GetDataMsg;
         struct
         {
             uint32_t m_MsgArray[15];
@@ -73,6 +79,7 @@ extern void SendModeChangeCommand (uint8_t newMode);
 extern void SendCalibrationStartCommand (void);
 extern void SendCalibrationStopCommand (void);
 extern void SendGetVersionCommand (void);
+extern void SendGetDataCommand (PHYSICAL_PAD_ENUM padID, SEND_DATA_ENUM start);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -107,6 +114,12 @@ typedef struct HHP_HA_MSG_S
             uint8_t m_Minor;
             uint8_t m_Build;
         } Version;
+        struct          // Use this struct to start and stop data from being read.
+        {
+            PHYSICAL_PAD_ENUM m_PadID;
+            uint16_t m_RawData;
+            uint16_t m_DriveDemand;
+        } GetDataMsg;
         struct
         {
             uint32_t m_MsgArray[15];

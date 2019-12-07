@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  6.12.2019   Time (hh:mm): 17:50                        */
+/*  Date (dd.mm.yyyy):  6.12.2019   Time (hh:mm): 19:08                        */
 /*******************************************************************************/
 
 
@@ -30580,10 +30580,11 @@ GX_CONST GX_UBYTE main_display_STRING_12_English[17] = "    POWER ON/OFF";
 GX_CONST GX_UBYTE main_display_STRING_14_English[23] = "          POWER ON/OFF";
 GX_CONST GX_UBYTE main_display_STRING_39_English[21] = "          FUSION OFF";
 GX_CONST GX_UBYTE main_display_STRING_38_English[13] = "PRESS SWITCH";
+GX_CONST GX_UBYTE main_display_STRING_21_English[4] = "100";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[64] =
+GX_CONST GX_UBYTE *main_display_English_string_table[65] =
 {
     GX_NULL,
     main_display_STRING_15_English,
@@ -30648,7 +30649,8 @@ GX_CONST GX_UBYTE *main_display_English_string_table[64] =
     main_display_STRING_12_English,
     main_display_STRING_14_English,
     main_display_STRING_39_English,
-    main_display_STRING_38_English
+    main_display_STRING_38_English,
+    main_display_STRING_21_English
 
 };
 

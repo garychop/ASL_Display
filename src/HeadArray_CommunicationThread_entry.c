@@ -44,19 +44,24 @@ static uint8_t Read_I2C_Package(uint8_t *);
 uint8_t ExecuteHeartBeat(void);
 uint8_t CalculateChecksum (uint8_t *, uint8_t);
 uint32_t Process_GUI_Messages (GUI_MSG_STRUCT);
+uint8_t GetPadData(void);
 
 //******************************************************************************
 // Global Variables
 //******************************************************************************
 
 uint8_t g_HeartBeatCounter = 0;
-void (*g_MyState)(void);
+uint8_t g_GetDataActive = 0;
+PHYSICAL_PAD_ENUM g_ActivePadID = INVALID_PAD;
+
+// void (*g_MyState)(void);
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
 PAD_DIRECTION_ENUM myPadDirection[] = {LEFT_DIRECTION, RIGHT_DIRECTION, FORWARD_DIRECTION};
 FEATURE_ID_ENUM g_myMode = POWER_ONOFF_ID;
 uint8_t g_HeadArray_Status;
 PAD_TYPE_ENUM g_MyPadTypes[] = {PROPORTIONAL_PADTYPE, PROPORTIONAL_PADTYPE, PROPORTIONAL_PADTYPE};
+uint8_t g_RawData, g_DriveDemand;
 #endif
 
 //******************************************************************************
@@ -438,7 +443,7 @@ uint8_t ExecuteHeartBeat(void)
     ++HeadArrayMsg.HeartBeatMsg.m_HB_Count;
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-    if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 60)
+    if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 40)
     {
         g_HeartBeatCounter = 25;
         g_HeadArray_Status = 0x01;
@@ -458,6 +463,53 @@ uint8_t ExecuteHeartBeat(void)
 #endif
 
     // Send message to.... let's say... the GUI task.
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
+
+    return msgStatus;
+}
+
+//******************************************************************************
+// Function: GetPadData
+// Description: This function requests the Pad Data from the head array
+//      and then passes it back to the GUI.
+//
+//******************************************************************************
+
+uint8_t GetPadData(void)
+{
+    uint8_t HB_Message[16];
+    uint8_t cs;
+    uint8_t msgStatus;
+    uint8_t HB_Response[16];
+    HHP_HA_MSG_STRUCT HeadArrayMsg;
+
+    HB_Message[0] = 0x04;     // msg length
+    HB_Message[1] = HHP_HA_PAD_DATA_GET;
+    HB_Message[2] = g_ActivePadID;
+    cs = CalculateChecksum(HB_Message, (uint8_t) (HB_Message[0]-1));
+    HB_Message[3] = cs;
+    msgStatus = Send_I2C_Package(HB_Message, HB_Message[0]);
+
+    if (msgStatus == MSG_OK)
+    {
+        msgStatus = Read_I2C_Package(HB_Response);
+    }
+
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+    HB_Response[1] = g_RawData++;
+    HB_Response[2] = g_DriveDemand++;
+    if (g_DriveDemand > 100)
+        g_DriveDemand = 0;
+
+    msgStatus = MSG_OK;     // Fool it for now.
+#endif
+
+    // Prepare and send the Pad Data message to the GUI via the queue.
+    HeadArrayMsg.m_MsgType = HHP_HA_PAD_DATA_GET;
+    HeadArrayMsg.GetDataMsg.m_PadID = g_ActivePadID;
+    HeadArrayMsg.GetDataMsg.m_RawData = HB_Response[1];
+    HeadArrayMsg.GetDataMsg.m_DriveDemand = HB_Response[2];
+
     tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
 
     return msgStatus;
@@ -566,6 +618,15 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
 #endif
             break;
 
+        case HHP_HA_PAD_DATA_GET:
+            g_ActivePadID = GUI_Msg.GetDataMsg.m_PadID;     // Save Pad Identification.
+            g_GetDataActive = GUI_Msg.GetDataMsg.m_Start;   // non0 = Start getting data, 0 = Stop getting data.
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+            g_RawData = 0;
+            g_DriveDemand = 0;
+#endif
+            break;
+
         default:
             msgSent = false;
             break;
@@ -602,8 +663,17 @@ void HeadArray_CommunicationThread_entry(void)
             tx_queue_receive (&g_GUI_to_COMM_queue, &GUI_Msg, TX_NO_WAIT);
             msgSent = Process_GUI_Messages (GUI_Msg);
         }
-        else
-            msgSent = false;
+        else // We got messages from the GUI to process.
+        {
+            if (g_GetDataActive)    // Are we expected to continuously get PAD data from the Head Array?
+            {
+                msgSent = GetPadData();
+            }
+            else
+            {
+                msgSent = false;
+            }
+        }
 
         if (msgSent == false)
             ExecuteHeartBeat();
