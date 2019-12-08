@@ -144,12 +144,12 @@ PAD_TYPE_ENUM TranslatePadType_CharToEnum (char padType)
 
 char TranslatePadType_EnumToChar (PAD_TYPE_ENUM padType)
 {
-    if (padType == 'D')
-        return DIGITAL_PADTYPE;
-    else if (padType == 'P')
-        return PROPORTIONAL_PADTYPE;
-
-    return INVALID_PAD_TYPE;
+    if (padType == DIGITAL_PADTYPE)
+        return 'D';
+    else if (padType == PROPORTIONAL_PADTYPE)
+        return 'P';
+    else // TODO: May want something more done here at some point.
+        return 'P';
 }
 
 //****************************************************************************
