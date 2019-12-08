@@ -882,10 +882,7 @@ UINT ShowHidePad (GX_EVENT *event_ptr)
             {
                 // Determine if we show the Proportional (Orange) or Digital (Green)
                 if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
-                {
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
-                    SendGetDataCommand (pad, START_SENDING_DATA);
-                }
                 else
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
             }
@@ -893,10 +890,7 @@ UINT ShowHidePad (GX_EVENT *event_ptr)
             {
                 // Now we are going to hide it.
                 if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
-                {
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
-                    SendGetDataCommand (pad, STOP_SENDING_DATA);
-                }
                 else
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_HiddenRectangle);
             }
@@ -967,17 +961,19 @@ UINT DiagnosticScreen_event_handler(GX_WINDOW *window, GX_EVENT *event_ptr)
             else
                 gx_widget_resize ((GX_WIDGET*)g_PadSettings[pads].m_DiagnosticOff_Widget, &g_HiddenRectangle);
         }
+        SendGetDataCommand (START_SENDING_DATA);
         break;
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
         gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
+        SendGetDataCommand (STOP_SENDING_DATA);
         break;
 
-    case GX_EVENT_PEN_DOWN:
-    case GX_EVENT_PEN_UP:
-        ShowHidePad (event_ptr);
-        break;
+//    case GX_EVENT_PEN_DOWN:
+//    case GX_EVENT_PEN_UP:
+//        ShowHidePad (event_ptr);
+//        break;
     } // end switch
 
     gx_window_event_process(window, event_ptr);

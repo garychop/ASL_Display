@@ -65,7 +65,7 @@ typedef struct GUI_MSG_S
         struct          // Use this struct to start and stop data from being read.
         {
             SEND_DATA_ENUM m_Start;    // non0 = Start, 0 = Stop
-            PHYSICAL_PAD_ENUM m_PadID;
+            //PHYSICAL_PAD_ENUM m_PadID;
         } GetDataMsg;
         struct
         {
@@ -81,7 +81,7 @@ extern void SendModeChangeCommand (uint8_t newMode);
 extern void SendCalibrationStartCommand (void);
 extern void SendCalibrationStopCommand (void);
 extern void SendGetVersionCommand (void);
-extern void SendGetDataCommand (PHYSICAL_PAD_ENUM padID, SEND_DATA_ENUM start);
+extern void SendGetDataCommand (/*PHYSICAL_PAD_ENUM padID, */ SEND_DATA_ENUM start);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S

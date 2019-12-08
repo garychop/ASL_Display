@@ -23,7 +23,7 @@
 
 #include "QueueDefinition.h"
 
-//#define FORCE_OK_FOR_GUI_DEBUGGING
+#define FORCE_OK_FOR_GUI_DEBUGGING
 
 
 //******************************************************************************
@@ -512,6 +512,11 @@ uint8_t GetPadData(void)
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
 
+    // Do the next pad.
+    ++g_ActivePadID;
+    if (g_ActivePadID == INVALID_PAD)
+        g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;
+
     return msgStatus;
 }
 
@@ -622,7 +627,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             break;
 
         case HHP_HA_PAD_DATA_GET:
-            g_ActivePadID = GUI_Msg.GetDataMsg.m_PadID;     // Save Pad Identification.
+            g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;          // Start with the Left Pad
             g_GetDataActive = GUI_Msg.GetDataMsg.m_Start;   // non0 = Start getting data, 0 = Stop getting data.
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
             g_RawData = 0;
