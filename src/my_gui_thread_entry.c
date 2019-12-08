@@ -96,8 +96,10 @@ struct PadInfoStruct
 {
     enum PAD_TYPE m_PadType;
     enum PAD_DIRECTION m_PadDirection;
-    int m_PadMinimumCalibrationValue;
-    int m_PadMaximumCalibrationValue;
+    uint16_t m_PadMinimumCalibrationValue;
+    uint16_t m_PadMaximumCalibrationValue;
+    uint16_t m_Minimum_ADC_Threshold;
+    uint16_t m_Maximum_ADC_Threshold;
     int m_DiagnosticOff_ID;
     GX_PIXELMAP_BUTTON *m_DiagnosticOff_Widget;
     int m_DiagnosticDigital_ID;
@@ -146,7 +148,6 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 
 UINT DisplayMainScreenActiveFeatures ();
-UINT ShowHidePad (GX_EVENT *event_ptr);
 void AdjustActiveFeature (uint8_t newMode);
 void ShowPadTypes (void);
 void ShowActiveFeatures (void);
@@ -227,6 +228,8 @@ void my_gui_thread_entry(void)
     g_PadSettings[LEFT_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Question_Button;
     g_PadSettings[LEFT_PAD].m_PadMinimumCalibrationValue = 0;
     g_PadSettings[LEFT_PAD].m_PadMaximumCalibrationValue = 100;
+    g_PadSettings[LEFT_PAD].m_Minimum_ADC_Threshold = 50;
+    g_PadSettings[LEFT_PAD].m_Maximum_ADC_Threshold = 220;
     g_PadSettings[LEFT_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[LEFT_PAD];
     g_PadSettings[LEFT_PAD].m_DiagnosticOff_ID = LEFT_PAD_OFF_BTN_ID;
     g_PadSettings[LEFT_PAD].m_DiagnosticDigital_ID = LEFT_PAD_DIGITAL_BTN_ID;
@@ -251,6 +254,8 @@ void my_gui_thread_entry(void)
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Question_Button;
     g_PadSettings[RIGHT_PAD].m_PadMinimumCalibrationValue = 5;
     g_PadSettings[RIGHT_PAD].m_PadMaximumCalibrationValue = 95;
+    g_PadSettings[RIGHT_PAD].m_Minimum_ADC_Threshold = 25;
+    g_PadSettings[RIGHT_PAD].m_Maximum_ADC_Threshold = 220;
     g_PadSettings[RIGHT_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[RIGHT_PAD];
     g_PadSettings[RIGHT_PAD].m_DiagnosticOff_ID = RIGHT_PAD_OFF_BTN_ID;
     g_PadSettings[RIGHT_PAD].m_DiagnosticDigital_ID = RIGHT_PAD_DIGITAL_BTN_ID;
@@ -275,6 +280,8 @@ void my_gui_thread_entry(void)
     g_PadSettings[CENTER_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Question_Button;
     g_PadSettings[CENTER_PAD].m_PadMinimumCalibrationValue = 10;
     g_PadSettings[CENTER_PAD].m_PadMaximumCalibrationValue = 90;
+    g_PadSettings[CENTER_PAD].m_Minimum_ADC_Threshold = 20;
+    g_PadSettings[CENTER_PAD].m_Maximum_ADC_Threshold = 220;
     g_PadSettings[CENTER_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[CENTER_PAD];
     g_PadSettings[CENTER_PAD].m_DiagnosticOff_ID = CENTER_PAD_OFF_BTN_ID;
     g_PadSettings[CENTER_PAD].m_DiagnosticDigital_ID = CENTER_PAD_DIGITAL_BTN_ID;
@@ -846,59 +853,6 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     return GX_SUCCESS;
 }
 
-
-//*************************************************************************************
-// Function Name: ShowHidePad
-//
-// Description: This functions displays an green-illuminated pad simulating an active pad.
-//
-//*************************************************************************************
-
-UINT ShowHidePad (GX_EVENT *event_ptr)
-{
-    int pad;
-//  GX_WIDGET *myWidget;
-    GX_VALUE xPos, yPos;
-
-    // We can only look at the PEN UP and PEN DOWN events and it only provides
-    if (event_ptr->gx_event_target->gx_widget_first_child == NULL)
-        return GX_FAILURE;
-    // We are going to identify the "press" pad by its location.
-    xPos = event_ptr->gx_event_payload.gx_event_pointdata.gx_point_x;
-    yPos = event_ptr->gx_event_payload.gx_event_pointdata.gx_point_y;
-
-    // Now traverse the entire set of widgets for this window looking for the the "Pressed" icon.
-    for (pad = 0; pad <= 2; ++pad)
-    {
-        if ((yPos >= g_PadSettings[pad].m_DiagnosticWidigetLocation.gx_rectangle_top)
-            && (yPos <= g_PadSettings[pad].m_DiagnosticWidigetLocation.gx_rectangle_bottom)
-            && (xPos >= g_PadSettings[pad].m_DiagnosticWidigetLocation.gx_rectangle_left)
-            && (xPos <= g_PadSettings[pad].m_DiagnosticWidigetLocation.gx_rectangle_right))
-        // If we got the right pad, then do something.
-        if (g_PadSettings[pad].m_PadDirection != OFF_DIRECTION)
-        {
-            // Determine if we are going to show it or hide it.
-            if (event_ptr->gx_event_type == GX_EVENT_PEN_DOWN)
-            {
-                // Determine if we show the Proportional (Orange) or Digital (Green)
-                if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
-                    gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
-                else
-                    gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
-            }
-            else // PEN UP
-            {
-                // Now we are going to hide it.
-                if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
-                    gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
-                else
-                    gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_HiddenRectangle);
-            }
-        } // endif !OFF
-    } // end while
-    return (GX_SUCCESS);
-}
-
 //*************************************************************************************
 // Function Name: DiagnosticScreen_event_handler
 //
@@ -906,38 +860,36 @@ UINT ShowHidePad (GX_EVENT *event_ptr)
 //
 //*************************************************************************************
 
-bool nextTIme = true;
-
 VOID DiagnosticScreen_draw_event (GX_WINDOW *window)
 {
-    uint8_t i;
+    uint8_t pad;
 
-    if (nextTIme)
+    for (pad=0; pad<3; ++pad)
     {
-        for (i=0; i<3; ++i)
+        // Show the Raw and Demand values
+        // Unfortunately, I have to use a "Global" or "Const" string with the gx_prompt_text_set function instead
+        // of a local string variable in this function. It actually sends a pointer to the function and
+        // not a copy of the string. That means that the last information is applied to all
+        // gx_prompt_text_set calls.
+        sprintf (g_PadSettings[pad].m_DriveDemandString, "%3d", g_PadSettings[pad].m_Proportional_DriveDemand);
+        gx_prompt_text_set (g_PadSettings[pad].m_AdjustedValuePrompt, g_PadSettings[pad].m_DriveDemandString);
+        sprintf (g_PadSettings[pad].m_RawValueString, "%3d", g_PadSettings[pad].m_Proportional_RawValue);
+        gx_prompt_text_set (g_PadSettings[pad].m_RawValuePrompt, g_PadSettings[pad].m_RawValueString);
+        if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
         {
-            if (g_PadSettings[i].m_PadType == PROPORTIONAL_PADTYPE)
-            {
-                // Unfortunately, I have to use a "Global" or "Const" string with the gx_prompt_text_set function instead
-                // of a local string variable in this function. It actually sends a pointer to the function and
-                // not a copy of the string. That means that the last information is applied to all
-                // gx_prompt_text_set calls.
-                sprintf (g_PadSettings[i].m_RawValueString, "%3d", g_PadSettings[i].m_Proportional_RawValue);
-                gx_prompt_text_set (g_PadSettings[i].m_RawValuePrompt, g_PadSettings[i].m_RawValueString);
-                sprintf (g_PadSettings[i].m_DriveDemandString, "%3d", g_PadSettings[i].m_Proportional_DriveDemand);
-                gx_prompt_text_set (g_PadSettings[i].m_AdjustedValuePrompt, g_PadSettings[i].m_DriveDemandString);
-            }
+            // Annunciate an active pad.
+            if (g_PadSettings[pad].m_Proportional_RawValue > g_PadSettings[pad].m_Minimum_ADC_Threshold)
+                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
             else
-            {
-                gx_prompt_text_set (g_PadSettings[i].m_RawValuePrompt, "DIG");
-                gx_prompt_text_set (g_PadSettings[i].m_AdjustedValuePrompt, "");
-            }
+                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
         }
-        nextTIme = false;
-    }
-    else
-    {
-        nextTIme = true;
+        else // It's digital
+        {
+            if (g_PadSettings[pad].m_Proportional_RawValue > g_PadSettings[pad].m_Minimum_ADC_Threshold)
+                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
+            else
+                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_HiddenRectangle);
+        }
     }
 
     gx_window_draw(window);

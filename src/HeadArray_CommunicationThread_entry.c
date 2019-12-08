@@ -500,6 +500,8 @@ uint8_t GetPadData(void)
     HB_Response[2] = g_DriveDemand++;
     if (g_DriveDemand > 100)
         g_DriveDemand = 0;
+    if (g_RawData > 100)
+        g_RawData = 0;
 
     msgStatus = MSG_OK;     // Fool it for now.
 #endif
