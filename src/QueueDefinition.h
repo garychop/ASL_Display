@@ -81,7 +81,7 @@ extern void SendModeChangeCommand (uint8_t newMode);
 extern void SendCalibrationStartCommand (void);
 extern void SendCalibrationStopCommand (void);
 extern void SendGetVersionCommand (void);
-extern void SendGetDataCommand (/*PHYSICAL_PAD_ENUM padID, */ SEND_DATA_ENUM start);
+extern void SendGetDataCommand (SEND_DATA_ENUM start);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S

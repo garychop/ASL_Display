@@ -96,15 +96,12 @@ struct PadInfoStruct
 {
     enum PAD_TYPE m_PadType;
     enum PAD_DIRECTION m_PadDirection;
-    uint16_t m_PadMinimumCalibrationValue;
-    uint16_t m_PadMaximumCalibrationValue;
+    int16_t m_PadMinimumCalibrationValue;
+    int16_t m_PadMaximumCalibrationValue;
     uint16_t m_Minimum_ADC_Threshold;
     uint16_t m_Maximum_ADC_Threshold;
-    int m_DiagnosticOff_ID;
     GX_PIXELMAP_BUTTON *m_DiagnosticOff_Widget;
-    int m_DiagnosticDigital_ID;
     GX_PIXELMAP_BUTTON *m_DiagnosticDigital_Widget;
-    int m_DiagnosticProportional_ID;
     GX_PIXELMAP_BUTTON *m_DiagnosticProportional_Widget;
     GX_RECTANGLE m_DiagnosticWidigetLocation;
     GX_PIXELMAP_BUTTON *m_DirectionIcons[5];
@@ -231,9 +228,6 @@ void my_gui_thread_entry(void)
     g_PadSettings[LEFT_PAD].m_Minimum_ADC_Threshold = 50;
     g_PadSettings[LEFT_PAD].m_Maximum_ADC_Threshold = 220;
     g_PadSettings[LEFT_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[LEFT_PAD];
-    g_PadSettings[LEFT_PAD].m_DiagnosticOff_ID = LEFT_PAD_OFF_BTN_ID;
-    g_PadSettings[LEFT_PAD].m_DiagnosticDigital_ID = LEFT_PAD_DIGITAL_BTN_ID;
-    g_PadSettings[LEFT_PAD].m_DiagnosticProportional_ID = LEFT_PAD_PROP_BTN_ID;
     g_PadSettings[LEFT_PAD].m_DiagnosticOff_Widget = &DiagnosticScreen.DiagnosticScreen_LeftPadOff_Button;
     g_PadSettings[LEFT_PAD].m_DiagnosticProportional_Widget = &DiagnosticScreen.DiagnosticScreen_LeftPadProp_Button;
     g_PadSettings[LEFT_PAD].m_DiagnosticDigital_Widget = &DiagnosticScreen.DiagnosticScreen_LeftPadDigital_Button;
@@ -257,9 +251,6 @@ void my_gui_thread_entry(void)
     g_PadSettings[RIGHT_PAD].m_Minimum_ADC_Threshold = 25;
     g_PadSettings[RIGHT_PAD].m_Maximum_ADC_Threshold = 220;
     g_PadSettings[RIGHT_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[RIGHT_PAD];
-    g_PadSettings[RIGHT_PAD].m_DiagnosticOff_ID = RIGHT_PAD_OFF_BTN_ID;
-    g_PadSettings[RIGHT_PAD].m_DiagnosticDigital_ID = RIGHT_PAD_DIGITAL_BTN_ID;
-    g_PadSettings[RIGHT_PAD].m_DiagnosticProportional_ID = RIGHT_PAD_PROP_BTN_ID;
     g_PadSettings[RIGHT_PAD].m_DiagnosticOff_Widget = &DiagnosticScreen.DiagnosticScreen_RightPadOff_Button;
     g_PadSettings[RIGHT_PAD].m_DiagnosticProportional_Widget = &DiagnosticScreen.DiagnosticScreen_RightPadProp_Button;
     g_PadSettings[RIGHT_PAD].m_DiagnosticDigital_Widget = &DiagnosticScreen.DiagnosticScreen_RightPadDigital_Button;
@@ -283,9 +274,6 @@ void my_gui_thread_entry(void)
     g_PadSettings[CENTER_PAD].m_Minimum_ADC_Threshold = 20;
     g_PadSettings[CENTER_PAD].m_Maximum_ADC_Threshold = 220;
     g_PadSettings[CENTER_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[CENTER_PAD];
-    g_PadSettings[CENTER_PAD].m_DiagnosticOff_ID = CENTER_PAD_OFF_BTN_ID;
-    g_PadSettings[CENTER_PAD].m_DiagnosticDigital_ID = CENTER_PAD_DIGITAL_BTN_ID;
-    g_PadSettings[CENTER_PAD].m_DiagnosticProportional_ID = CENTER_PAD_PROP_BTN_ID;
     g_PadSettings[CENTER_PAD].m_DiagnosticOff_Widget = &DiagnosticScreen.DiagnosticScreen_CenterPadOff_Button;
     g_PadSettings[CENTER_PAD].m_DiagnosticProportional_Widget = &DiagnosticScreen.DiagnosticScreen_CenterPadProp_Button;
     g_PadSettings[CENTER_PAD].m_DiagnosticDigital_Widget = &DiagnosticScreen.DiagnosticScreen_CenterPadDigital_Button;
@@ -1633,13 +1621,13 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         if (g_CalibrationStepNumber == 0)       // We are doing minimum
         {
             if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue > 4)
-                g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue -= 5;
+                g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue -= 1;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
         }
         else if (g_CalibrationStepNumber == 1)  // Doing maximum
         {
             if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue > 4)
-                g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue -= 5;
+                g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue -= 1;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
         }
         gx_system_dirty_mark(g_CalibrationScreen);      // This forces the gauge to be updated and redrawn
@@ -1648,13 +1636,13 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         if (g_CalibrationStepNumber == 0)       // We are doing minimum
         {
             if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue < 100)
-                g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue += 5;
+                g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue += 1;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
         }
         else if (g_CalibrationStepNumber == 1)  // Doing maximum
         {
             if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue < 100)
-                g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue += 5;
+                g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue += 1;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
         }
         gx_system_dirty_mark(g_CalibrationScreen);      // This forces the gauge to be updated and redrawn
