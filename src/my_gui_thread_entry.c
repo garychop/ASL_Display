@@ -92,6 +92,23 @@ GX_RECTANGLE g_TimeoutValueLocation[] = {
     {140, 60, 140+88, 60+70},
     {0,0,0,0}};
 
+// This is used for setting the colors in the Calibration Pies, but can be used generically.
+typedef struct myColorS
+{
+    union
+    {
+        GX_COLOR gx_color;
+        struct
+        {
+            GX_COLOR blue : 5;
+            GX_COLOR green : 6;
+            GX_COLOR red : 5;
+            GX_COLOR spare : 16;
+        } rgb;
+    };
+} RGB16_Struct;
+
+RGB16_Struct g_Color;
 
 struct PadInfoStruct
 {
@@ -1518,23 +1535,6 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 //
 //*************************************************************************************
 
-typedef struct myColorS
-{
-    union
-    {
-        GX_COLOR gx_color;
-    } wholeColor;
-    struct
-    {
-        GX_COLOR spare : 16;
-        GX_COLOR red : 5;
-        GX_COLOR blue : 6;
-        GX_COLOR green : 5;
-    } rgb;
-} color16_Struct;
-
-color16_Struct g_Color;
-
 VOID CalibrationScreen_draw (GX_WINDOW *window)
 {
     GX_BRUSH *brush;
@@ -1550,14 +1550,15 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
 
     // Draw the background
     brush->gx_brush_line_color = 0xffffff;  // GX_COLOR_LIGHTGRAY;
-    brush->gx_brush_width = 3;
-    g_Color.rgb.red = 0x5;
-    g_Color.rgb.blue = 0;
-    g_Color.rgb.green = 0;
-    brush->gx_brush_fill_color = g_Color.wholeColor.gx_color;
+    brush->gx_brush_width = 1;
+    g_Color.rgb.red = 0x10;      // Trying to make gray
+    g_Color.rgb.blue = 0x10;
+    g_Color.rgb.green = 0x20;
+    brush->gx_brush_fill_color = g_Color.gx_color;
             // BLUE 0xc001010ff; // 0x808080;  // GX_COLOR_DARKGRAY;
 
-    gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 55, -5, 185);
+//    gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 55, -5, 185);
+    gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 55, 0, 180);
 
     padValue = g_PadSettings[g_CalibrationPadNumber].m_Proportional_RawValue;    // Get the Pad value.
 
@@ -1582,7 +1583,10 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
         raw100 *= 18;                   // This converts the percentage to degrees which is a factor of 1.8
         pieSide = raw100 / 1000;        // This is includes the decimal shift.
         brush->gx_brush_width = 2;
-        brush->gx_brush_fill_color = GX_COLOR_GREEN;
+        g_Color.rgb.red = 0;
+        g_Color.rgb.blue = 0;
+        g_Color.rgb.green = 0x20;
+        brush->gx_brush_fill_color = g_Color.gx_color; //  GX_COLOR_GREEN;
         gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 54, pieSide, 180);
     }
 
@@ -1600,8 +1604,6 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
     if (pieSide > 175)              // Anything less than 175-180 is too small of a pie to see.
         pieSide = 175;
     brush->gx_brush_fill_color = GX_COLOR_YELLOW;   // Draw in yellow.
-    //brush->gx_brush_line_color = GX_COLOR_BLACK;
-    //brush->gx_brush_style = GX_BRUSH_OUTLINE;
     brush->gx_brush_width = 1;
     gx_context_brush_set(brush);        // Not really required. It seems to change the color to yellow without this call.
     gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 40, pieSide, 180);
@@ -1613,7 +1615,11 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
     pieSide = raw100 / 1000;        // This is includes the decimal shift.
     if (pieSide < 5)                        // Anything less than 0-5 is too small of a sliver to see.
         pieSide = 5;
-    brush->gx_brush_fill_color = 0xff6a00;  // Orange
+    g_Color.rgb.red = 0b11111;
+    g_Color.rgb.blue = 0;
+    g_Color.rgb.green = 0b01111;
+    brush->gx_brush_fill_color = g_Color.gx_color; //  GX_COLOR_GREEN;
+    brush->gx_brush_width = 1;
     gx_context_brush_set(brush);        // Not really required. It seems to change the color to yellow without this call.
     gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 40, 0, pieSide);
 

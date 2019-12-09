@@ -647,7 +647,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 g_GetAllPadData = false;
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-            g_RawData = 30;
+            g_RawData = 400;
             g_DriveDemand = 0;
 #endif
             break;
