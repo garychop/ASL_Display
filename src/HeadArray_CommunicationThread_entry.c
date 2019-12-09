@@ -51,6 +51,7 @@ uint8_t GetPadData(void);
 //******************************************************************************
 
 uint8_t g_HeartBeatCounter = 0;
+uint8_t g_GetAllPadData = false;
 uint8_t g_GetDataActive = 0;
 PHYSICAL_PAD_ENUM g_ActivePadID = INVALID_PAD;
 
@@ -496,11 +497,12 @@ uint8_t GetPadData(void)
     }
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-    HB_Response[1] = g_RawData++;
+    HB_Response[1] = g_RawData;
+    g_RawData += 5;
     HB_Response[2] = g_DriveDemand++;
     if (g_DriveDemand > 100)
         g_DriveDemand = 0;
-    if (g_RawData > 100)
+    if (g_RawData > 220)
         g_RawData = 0;
 
     msgStatus = MSG_OK;     // Fool it for now.
@@ -514,10 +516,13 @@ uint8_t GetPadData(void)
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
 
-    // Do the next pad.
-    ++g_ActivePadID;
-    if (g_ActivePadID == INVALID_PAD)
-        g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;
+    // Determine next pad data to get.
+    if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad.
+    {
+        ++g_ActivePadID;
+        if (g_ActivePadID == INVALID_PAD)
+            g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;  // Roll over beethoven.
+    }
 
     return msgStatus;
 }
@@ -629,10 +634,18 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             break;
 
         case HHP_HA_PAD_DATA_GET:
-            g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;          // Start with the Left Pad
+            g_ActivePadID = GUI_Msg.GetDataMsg.m_PadID;          // Start with the Left Pad
             g_GetDataActive = GUI_Msg.GetDataMsg.m_Start;   // non0 = Start getting data, 0 = Stop getting data.
+            if (g_ActivePadID == INVALID_PAD)
+            {
+                g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;
+                g_GetAllPadData = true;
+            }
+            else
+                g_GetAllPadData = false;
+
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-            g_RawData = 0;
+            g_RawData = 30;
             g_DriveDemand = 0;
 #endif
             break;

@@ -3999,9 +3999,9 @@
 <type>prompt</type>
 <app_name>LeftPad_Adjusted_Prompt</app_name>
 <size>
-<left>96</left>
+<left>97</left>
 <top>72</top>
-<right>125</right>
+<right>126</right>
 <bottom>91</bottom>
 </size>
 <style>1342193664</style>
@@ -4318,7 +4318,7 @@
 <id_name>CENTER_PAD_ON_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<normal_pixelmap>DIAGCENTERPADACTIVE</normal_pixelmap>
+<normal_pixelmap>PROPCENTERPADACTIVE</normal_pixelmap>
 </widget>
 <widget>
 <type>prompt</type>
@@ -4362,7 +4362,7 @@
 <id_name>LEFT_PAD_ON_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<normal_pixelmap>DIAGLEFTRIGHTPADACTIVE</normal_pixelmap>
+<normal_pixelmap>PROPLEFTRIGHTPADACTIVE</normal_pixelmap>
 </widget>
 <widget>
 <type>text_button</type>
@@ -4406,7 +4406,7 @@
 <id_name>RIGHT_PAD_ON_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<normal_pixelmap>DIAGLEFTRIGHTPADACTIVE</normal_pixelmap>
+<normal_pixelmap>PROPLEFTRIGHTPADACTIVE</normal_pixelmap>
 </widget>
 <widget>
 <type>prompt</type>

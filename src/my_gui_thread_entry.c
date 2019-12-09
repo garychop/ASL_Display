@@ -3,6 +3,7 @@
 #include "lcd.h"
 #include <my_gui_thread_entry.h>
 #include <stdio.h>
+#include <math.h>
 #include "gx_api.h"
 #include "ASL_HHP_Display_GUIX_resources.h"
 #include "ASL_HHP_Display_GUIX_specifications.h"
@@ -118,8 +119,6 @@ struct PadInfoStruct
 int g_SettingsChanged;
 int g_CalibrationPadNumber;
 int g_CalibrationStepNumber;
-int g_PadValue;
-int g_DeltaValue;
 int g_ClicksActive = FALSE;
 FEATURE_ID_ENUM g_ActiveFeature = POWER_ONOFF_ID;     // this indicates the active feature.
 
@@ -901,13 +900,13 @@ UINT DiagnosticScreen_event_handler(GX_WINDOW *window, GX_EVENT *event_ptr)
             else
                 gx_widget_resize ((GX_WIDGET*)g_PadSettings[pads].m_DiagnosticOff_Widget, &g_HiddenRectangle);
         }
-        SendGetDataCommand (START_SENDING_DATA);
+        SendGetDataCommand (START_SENDING_DATA, INVALID_PAD);
         break;
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
         gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
-        SendGetDataCommand (STOP_SENDING_DATA);
+        SendGetDataCommand (STOP_SENDING_DATA, INVALID_PAD);
         break;
 
 //    case GX_EVENT_PEN_DOWN:
@@ -1502,11 +1501,31 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 //
 //*************************************************************************************
 
+typedef struct myColorS
+{
+    union
+    {
+        GX_COLOR gx_color;
+    } wholeColor;
+    struct
+    {
+        GX_COLOR spare : 16;
+        GX_COLOR red : 5;
+        GX_COLOR blue : 6;
+        GX_COLOR green : 5;
+    } rgb;
+} color16_Struct;
+
+color16_Struct g_Color;
+
 VOID CalibrationScreen_draw (GX_WINDOW *window)
 {
     GX_BRUSH *brush;
     GX_BRUSH originalBrush;
     INT raw100, pieSide;
+    uint16_t padValue;
+    uint16_t k;
+    float f1, f2, f3, f4;
 
     gx_window_draw(window);
 
@@ -1514,15 +1533,35 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
     originalBrush = *brush;
 
     // Draw the background
-    brush->gx_brush_line_color = GX_COLOR_LIGHTGRAY;
+    brush->gx_brush_line_color = 0xffffff;  // GX_COLOR_LIGHTGRAY;
     brush->gx_brush_width = 3;
-    brush->gx_brush_fill_color = GX_COLOR_DARKGRAY;
+    g_Color.rgb.red = 0x5;
+    g_Color.rgb.blue = 0;
+    g_Color.rgb.green = 0;
+    brush->gx_brush_fill_color = g_Color.wholeColor.gx_color;
+            // BLUE 0xc001010ff; // 0x808080;  // GX_COLOR_DARKGRAY;
+
     gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 55, -5, 185);
 
+    padValue = g_PadSettings[g_CalibrationPadNumber].m_Proportional_RawValue;    // Get the Pad value.
+
     // Draw the Pad pie
-    if (g_PadValue > 0)             // Anything less than 175-180 is too small of a pie to see; if it's 180 it draws a full circle.
+    if (g_PadSettings[g_CalibrationPadNumber].m_Proportional_RawValue > 0)             // Anything less than 175-180 is too small of a pie to see; if it's 180 it draws a full circle.
     {
-        raw100 = 100 - g_PadValue;
+        // Use the pad max ADC and adjust to 100%.
+        f1 = (float) g_PadSettings[g_CalibrationPadNumber].m_Maximum_ADC_Threshold;
+        f2 = 100.00f / f1;      // Create percentage of ADC threshold.
+        f3 = (float) g_PadSettings[g_CalibrationPadNumber].m_Proportional_RawValue;
+        f4 = f3 * f2;
+        padValue = (uint16_t) f4;
+
+        // John Mattes sanity check.
+        if (padValue < 1)
+            padValue = 1;
+        else if (padValue > 100)
+            padValue = 100;
+
+        raw100 = 100 - padValue;
         raw100 *= 100;                  // Integer math, yuch!
         raw100 *= 18;                   // This converts the percentage to degrees which is a factor of 1.8
         pieSide = raw100 / 1000;        // This is includes the decimal shift.
@@ -1600,6 +1639,10 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             break;
         } // end switch (g_CalibrationPadNumber)
 
+        SendCalibrationStartCommand();      // The Head Array to enter the "Calibrate state"; this allows the pad to be activated without driving the wheelchair.
+
+        SendGetDataCommand (START_SENDING_DATA, g_CalibrationPadNumber);    // Start asking the Head Array for data.
+
         g_CalibrationScreen = window;       // Store for use by screen update process.
         break;
 
@@ -1615,6 +1658,10 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         {
             gx_widget_attach (p_window_root, (GX_WIDGET*) &SetPadTypeScreen);
             gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen);
+
+            SendGetDataCommand (STOP_SENDING_DATA, g_CalibrationPadNumber);     // We will stop asking for data from the head array.
+
+            SendCalibrationStopCommand();           // This tells the Head Array to EXIT Calibration Mode.
         }
         break;
     case GX_SIGNAL(DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):

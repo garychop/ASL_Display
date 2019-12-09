@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  6.12.2019   Time (hh:mm): 19:08                        */
+/*  Date (dd.mm.yyyy):  9.12.2019   Time (hh:mm): 08:48                        */
 /*******************************************************************************/
 
 
@@ -321,7 +321,7 @@ GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_LeftPad_Adjusted_Prompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {96, 72, 125, 91},                       /* widget size                    */
+    {97, 72, 126, 91},                       /* widget size                    */
     &DiagnosticScreen_RightPad_Adjusted_Prompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_LeftPad_Adjusted_Prompt), /* control block */
@@ -949,7 +949,7 @@ GX_WINDOW_PROPERTIES PadCalibrationScreen_properties =
 };
 GX_PIXELMAP_BUTTON_PROPERTIES PadCalibrationScreen_CenterPadON_Button_properties =
 {
-    GX_PIXELMAP_ID_DIAGCENTERPADACTIVE,      /* normal pixelmap id             */
+    GX_PIXELMAP_ID_PROPCENTERPADACTIVE,      /* normal pixelmap id             */
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };
@@ -962,7 +962,7 @@ GX_PROMPT_PROPERTIES PadCalibrationScreen_MinimumInstructionsText_properties =
 };
 GX_PIXELMAP_BUTTON_PROPERTIES PadCalibrationScreen_LeftPadON_Button_properties =
 {
-    GX_PIXELMAP_ID_DIAGLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
+    GX_PIXELMAP_ID_PROPLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };
@@ -975,7 +975,7 @@ GX_TEXT_BUTTON_PROPERTIES PadCalibrationScreen_OK_Button_properties =
 };
 GX_PIXELMAP_BUTTON_PROPERTIES PadCalibrationScreen_RightPadON_Button_properties =
 {
-    GX_PIXELMAP_ID_DIAGLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
+    GX_PIXELMAP_ID_PROPLEFTRIGHTPADACTIVE,   /* normal pixelmap id             */
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };

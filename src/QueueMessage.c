@@ -169,7 +169,7 @@ FEATURE_ID_ENUM TranslateFeature_CharToEnum (char feature)
 }
 
 //****************************************************************************
-// Funtion: SendGetVersionCommand
+// Function: SendGetVersionCommand
 // Description: This creates a queue msg to ask for the Head Array Version.
 //
 //****************************************************************************
@@ -196,17 +196,17 @@ void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t build
 }
 
 //****************************************************************************
-// Funtion: SendGetDataCommand
+// Function: SendGetDataCommand
 // Description: This function creates a msg to tell the COMM task to
-//      Start sending "Data Get" msgs to the Head Array and don't stop
-//      until this sends a stop message.
+//      start or stop sending "Get Pad Data" msgs to the Head Array.
 //****************************************************************************
-void SendGetDataCommand (uint8_t start)
+void SendGetDataCommand (uint8_t start, PHYSICAL_PAD_ENUM pad)
 {
     GUI_MSG_STRUCT msg;
 
     msg.m_MsgType = HHP_HA_PAD_DATA_GET;
     msg.GetDataMsg.m_Start = start;   // non0 = Start getting data, 0 = Stop getting data.
+    msg.GetDataMsg.m_PadID = pad;             // specific pad or INVALID_PAD for "all".
 
     tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
