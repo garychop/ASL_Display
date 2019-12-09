@@ -73,6 +73,12 @@ typedef struct GUI_MSG_S
         } GetCalibrationData;
         struct
         {
+            PHYSICAL_PAD_ENUM m_PadID;
+            uint16_t m_MinThreshold;
+            uint16_t m_MaxThreshold;
+        } SendCalibrationData;
+        struct
+        {
             uint32_t m_MsgArray[15];
         } WholeMsg;
     };
@@ -87,6 +93,7 @@ extern void SendCalibrationStopCommand (void);
 extern void SendGetVersionCommand (void);
 extern void SendGetDataCommand (SEND_DATA_ENUM start, PHYSICAL_PAD_ENUM pad);   // or INVALID_PAD to get all data, for Diagnostic Screen.
 extern void SendGetCalDataCommnd (PHYSICAL_PAD_ENUM pad);
+extern void SendCalibrationData (PHYSICAL_PAD_ENUM pad, uint16_t min, uint16_t max);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S

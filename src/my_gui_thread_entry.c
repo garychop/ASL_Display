@@ -1627,19 +1627,6 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
 //
 //*************************************************************************************
 
-uint16_t Convert_ADC_to_Perecentage (uint16_t adc, uint16_t maxADC, uint16_t minADC)
-{
-    // Convert the number 0-100 into Min-Max ADC values.
-    //
-    // Calculate range of ADC's.                f1 = Max - Min
-    // Calculate weight of each percentage      f2 = 100 / f1;
-    // Calculate new value                      f3 = f2 * value;
-    //
-//    f1 = g_PadSettings[g_CalibrationPadNumber].m_Maximum_ADC_Threshold - g_PadSettings[g_CalibrationPadNumber].m_Minimum_ADC_Threshold;
-
-    return (0);
-}
-
 UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
@@ -1699,7 +1686,6 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue > 4)
                 --g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
-//            f1 = Convert_ADC_to_Perecentage (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue, g_PadSettings[g_CalibrationPadNumber].m_Maximum_ADC_Threshold - g_PadSettings[g_CalibrationPadNumber].m_Minimum_ADC_Threshold);
         }
         else if (g_CalibrationStepNumber == 1)  // Doing maximum
         {

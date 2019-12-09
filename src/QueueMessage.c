@@ -325,6 +325,17 @@ void SendCalDataResponse (PHYSICAL_PAD_ENUM physicalPad, uint16_t minADC, uint16
     HHP_Msg.CalibrationDataResponse.m_MaxThreshold = maxThreshold;
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
-
-
 }
+
+void SendCalibrationData (PHYSICAL_PAD_ENUM pad, uint16_t min, uint16_t max)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_CALIBRATE_RANGE_SET;
+    q_Msg.SendCalibrationData.m_PadID = pad;
+    q_Msg.SendCalibrationData.m_MinThreshold = min;
+    q_Msg.SendCalibrationData.m_MaxThreshold = max;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
