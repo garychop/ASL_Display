@@ -62,7 +62,7 @@ PAD_DIRECTION_ENUM myPadDirection[] = {LEFT_DIRECTION, RIGHT_DIRECTION, FORWARD_
 FEATURE_ID_ENUM g_myMode = POWER_ONOFF_ID;
 uint8_t g_HeadArray_Status;
 PAD_TYPE_ENUM g_MyPadTypes[] = {PROPORTIONAL_PADTYPE, PROPORTIONAL_PADTYPE, PROPORTIONAL_PADTYPE};
-uint8_t g_RawData, g_DriveDemand;
+uint16_t g_RawData, g_DriveDemand;
 #endif
 
 //******************************************************************************
@@ -497,12 +497,14 @@ uint8_t GetPadData(void)
     }
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-    HB_Response[1] = g_RawData;
+    HB_Response[1] = (uint8_t) ((g_RawData >> 8) & 0xff);
+    HB_Response[2] = (uint8_t) (g_RawData & 0xff);
+    HB_Response[3] = (uint8_t) ((g_DriveDemand >> 8) & 0xff);
+    HB_Response[4] = (uint8_t) (g_DriveDemand & 0xff);
     g_RawData += 5;
-    HB_Response[2] = g_DriveDemand++;
     if (g_DriveDemand > 100)
         g_DriveDemand = 0;
-    if (g_RawData > 220)
+    if (g_RawData > 980)
         g_RawData = 0;
 
     msgStatus = MSG_OK;     // Fool it for now.
@@ -511,8 +513,8 @@ uint8_t GetPadData(void)
     // Prepare and send the Pad Data message to the GUI via the queue.
     HeadArrayMsg.m_MsgType = HHP_HA_PAD_DATA_GET;
     HeadArrayMsg.GetDataMsg.m_PadID = g_ActivePadID;
-    HeadArrayMsg.GetDataMsg.m_RawData = HB_Response[1];
-    HeadArrayMsg.GetDataMsg.m_DriveDemand = HB_Response[2];
+    HeadArrayMsg.GetDataMsg.m_RawData = (HB_Response[1] << 8) + HB_Response[2];
+    HeadArrayMsg.GetDataMsg.m_DriveDemand = (HB_Response[3] << 8) + HB_Response[4];
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
 
@@ -648,6 +650,42 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             g_RawData = 30;
             g_DriveDemand = 0;
 #endif
+            break;
+
+        case HHP_HA_CALIBRATE_RANGE_GET:
+            HA_Msg[0] = 0x04;     // msg length
+            HA_Msg[1] = HHP_HA_CALIBRATE_RANGE_GET;
+            HA_Msg[2] = GUI_Msg.GetCalibrationData.m_PadID;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+            }
+
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+            if (msgStatus != MSG_OK)
+            {
+                HB_Response[2] = (2 >> 8) & 0xff;       // Min ADC
+                HB_Response[3] = (2 & 0xff);
+                HB_Response[4] = (1000 >> 8) & 0xff;    // Max ADC
+                HB_Response[5] = (1000 & 0xff);
+                HB_Response[6] = (5 >> 8) & 0xff;      // Min Threshold
+                HB_Response[7] = (5 & 0xff);
+                HB_Response[8] = (95 >> 8) & 0xff;     // Max Threshold
+                HB_Response[9] = (95 & 0xff);
+                msgStatus = MSG_OK;
+            }
+#endif
+            if (msgStatus == MSG_OK)
+            {
+                SendCalDataResponse (GUI_Msg.GetCalibrationData.m_PadID,
+                        (HB_Response[2]<<8) + HB_Response[3],   // Min ADC
+                        (HB_Response[4]<<8) + HB_Response[5],   // Max ADC
+                        (HB_Response[6]<<8) + HB_Response[7],   // Min Threshold
+                        (HB_Response[8]<<8) + HB_Response[9]);   // Max Threshold
+            }
             break;
 
         default:

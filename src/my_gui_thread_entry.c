@@ -245,8 +245,8 @@ void my_gui_thread_entry(void)
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_LeftArrow_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_ForwardArrow_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Question_Button;
-    g_PadSettings[RIGHT_PAD].m_PadMinimumCalibrationValue = 5;
-    g_PadSettings[RIGHT_PAD].m_PadMaximumCalibrationValue = 95;
+    g_PadSettings[RIGHT_PAD].m_PadMinimumCalibrationValue = 0;
+    g_PadSettings[RIGHT_PAD].m_PadMaximumCalibrationValue = 100;
     g_PadSettings[RIGHT_PAD].m_Minimum_ADC_Threshold = 25;
     g_PadSettings[RIGHT_PAD].m_Maximum_ADC_Threshold = 220;
     g_PadSettings[RIGHT_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[RIGHT_PAD];
@@ -268,8 +268,8 @@ void my_gui_thread_entry(void)
     g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_LeftArrow_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_ForwardArrow_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Question_Button;
-    g_PadSettings[CENTER_PAD].m_PadMinimumCalibrationValue = 10;
-    g_PadSettings[CENTER_PAD].m_PadMaximumCalibrationValue = 90;
+    g_PadSettings[CENTER_PAD].m_PadMinimumCalibrationValue = 0;
+    g_PadSettings[CENTER_PAD].m_PadMaximumCalibrationValue = 100;
     g_PadSettings[CENTER_PAD].m_Minimum_ADC_Threshold = 20;
     g_PadSettings[CENTER_PAD].m_Maximum_ADC_Threshold = 220;
     g_PadSettings[CENTER_PAD].m_DiagnosticWidigetLocation = g_DiagnosticWidgetLocations[CENTER_PAD];
@@ -526,6 +526,17 @@ void ProcessCommunicationMsgs ()
             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
             gxe.gx_event_display_handle = 0;
             gx_system_event_send(&gxe);
+            break;
+
+        case HHP_HA_CALIBRATE_RANGE_GET:
+            myPad = HeadArrayMsg.GetDataMsg.m_PadID;        // Get Physical Pad ID
+            if (myPad < INVALID_PAD)
+            {
+                g_PadSettings[myPad].m_Minimum_ADC_Threshold = (int16_t) HeadArrayMsg.CalibrationDataResponse.m_MinADC;
+                g_PadSettings[myPad].m_Maximum_ADC_Threshold = (int16_t) HeadArrayMsg.CalibrationDataResponse.m_MaxADC;
+                g_PadSettings[myPad].m_PadMinimumCalibrationValue = HeadArrayMsg.CalibrationDataResponse.m_MinThreshold;
+                g_PadSettings[myPad].m_PadMaximumCalibrationValue = HeadArrayMsg.CalibrationDataResponse.m_MaxThreshold;
+            }
             break;
 
         default:
@@ -832,6 +843,12 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_attach (p_window_root, (GX_WIDGET*) g_GoBackScreen);
         gx_widget_show ((GX_WIDGET*) g_GoBackScreen);
+        break;
+
+    case GX_EVENT_SHOW:
+        SendGetCalDataCommnd (LEFT_PAD);
+        SendGetCalDataCommnd (RIGHT_PAD);
+        SendGetCalDataCommnd (CENTER_PAD);
         break;
     }
 
@@ -1524,7 +1541,6 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
     GX_BRUSH originalBrush;
     INT raw100, pieSide;
     uint16_t padValue;
-    uint16_t k;
     float f1, f2, f3, f4;
 
     gx_window_draw(window);
@@ -1611,6 +1627,19 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
 //
 //*************************************************************************************
 
+uint16_t Convert_ADC_to_Perecentage (uint16_t adc, uint16_t maxADC, uint16_t minADC)
+{
+    // Convert the number 0-100 into Min-Max ADC values.
+    //
+    // Calculate range of ADC's.                f1 = Max - Min
+    // Calculate weight of each percentage      f2 = 100 / f1;
+    // Calculate new value                      f3 = f2 * value;
+    //
+//    f1 = g_PadSettings[g_CalibrationPadNumber].m_Maximum_ADC_Threshold - g_PadSettings[g_CalibrationPadNumber].m_Minimum_ADC_Threshold;
+
+    return (0);
+}
+
 UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
@@ -1668,13 +1697,14 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         if (g_CalibrationStepNumber == 0)       // We are doing minimum
         {
             if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue > 4)
-                g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue -= 1;
+                --g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
+//            f1 = Convert_ADC_to_Perecentage (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue, g_PadSettings[g_CalibrationPadNumber].m_Maximum_ADC_Threshold - g_PadSettings[g_CalibrationPadNumber].m_Minimum_ADC_Threshold);
         }
         else if (g_CalibrationStepNumber == 1)  // Doing maximum
         {
             if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue > 4)
-                g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue -= 1;
+                --g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
         }
         gx_system_dirty_mark(g_CalibrationScreen);      // This forces the gauge to be updated and redrawn
@@ -1683,13 +1713,13 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         if (g_CalibrationStepNumber == 0)       // We are doing minimum
         {
             if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue < 100)
-                g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue += 1;
+                ++g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
         }
         else if (g_CalibrationStepNumber == 1)  // Doing maximum
         {
             if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue < 100)
-                g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue += 1;
+                ++g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
         }
         gx_system_dirty_mark(g_CalibrationScreen);      // This forces the gauge to be updated and redrawn

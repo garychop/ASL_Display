@@ -296,5 +296,35 @@ void SendCalibrationStopCommand (void)
     q_Msg.m_MsgType = HHP_HA_CALIBRATE_STOP_CMD;
 
     tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+//****************************************************************************
+// Function: Calibrate Functions.
+//****************************************************************************
+
+void SendGetCalDataCommnd (PHYSICAL_PAD_ENUM pad)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_CALIBRATE_RANGE_GET;
+    q_Msg.GetCalibrationData.m_PadID = pad;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+void SendCalDataResponse (PHYSICAL_PAD_ENUM physicalPad, uint16_t minADC, uint16_t maxADC, uint16_t minThreshold, uint16_t maxThreshold)
+{
+    HHP_HA_MSG_STRUCT HHP_Msg;
+
+    HHP_Msg.m_MsgType = HHP_HA_CALIBRATE_RANGE_GET;
+
+    HHP_Msg.CalibrationDataResponse.m_PadID = physicalPad;
+    HHP_Msg.CalibrationDataResponse.m_MinADC = minADC;
+    HHP_Msg.CalibrationDataResponse.m_MaxADC = maxADC;
+    HHP_Msg.CalibrationDataResponse.m_MinThreshold = minThreshold;
+    HHP_Msg.CalibrationDataResponse.m_MaxThreshold = maxThreshold;
+
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+
 
 }
