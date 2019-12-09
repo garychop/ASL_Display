@@ -485,7 +485,7 @@ uint8_t GetPadData(void)
 
     HB_Message[0] = 0x04;     // msg length
     HB_Message[1] = HHP_HA_PAD_DATA_GET;
-    HB_Message[2] = g_ActivePadID;
+    HB_Message[2] = (uint8_t) TranslatePad_EnumToChar (g_ActivePadID);
     cs = CalculateChecksum(HB_Message, (uint8_t) (HB_Message[0]-1));
     HB_Message[3] = cs;
     msgStatus = Send_I2C_Package(HB_Message, HB_Message[0]);
