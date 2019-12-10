@@ -5021,6 +5021,7 @@
 <selected_fill_color>SCROLL_BUTTON</selected_fill_color>
 <disabled_fill_color>SCROLL_BUTTON</disabled_fill_color>
 <event_handler>FeatureSettingsScreen_event_process</event_handler>
+<draw_func>FeatureSettingsScreen_draw_function</draw_func>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
 <wallpaper>NEWBACKGROUND_FLATTEN_1</wallpaper>

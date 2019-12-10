@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 10.12.2019   Time (hh:mm): 04:47                        */
+/*  Date (dd.mm.yyyy): 10.12.2019   Time (hh:mm): 05:36                        */
 /*******************************************************************************/
 
 
@@ -2455,7 +2455,7 @@ GX_CONST GX_STUDIO_WIDGET FeatureSettingsScreen_define =
     GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
     GX_COLOR_ID_SCROLL_BUTTON,               /* selected color id              */
     gx_studio_window_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
+    (VOID (*)(GX_WIDGET *)) FeatureSettingsScreen_draw_function, /* drawing function override */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) FeatureSettingsScreen_event_process, /* event function override */
     {0, 0, 319, 239},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */

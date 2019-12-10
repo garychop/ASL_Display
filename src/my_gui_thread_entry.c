@@ -11,7 +11,7 @@
 #include "HeadArray_CommunicationThread.h"
 
 //-------------------------------------------------------------------------
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ATT: 0.0.2";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ATT: 0.1.3";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -77,17 +77,23 @@ GX_WINDOW *g_CalibrationScreen = GX_NULL;
 GX_WIDGET *g_ActiveScreen = GX_NULL;
 
 // Timeout information
-int g_TimeoutValue;
-GX_PIXELMAP_BUTTON *g_TimeoutIcons[] = {
-    &UserSettingsScreen.UserSettingsScreen_Timer_Off_Button,
-    &UserSettingsScreen.UserSettingsScreen_Timer_10_Button,
-    &UserSettingsScreen.UserSettingsScreen_Timer_15_Button,
-    &UserSettingsScreen.UserSettingsScreen_Timer_20_Button,
-    &UserSettingsScreen.UserSettingsScreen_Timer_25_Button,
-    &UserSettingsScreen.UserSettingsScreen_Timer_30_Button,
-    &UserSettingsScreen.UserSettingsScreen_Timer_40_Button,
-    &UserSettingsScreen.UserSettingsScreen_Timer_50_Button,
-    GX_NULL};
+uint8_t g_TimeoutValue;
+typedef struct TIMEOUT_STRUCT
+{
+    GX_PIXELMAP_BUTTON *m_TimeoutIcon;
+    uint8_t m_TimeoutValue;
+} TimeoutInfo_S;
+
+TimeoutInfo_S g_TimeoutInfo[] = {
+    {&UserSettingsScreen.UserSettingsScreen_Timer_Off_Button, 0},
+    {&UserSettingsScreen.UserSettingsScreen_Timer_10_Button, 10},
+    {&UserSettingsScreen.UserSettingsScreen_Timer_15_Button, 15},
+    {&UserSettingsScreen.UserSettingsScreen_Timer_20_Button, 20},
+    {&UserSettingsScreen.UserSettingsScreen_Timer_25_Button, 25},
+    {&UserSettingsScreen.UserSettingsScreen_Timer_30_Button, 30},
+    {&UserSettingsScreen.UserSettingsScreen_Timer_40_Button, 40},
+    {&UserSettingsScreen.UserSettingsScreen_Timer_50_Button, 50},
+    {GX_NULL, 0} };
 GX_RECTANGLE g_TimeoutValueLocation[] = {
     {140, 60, 140+88, 60+70},
     {0,0,0,0}};
@@ -156,12 +162,13 @@ static void reset_check(void);
 UINT SettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
+int LocateNextTimeoutIndex (void);
 UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 
 UINT DisplayMainScreenActiveFeatures ();
-void AdjustActiveFeature (uint8_t newMode);
+void AdjustActiveFeature (FEATURE_ID_ENUM newMode);
 void ShowPadTypes (void);
 void ShowActiveFeatures (void);
 void ShowUserSettingsItems (void);
@@ -450,7 +457,7 @@ void ProcessCommunicationMsgs ()
                         // This triggers redrawing the main screen if the mode changes.
                         if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
                         {
-                            AdjustActiveFeature (HeadArrayMsg.HeartBeatMsg.m_ActiveMode);   // This function also store "g_ActiveFeature" if appropriate.
+                            AdjustActiveFeature ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
                             gxe.gx_event_type = GX_EVENT_REDRAW;
                             gxe.gx_event_sender = GX_ID_NONE;
                             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
@@ -501,6 +508,7 @@ void ProcessCommunicationMsgs ()
     //            }
 
             break;
+
         case HHP_HA_PAD_ASSIGMENT_SET:  // Yes, the COMM task is responding with a "set" command.
             myPad = HeadArrayMsg.PadAssignmentResponseMsg.m_PhysicalPadNumber;
             if (myPad != INVALID_PAD)
@@ -550,11 +558,26 @@ void ProcessCommunicationMsgs ()
             myPad = HeadArrayMsg.GetDataMsg.m_PadID;        // Get Physical Pad ID
             if (myPad < INVALID_PAD)
             {
-                g_PadSettings[myPad].m_Minimum_ADC_Threshold = (int16_t) HeadArrayMsg.CalibrationDataResponse.m_MinADC;
-                g_PadSettings[myPad].m_Maximum_ADC_Threshold = (int16_t) HeadArrayMsg.CalibrationDataResponse.m_MaxADC;
-                g_PadSettings[myPad].m_PadMinimumCalibrationValue = HeadArrayMsg.CalibrationDataResponse.m_MinThreshold;
-                g_PadSettings[myPad].m_PadMaximumCalibrationValue = HeadArrayMsg.CalibrationDataResponse.m_MaxThreshold;
+                g_PadSettings[myPad].m_Minimum_ADC_Threshold = HeadArrayMsg.CalibrationDataResponse.m_MinADC;
+                g_PadSettings[myPad].m_Maximum_ADC_Threshold = HeadArrayMsg.CalibrationDataResponse.m_MaxADC;
+                g_PadSettings[myPad].m_PadMinimumCalibrationValue = (int16_t) (HeadArrayMsg.CalibrationDataResponse.m_MinThreshold);
+                g_PadSettings[myPad].m_PadMaximumCalibrationValue = (int16_t) (HeadArrayMsg.CalibrationDataResponse.m_MaxThreshold);
             }
+            break;
+
+        case HHP_HA_FEATURE_GET:
+            g_TimeoutValue = HeadArrayMsg.GetFeatureResponse.m_Timeout;
+            g_ScreenPrompts[0].m_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x01 ? true : false); // Power On/Off
+            g_ScreenPrompts[1].m_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x02 ? true : false); // Bluetooth
+            g_ScreenPrompts[2].m_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x04 ? true : false); // Next Function
+            g_ScreenPrompts[3].m_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x08 ? true : false); // Next Profile
+            g_ClicksActive = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x10 ? true : false);              // Clicks on/off
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
             break;
 
         default:
@@ -604,21 +627,30 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 //  in the Screen Prompts "objects".
 //
 //*************************************************************************************
-void AdjustActiveFeature (uint8_t newMode)
+void AdjustActiveFeature (FEATURE_ID_ENUM newMode)
 {
-    uint8_t featureCount, myMode;
+    uint8_t featureCount, myMode, lineNumber;
 
-    if (newMode > 3)    // Check for valid mode
+    if (newMode >= INVALID_FEATURE_ID)    // Check for valid mode
         return;
 
-    g_ActiveFeature = newMode;
-    myMode = newMode;
+    g_ActiveFeature = newMode;          // Store the active feature in global var.
+    myMode = (uint8_t) newMode;
+    lineNumber = 0;                     // Need to keep track of which line is next.
 
     for (featureCount = 0; featureCount < 4; ++featureCount)
     {
-        g_ScreenPrompts[myMode].m_Location = featureCount;
-        ++myMode;
-        if (myMode > 3)
+        if (g_ScreenPrompts[myMode].m_Active)                   // Start with the first active feature.
+        {
+            g_ScreenPrompts[myMode].m_Location = lineNumber;
+            ++lineNumber;
+        }
+        else
+        {
+            g_ScreenPrompts[myMode].m_Location = 5;
+        }
+        ++myMode;               // Look at the next feature information.
+        if (myMode >= INVALID_FEATURE_ID)         // Rollover
             myMode = 0;
     }
 }
@@ -732,13 +764,13 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             g_ChangeScreen_WIP = FALSE;
             break;
         }
-        // Count the number of active features to set a limit on location
-        activeCount = 0;
-        for (feature = 0; feature < 4; ++feature)
-        {
-            if (g_ScreenPrompts[feature].m_Active)
-                ++activeCount;
-        }
+//        // Count the number of active features to set a limit on location
+//        activeCount = 0;
+//        for (feature = 0; feature < 4; ++feature)
+//        {
+//            if (g_ScreenPrompts[feature].m_Active)
+//                ++activeCount;
+//        }
         // Move Top Feature to Bottom and move Bottom upward.
         for (feature = 0; feature < 4; ++feature)
         {
@@ -766,13 +798,14 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             if (g_ScreenPrompts[feature].m_Active)
                 ++activeCount;
         }
+        --activeCount; // 0-based to translate the number of items to the max line number.
 
         // Move the features downward, limiting the movement by the number of Active Features.
         for (feature = 0; feature < 4; ++feature)
         {
             if (g_ScreenPrompts[feature].m_Active)
             {
-                if (g_ScreenPrompts[feature].m_Location == 3)
+                if (g_ScreenPrompts[feature].m_Location == activeCount)
                 {
                     SendModeChangeCommand (feature);  // We have a new active feature, tell the Head Array
                 }
@@ -980,11 +1013,13 @@ UINT SettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_SIGNAL(GOTO_USER_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_attach (p_window_root, (GX_WIDGET*) &UserSettingsScreen);
         gx_widget_show ((GX_WIDGET*) &UserSettingsScreen);
+        SendFeatureGetCommand();        // Send command to get the current users settings.
         break;
 
     case GX_SIGNAL(FEATURES_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_attach (p_window_root, (GX_WIDGET*) &FeatureSettingsScreen);
         gx_widget_show ((GX_WIDGET*) &FeatureSettingsScreen);
+        SendFeatureGetCommand();        // Send command to get the current users settings.
         break;
     }
 
@@ -1177,6 +1212,26 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 //
 //*************************************************************************************
 
+int LocateNextTimeoutIndex (void)
+{
+    int i;
+    int found = 0;
+
+    for (i=0; g_TimeoutInfo[i].m_TimeoutIcon != GX_NULL; ++i)
+    {
+        if (g_TimeoutInfo[i].m_TimeoutValue == g_TimeoutValue)
+        {
+            found = i+1;
+            if (g_TimeoutInfo[found].m_TimeoutIcon == GX_NULL)  // wrap around to the beginning.
+                found = 0;
+            break;
+        }
+    }
+    return found;
+}
+
+//*************************************************************************************
+
 void ShowUserSettingsItems (void)
 {
     int feature;
@@ -1192,15 +1247,19 @@ void ShowUserSettingsItems (void)
         gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_ActiveIcon);
     }
     // Show the Timeout Value
-    for (feature = 0; g_TimeoutIcons[feature] != GX_NULL; ++feature)
+    for (feature = 0; g_TimeoutInfo[feature].m_TimeoutIcon != GX_NULL; ++feature)
     {
-        gx_widget_resize ((GX_WIDGET*) g_TimeoutIcons[feature], &g_TimeoutValueLocation[1]);
+        if (g_TimeoutInfo[feature].m_TimeoutValue == g_TimeoutValue)
+            gx_widget_resize ((GX_WIDGET*) g_TimeoutInfo[feature].m_TimeoutIcon, &g_TimeoutValueLocation[0]); // show it
+        else
+            gx_widget_resize ((GX_WIDGET*) g_TimeoutInfo[feature].m_TimeoutIcon, &g_TimeoutValueLocation[1]); // hide it off screen.
     }
-    gx_widget_resize ((GX_WIDGET*) g_TimeoutIcons[g_TimeoutValue], &g_TimeoutValueLocation[0]);
 }
 
 UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
+    int feature;
+    uint8_t myActiveFeatures, myMask;
 
     switch (event_ptr->gx_event_type)
     {
@@ -1210,6 +1269,21 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_attach (p_window_root, (GX_WIDGET*) &SettingsScreen);
         gx_widget_show ((GX_WIDGET*) &SettingsScreen);
+
+        myMask = 0x01;
+        for (feature = 0; feature < 4; ++feature)
+        {
+            if (g_ScreenPrompts[feature].m_Active)
+            {
+                // Create the byte to send to the COMM Task to tell Head Array what features are active.
+                myActiveFeatures |= myMask;     // Set bit.
+            }
+            myMask <<= 1;    // Rotate the bit.
+        }
+        // Add clicks in D4.
+        if (g_ClicksActive)
+            myActiveFeatures |= 0x10;
+        SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
         break;
 
         // Click (Audio) Feature handling
@@ -1226,11 +1300,8 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_SIGNAL(TIMER_30_BTN_ID, GX_EVENT_CLICKED):
     case GX_SIGNAL(TIMER_40_BTN_ID, GX_EVENT_CLICKED):
     case GX_SIGNAL(TIMER_50_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_resize ((GX_WIDGET*) g_TimeoutIcons[g_TimeoutValue], &g_HiddenRectangle);
-        ++g_TimeoutValue;
-        if (g_TimeoutIcons[g_TimeoutValue] == GX_NULL)
-            g_TimeoutValue = 0;
-        gx_widget_resize ((GX_WIDGET*) g_TimeoutIcons[g_TimeoutValue], &g_TimeoutValueLocation[0]);
+        feature = LocateNextTimeoutIndex();
+        g_TimeoutValue = g_TimeoutInfo[feature].m_TimeoutValue;
         break;
     }
 
@@ -1304,10 +1375,18 @@ void ShowActiveFeatures (void)
 //
 //*************************************************************************************
 
+void FeatureSettingsScreen_draw_function (GX_WINDOW *window)
+{
+    ShowActiveFeatures ();
+    gx_window_draw(window);
+}
+
 UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     int feature;
     int numActive;
+    uint8_t myActiveFeatures;
+    uint8_t myMask;
 
     switch (event_ptr->gx_event_type)
     {
@@ -1318,6 +1397,9 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
         gx_widget_attach (p_window_root, (GX_WIDGET*) &SettingsScreen);
         gx_widget_show ((GX_WIDGET*) &SettingsScreen);
+        // This sets the screen location of any active features.
+        myActiveFeatures = 0;
+        myMask = 0x01;
         if (g_SettingsChanged)
         {
             numActive = 0;
@@ -1325,10 +1407,19 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
             {
                 if (g_ScreenPrompts[feature].m_Active)
                 {
+                    // Create the byte to send to the COMM Task to tell Head Array what features are active.
+                    myActiveFeatures |= myMask;     // Set bit.
+                    if (numActive == 0)
+                        SendModeChangeCommand ((FEATURE_ID_ENUM) feature);
                     g_ScreenPrompts[feature].m_Location = numActive;
                     ++numActive;
                 }
+                myMask <<= 1;    // Rotate the bit.
             }
+            // Add clicks in D4.
+            if (g_ClicksActive)
+                myActiveFeatures |= 0x10;
+            SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
         }
         break;
 

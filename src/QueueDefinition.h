@@ -21,7 +21,7 @@
 typedef enum PHYSICAL_PAD {LEFT_PAD, RIGHT_PAD, CENTER_PAD, INVALID_PAD} PHYSICAL_PAD_ENUM;
 typedef enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, INVALID_DIRECTION} PAD_DIRECTION_ENUM;
 typedef enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE, INVALID_PAD_TYPE} PAD_TYPE_ENUM;
-typedef enum FEATURE_ID {POWER_ONOFF_ID, BLUETOOTH_ID, NEXT_FUNCTION_ID, NEXT_PROFILE_ID, INVALID_FEATURE_ID} FEATURE_ID_ENUM;
+typedef enum FEATURE_ID {POWER_ONOFF_ID, BLUETOOTH_ID, NEXT_FUNCTION_ID, NEXT_PROFILE_ID, INVALID_FEATURE_ID} FEATURE_ID_ENUM; // "invalid" must be last enum
 typedef enum SEND_DATA_BOOL {STOP_SENDING_DATA = 0, START_SENDING_DATA} SEND_DATA_ENUM;
 
 typedef enum HHP_HA_MESSAGES_E
@@ -79,6 +79,11 @@ typedef struct GUI_MSG_S
         } SendCalibrationData;
         struct
         {
+            uint8_t m_FeatureActiveList;
+            uint8_t m_Timeout;
+        } SendFeatureActiveList;
+        struct
+        {
             uint32_t m_MsgArray[15];
         } WholeMsg;
     };
@@ -94,6 +99,8 @@ extern void SendGetVersionCommand (void);
 extern void SendGetDataCommand (SEND_DATA_ENUM start, PHYSICAL_PAD_ENUM pad);   // or INVALID_PAD to get all data, for Diagnostic Screen.
 extern void SendGetCalDataCommnd (PHYSICAL_PAD_ENUM pad);
 extern void SendCalibrationData (PHYSICAL_PAD_ENUM pad, uint16_t min, uint16_t max);
+extern void SendFeatureGetCommand (void);
+extern void SendFeatureSetting (uint8_t myActiveFeatures, uint8_t g_TimeoutValue);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -145,6 +152,11 @@ typedef struct HHP_HA_MSG_S
         } CalibrationDataResponse;
         struct
         {
+            uint8_t m_FeatureSet;
+            uint8_t m_Timeout;
+        } GetFeatureResponse;
+        struct
+        {
             uint32_t m_MsgArray[15];
         } WholeMsg;
     };
@@ -154,6 +166,7 @@ typedef struct HHP_HA_MSG_S
 extern void SendPadGetResponse (PHYSICAL_PAD_ENUM physicalPad, PAD_DIRECTION_ENUM direction, PAD_TYPE_ENUM padType);
 extern void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t buildVersion, uint8_t eeprom);
 extern void SendCalDataResponse (PHYSICAL_PAD_ENUM physicalPad, uint16_t minADC, uint16_t maxADC, uint16_t minThreshold, uint16_t maxThreshold);
+extern void SendFeatureGet (uint8_t featureSet, uint8_t timeout);
 
 // Helper functions
 extern PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad);

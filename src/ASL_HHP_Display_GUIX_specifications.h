@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 10.12.2019   Time (hh:mm): 04:47                        */
+/*  Date (dd.mm.yyyy): 10.12.2019   Time (hh:mm): 05:36                        */
 /*******************************************************************************/
 
 
@@ -488,6 +488,7 @@ UINT SetPadTypeScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 VOID SetPadTypeScreen_Draw_Function(GX_WINDOW *widget);
 UINT UserSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT FeatureSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
+VOID FeatureSettingsScreen_draw_function(GX_WINDOW *widget);
 UINT PadOptionsSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT SettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT SetPadDirectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);

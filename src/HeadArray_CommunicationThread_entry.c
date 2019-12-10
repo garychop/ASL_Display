@@ -23,7 +23,7 @@
 
 #include "QueueDefinition.h"
 
-#define FORCE_OK_FOR_GUI_DEBUGGING
+//#define FORCE_OK_FOR_GUI_DEBUGGING
 
 
 //******************************************************************************
@@ -63,6 +63,8 @@ FEATURE_ID_ENUM g_myMode = POWER_ONOFF_ID;
 uint8_t g_HeadArray_Status;
 PAD_TYPE_ENUM g_MyPadTypes[] = {PROPORTIONAL_PADTYPE, PROPORTIONAL_PADTYPE, PROPORTIONAL_PADTYPE};
 uint16_t g_RawData, g_DriveDemand;
+uint8_t g_TimeoutValue;            // 1.5 seconds in 100 milli second increments.
+uint8_t g_ActiveFeatureSet = 0x1f;    // "1f" is all features active plus Clicks on.
 #endif
 
 //******************************************************************************
@@ -414,7 +416,7 @@ uint8_t ExecuteHeartBeat(void)
     HB_Message[1] = HHP_HA_HEART_BEAT;
     HB_Message[2] = ++g_HeartBeatCounter;
     cs = CalculateChecksum(HB_Message, (uint8_t) (HB_Message[0]-1));
-    HB_Message[3] = cs;
+    HB_Message[HB_Message[0]-1] = cs;
     msgStatus = Send_I2C_Package(HB_Message, HB_Message[0]);
 
     if (msgStatus == MSG_OK)
@@ -513,8 +515,8 @@ uint8_t GetPadData(void)
     // Prepare and send the Pad Data message to the GUI via the queue.
     HeadArrayMsg.m_MsgType = HHP_HA_PAD_DATA_GET;
     HeadArrayMsg.GetDataMsg.m_PadID = g_ActivePadID;
-    HeadArrayMsg.GetDataMsg.m_RawData = (HB_Response[1] << 8) + HB_Response[2];
-    HeadArrayMsg.GetDataMsg.m_DriveDemand = (HB_Response[3] << 8) + HB_Response[4];
+    HeadArrayMsg.GetDataMsg.m_RawData = (uint16_t) ((HB_Response[1] << 8) + HB_Response[2]);
+    HeadArrayMsg.GetDataMsg.m_DriveDemand = (uint16_t) ((HB_Response[3] << 8) + HB_Response[4]);
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
 
@@ -681,10 +683,10 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             if (msgStatus == MSG_OK)
             {
                 SendCalDataResponse (GUI_Msg.GetCalibrationData.m_PadID,
-                        (HB_Response[2]<<8) + HB_Response[3],   // Min ADC
-                        (HB_Response[4]<<8) + HB_Response[5],   // Max ADC
-                        (HB_Response[6]<<8) + HB_Response[7],   // Min Threshold
-                        (HB_Response[8]<<8) + HB_Response[9]);   // Max Threshold
+                        (uint16_t) ((HB_Response[2]<<8) + HB_Response[3]),   // Min ADC
+                        (uint16_t) ((HB_Response[4]<<8) + HB_Response[5]),   // Max ADC
+                        (uint16_t) ((HB_Response[6]<<8) + HB_Response[7]),   // Min Threshold
+                        (uint16_t) ((HB_Response[8]<<8) + HB_Response[9]));   // Max Threshold
             }
             break;
 
@@ -692,10 +694,10 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             HA_Msg[0] = 0x08;     // msg length
             HA_Msg[1] = HHP_HA_CALIBRATE_RANGE_SET;
             HA_Msg[2] = GUI_Msg.SendCalibrationData.m_PadID;
-            HA_Msg[3] = (GUI_Msg.SendCalibrationData.m_MinThreshold >> 8) & 0xff;
-            HA_Msg[4] = (GUI_Msg.SendCalibrationData.m_MinThreshold & 0xff);
-            HA_Msg[5] = (GUI_Msg.SendCalibrationData.m_MaxThreshold >> 8) & 0xff;
-            HA_Msg[6] = (GUI_Msg.SendCalibrationData.m_MaxThreshold & 0xff);
+            HA_Msg[3] = (uint8_t) ((GUI_Msg.SendCalibrationData.m_MinThreshold >> 8) & 0xff);
+            HA_Msg[4] = (uint8_t) ((GUI_Msg.SendCalibrationData.m_MinThreshold & 0xff));
+            HA_Msg[5] = (uint8_t) ((GUI_Msg.SendCalibrationData.m_MaxThreshold >> 8) & 0xff);
+            HA_Msg[6] = (uint8_t) ((GUI_Msg.SendCalibrationData.m_MaxThreshold & 0xff));
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
@@ -704,6 +706,56 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = Read_I2C_Package(HB_Response);
             }
             // Probably should process the NAK.
+            break;
+
+        case HHP_HA_FEATURE_GET:
+            HA_Msg[0] = 0x03;     // msg length
+            HA_Msg[1] = HHP_HA_FEATURE_GET;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+            }
+
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+            if (msgStatus != MSG_OK)
+            {
+                msgStatus = MSG_OK;
+                HB_Response[0] = HHP_HA_FEATURE_GET;
+                HB_Response[1] = g_ActiveFeatureSet;   // All features enabled plus sound
+                HB_Response[2] = g_TimeoutValue;     // 1.5 seconds.
+            }
+#endif
+            if (msgStatus == MSG_OK)
+            {
+                SendFeatureGet (HB_Response[1], HB_Response[2]);
+            }
+            break;
+
+        case HHP_HA_FEATURE_SET:
+            HA_Msg[0] = 0x04;     // msg length
+            HA_Msg[1] = HHP_HA_FEATURE_SET;
+            HA_Msg[2] = GUI_Msg.SendFeatureActiveList.m_FeatureActiveList;
+            HA_Msg[3] = GUI_Msg.SendFeatureActiveList.m_Timeout;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+            }
+
+#ifdef FORCE_OK_FOR_GUI_DEBUGGING
+            if (msgStatus != MSG_OK)
+            {
+                g_ActiveFeatureSet = GUI_Msg.SendFeatureActiveList.m_FeatureActiveList;
+                g_TimeoutValue = GUI_Msg.SendFeatureActiveList.m_Timeout;
+                msgStatus = MSG_OK;
+            }
+#endif
+            // Might want to consider processing the ACK/NAK
             break;
 
         default:
@@ -729,6 +781,7 @@ void HeadArray_CommunicationThread_entry(void)
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
     g_HeadArray_Status = 0x00;
+    g_TimeoutValue = 15;
 #endif
 
     g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
