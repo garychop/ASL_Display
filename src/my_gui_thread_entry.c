@@ -13,7 +13,7 @@
 //-------------------------------------------------------------------------
 GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ATT: 0.0.2";
 GX_CHAR g_HeadArrayVersionString[20] = "";
-uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build;
+uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
 //-------------------------------------------------------------------------
 // Typdefs and defines
@@ -521,6 +521,7 @@ void ProcessCommunicationMsgs ()
             g_HA_Version_Major = HeadArrayMsg.Version.m_Major;
             g_HA_Version_Minor = HeadArrayMsg.Version.m_Minor;
             g_HA_Version_Build = HeadArrayMsg.Version.m_Build;
+            g_HA_EEPROM_Version = HeadArrayMsg.Version.m_EEPROM_Version;
 
             // Redraw the current window.
             gxe.gx_event_type = GX_EVENT_REDRAW;
@@ -684,8 +685,6 @@ VOID Main_User_Screen_draw_function(GX_WINDOW *window)
     g_ActiveScreen = (GX_WIDGET*) window;
 
     DisplayMainScreenActiveFeatures();  // Redraw the items.
-    gx_prompt_text_set ((GX_PROMPT*)&Main_User_Screen.Main_User_Screen_Version_Prompt, ASL110_DISPLAY_VERSION_STRING);
-    gx_prompt_text_set ((GX_PROMPT*)&Main_User_Screen.Main_User_Screen_HeadArray_Version_Prompt, g_HeadArrayVersionString);
 
     gx_window_draw(window);
 }
@@ -863,6 +862,9 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         break;
 
     case GX_EVENT_SHOW:
+        gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_Version_Prompt, ASL110_DISPLAY_VERSION_STRING);
+        gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_HeadArray_Version_Prompt, g_HeadArrayVersionString);
+
         SendGetCalDataCommnd (LEFT_PAD);
         SendGetCalDataCommnd (RIGHT_PAD);
         SendGetCalDataCommnd (CENTER_PAD);

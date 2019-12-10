@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  9.12.2019   Time (hh:mm): 08:48                        */
+/*  Date (dd.mm.yyyy): 10.12.2019   Time (hh:mm): 04:47                        */
 /*******************************************************************************/
 
 
@@ -3304,65 +3304,65 @@ GX_TEXT_BUTTON_PROPERTIES HHP_Start_Screen_OK_Button_properties =
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
-GX_PROMPT_PROPERTIES HHP_Start_Screen_VersionPrompt_properties =
+GX_PROMPT_PROPERTIES HHP_Start_Screen_Version_Prompt_properties =
 {
-    GX_STRING_ID_STRING_48,                  /* string id                      */
-    GX_FONT_ID_PROMPT,                       /* font id                        */
-    GX_COLOR_ID_TEXT,                        /* normal text color              */
-    GX_COLOR_ID_TEXT                         /* selected text color            */
+    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_FONT_ID_MINSIZE,                      /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
 };
-GX_PROMPT_PROPERTIES HHP_Start_Screen_VersionPrompt_1_properties =
+GX_PROMPT_PROPERTIES HHP_Start_Screen_HeadArray_Version_Prompt_properties =
 {
-    GX_STRING_ID_STRING_49,                  /* string id                      */
-    GX_FONT_ID_PROMPT,                       /* font id                        */
-    GX_COLOR_ID_TEXT,                        /* normal text color              */
-    GX_COLOR_ID_TEXT                         /* selected text color            */
+    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_FONT_ID_MINSIZE,                      /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
 };
 
-GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_VersionPrompt_1_define =
+GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_HeadArray_Version_Prompt_define =
 {
-    "VersionPrompt_1",
+    "HeadArray_Version_Prompt",
     GX_TYPE_PROMPT,                          /* widget type                    */
-    VERSION_PROMPT1l_ID,                     /* widget id                      */
+    HEAD_ARRAY_VERSION_PROMPT_ID,            /* widget id                      */
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_LEFT,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_PROMPT),                       /* control block size             */
-    GX_COLOR_ID_TEXT,                        /* normal color id                */
-    GX_COLOR_ID_BTN_TEXT,                    /* selected color id              */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {8, 196, 168, 219},                      /* widget size                    */
+    {34, 186, 143, 205},                     /* widget size                    */
     GX_NULL,                                 /* no next widget                 */
     GX_NULL,                                 /* no child widgets               */ 
-    offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_VersionPrompt_1), /* control block */
-    (void *) &HHP_Start_Screen_VersionPrompt_1_properties /* extended properties */
+    offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_HeadArray_Version_Prompt), /* control block */
+    (void *) &HHP_Start_Screen_HeadArray_Version_Prompt_properties /* extended properties */
 };
 
-GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_VersionPrompt_define =
+GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_Version_Prompt_define =
 {
-    "VersionPrompt",
+    "Version_Prompt",
     GX_TYPE_PROMPT,                          /* widget type                    */
     VERSION_PROMPT_ID,                       /* widget id                      */
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_LEFT,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_PROMPT),                       /* control block size             */
-    GX_COLOR_ID_TEXT,                        /* normal color id                */
-    GX_COLOR_ID_BTN_TEXT,                    /* selected color id              */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {8, 172, 168, 195},                      /* widget size                    */
-    &HHP_Start_Screen_VersionPrompt_1_define, /* next widget definition        */
+    {34, 208, 143, 227},                     /* widget size                    */
+    &HHP_Start_Screen_HeadArray_Version_Prompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
-    offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_VersionPrompt), /* control block */
-    (void *) &HHP_Start_Screen_VersionPrompt_properties /* extended properties */
+    offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_Version_Prompt), /* control block */
+    (void *) &HHP_Start_Screen_Version_Prompt_properties /* extended properties */
 };
 
 GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_OK_Button_define =
@@ -3382,7 +3382,7 @@ GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_OK_Button_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {230, 164, 309, 227},                    /* widget size                    */
-    &HHP_Start_Screen_VersionPrompt_define,  /* next widget definition         */
+    &HHP_Start_Screen_Version_Prompt_define, /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_OK_Button), /* control block */
     (void *) &HHP_Start_Screen_OK_Button_properties /* extended properties     */
@@ -3611,66 +3611,6 @@ GX_TEXT_BUTTON_PROPERTIES Main_User_Screen_BothButton_properties =
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
-GX_PROMPT_PROPERTIES Main_User_Screen_Version_Prompt_properties =
-{
-    GX_STRING_ID_STRING_1,                   /* string id                      */
-    GX_FONT_ID_MINSIZE,                      /* font id                        */
-    GX_COLOR_ID_WHITE,                       /* normal text color              */
-    GX_COLOR_ID_WHITE                        /* selected text color            */
-};
-GX_PROMPT_PROPERTIES Main_User_Screen_HeadArray_Version_Prompt_properties =
-{
-    GX_STRING_ID_STRING_1,                   /* string id                      */
-    GX_FONT_ID_MINSIZE,                      /* font id                        */
-    GX_COLOR_ID_WHITE,                       /* normal text color              */
-    GX_COLOR_ID_WHITE                        /* selected text color            */
-};
-
-GX_CONST GX_STUDIO_WIDGET Main_User_Screen_HeadArray_Version_Prompt_define =
-{
-    "HeadArray_Version_Prompt",
-    GX_TYPE_PROMPT,                          /* widget type                    */
-    HEAD_ARRAY_VERSION_PROMPT_ID,            /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
-    0,                                       /* status flags                   */
-    sizeof(GX_PROMPT),                       /* control block size             */
-    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
-    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
-    gx_studio_prompt_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {30, 218, 139, 237},                     /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_HeadArray_Version_Prompt), /* control block */
-    (void *) &Main_User_Screen_HeadArray_Version_Prompt_properties /* extended properties */
-};
-
-GX_CONST GX_STUDIO_WIDGET Main_User_Screen_Version_Prompt_define =
-{
-    "Version_Prompt",
-    GX_TYPE_PROMPT,                          /* widget type                    */
-    VERSION_PROMPT_ID,                       /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
-    0,                                       /* status flags                   */
-    sizeof(GX_PROMPT),                       /* control block size             */
-    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
-    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
-    gx_studio_prompt_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {202, 218, 311, 237},                    /* widget size                    */
-    &Main_User_Screen_HeadArray_Version_Prompt_define, /* next widget definition */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_Version_Prompt), /* control block */
-    (void *) &Main_User_Screen_Version_Prompt_properties /* extended properties */
-};
 
 GX_CONST GX_STUDIO_WIDGET Main_User_Screen_BothButton_define =
 {
@@ -3689,7 +3629,7 @@ GX_CONST GX_STUDIO_WIDGET Main_User_Screen_BothButton_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {340, 108, 419, 131},                    /* widget size                    */
-    &Main_User_Screen_Version_Prompt_define, /* next widget definition         */
+    GX_NULL,                                 /* no next widget                 */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAIN_USER_SCREEN_CONTROL_BLOCK, Main_User_Screen_BothButton), /* control block */
     (void *) &Main_User_Screen_BothButton_properties /* extended properties    */

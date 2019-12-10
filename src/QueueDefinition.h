@@ -127,6 +127,7 @@ typedef struct HHP_HA_MSG_S
             uint8_t m_Major;
             uint8_t m_Minor;
             uint8_t m_Build;
+            uint8_t m_EEPROM_Version;
         } Version;
         struct          // Use this struct to start and stop data from being read.
         {
@@ -151,7 +152,7 @@ typedef struct HHP_HA_MSG_S
 
 // Functions that send the command from the Head Array Communication Task to the GUI task.
 extern void SendPadGetResponse (PHYSICAL_PAD_ENUM physicalPad, PAD_DIRECTION_ENUM direction, PAD_TYPE_ENUM padType);
-extern void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t buildVersion);
+extern void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t buildVersion, uint8_t eeprom);
 extern void SendCalDataResponse (PHYSICAL_PAD_ENUM physicalPad, uint16_t minADC, uint16_t maxADC, uint16_t minThreshold, uint16_t maxThreshold);
 
 // Helper functions

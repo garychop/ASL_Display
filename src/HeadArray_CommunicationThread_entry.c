@@ -624,13 +624,13 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             if (msgStatus == MSG_OK)
             {
                 msgStatus = Read_I2C_Package(HB_Response);
-                SendVersionToGUI (HB_Response[1], HB_Response[2], HB_Response[3]);
+                SendVersionToGUI (HB_Response[1], HB_Response[2], HB_Response[3], HB_Response[4]);
             }
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
             if (msgStatus != MSG_OK)    // Just in case the message WAS received.
             {
-                SendVersionToGUI (0,1,0);
+                SendVersionToGUI (0,1,0,1);
             }
 #endif
             break;

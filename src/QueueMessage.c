@@ -183,7 +183,7 @@ void SendGetVersionCommand (void)
     tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 
-void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t buildVersion)
+void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t buildVersion, uint8_t eeprom)
 {
     HHP_HA_MSG_STRUCT HHP_Msg;
 
@@ -191,6 +191,7 @@ void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t build
     HHP_Msg.Version.m_Major = majorVersion;
     HHP_Msg.Version.m_Minor = minorVersion;
     HHP_Msg.Version.m_Build = buildVersion;
+    HHP_Msg.Version.m_EEPROM_Version = eeprom;
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }

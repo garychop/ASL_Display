@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  9.12.2019   Time (hh:mm): 08:48                        */
+/*  Date (dd.mm.yyyy): 10.12.2019   Time (hh:mm): 04:47                        */
 /*******************************************************************************/
 
 
@@ -107,7 +107,7 @@ extern   "C" {
 #define DIAGNOSTIC_BTN_ID 83
 #define SETTINGS_BTN_ID 84
 #define VERSION_PROMPT_ID 85
-#define VERSION_PROMPT1l_ID 86
+#define HEAD_ARRAY_VERSION_PROMPT_ID 86
 #define MAIN_USER_SCREEN_ID 87
 #define RIGHT_PAD_OFF_ID 88
 #define PROFILE_NEXT_SMALL_PROMPT_ID 89
@@ -122,7 +122,6 @@ extern   "C" {
 #define UP_ARROW_BTN_ID 98
 #define DOWN_ARROW_BTN_ID 99
 #define BOTH_ARROW_BTN_ID 100
-#define HEAD_ARRAY_VERSION_PROMPT_ID 101
 
 
 /* Define animation ids                                                        */
@@ -375,8 +374,8 @@ typedef struct HHP_START_SCREEN_CONTROL_BLOCK_STRUCT
     GX_TEXT_BUTTON HHP_Start_Screen_Diagnostic_Button;
     GX_TEXT_BUTTON HHP_Start_Screen_Settings_Button;
     GX_TEXT_BUTTON HHP_Start_Screen_OK_Button;
-    GX_PROMPT HHP_Start_Screen_VersionPrompt;
-    GX_PROMPT HHP_Start_Screen_VersionPrompt_1;
+    GX_PROMPT HHP_Start_Screen_Version_Prompt;
+    GX_PROMPT HHP_Start_Screen_HeadArray_Version_Prompt;
 } HHP_START_SCREEN_CONTROL_BLOCK;
 
 typedef struct MAIN_USER_SCREEN_CONTROL_BLOCK_STRUCT
@@ -395,8 +394,6 @@ typedef struct MAIN_USER_SCREEN_CONTROL_BLOCK_STRUCT
     GX_TEXT_BUTTON Main_User_Screen_UpArrowBtn;
     GX_TEXT_BUTTON Main_User_Screen_DownArrowBtn;
     GX_TEXT_BUTTON Main_User_Screen_BothButton;
-    GX_PROMPT Main_User_Screen_Version_Prompt;
-    GX_PROMPT Main_User_Screen_HeadArray_Version_Prompt;
 } MAIN_USER_SCREEN_CONTROL_BLOCK;
 
 
