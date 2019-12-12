@@ -669,24 +669,24 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
             if (msgStatus != MSG_OK)
             {
-                HB_Response[2] = (2 >> 8) & 0xff;       // Min ADC
-                HB_Response[3] = (2 & 0xff);
-                HB_Response[4] = (1000 >> 8) & 0xff;    // Max ADC
-                HB_Response[5] = (1000 & 0xff);
-                HB_Response[6] = (5 >> 8) & 0xff;      // Min Threshold
-                HB_Response[7] = (5 & 0xff);
-                HB_Response[8] = (95 >> 8) & 0xff;     // Max Threshold
-                HB_Response[9] = (95 & 0xff);
+                HB_Response[1] = (2 >> 8) & 0xff;       // Min ADC
+                HB_Response[2] = (2 & 0xff);
+                HB_Response[3] = (1000 >> 8) & 0xff;    // Max ADC
+                HB_Response[4] = (1000 & 0xff);
+                HB_Response[5] = (5 >> 8) & 0xff;      // Min Threshold
+                HB_Response[6] = (5 & 0xff);
+                HB_Response[7] = (95 >> 8) & 0xff;     // Max Threshold
+                HB_Response[8] = (95 & 0xff);
                 msgStatus = MSG_OK;
             }
 #endif
             if (msgStatus == MSG_OK)
             {
                 SendCalDataResponse (GUI_Msg.GetCalibrationData.m_PadID,
-                        (uint16_t) ((HB_Response[2]<<8) + HB_Response[3]),   // Min ADC
-                        (uint16_t) ((HB_Response[4]<<8) + HB_Response[5]),   // Max ADC
-                        (uint16_t) ((HB_Response[6]<<8) + HB_Response[7]),   // Min Threshold
-                        (uint16_t) ((HB_Response[8]<<8) + HB_Response[9]));   // Max Threshold
+                        (uint16_t) ((HB_Response[1]<<8) + HB_Response[2]),   // Min ADC
+                        (uint16_t) ((HB_Response[3]<<8) + HB_Response[4]),   // Max ADC
+                        (uint16_t) ((HB_Response[5]<<8) + HB_Response[6]),   // Min Threshold
+                        (uint16_t) ((HB_Response[7]<<8) + HB_Response[8]));   // Max Threshold
             }
             break;
 
