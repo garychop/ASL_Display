@@ -735,7 +735,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             break;
 
         case HHP_HA_FEATURE_SET:
-            HA_Msg[0] = 0x04;     // msg length
+            HA_Msg[0] = 0x05;     // msg length
             HA_Msg[1] = HHP_HA_FEATURE_SET;
             HA_Msg[2] = GUI_Msg.SendFeatureActiveList.m_FeatureActiveList;
             HA_Msg[3] = GUI_Msg.SendFeatureActiveList.m_Timeout;
