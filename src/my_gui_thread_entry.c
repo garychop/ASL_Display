@@ -1777,6 +1777,10 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             SendGetDataCommand (STOP_SENDING_DATA, g_CalibrationPadNumber);     // We will stop asking for data from the head array.
 
             SendCalibrationStopCommand();           // This tells the Head Array to EXIT Calibration Mode.
+
+            // Tell the head array what the new cal values are.
+            SendCalibrationData (g_CalibrationPadNumber, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue,
+                                 g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
         }
         break;
     case GX_SIGNAL(DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):

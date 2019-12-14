@@ -657,7 +657,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
         case HHP_HA_CALIBRATE_RANGE_GET:
             HA_Msg[0] = 0x04;     // msg length
             HA_Msg[1] = HHP_HA_CALIBRATE_RANGE_GET;
-            HA_Msg[2] = GUI_Msg.GetCalibrationData.m_PadID;
+            HA_Msg[2] = (uint8_t) TranslatePad_EnumToChar (GUI_Msg.GetCalibrationData.m_PadID);
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
@@ -693,11 +693,39 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
         case HHP_HA_CALIBRATE_RANGE_SET:
             HA_Msg[0] = 0x08;     // msg length
             HA_Msg[1] = HHP_HA_CALIBRATE_RANGE_SET;
-            HA_Msg[2] = GUI_Msg.SendCalibrationData.m_PadID;
+            HA_Msg[2] = (uint8_t) TranslatePad_EnumToChar (GUI_Msg.SendCalibrationData.m_PadID);
             HA_Msg[3] = (uint8_t) ((GUI_Msg.SendCalibrationData.m_MinThreshold >> 8) & 0xff);
             HA_Msg[4] = (uint8_t) ((GUI_Msg.SendCalibrationData.m_MinThreshold & 0xff));
             HA_Msg[5] = (uint8_t) ((GUI_Msg.SendCalibrationData.m_MaxThreshold >> 8) & 0xff);
             HA_Msg[6] = (uint8_t) ((GUI_Msg.SendCalibrationData.m_MaxThreshold & 0xff));
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+            }
+            // Probably should process the NAK.
+            break;
+
+        case HHP_HA_CALIBRATE_START_CMD:
+            HA_Msg[0] = 0x03;     // msg length
+            HA_Msg[1] = HHP_HA_CALIBRATE_START_CMD;
+            HA_Msg[2] = (uint8_t) TranslatePad_EnumToChar (GUI_Msg.SendCalibrationData.m_PadID);
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+            }
+            // Probably should process the NAK.
+            break;
+
+        case HHP_HA_CALIBRATE_STOP_CMD:
+            HA_Msg[0] = 0x03;     // msg length
+            HA_Msg[1] = HHP_HA_CALIBRATE_STOP_CMD;
+            HA_Msg[2] = (uint8_t) TranslatePad_EnumToChar (GUI_Msg.SendCalibrationData.m_PadID);
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
