@@ -11,7 +11,7 @@
 #include "HeadArray_CommunicationThread.h"
 
 //-------------------------------------------------------------------------
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ATT: 0.1.6";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ATT: 0.2.0";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -310,6 +310,7 @@ void my_gui_thread_entry(void)
     /* Create the widgets we have defined with the GUIX data structures and resources. */
     GX_WIDGET * p_first_screen = NULL;
     
+    gx_studio_named_widget_create("OON_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("SetPadDirectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("SetPadTypeScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("PadCalibrationScreen", GX_NULL, GX_NULL);
@@ -451,11 +452,16 @@ void ProcessCommunicationMsgs ()
                 {
                     if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x01)   // Bit0 = 1 if Head Array in "Ready", Power On mode.
                     {
-                        // Needs to translate from HA-HHP protocol to GUI mode reference.
-                        //--HeadArrayMsg.HeartBeatMsg.m_ActiveMode;   // HA-HHP is 1-based, GUI is 0-based.
-
+                        if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x20) == 0x20)// Out of Neutral?
+                        {
+                            gxe.gx_event_type = GX_SIGNAL (HB_OON_ID, GX_EVENT_CLICKED);
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
                         // This triggers redrawing the main screen if the mode changes.
-                        if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
+                        else if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
                         {
                             AdjustActiveFeature ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
                             gxe.gx_event_type = GX_EVENT_REDRAW;
@@ -465,7 +471,7 @@ void ProcessCommunicationMsgs ()
                             gx_system_event_send(&gxe);
                         }
                     }
-                    else // Bit 0 = 0; means Head Array in Power Off, Idle Mode, we are recommending to change screens.
+                    else if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x00)// Bit 0 = 0; means Head Array in Power Off, Idle Mode, we are recommending to change screens.
                     {
                         gxe.gx_event_type = GX_SIGNAL (POWER_OFF_ID, GX_EVENT_CLICKED);
                         gxe.gx_event_sender = GX_ID_NONE;
@@ -479,6 +485,17 @@ void ProcessCommunicationMsgs ()
                     if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x01)   // Bit0 = 1 if Head Array in "Ready", Power On mode.
                     {
                         gxe.gx_event_type = GX_SIGNAL (POWER_ON_ID, GX_EVENT_CLICKED);
+                        gxe.gx_event_sender = GX_ID_NONE;
+                        gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                        gxe.gx_event_display_handle = 0;
+                        gx_system_event_send(&gxe);
+                    }
+                }
+                else if (g_ActiveScreen->gx_widget_id == OON_SCREEN_ID)
+                {
+                    if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x20) == 0x00)   // We are OK to go... Neutral Test passed.
+                    {
+                        gxe.gx_event_type = GX_SIGNAL (OON_OK_BTN_ID, GX_EVENT_CLICKED);
                         gxe.gx_event_sender = GX_ID_NONE;
                         gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
                         gxe.gx_event_display_handle = 0;
@@ -829,6 +846,11 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         gx_widget_show ((GX_WIDGET*) &ReadyScreen);
         break;
 
+    case GX_SIGNAL (HB_OON_ID, GX_EVENT_CLICKED):
+        gx_widget_attach (p_window_root, (GX_WIDGET*) &OON_Screen);
+        gx_widget_show ((GX_WIDGET*) &OON_Screen);
+        break;
+
     }
 
    // DisplayMainScreenActiveFeatures();  // Remove this when more of the previous code is "undefinded".
@@ -868,6 +890,34 @@ UINT Ready_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     return GX_SUCCESS;
 }
+
+//*************************************************************************************
+// Out of Neutral Test screen processing.
+//*************************************************************************************
+
+VOID OON_Screen_draw_function (GX_WINDOW *window)
+{
+    g_ActiveScreen = (GX_WIDGET*) window;
+
+    gx_window_draw(window);
+}
+
+UINT OON_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    gx_window_event_process(window, event_ptr);
+
+    switch (event_ptr->gx_event_type)
+    {
+        case GX_SIGNAL (OON_OK_BTN_ID, GX_EVENT_CLICKED):
+            gx_widget_attach (p_window_root, (GX_WIDGET*) &Main_User_Screen);
+            gx_widget_show ((GX_WIDGET*) &Main_User_Screen);
+            SendGetVersionCommand ();
+            break;
+    } // end switch
+
+    return GX_SUCCESS;
+}
+
 //*************************************************************************************
 // Function Name: HHP_Start_Screen_event_process
 //

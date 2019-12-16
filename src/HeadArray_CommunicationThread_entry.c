@@ -446,10 +446,16 @@ uint8_t ExecuteHeartBeat(void)
     ++HeadArrayMsg.HeartBeatMsg.m_HB_Count;
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
-    if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 40)
+    if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 60)
     {
-        g_HeartBeatCounter = 25;
+        g_HeartBeatCounter = 61;
         g_HeadArray_Status = 0x01;
+        HeadArrayMsg.HeartBeatMsg.m_HA_Status = g_HeadArray_Status;
+    }
+    else if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 40)
+    {
+        //g_HeartBeatCounter = 45;
+        g_HeadArray_Status = 0x21;
         HeadArrayMsg.HeartBeatMsg.m_HA_Status = g_HeadArray_Status;
     }
 //    else if (HeadArrayMsg.HeartBeatMsg.m_HB_Count > 40)
