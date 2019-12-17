@@ -23,7 +23,7 @@
 
 #include "QueueDefinition.h"
 
-//#define FORCE_OK_FOR_GUI_DEBUGGING
+//#define FORCE_OK_FOR_GUI_DEBUGGING      // comment this out to run "non-debug" code.
 
 
 //******************************************************************************
