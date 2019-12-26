@@ -154,6 +154,7 @@ bool g_UseNewPrompt = false;
 void my_gui_thread_entry(void);
 
 static void guix_test_send_touch_message(sf_touch_panel_payload_t * p_payload);
+VOID screen_toggle(GX_WINDOW *new_win, GX_WINDOW *old_win);
 
 #ifdef OK_TO_USE_RESET
 static void reset_check(void);
@@ -602,6 +603,27 @@ void ProcessCommunicationMsgs ()
     } // end switch
 }
 
+//******************************************************************************************
+// Detach one window and attach another window to root. This function checks if the
+// parent window is already attached and attaches itself to it. If is already attached
+// it simply displays the widget.
+//
+// Used it to "Change Screens".
+//
+//******************************************************************************************
+
+VOID screen_toggle(GX_WINDOW *new_win, GX_WINDOW *old_win)
+{
+    if (!new_win->gx_widget_parent)
+    {
+        gx_widget_attach(p_window_root, (GX_WIDGET *)new_win);
+    }
+    else
+    {
+        gx_widget_show((GX_WIDGET *)new_win);
+    }
+    gx_widget_detach((GX_WIDGET *)old_win);
+}
 
 //*************************************************************************************
 // Startup Screen
@@ -628,8 +650,7 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     switch (event_ptr->gx_event_type)
     {
         case GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED):
-            gx_widget_attach (p_window_root, (GX_WIDGET*) &Main_User_Screen);
-            gx_widget_show ((GX_WIDGET*) &Main_User_Screen);
+            screen_toggle((GX_WINDOW *)&Main_User_Screen, window);
             SendGetVersionCommand ();
             break;
     } // end switch
@@ -747,111 +768,85 @@ UINT Main_User_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     switch (event_ptr->gx_event_type)
     {
-    case GX_EVENT_TIMER:
-        if (event_ptr->gx_event_payload.gx_event_timer_id == ARROW_PUSHED_TIMER_ID)
-        {
-            gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
-            gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
+        case GX_EVENT_TIMER:
+            if (event_ptr->gx_event_payload.gx_event_timer_id == ARROW_PUSHED_TIMER_ID)
+            {
+                screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+                g_ChangeScreen_WIP = TRUE;
+            }
+            break;
+
+        case GX_EVENT_SHOW:
+            g_GoBackScreen = window;        // Set the going back window.
+            DisplayMainScreenActiveFeatures();
+            break;
+
+        case GX_SIGNAL (DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            // This is necessary to prevent the subsequent "Clicked" message from advancing the feature when we are changing to the Programming screen.
+            if (g_ChangeScreen_WIP)
+            {
+                g_ChangeScreen_WIP = FALSE;
+                break;
+            }
+            // Move Top Feature to Bottom and move Bottom upward.
+            for (feature = 0; feature < 4; ++feature)
+            {
+                if (g_ScreenPrompts[feature].m_Active)
+                {
+                    if (g_ScreenPrompts[feature].m_Location == 1)
+                    {
+                        SendModeChangeCommand (feature);  // We have a new active feature, tell the Head Array
+                    }
+                }
+            }
+            break;
+
+        case GX_SIGNAL(UP_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            // This is necessary to prevent the subsequent "Clicked" message from advancing the feature when we are changing to the Programming screen.
+            if (g_ChangeScreen_WIP)
+            {
+                g_ChangeScreen_WIP = FALSE;
+                break;
+            }
+            // Count the number of active features to set a limit on location
+            activeCount = 0;
+            for (feature = 0; feature < 4; ++feature)
+            {
+                if (g_ScreenPrompts[feature].m_Active)
+                    ++activeCount;
+            }
+            --activeCount; // 0-based to translate the number of items to the max line number.
+
+            // Move the features downward, limiting the movement by the number of Active Features.
+            for (feature = 0; feature < 4; ++feature)
+            {
+                if (g_ScreenPrompts[feature].m_Active)
+                {
+                    if (g_ScreenPrompts[feature].m_Location == activeCount)
+                    {
+                        SendModeChangeCommand (feature);  // We have a new active feature, tell the Head Array
+                    }
+                }
+            }
+            break;
+
+        case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
             g_ChangeScreen_WIP = TRUE;
-        }
-        break;
-//    case GX_EVENT_PEN_DOWN: // We are going to determine if the Up or Down arrow buttons have been held for a
-//                            // ... long time (2 seconds) and goto Programming if so.
-//
-//        if ((event_ptr->gx_event_target->gx_widget_id == DOWN_ARROW_ID))
-//        if ((event_ptr->gx_event_target->gx_widget_name == "DownArrowButton") || (event_ptr->gx_event_target->gx_widget_name == "UpArrowButton"))
-//        {
-//            gx_system_timer_start(window, ARROW_PUSHED_TIMER_ID, 100, 0);
-//            g_ChangeScreen_WIP = FALSE;
-//        }
-//        break;
-//    case GX_EVENT_PEN_UP:
-//            gx_system_timer_stop(window, ARROW_PUSHED_TIMER_ID);
-//        break;
-//
-    case GX_EVENT_SHOW:
-        g_GoBackScreen = window;        // Set the going back window.
-        DisplayMainScreenActiveFeatures();
-        break;
-
-    case GX_SIGNAL (DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        // This is necessary to prevent the subsequent "Clicked" message from advancing the feature when we are changing to the Programming screen.
-        if (g_ChangeScreen_WIP)
-        {
-            g_ChangeScreen_WIP = FALSE;
             break;
-        }
-//        // Count the number of active features to set a limit on location
-//        activeCount = 0;
-//        for (feature = 0; feature < 4; ++feature)
-//        {
-//            if (g_ScreenPrompts[feature].m_Active)
-//                ++activeCount;
-//        }
-        // Move Top Feature to Bottom and move Bottom upward.
-        for (feature = 0; feature < 4; ++feature)
-        {
-            if (g_ScreenPrompts[feature].m_Active)
-            {
-                if (g_ScreenPrompts[feature].m_Location == 1)
-                {
-                    SendModeChangeCommand (feature);  // We have a new active feature, tell the Head Array
-                }
-            }
-        }
-        break;
 
-    case GX_SIGNAL(UP_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        // This is necessary to prevent the subsequent "Clicked" message from advancing the feature when we are changing to the Programming screen.
-        if (g_ChangeScreen_WIP)
-        {
-            g_ChangeScreen_WIP = FALSE;
+        case GX_SIGNAL (HB_TIMEOUT_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&StartupSplashScreen, window);
             break;
-        }
-        // Count the number of active features to set a limit on location
-        activeCount = 0;
-        for (feature = 0; feature < 4; ++feature)
-        {
-            if (g_ScreenPrompts[feature].m_Active)
-                ++activeCount;
-        }
-        --activeCount; // 0-based to translate the number of items to the max line number.
 
-        // Move the features downward, limiting the movement by the number of Active Features.
-        for (feature = 0; feature < 4; ++feature)
-        {
-            if (g_ScreenPrompts[feature].m_Active)
-            {
-                if (g_ScreenPrompts[feature].m_Location == activeCount)
-                {
-                    SendModeChangeCommand (feature);  // We have a new active feature, tell the Head Array
-                }
-            }
-        }
-        break;
+        case GX_SIGNAL (POWER_OFF_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&ReadyScreen, window);
+            break;
 
-    case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
-        gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
-        g_ChangeScreen_WIP = TRUE;
-        break;
-
-    case GX_SIGNAL (HB_TIMEOUT_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &StartupSplashScreen);
-        gx_widget_show ((GX_WIDGET*) &StartupSplashScreen);
-        break;
-
-    case GX_SIGNAL (POWER_OFF_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &ReadyScreen);
-        gx_widget_show ((GX_WIDGET*) &ReadyScreen);
-        break;
-
-    case GX_SIGNAL (HB_OON_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &OON_Screen);
-        gx_widget_show ((GX_WIDGET*) &OON_Screen);
-        break;
-
-    }
+        case GX_SIGNAL (HB_OON_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&OON_Screen, window);
+            break;
+    } // end swtich
 
    // DisplayMainScreenActiveFeatures();  // Remove this when more of the previous code is "undefinded".
 
@@ -880,10 +875,9 @@ UINT Ready_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
     {
-    case GX_SIGNAL(POWER_ON_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &Main_User_Screen);
-        gx_widget_show ((GX_WIDGET*) &Main_User_Screen);
-        break;
+        case GX_SIGNAL(POWER_ON_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&Main_User_Screen, window);
+            break;
     } // end switch
 
     gx_window_event_process(window, event_ptr);
@@ -909,8 +903,7 @@ UINT OON_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     switch (event_ptr->gx_event_type)
     {
         case GX_SIGNAL (OON_OK_BTN_ID, GX_EVENT_CLICKED):
-            gx_widget_attach (p_window_root, (GX_WIDGET*) &Main_User_Screen);
-            gx_widget_show ((GX_WIDGET*) &Main_User_Screen);
+            screen_toggle((GX_WINDOW *)&Main_User_Screen, window);
             SendGetVersionCommand ();
             break;
     } // end switch
@@ -929,29 +922,26 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
     {
-    case GX_SIGNAL(DIAGNOSTIC_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &DiagnosticScreen);
-        gx_widget_show ((GX_WIDGET*) &DiagnosticScreen);
-        break;
+        case GX_SIGNAL(DIAGNOSTIC_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&DiagnosticScreen, window);
+            break;
 
-    case GX_SIGNAL(SETTINGS_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &SettingsScreen);
-        gx_widget_show ((GX_WIDGET*) &SettingsScreen);
-        break;
+        case GX_SIGNAL(SETTINGS_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&SettingsScreen, window);
+            break;
 
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) g_GoBackScreen);
-        gx_widget_show ((GX_WIDGET*) g_GoBackScreen);
-        break;
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)g_GoBackScreen, window);
+            break;
 
-    case GX_EVENT_SHOW:
-        gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_Version_Prompt, ASL110_DISPLAY_VERSION_STRING);
-        gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_HeadArray_Version_Prompt, g_HeadArrayVersionString);
+        case GX_EVENT_SHOW:
+            gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_Version_Prompt, ASL110_DISPLAY_VERSION_STRING);
+            gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_HeadArray_Version_Prompt, g_HeadArrayVersionString);
 
-        SendGetCalDataCommnd (LEFT_PAD);
-        SendGetCalDataCommnd (RIGHT_PAD);
-        SendGetCalDataCommnd (CENTER_PAD);
-        break;
+            SendGetCalDataCommnd (LEFT_PAD);        // We send the commmands to the Head Array to get the Calibration Data for all 3 pads.
+            SendGetCalDataCommnd (RIGHT_PAD);
+            SendGetCalDataCommnd (CENTER_PAD);
+            break;
     }
 
     gx_window_event_process(window, event_ptr);
@@ -1009,29 +999,24 @@ UINT DiagnosticScreen_event_handler(GX_WINDOW *window, GX_EVENT *event_ptr)
 
     switch (event_ptr->gx_event_type)
     {
-    case GX_EVENT_SHOW:
-        for (pads = 0; pads < 3; ++pads)
-        {
-            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DiagnosticDigital_Widget, &g_HiddenRectangle);
-            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DiagnosticProportional_Widget, &g_HiddenRectangle);
-            if (g_PadSettings[pads].m_PadDirection == OFF_DIRECTION)
-                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pads].m_DiagnosticOff_Widget, &g_PadSettings[pads].m_DiagnosticWidigetLocation);
-            else
-                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pads].m_DiagnosticOff_Widget, &g_HiddenRectangle);
-        }
-        SendGetDataCommand (START_SENDING_DATA, INVALID_PAD);
-        break;
+        case GX_EVENT_SHOW:
+            for (pads = 0; pads < 3; ++pads)
+            {
+                gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DiagnosticDigital_Widget, &g_HiddenRectangle);
+                gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DiagnosticProportional_Widget, &g_HiddenRectangle);
+                if (g_PadSettings[pads].m_PadDirection == OFF_DIRECTION)
+                    gx_widget_resize ((GX_WIDGET*)g_PadSettings[pads].m_DiagnosticOff_Widget, &g_PadSettings[pads].m_DiagnosticWidigetLocation);
+                else
+                    gx_widget_resize ((GX_WIDGET*)g_PadSettings[pads].m_DiagnosticOff_Widget, &g_HiddenRectangle);
+            }
+            SendGetDataCommand (START_SENDING_DATA, INVALID_PAD);
+            break;
 
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
-        gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
-        SendGetDataCommand (STOP_SENDING_DATA, INVALID_PAD);
-        break;
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+            SendGetDataCommand (STOP_SENDING_DATA, INVALID_PAD);
+            break;
 
-//    case GX_EVENT_PEN_DOWN:
-//    case GX_EVENT_PEN_UP:
-//        ShowHidePad (event_ptr);
-//        break;
     } // end switch
 
     gx_window_event_process(window, event_ptr);
@@ -1050,28 +1035,24 @@ UINT SettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
     {
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &HHP_Start_Screen);
-        gx_widget_show ((GX_WIDGET*) &HHP_Start_Screen);
-        break;
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+            break;
 
-    case GX_SIGNAL(GOTO_PAD_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &PadOptionsSettingsScreen);
-        gx_widget_show ((GX_WIDGET*) &PadOptionsSettingsScreen);
-        break;
+        case GX_SIGNAL(GOTO_PAD_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
+            break;
 
-    case GX_SIGNAL(GOTO_USER_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &UserSettingsScreen);
-        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen);
-        SendFeatureGetCommand();        // Send command to get the current users settings.
-        break;
+        case GX_SIGNAL(GOTO_USER_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&UserSettingsScreen, window);
+            SendFeatureGetCommand();        // Send command to get the current users settings.
+            break;
 
-    case GX_SIGNAL(FEATURES_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &FeatureSettingsScreen);
-        gx_widget_show ((GX_WIDGET*) &FeatureSettingsScreen);
-        SendFeatureGetCommand();        // Send command to get the current users settings.
-        break;
-    }
+        case GX_SIGNAL(FEATURES_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&FeatureSettingsScreen, window);
+            SendFeatureGetCommand();        // Send command to get the current users settings.
+            break;
+    } // end switch
 
     gx_window_event_process(window, event_ptr);
 
@@ -1090,21 +1071,18 @@ UINT PadOptionsSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_
 
     switch (event_ptr->gx_event_type)
     {
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &SettingsScreen);
-        gx_widget_show ((GX_WIDGET*) &SettingsScreen);
-        break;
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&SettingsScreen, window);
+            break;
 
-    case GX_SIGNAL(GOTO_PAD_TYPE_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &SetPadTypeScreen);
-        gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen);
-        break;
+        case GX_SIGNAL(GOTO_PAD_TYPE_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&SetPadTypeScreen, window);
+            break;
 
-    case GX_SIGNAL(GOTO_PAD_DIRECTIONS_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &SetPadDirectionScreen);
-        gx_widget_show ((GX_WIDGET*) &SetPadDirectionScreen);
-        break;
-    }
+        case GX_SIGNAL(GOTO_PAD_DIRECTIONS_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&SetPadDirectionScreen, window);
+            break;
+    } // end switch
 
     gx_window_event_process(window, event_ptr);
 
@@ -1140,115 +1118,89 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
     UINT pads, icons;
     switch (event_ptr->gx_event_type)
     {
-    case GX_EVENT_SHOW:
-        // Show correct settings for LEFT pad. Off, Right, Forward or Left.
-        // First let's hide all choices for all pads.
-        for (pads = 0; pads < 3; ++pads)
-        {
-            for (icons = 0; icons < 5; ++icons)
+        case GX_EVENT_SHOW:
+            // Show correct settings for LEFT pad. Off, Right, Forward or Left.
+            // First let's hide all choices for all pads.
+            for (pads = 0; pads < 3; ++pads)
             {
-                gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[icons], &g_HiddenRectangle);
+                for (icons = 0; icons < 5; ++icons)
+                {
+                    gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[icons], &g_HiddenRectangle);
+                }
+                gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[INVALID_DIRECTION], &g_PadDirectionLocation[pads]);
             }
-            gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[INVALID_DIRECTION], &g_PadDirectionLocation[pads]);
-        }
-        SendGetPadAssignmentMsg (LEFT_PAD);
-        SendGetPadAssignmentMsg (RIGHT_PAD);
-        SendGetPadAssignmentMsg (CENTER_PAD);
-        break;
+            SendGetPadAssignmentMsg (LEFT_PAD);
+            SendGetPadAssignmentMsg (RIGHT_PAD);
+            SendGetPadAssignmentMsg (CENTER_PAD);
+            break;
 
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &PadOptionsSettingsScreen);
-        gx_widget_show ((GX_WIDGET*) &PadOptionsSettingsScreen);
-        break;
-    // Process LEFT button pushes
-    case GX_SIGNAL(LEFT_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
-        g_PadSettings[LEFT_PAD].m_PadDirection = LEFT_DIRECTION;
-        SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
-        SendGetPadAssignmentMsg (LEFT_PAD);
-        break;
-    case GX_SIGNAL(LEFT_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
-        g_PadSettings[LEFT_PAD].m_PadDirection = FORWARD_DIRECTION;
-        SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
-        SendGetPadAssignmentMsg (LEFT_PAD);
-        break;
-    case GX_SIGNAL(LEFT_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
-        g_PadSettings[LEFT_PAD].m_PadDirection = RIGHT_DIRECTION;
-        SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
-        SendGetPadAssignmentMsg (LEFT_PAD);
-        break;
-    case GX_SIGNAL(LEFT_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_PadDirectionLocation[LEFT_PAD]);
-        g_PadSettings[LEFT_PAD].m_PadDirection = OFF_DIRECTION;
-        SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
-        SendGetPadAssignmentMsg (LEFT_PAD);
-        break;
-    // Process RIGHT button pushes
-    case GX_SIGNAL(RIGHT_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
-        g_PadSettings[RIGHT_PAD].m_PadDirection = LEFT_DIRECTION;
-        SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
-        SendGetPadAssignmentMsg (RIGHT_PAD);
-        break;
-    case GX_SIGNAL(RIGHT_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
-        g_PadSettings[RIGHT_PAD].m_PadDirection = FORWARD_DIRECTION;
-        SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
-        SendGetPadAssignmentMsg (RIGHT_PAD);
-        break;
-    case GX_SIGNAL(RIGHT_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
-        g_PadSettings[RIGHT_PAD].m_PadDirection = RIGHT_DIRECTION;
-        SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
-        SendGetPadAssignmentMsg (RIGHT_PAD);
-        break;
-    case GX_SIGNAL(RIGHT_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION], &g_PadDirectionLocation[RIGHT_PAD]);
-        g_PadSettings[RIGHT_PAD].m_PadDirection = OFF_DIRECTION;
-        SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
-        SendGetPadAssignmentMsg (RIGHT_PAD);
-        break;
-    // Process CENTER PAD button pushes
-    case GX_SIGNAL(CENTER_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
-        g_PadSettings[CENTER_PAD].m_PadDirection = LEFT_DIRECTION;
-        SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
-        SendGetPadAssignmentMsg (CENTER_PAD);
-        break;
-    case GX_SIGNAL(CENTER_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
-        g_PadSettings[CENTER_PAD].m_PadDirection = FORWARD_DIRECTION;
-        SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
-        SendGetPadAssignmentMsg (CENTER_PAD);
-        break;
-    case GX_SIGNAL(CENTER_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[FORWARD_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
-        g_PadSettings[CENTER_PAD].m_PadDirection = RIGHT_DIRECTION;
-        SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
-        SendGetPadAssignmentMsg (CENTER_PAD);
-        break;
-    case GX_SIGNAL(CENTER_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION], &g_HiddenRectangle);
-        //gx_widget_resize ((GX_WIDGET*) g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION], &g_PadDirectionLocation[CENTER_PAD]);
-        g_PadSettings[CENTER_PAD].m_PadDirection = OFF_DIRECTION;
-        SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
-        SendGetPadAssignmentMsg (CENTER_PAD);
-        break;
-
-    }
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
+            break;
+        // Process LEFT button pushes
+        case GX_SIGNAL(LEFT_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[LEFT_PAD].m_PadDirection = LEFT_DIRECTION;
+            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (LEFT_PAD);
+            break;
+        case GX_SIGNAL(LEFT_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[LEFT_PAD].m_PadDirection = FORWARD_DIRECTION;
+            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (LEFT_PAD);
+            break;
+        case GX_SIGNAL(LEFT_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[LEFT_PAD].m_PadDirection = RIGHT_DIRECTION;
+            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (LEFT_PAD);
+            break;
+        case GX_SIGNAL(LEFT_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[LEFT_PAD].m_PadDirection = OFF_DIRECTION;
+            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (LEFT_PAD);
+            break;
+        // Process RIGHT button pushes
+        case GX_SIGNAL(RIGHT_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[RIGHT_PAD].m_PadDirection = LEFT_DIRECTION;
+            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (RIGHT_PAD);
+            break;
+        case GX_SIGNAL(RIGHT_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[RIGHT_PAD].m_PadDirection = FORWARD_DIRECTION;
+            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (RIGHT_PAD);
+            break;
+        case GX_SIGNAL(RIGHT_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[RIGHT_PAD].m_PadDirection = RIGHT_DIRECTION;
+            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (RIGHT_PAD);
+            break;
+        case GX_SIGNAL(RIGHT_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[RIGHT_PAD].m_PadDirection = OFF_DIRECTION;
+            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
+            SendGetPadAssignmentMsg (RIGHT_PAD);
+            break;
+        // Process CENTER PAD button pushes
+        case GX_SIGNAL(CENTER_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[CENTER_PAD].m_PadDirection = LEFT_DIRECTION;
+            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
+            SendGetPadAssignmentMsg (CENTER_PAD);
+            break;
+        case GX_SIGNAL(CENTER_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[CENTER_PAD].m_PadDirection = FORWARD_DIRECTION;
+            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
+            SendGetPadAssignmentMsg (CENTER_PAD);
+            break;
+        case GX_SIGNAL(CENTER_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[CENTER_PAD].m_PadDirection = RIGHT_DIRECTION;
+            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
+            SendGetPadAssignmentMsg (CENTER_PAD);
+            break;
+        case GX_SIGNAL(CENTER_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            g_PadSettings[CENTER_PAD].m_PadDirection = OFF_DIRECTION;
+            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
+            SendGetPadAssignmentMsg (CENTER_PAD);
+            break;
+    } // end switch
 
     gx_window_event_process(window, event_ptr);
 
@@ -1313,47 +1265,46 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     switch (event_ptr->gx_event_type)
     {
-    case GX_EVENT_SHOW:
-        break;
+        case GX_EVENT_SHOW:
+            break;
 
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &SettingsScreen);
-        gx_widget_show ((GX_WIDGET*) &SettingsScreen);
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&SettingsScreen, window);
 
-        myMask = 0x01;
-        for (feature = 0; feature < 4; ++feature)
-        {
-            if (g_ScreenPrompts[feature].m_Active)
+            myMask = 0x01;
+            for (feature = 0; feature < 4; ++feature)
             {
-                // Create the byte to send to the COMM Task to tell Head Array what features are active.
-                myActiveFeatures |= myMask;     // Set bit.
+                if (g_ScreenPrompts[feature].m_Active)
+                {
+                    // Create the byte to send to the COMM Task to tell Head Array what features are active.
+                    myActiveFeatures |= myMask;     // Set bit.
+                }
+                myMask = (uint8_t)(myMask << 1);    // Rotate the bit.
             }
-            myMask <<= 1;    // Rotate the bit.
-        }
-        // Add clicks in D4.
-        if (g_ClicksActive)
-            myActiveFeatures |= 0x10;
-        SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
-        break;
+            // Add clicks in D4 of byte.
+            if (g_ClicksActive)
+                myActiveFeatures |= 0x10;
+            SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
+            break;
 
-        // Click (Audio) Feature handling
-    case GX_SIGNAL(CLICKS_INACTIVE_ICON, GX_EVENT_CLICKED):
-    case GX_SIGNAL(CLICKS_ACTIVE_ICON, GX_EVENT_CLICKED):
-        g_ClicksActive = (g_ClicksActive == TRUE ? FALSE : TRUE);
-        break;
+            // Click (Audio) Feature handling
+        case GX_SIGNAL(CLICKS_INACTIVE_ICON, GX_EVENT_CLICKED):
+        case GX_SIGNAL(CLICKS_ACTIVE_ICON, GX_EVENT_CLICKED):
+            g_ClicksActive = (g_ClicksActive == TRUE ? FALSE : TRUE);
+            break;
 
-    case GX_SIGNAL(TIMER_OFF_BTN_ID, GX_EVENT_CLICKED):
-    case GX_SIGNAL(TIMER_10_BTN_ID, GX_EVENT_CLICKED):
-    case GX_SIGNAL(TIMER_15_BTN_ID, GX_EVENT_CLICKED):
-    case GX_SIGNAL(TIMER_20_BTN_ID, GX_EVENT_CLICKED):
-    case GX_SIGNAL(TIMER_25_BTN_ID, GX_EVENT_CLICKED):
-    case GX_SIGNAL(TIMER_30_BTN_ID, GX_EVENT_CLICKED):
-    case GX_SIGNAL(TIMER_40_BTN_ID, GX_EVENT_CLICKED):
-    case GX_SIGNAL(TIMER_50_BTN_ID, GX_EVENT_CLICKED):
-        feature = LocateNextTimeoutIndex();
-        g_TimeoutValue = g_TimeoutInfo[feature].m_TimeoutValue;
-        break;
-    }
+        case GX_SIGNAL(TIMER_OFF_BTN_ID, GX_EVENT_CLICKED):
+        case GX_SIGNAL(TIMER_10_BTN_ID, GX_EVENT_CLICKED):
+        case GX_SIGNAL(TIMER_15_BTN_ID, GX_EVENT_CLICKED):
+        case GX_SIGNAL(TIMER_20_BTN_ID, GX_EVENT_CLICKED):
+        case GX_SIGNAL(TIMER_25_BTN_ID, GX_EVENT_CLICKED):
+        case GX_SIGNAL(TIMER_30_BTN_ID, GX_EVENT_CLICKED):
+        case GX_SIGNAL(TIMER_40_BTN_ID, GX_EVENT_CLICKED):
+        case GX_SIGNAL(TIMER_50_BTN_ID, GX_EVENT_CLICKED):
+            feature = LocateNextTimeoutIndex();
+            g_TimeoutValue = g_TimeoutInfo[feature].m_TimeoutValue;
+            break;
+    } // end switch
 
     ShowUserSettingsItems();
 
@@ -1440,68 +1391,67 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 
     switch (event_ptr->gx_event_type)
     {
-    case GX_EVENT_SHOW:
-        g_SettingsChanged = FALSE;
-        break;
+        case GX_EVENT_SHOW:
+            g_SettingsChanged = FALSE;
+            break;
 
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &SettingsScreen);
-        gx_widget_show ((GX_WIDGET*) &SettingsScreen);
-        // This sets the screen location of any active features.
-        myActiveFeatures = 0;
-        myMask = 0x01;
-        if (g_SettingsChanged)
-        {
-            numActive = 0;
-            for (feature = 0; feature < 4; ++feature)
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&SettingsScreen, window);
+            // This sets the screen location of any active features.
+            myActiveFeatures = 0;
+            myMask = 0x01;
+            if (g_SettingsChanged)
             {
-                if (g_ScreenPrompts[feature].m_Active)
+                numActive = 0;
+                for (feature = 0; feature < 4; ++feature)
                 {
-                    // Create the byte to send to the COMM Task to tell Head Array what features are active.
-                    myActiveFeatures |= myMask;     // Set bit.
-                    if (numActive == 0)
-                        SendModeChangeCommand ((FEATURE_ID_ENUM) feature);
-                    g_ScreenPrompts[feature].m_Location = numActive;
-                    ++numActive;
+                    if (g_ScreenPrompts[feature].m_Active)
+                    {
+                        // Create the byte to send to the COMM Task to tell Head Array what features are active.
+                        myActiveFeatures |= myMask;     // Set bit.
+                        if (numActive == 0)
+                            SendModeChangeCommand ((FEATURE_ID_ENUM) feature);
+                        g_ScreenPrompts[feature].m_Location = numActive;
+                        ++numActive;
+                    }
+                    myMask = (uint8_t)(myMask << 1);    // Rotate the bit.
                 }
-                myMask <<= 1;    // Rotate the bit.
+                // Add clicks in D4.
+                if (g_ClicksActive)
+                    myActiveFeatures |= 0x10;
+                SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
             }
-            // Add clicks in D4.
-            if (g_ClicksActive)
-                myActiveFeatures |= 0x10;
-            SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
-        }
-        break;
+            break;
 
-        // Power Feature handling
-//    case GX_SIGNAL(POWER_BTN_ID, GX_EVENT_CLICKED):
-    case GX_SIGNAL(POWER_INACTIVE_ICON, GX_EVENT_CLICKED):
-    case GX_SIGNAL(POWER_ACTIVE_ICON, GX_EVENT_CLICKED):
-        g_ScreenPrompts[0].m_Active = (g_ScreenPrompts[0].m_Active==TRUE ? FALSE : TRUE);
-        g_SettingsChanged = TRUE;
-        break;
+            // Power Feature handling
+    //    case GX_SIGNAL(POWER_BTN_ID, GX_EVENT_CLICKED):
+        case GX_SIGNAL(POWER_INACTIVE_ICON, GX_EVENT_CLICKED):
+        case GX_SIGNAL(POWER_ACTIVE_ICON, GX_EVENT_CLICKED):
+            g_ScreenPrompts[0].m_Active = (g_ScreenPrompts[0].m_Active==TRUE ? FALSE : TRUE);
+            g_SettingsChanged = TRUE;
+            break;
 
-        // Bluetooth Feature handling
-    case GX_SIGNAL(BLUETOOTH_INACTIVE_ICON, GX_EVENT_CLICKED):
-    case GX_SIGNAL(BLUETOOTH_ACTIVE_ICON, GX_EVENT_CLICKED):
-        g_ScreenPrompts[1].m_Active = (g_ScreenPrompts[1].m_Active==TRUE ? FALSE : TRUE);
-        g_SettingsChanged = TRUE;
-        break;
+            // Bluetooth Feature handling
+        case GX_SIGNAL(BLUETOOTH_INACTIVE_ICON, GX_EVENT_CLICKED):
+        case GX_SIGNAL(BLUETOOTH_ACTIVE_ICON, GX_EVENT_CLICKED):
+            g_ScreenPrompts[1].m_Active = (g_ScreenPrompts[1].m_Active==TRUE ? FALSE : TRUE);
+            g_SettingsChanged = TRUE;
+            break;
 
-        // Next Function Feature handling
-    case GX_SIGNAL(NEXT_FUNCTION_INACTIVE_ICON, GX_EVENT_CLICKED):
-    case GX_SIGNAL(NEXT_FUNCTION_ACTIVE_ICON, GX_EVENT_CLICKED):
-        g_ScreenPrompts[2].m_Active = (g_ScreenPrompts[2].m_Active==TRUE ? FALSE : TRUE);
-        g_SettingsChanged = TRUE;
-        break;
+            // Next Function Feature handling
+        case GX_SIGNAL(NEXT_FUNCTION_INACTIVE_ICON, GX_EVENT_CLICKED):
+        case GX_SIGNAL(NEXT_FUNCTION_ACTIVE_ICON, GX_EVENT_CLICKED):
+            g_ScreenPrompts[2].m_Active = (g_ScreenPrompts[2].m_Active==TRUE ? FALSE : TRUE);
+            g_SettingsChanged = TRUE;
+            break;
 
-        // Next Profile Feature handling
-    case GX_SIGNAL(NEXT_PROFILE_INACTIVE_ICON, GX_EVENT_CLICKED):
-    case GX_SIGNAL(NEXT_PROFILE_ACTIVE_ICON, GX_EVENT_CLICKED):
-        g_ScreenPrompts[3].m_Active = (g_ScreenPrompts[3].m_Active==TRUE ? FALSE : TRUE);
-        g_SettingsChanged = TRUE;
-        break;
-    }
+            // Next Profile Feature handling
+        case GX_SIGNAL(NEXT_PROFILE_INACTIVE_ICON, GX_EVENT_CLICKED):
+        case GX_SIGNAL(NEXT_PROFILE_ACTIVE_ICON, GX_EVENT_CLICKED):
+            g_ScreenPrompts[3].m_Active = (g_ScreenPrompts[3].m_Active==TRUE ? FALSE : TRUE);
+            g_SettingsChanged = TRUE;
+            break;
+    } // end switch
 
     ShowActiveFeatures ();
 
@@ -1562,105 +1512,103 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
     {
-    case GX_EVENT_SHOW:
-        g_ChangeScreen_WIP = FALSE;
-        // Hide all buttons/icons. THe "Get Pad Assignment" response will issue a "redraw" this screen after it gets the current settings from the Head Array.
-        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
-        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
-        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
-        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
-        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadProportional_Button);
-        gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
-        SendGetPadAssignmentMsg (LEFT_PAD);
-        SendGetPadAssignmentMsg (RIGHT_PAD);
-        SendGetPadAssignmentMsg (CENTER_PAD);
-        break;
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        gx_widget_attach (p_window_root, (GX_WIDGET*) &PadOptionsSettingsScreen);
-        gx_widget_show ((GX_WIDGET*) &PadOptionsSettingsScreen);
-        break;
-    case GX_SIGNAL(RIGHT_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
-        if (!g_ChangeScreen_WIP)
-        {
-            g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
-            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (RIGHT_PAD);
-        }
-        break;
-    case GX_SIGNAL(RIGHT_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
-        if (!g_ChangeScreen_WIP)
-        {
-            g_PadSettings[RIGHT_PAD].m_PadType = DIGITAL_PADTYPE;
-            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (RIGHT_PAD);
-        }
-        break;
-    case GX_SIGNAL(LEFT_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
-        if (!g_ChangeScreen_WIP)
-        {
-            g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
-            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
+        case GX_EVENT_SHOW:
+            g_ChangeScreen_WIP = FALSE;
+            // Hide all buttons/icons. THe "Get Pad Assignment" response will issue a "redraw" this screen after it gets the current settings from the Head Array.
+            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadProportional_Button);
+            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_LeftPadDigital_Button);
+            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadProportional_Button);
+            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_RightPadDigital_Button);
+            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadProportional_Button);
+            gx_widget_hide ((GX_WIDGET*) &SetPadTypeScreen.SetPadTypeScreen_CenterPadDigital_Button);
             SendGetPadAssignmentMsg (LEFT_PAD);
-        }
-        break;
-    case GX_SIGNAL(LEFT_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
-        if (!g_ChangeScreen_WIP)
-        {
-            g_PadSettings[LEFT_PAD].m_PadType = DIGITAL_PADTYPE;
-            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (LEFT_PAD);
-        }
-        break;
-    case GX_SIGNAL(CENTER_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
-        if (!g_ChangeScreen_WIP)
-        {
-            g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
-            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
+            SendGetPadAssignmentMsg (RIGHT_PAD);
             SendGetPadAssignmentMsg (CENTER_PAD);
-        }
-        break;
-    case GX_SIGNAL(CENTER_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
-        if (!g_ChangeScreen_WIP)
-        {
-            g_PadSettings[CENTER_PAD].m_PadType = DIGITAL_PADTYPE;
-            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
-            SendGetPadAssignmentMsg (CENTER_PAD);
-        }
-        break;
+            break;
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
+            break;
+        case GX_SIGNAL(RIGHT_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
+            if (!g_ChangeScreen_WIP)
+            {
+                g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+                SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
+                SendGetPadAssignmentMsg (RIGHT_PAD);
+            }
+            break;
+        case GX_SIGNAL(RIGHT_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
+            if (!g_ChangeScreen_WIP)
+            {
+                g_PadSettings[RIGHT_PAD].m_PadType = DIGITAL_PADTYPE;
+                SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
+                SendGetPadAssignmentMsg (RIGHT_PAD);
+            }
+            break;
+        case GX_SIGNAL(LEFT_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
+            if (!g_ChangeScreen_WIP)
+            {
+                g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+                SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
+                SendGetPadAssignmentMsg (LEFT_PAD);
+            }
+            break;
+        case GX_SIGNAL(LEFT_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
+            if (!g_ChangeScreen_WIP)
+            {
+                g_PadSettings[LEFT_PAD].m_PadType = DIGITAL_PADTYPE;
+                SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
+                SendGetPadAssignmentMsg (LEFT_PAD);
+            }
+            break;
+        case GX_SIGNAL(CENTER_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
+            if (!g_ChangeScreen_WIP)
+            {
+                g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+                SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
+                SendGetPadAssignmentMsg (CENTER_PAD);
+            }
+            break;
+        case GX_SIGNAL(CENTER_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
+            if (!g_ChangeScreen_WIP)
+            {
+                g_PadSettings[CENTER_PAD].m_PadType = DIGITAL_PADTYPE;
+                SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
+                SendGetPadAssignmentMsg (CENTER_PAD);
+            }
+            break;
 
-    case GX_EVENT_TIMER:
-        if (event_ptr->gx_event_payload.gx_event_timer_id == CALIBRATION_TIMER_ID)
-        {
-            gx_system_timer_stop(window, CALIBRATION_TIMER_ID);
-            gx_widget_attach (p_window_root, (GX_WIDGET*) &PadCalibrationScreen);
-            gx_widget_show ((GX_WIDGET*) &PadCalibrationScreen);
-            g_ChangeScreen_WIP = TRUE;
-        }
-        break;
-    case GX_EVENT_PEN_DOWN: // We are going to determine if the Up or Down arrow buttons have been held for a
-                            // ... long time (2 seconds) and goto calibration if so.
+        case GX_EVENT_TIMER:
+            if (event_ptr->gx_event_payload.gx_event_timer_id == CALIBRATION_TIMER_ID)
+            {
+                gx_system_timer_stop(window, CALIBRATION_TIMER_ID);
+                screen_toggle((GX_WINDOW *)&PadCalibrationScreen, window);
+                g_ChangeScreen_WIP = TRUE;
+            }
+            break;
+        case GX_EVENT_PEN_DOWN: // We are going to determine if the Up or Down arrow buttons have been held for a
+                                // ... long time (2 seconds) and goto calibration if so.
 
-        if (event_ptr->gx_event_target->gx_widget_id == CENTER_PAD_PROPORTIONAL_BTN_ID)
-        {
-            g_CalibrationPadNumber = CENTER_PAD;
-            gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
-        }
-        else if (event_ptr->gx_event_target->gx_widget_id == LEFT_PAD_PROPORTIONAL_BTN_ID)
-        {
-            g_CalibrationPadNumber = LEFT_PAD;
-            gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
-        }
-        else if (event_ptr->gx_event_target->gx_widget_id == RIGHT_PAD_PROPORTIONAL_BTN_ID)
-        {
-            g_CalibrationPadNumber = RIGHT_PAD;
-            gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
-        }
-        break;
-    case GX_EVENT_PEN_UP:
-            gx_system_timer_stop(window, CALIBRATION_TIMER_ID);
-        break;
+            if (event_ptr->gx_event_target->gx_widget_id == CENTER_PAD_PROPORTIONAL_BTN_ID)
+            {
+                g_CalibrationPadNumber = CENTER_PAD;
+                gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
+            }
+            else if (event_ptr->gx_event_target->gx_widget_id == LEFT_PAD_PROPORTIONAL_BTN_ID)
+            {
+                g_CalibrationPadNumber = LEFT_PAD;
+                gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
+            }
+            else if (event_ptr->gx_event_target->gx_widget_id == RIGHT_PAD_PROPORTIONAL_BTN_ID)
+            {
+                g_CalibrationPadNumber = RIGHT_PAD;
+                gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
+            }
+            break;
+        case GX_EVENT_PEN_UP:
+                gx_system_timer_stop(window, CALIBRATION_TIMER_ID);
+            break;
 
-    }
+    } // end swtich
 
 //    ShowPadTypes();
 
@@ -1821,16 +1769,15 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         }
         else if (g_CalibrationStepNumber == 1)
         {
-            gx_widget_attach (p_window_root, (GX_WIDGET*) &SetPadTypeScreen);
-            gx_widget_show ((GX_WIDGET*) &SetPadTypeScreen);
+            screen_toggle((GX_WINDOW *)&SetPadTypeScreen, window);
 
             SendGetDataCommand (STOP_SENDING_DATA, g_CalibrationPadNumber);     // We will stop asking for data from the head array.
 
             SendCalibrationStopCommand();           // This tells the Head Array to EXIT Calibration Mode.
 
             // Tell the head array what the new cal values are.
-            SendCalibrationData (g_CalibrationPadNumber, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue,
-                                 g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
+            SendCalibrationData (g_CalibrationPadNumber, (uint16_t) g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue,
+                    (uint16_t) g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
         }
         break;
     case GX_SIGNAL(DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):

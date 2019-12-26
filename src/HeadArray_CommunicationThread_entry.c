@@ -509,7 +509,7 @@ uint8_t GetPadData(void)
     HB_Response[2] = (uint8_t) (g_RawData & 0xff);
     HB_Response[3] = (uint8_t) ((g_DriveDemand >> 8) & 0xff);
     HB_Response[4] = (uint8_t) (g_DriveDemand & 0xff);
-    g_RawData += 5;
+    g_RawData = (uint16_t)(g_RawData + 5);
     if (g_DriveDemand > 100)
         g_DriveDemand = 0;
     if (g_RawData > 980)
