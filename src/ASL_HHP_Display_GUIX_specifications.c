@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 17.12.2019   Time (hh:mm): 07:24                        */
+/*  Date (dd.mm.yyyy): 27.12.2019   Time (hh:mm): 11:03                        */
 /*******************************************************************************/
 
 
@@ -147,7 +147,7 @@ UINT gx_studio_window_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control
 }
 GX_WINDOW_PROPERTIES OON_Screen_properties =
 {
-    GX_PIXELMAP_ID_OUTOFNEUTRAL              /* wallpaper pixelmap id          */
+    GX_PIXELMAP_ID_OUTOFNEUTRAL_NOLOGO       /* wallpaper pixelmap id          */
 };
 GX_PROMPT_PROPERTIES OON_Screen_prompt_properties =
 {
@@ -196,7 +196,7 @@ GX_CONST GX_STUDIO_WIDGET OON_Screen_prompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {29, 180, 207, 212},                     /* widget size                    */
+    {69, 178, 247, 210},                     /* widget size                    */
     &OON_Screen_OON_OK_Button_define,        /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(OON_SCREEN_CONTROL_BLOCK, OON_Screen_prompt), /* control block    */
@@ -755,7 +755,7 @@ GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_define =
 };
 GX_WINDOW_PROPERTIES ReadyScreen_properties =
 {
-    GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_FLATTEN  /* wallpaper pixelmap id        */
+    GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_NOLOGO  /* wallpaper pixelmap id         */
 };
 GX_PIXELMAP_PROMPT_PROPERTIES ReadyScreen_PowerLargeOrangePrompt_properties =
 {
@@ -794,7 +794,7 @@ GX_CONST GX_STUDIO_WIDGET ReadyScreen_PressSwitchPrompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {30, 162, 206, 195},                     /* widget size                    */
+    {90, 91, 266, 124},                      /* widget size                    */
     GX_NULL,                                 /* no next widget                 */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(READYSCREEN_CONTROL_BLOCK, ReadyScreen_PressSwitchPrompt), /* control block */
@@ -3562,7 +3562,7 @@ GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_define =
 };
 GX_WINDOW_PROPERTIES Main_User_Screen_properties =
 {
-    GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_FLATTEN  /* wallpaper pixelmap id        */
+    GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_NOLOGO  /* wallpaper pixelmap id         */
 };
 GX_PIXELMAP_PROMPT_PROPERTIES Main_User_Screen_RightPadOFF_properties =
 {

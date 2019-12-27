@@ -642,6 +642,7 @@ VOID StartupSplashScreen_draw_function (GX_WINDOW *window)
 }
 
 //*************************************************************************************
+int16_t g_StartupDelayCounter = 0;
 
 UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
@@ -650,8 +651,23 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     switch (event_ptr->gx_event_type)
     {
         case GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&Main_User_Screen, window);
-            SendGetVersionCommand ();
+            if (g_StartupDelayCounter < 0)      // If we've been here before but are recovering from a Heart Beat timeout, don't wait, just goto the Main User Screen.
+            {
+                screen_toggle((GX_WINDOW *)&Main_User_Screen, window);
+            }
+            else // OK, we are starting up.
+            {
+                ++g_StartupDelayCounter;
+                if (g_StartupDelayCounter > 5)  // Have we shown the startup screen long enough?
+                {
+                    screen_toggle((GX_WINDOW *)&Main_User_Screen, window);
+                    g_StartupDelayCounter = -1; // This prevents us from doing a "startup" delay should the Heart Beat stop.
+                }
+                else if (g_StartupDelayCounter == 2)    // We need to send a Version Request to the Head Array.
+                {
+                    SendGetVersionCommand ();
+                }
+            }
             break;
     } // end switch
 
