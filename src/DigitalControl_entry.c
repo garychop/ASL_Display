@@ -47,13 +47,12 @@
 //****************************************************************************
 // Typedefs
 //****************************************************************************
+typedef enum E_BUTTON_STATES {NO_BUTTONS_ACTIVE, SOME_BUTTON_ACTIVE, BOTH_BUTTONS_ACTIVE, WAIT_FOR_NO_ACTIVE} BUTTON_STATES_ENUM;
 
 typedef struct st_ButtonInfo
 {
     ioport_port_pin_t m_PortID;
-    ioport_level_t m_KeyState;
-    uint16_t m_Counter;
-    uint16_t m_Mask;
+    uint8_t m_Mask;
     ULONG m_GUI_ButtonID;
 } st_ButtonInfo_t;
 
@@ -65,12 +64,12 @@ typedef struct st_ButtonInfo
 // Global Variables
 //****************************************************************************
 
-st_ButtonInfo_t g_ButtonInfo[] = {{UP_ARROW_BTN_PORT, IOPORT_LEVEL_LOW,0, UP_ARROW_BTN, GX_SIGNAL (UP_ARROW_BTN_ID, GX_EVENT_CLICKED)},
-                                  {DOWN_ARROW_BTN_PORT, IOPORT_LEVEL_LOW,0, DOWN_ARROW_BTN, GX_SIGNAL (DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED)}};
+st_ButtonInfo_t g_ButtonInfo[] = {{UP_ARROW_BTN_PORT, UP_ARROW_BTN, GX_SIGNAL (UP_ARROW_BTN_ID, GX_EVENT_CLICKED)},
+                                  {DOWN_ARROW_BTN_PORT, DOWN_ARROW_BTN, GX_SIGNAL (DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED)}};
 
-uint16_t g_ArrowState = 0;          // Where 0x01 = Up, 0x02, Down
-uint16_t g_OldArrowState = 0;
-uint16_t g_BothArrowCounter = 0;
+BUTTON_STATES_ENUM g_ButtonFunction = NO_BUTTONS_ACTIVE;
+uint8_t g_OldButtonState;
+uint8_t g_Counter = 0;
 
 //****************************************************************************
 // External Prototypes
@@ -88,7 +87,6 @@ void Read_Arrow_Buttons(void);
 
 void DigitalControl_entry(void)
 {
-//    bool myFlag = 0;
 
     tx_thread_sleep (50);      // 10 milliseconds increments.
 
@@ -114,69 +112,130 @@ void DigitalControl_entry(void)
 // Description: This function reads the Up and Down arrow buttons on the
 //          front panel and sets global variables.
 //
+// PDL start
+//      Set "OldState" = NoActiveButtons
+//      Get UP arrow state
+//      Get DOWN arrow state
+//      combine them into ButtonState
+//      case NoneActive:
+//          if (ButtonState != 0)
+//              Set OldState = ButtonState
+//              Set to "SomethingActive"
+//          endcase
+//      case SomethingActive:
+//          if (ButtonState = 0)
+//              clear counter
+//              Set OldState = ButtonState
+//              set to "NoneActive"
+//          else if (OldState != ButtonState)
+//              clear counter
+//              set OldState = ButtonState
+//          else
+//              ++counter;
+//              if (counter > 8)
+//                  // Process Up, Down or BOTH buttons pushed.
+//                  if (both) send BOTH msg
+//                  else if (down) send Down Msg
+//                  else if (up) send Up Msg
+//                  set to WaitForNoneActive
+//              endif
+//          endcase
+//      case "WatiForNoneActive:
+//          if (ButtonState == 0)
+//              clear counter
+//              set OldState = ButtonState
+//              set to NoneActive
+//          endcase
+//
 //****************************************************************************
 
 void Read_Arrow_Buttons(void)
 {
     ioport_level_t pin_state;
     GX_EVENT gxe;
+    uint8_t buttonState;
+    uint8_t i;
 
-    for (uint16_t i=0; i<2; ++i)
+    // Get the current state of all (both) front panel switches.
+    buttonState = 0;
+    for (i=0; i<2; ++i)
     {
         g_ioport.p_api->pinRead(g_ButtonInfo[i].m_PortID, &pin_state);     // Get current status of switch input
-        if (pin_state == g_ButtonInfo[i].m_KeyState)                       // Did the state change?
-        {                                                                   // No, the status remains the same.
-            if (++g_ButtonInfo[i].m_Counter > 8)                           // Are we same state long enough, 8*10 milliseconds
-            {
-                g_ButtonInfo[i].m_Counter = 8;                             // Yep, make sure we don't exceed the uint.
-                if (pin_state == IOPORT_LEVEL_HIGH)                         // Is it High or low.
-                {
-                    g_ArrowState &= (0xff ^ g_ButtonInfo[i].m_Mask);        // Couldn't use "~" without getting compile warnings. A true hack
-                }
-                else
-                {
-                    g_ArrowState |= g_ButtonInfo[i].m_Mask;                // It's high, set the state high.
-                    gxe.gx_event_type = g_ButtonInfo[i].m_GUI_ButtonID;
-                }
-            }
-        }
-        else    // Yes, the state of switch DID change.
+        if (pin_state == IOPORT_LEVEL_LOW)                         // (active) Low? Yes, the button is pushed.
         {
-            g_ButtonInfo[i].m_Counter = 0;                                 // Reset the counter
-            g_ButtonInfo[i].m_KeyState = pin_state;                        // retain the current state of the switch.
-            g_BothArrowCounter = 0;
+            buttonState |= g_ButtonInfo[i].m_Mask;                // It's high, set the state high.
         }
     }
 
-    // Process a change in switch state and turn on LED when active as diagnostics.
-    if (g_OldArrowState!=g_ArrowState)
+    // Let's process the data as a state engine.
+    switch (g_ButtonFunction)
     {
-        gxe.gx_event_sender         = GX_ID_NONE;
-        gxe.gx_event_target         = 0;  /* the event to be routed to the widget that has input focus */
-        gxe.gx_event_display_handle = 0;
-        gx_system_event_send(&gxe);
-
-        g_OldArrowState = g_ArrowState;
-//        if ((g_ArrowState &= (UP_ARROW_BTN | DOWN_ARROW_BTN)) == 0x00)
-//            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);       // Turn off LED
-//        else
-//            g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);        // Turn on LED
-    }
-    else
-    {
-        // Special processing of both UP and DOWN arrows. If they are active for 10 seconds, then issue BOTH_ARROW_ID
-        if (g_ArrowState == (UP_ARROW_BTN | DOWN_ARROW_BTN))
-        {
-            ++g_BothArrowCounter;
-            if (g_BothArrowCounter > 200)      // 10 seconds in 10 millisecond increments
+        case NO_BUTTONS_ACTIVE:
+            g_Counter = 0;          // Doesn't hurt to clear the counter of every cycle.
+            if (buttonState != 0)   // Buttons are active high.
             {
-                gxe.gx_event_type = GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED);
-                gxe.gx_event_sender = GX_ID_NONE;
-                gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
-                gxe.gx_event_display_handle = 0;
-                gx_system_event_send(&gxe);
-                g_BothArrowCounter = 0;         // Reset this counter so it doesn't happen for at least 10 more seconds.
+                g_OldButtonState = buttonState;
+                g_ButtonFunction = SOME_BUTTON_ACTIVE;
             }
-        }
-    }
+            break;
+        case SOME_BUTTON_ACTIVE:
+            if (buttonState == 0)                // Are no switches active?
+                g_ButtonFunction = NO_BUTTONS_ACTIVE;
+            else if (g_OldButtonState == (UP_ARROW_BTN | DOWN_ARROW_BTN)) // Are both switches active?
+            {
+                g_Counter = 0;
+                g_ButtonFunction = BOTH_BUTTONS_ACTIVE;
+            }
+            else if (buttonState != g_OldButtonState) // did it flip/flop? Not likely but maybe.
+            {
+                g_OldButtonState = buttonState;
+                g_Counter = 0;          // Rats! something changed, we need to wait even longer.
+            }
+            else // it hasn't changed and it's one button pushed.
+            {
+                if (++g_Counter > 12)      // have we debounced enough? times 10 milliseconds.
+                {
+                    for (i=0; i<2; ++i) // locate the pushed button and send it's respective message to the GUI task.
+                    {
+                        if (buttonState == g_ButtonInfo[i].m_Mask)
+                        {
+                            gxe.gx_event_type = g_ButtonInfo[i].m_GUI_ButtonID;
+                            gxe.gx_event_sender         = GX_ID_NONE;
+                            gxe.gx_event_target         = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                            g_ButtonFunction = WAIT_FOR_NO_ACTIVE;
+                        }
+                    }
+                }
+            }
+            break;
+        case BOTH_BUTTONS_ACTIVE:
+            if (buttonState == (UP_ARROW_BTN | DOWN_ARROW_BTN))
+            {
+                if (++g_Counter > 200)
+                {
+                    gxe.gx_event_type = GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED);
+                    gxe.gx_event_sender = GX_ID_NONE;
+                    gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                    gxe.gx_event_display_handle = 0;
+                    gx_system_event_send(&gxe);
+                    g_ButtonFunction = WAIT_FOR_NO_ACTIVE;
+                }
+            }
+            else
+            {
+                g_ButtonFunction = WAIT_FOR_NO_ACTIVE;
+            }
+            break;
+        case WAIT_FOR_NO_ACTIVE:
+            g_Counter = 0;
+            if (buttonState == 0)
+            {
+                g_OldButtonState = buttonState;
+                g_ButtonFunction = NO_BUTTONS_ACTIVE;
+            }
+            break;
+    } // end switch
+
 }
