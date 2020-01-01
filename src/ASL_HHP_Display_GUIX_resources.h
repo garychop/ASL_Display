@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 27.12.2019   Time (hh:mm): 11:03                        */
+/*  Date (dd.mm.yyyy): 30.12.2019   Time (hh:mm): 17:12                        */
 /*******************************************************************************/
 
 
@@ -64,7 +64,9 @@
 #define GX_COLOR_ID_DARK_GRAY 30
 #define GX_COLOR_ID_WHITE 31
 #define GX_COLOR_ID_BRIGHT_ORANGE 32
-#define MAIN_DISPLAY_COLOR_TABLE_SIZE 33
+#define GX_COLOR_ID_RED 33
+#define GX_COLOR_ID_YELLOW 34
+#define MAIN_DISPLAY_COLOR_TABLE_SIZE 35
 
 /* Font ID definitions                                                         */
 
@@ -104,7 +106,7 @@
 #define GX_PIXELMAP_ID_DOWNARROW 18
 #define GX_PIXELMAP_ID_FUNCTIONNEXT_30X30 19
 #define GX_PIXELMAP_ID_FUNCTIONNEXT_70X70 20
-#define GX_PIXELMAP_ID_FUSIONLOGO 21
+#define GX_PIXELMAP_ID_FUSION_LOGO_WBLK_300X104 21
 #define GX_PIXELMAP_ID_HEADARRAY003 22
 #define GX_PIXELMAP_ID_LEFTRIGHTPAD_DIAGNOSTIC_OFF 23
 #define GX_PIXELMAP_ID_LEFTWHITEARROW 24

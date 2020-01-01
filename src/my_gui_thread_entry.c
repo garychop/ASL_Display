@@ -658,7 +658,7 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             else // OK, we are starting up.
             {
                 ++g_StartupDelayCounter;
-                if (g_StartupDelayCounter > 5)  // Have we shown the startup screen long enough?
+                if (g_StartupDelayCounter > 15)  // Have we shown the startup screen long enough?
                 {
                     screen_toggle((GX_WINDOW *)&Main_User_Screen, window);
                     g_StartupDelayCounter = -1; // This prevents us from doing a "startup" delay should the Heart Beat stop.
@@ -987,20 +987,29 @@ VOID DiagnosticScreen_draw_event (GX_WINDOW *window)
         gx_prompt_text_set (g_PadSettings[pad].m_AdjustedValuePrompt, g_PadSettings[pad].m_DriveDemandString);
         sprintf (g_PadSettings[pad].m_RawValueString, "%3d", g_PadSettings[pad].m_Proportional_RawValue);
         gx_prompt_text_set (g_PadSettings[pad].m_RawValuePrompt, g_PadSettings[pad].m_RawValueString);
-        if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
+        if (g_PadSettings[pad].m_PadDirection == OFF_DIRECTION)
         {
-            // Annunciate an active pad.
-            if (g_PadSettings[pad].m_Proportional_RawValue > g_PadSettings[pad].m_Minimum_ADC_Threshold)
-                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
-            else
-                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
+            gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticOff_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
+            gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
+            gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_HiddenRectangle);
         }
-        else // It's digital
+        else
         {
-            if (g_PadSettings[pad].m_Proportional_RawValue > g_PadSettings[pad].m_Minimum_ADC_Threshold)
-                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
-            else
+            if (g_PadSettings[pad].m_PadType == PROPORTIONAL_PADTYPE)
+            {
+                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
                 gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_HiddenRectangle);
+            }
+            else if (g_PadSettings[pad].m_PadType == DIGITAL_PADTYPE)
+            {
+                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
+                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
+            }
+            else
+            {
+                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
+                gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticDigital_Widget , &g_HiddenRectangle);
+            }
         }
     }
 
@@ -1724,7 +1733,7 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
         pieSide = 5;
     g_Color.rgb.red = 0b11111;
     g_Color.rgb.blue = 0;
-    g_Color.rgb.green = 0b01111;
+    g_Color.rgb.green = 0b01011;
     brush->gx_brush_fill_color = g_Color.gx_color; //  GX_COLOR_GREEN;
     brush->gx_brush_width = 1;
     gx_context_brush_set(brush);        // Not really required. It seems to change the color to yellow without this call.
@@ -1799,13 +1808,13 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_SIGNAL(DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):
         if (g_CalibrationStepNumber == 0)       // We are doing minimum
         {
-            if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue > 4)
+            if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue > 2)
                 --g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
         }
         else if (g_CalibrationStepNumber == 1)  // Doing maximum
         {
-            if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue > 4)
+            if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue > 2)
                 --g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
         }

@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 27.12.2019   Time (hh:mm): 11:03                        */
+/*  Date (dd.mm.yyyy): 30.12.2019   Time (hh:mm): 17:12                        */
 /*******************************************************************************/
 
 
@@ -852,7 +852,7 @@ GX_WINDOW_PROPERTIES StartupSplashScreen_properties =
 };
 GX_PIXELMAP_BUTTON_PROPERTIES StartupSplashScreen_pixelmap_button_properties =
 {
-    GX_PIXELMAP_ID_FUSIONLOGO,               /* normal pixelmap id             */
+    GX_PIXELMAP_ID_FUSION_LOGO_WBLK_300X104, /* normal pixelmap id             */
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };
@@ -903,7 +903,7 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_PowerOnButton_define =
     gx_studio_button_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {157, 117, 161, 121},                    /* widget size                    */
+    {320, 117, 324, 121},                    /* widget size                    */
     &StartupSplashScreen_HB_OON_Button_define, /* next widget definition       */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_PowerOnButton), /* control block */
@@ -995,7 +995,7 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_StatusPrompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {72, 112, 301, 141},                     /* widget size                    */
+    {47, 163, 276, 192},                     /* widget size                    */
     &StartupSplashScreen_HB_OK_Button_define, /* next widget definition        */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_StatusPrompt), /* control block */
@@ -1018,7 +1018,7 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_pixelmap_button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {64, 15, 250, 115},                      /* widget size                    */
+    {7, 18, 305, 115},                       /* widget size                    */
     &StartupSplashScreen_StatusPrompt_define, /* next widget definition        */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_pixelmap_button), /* control block */
@@ -1061,7 +1061,7 @@ GX_PROMPT_PROPERTIES PadCalibrationScreen_MinimumInstructionsText_properties =
 {
     GX_STRING_ID_STRING_23,                  /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
-    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
+    GX_COLOR_ID_YELLOW,                      /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_PIXELMAP_BUTTON_PROPERTIES PadCalibrationScreen_LeftPadON_Button_properties =
@@ -1087,7 +1087,7 @@ GX_PROMPT_PROPERTIES PadCalibrationScreen_MaximumInstructionsText_properties =
 {
     GX_STRING_ID_STRING_26,                  /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
-    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
+    GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_NUMERIC_PROMPT_PROPERTIES PadCalibrationScreen_Value_Prompt_properties =
