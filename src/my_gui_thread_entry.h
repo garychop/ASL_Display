@@ -16,10 +16,19 @@ V0.0.1 Jul22, 2019
 											
 //-------------------------------------------------------------------------
 
+#define USE_ORIGINAL_WIRING
+
+#ifdef USE_ORIGINAL_WIRING // This uses the wire harness with Brown, Blue, White, Red, Black, Green wires
 #define I2C_CS_PIN      IOPORT_PORT_05_PIN_01	//IOPORT_PORT_04_PIN_10
 #define I2C_RES_PIN    	IOPORT_PORT_05_PIN_02	//IOPORT_PORT_04_PIN_11
 #define I2C_IO_PIN     	IOPORT_PORT_05_PIN_03	//IOPORT_PORT_04_PIN_12
 #define I2C_CLK_PIN    	IOPORT_PORT_05_PIN_04	//IOPORT_PORT_04_PIN_13
+#else   // This uses the wire harness with the Yellow, Pink, White, Gray, Brown, Green wires
+#define I2C_CS_PIN      IOPORT_PORT_05_PIN_02
+#define I2C_RES_PIN     IOPORT_PORT_05_PIN_01   //IOPORT_PORT_04_PIN_11
+#define I2C_IO_PIN      IOPORT_PORT_05_PIN_04   //IOPORT_PORT_04_PIN_12
+#define I2C_CLK_PIN     IOPORT_PORT_05_PIN_03   //IOPORT_PORT_04_PIN_13
+#endif
 
 #define beep_out  			IOPORT_PORT_03_PIN_08	//beep Control
 

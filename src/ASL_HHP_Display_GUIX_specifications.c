@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  2. 1.2020   Time (hh:mm): 18:17                        */
+/*  Date (dd.mm.yyyy): 10. 1.2020   Time (hh:mm): 14:23                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+VEERADJUSTSCREEN_CONTROL_BLOCK VeerAdjustScreen;
 OON_SCREEN_CONTROL_BLOCK OON_Screen;
 DIAGNOSTICSCREEN_CONTROL_BLOCK DiagnosticScreen;
 READYSCREEN_CONTROL_BLOCK ReadyScreen;
@@ -65,6 +66,37 @@ UINT gx_studio_pixelmap_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET
                props->selected_pixelmap_id,
                props->disabled_pixelmap_id,
                info->style, info->widget_id, &info->size);
+    return status;
+}
+
+UINT gx_studio_pixelmap_slider_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent)
+{
+    UINT status;
+    GX_PIXELMAP_SLIDER *slider = (GX_PIXELMAP_SLIDER *) control_block;
+    GX_PIXELMAP_SLIDER_PROPERTIES *props = (GX_PIXELMAP_SLIDER_PROPERTIES *) info->properties;
+    GX_PIXELMAP_SLIDER_INFO pixelmap_info;
+    GX_SLIDER_INFO slider_info;
+    slider_info.gx_slider_info_min_val = props->min_val;
+    slider_info.gx_slider_info_max_val = props->max_val;
+    slider_info.gx_slider_info_current_val = props->current_val;
+    slider_info.gx_slider_info_increment = props->increment;
+    slider_info.gx_slider_info_min_travel = props->min_travel;
+    slider_info.gx_slider_info_max_travel = props->max_travel;
+    slider_info.gx_slider_info_needle_width = props->needle_width;
+    slider_info.gx_slider_info_needle_height = props->needle_height;
+    slider_info.gx_slider_info_needle_inset = props->needle_inset;
+    slider_info.gx_slider_info_needle_hotspot_offset = props->needle_hotspot;
+    pixelmap_info.gx_pixelmap_slider_info_lower_background_pixelmap = props->lower_pixelmap;
+    pixelmap_info.gx_pixelmap_slider_info_upper_background_pixelmap = props->upper_pixelmap;
+    pixelmap_info.gx_pixelmap_slider_info_needle_pixelmap = props->needle_pixelmap;
+    status = gx_pixelmap_slider_create(slider,
+                    info->widget_name,
+                    parent,
+                    &slider_info,
+                    &pixelmap_info,
+                    info->style,
+                    info->widget_id,
+                    &info->size);
     return status;
 }
 
@@ -145,6 +177,192 @@ UINT gx_studio_window_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control
     }
     return status;
 }
+GX_WINDOW_PROPERTIES VeerAdjustScreen_properties =
+{
+    GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_NOLOGO  /* wallpaper pixelmap id         */
+};
+GX_PIXELMAP_SLIDER_PROPERTIES VeerAdjustScreen_VeerSlider_properties =
+{
+    0,                                       /* minimum value                  */
+    20,                                      /* maximum value                  */
+    10,                                      /* current value                  */
+    1,                                       /* increment                      */
+    24,                                      /* minimum travel                 */
+    24,                                      /* maximum travel                 */
+    48,                                      /* needle width                   */
+    44,                                      /* needle height                  */
+    5,                                       /* needle inset                   */
+    20,                                      /* needle hotspot                 */
+    GX_PIXELMAP_ID_SLIDER_THIN_HORIZONTAL,   /* lower pixelmap id              */
+    GX_PIXELMAP_ID_SLIDER_THIN_HORIZONTAL,   /* upper pixelmap id              */
+    GX_PIXELMAP_ID_SLIDER_THIN_NUB_HORIZONTAL  /* needle pixelmap id           */
+};
+GX_TEXT_BUTTON_PROPERTIES VeerAdjustScreen_OK_Button_properties =
+{
+    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_TEXT_BUTTON_PROPERTIES VeerAdjustScreen_SliderValue_Button_properties =
+{
+    GX_STRING_ID_STRING_25,                  /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_PROMPT_PROPERTIES VeerAdjustScreen_InstructionLine_1_properties =
+{
+    GX_STRING_ID_STRING_53,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_PROMPT_PROPERTIES VeerAdjustScreen_InstructionLine_2_properties =
+{
+    GX_STRING_ID_STRING_56_1,                /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET VeerAdjustScreen_InstructionLine_2_define =
+{
+    "InstructionLine_2",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {10, 31, 224, 58},                       /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(VEERADJUSTSCREEN_CONTROL_BLOCK, VeerAdjustScreen_InstructionLine_2), /* control block */
+    (void *) &VeerAdjustScreen_InstructionLine_2_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET VeerAdjustScreen_InstructionLine_1_define =
+{
+    "InstructionLine_1",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {17, 6, 231, 33},                        /* widget size                    */
+    &VeerAdjustScreen_InstructionLine_2_define, /* next widget definition      */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(VEERADJUSTSCREEN_CONTROL_BLOCK, VeerAdjustScreen_InstructionLine_1), /* control block */
+    (void *) &VeerAdjustScreen_InstructionLine_1_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET VeerAdjustScreen_SliderValue_Button_define =
+{
+    "SliderValue_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    SLIDE_VALUE_BUTTON,                      /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {236, 12, 295, 61},                      /* widget size                    */
+    &VeerAdjustScreen_InstructionLine_1_define, /* next widget definition      */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(VEERADJUSTSCREEN_CONTROL_BLOCK, VeerAdjustScreen_SliderValue_Button), /* control block */
+    (void *) &VeerAdjustScreen_SliderValue_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET VeerAdjustScreen_OK_Button_define =
+{
+    "OK_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    OK_BTN_ID,                               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {230, 164, 309, 227},                    /* widget size                    */
+    &VeerAdjustScreen_SliderValue_Button_define, /* next widget definition     */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(VEERADJUSTSCREEN_CONTROL_BLOCK, VeerAdjustScreen_OK_Button), /* control block */
+    (void *) &VeerAdjustScreen_OK_Button_properties /* extended properties     */
+};
+
+GX_CONST GX_STUDIO_WIDGET VeerAdjustScreen_VeerSlider_define =
+{
+    "VeerSlider",
+    GX_TYPE_PIXELMAP_SLIDER,                 /* widget type                    */
+    VEER_SLIDER_ID,                          /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED|GX_STYLE_TILE_BACKGROUND,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_PIXELMAP_SLIDER),              /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WIDGET_FILL,                 /* selected color id              */
+    gx_studio_pixelmap_slider_create,        /* create function                */
+    (VOID (*)(GX_WIDGET *)) Slider_Draw_Function, /* drawing function override */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) VeerSlider_event_function, /* event function override */
+    {10, 86, 309, 145},                      /* widget size                    */
+    &VeerAdjustScreen_OK_Button_define,      /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(VEERADJUSTSCREEN_CONTROL_BLOCK, VeerAdjustScreen_VeerSlider), /* control block */
+    (void *) &VeerAdjustScreen_VeerSlider_properties /* extended properties    */
+};
+
+GX_CONST GX_STUDIO_WIDGET VeerAdjustScreen_define =
+{
+    "VeerAdjustScreen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    VEER_ADJUST_SCREEN_ID,                   /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(VEERADJUSTSCREEN_CONTROL_BLOCK),  /* control block size             */
+    GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
+    GX_COLOR_ID_SCROLL_BUTTON,               /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    (VOID (*)(GX_WIDGET *)) VeerAdjust_Screen_draw_function, /* drawing function override */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) VeerAdjust_Screen_event_handler, /* event function override */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &VeerAdjustScreen_VeerSlider_define,     /* child widget                   */
+    0,                                       /* control block                  */
+    (void *) &VeerAdjustScreen_properties    /* extended properties            */
+};
 GX_WINDOW_PROPERTIES OON_Screen_properties =
 {
     GX_PIXELMAP_ID_OUTOFNEUTRAL_NOLOGO       /* wallpaper pixelmap id          */
@@ -2592,6 +2810,36 @@ GX_TEXT_BUTTON_PROPERTIES PadOptionsSettingsScreen_OK_Button_properties =
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
+GX_TEXT_BUTTON_PROPERTIES PadOptionsSettingsScreen_GotoVeerAdjust_Button_properties =
+{
+    GX_STRING_ID_STRING_51,                  /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET PadOptionsSettingsScreen_GotoVeerAdjust_Button_define =
+{
+    "GotoVeerAdjust_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    GOTO_VEER_ADJUST_BTN_ID,                 /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {16, 165, 205, 228},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK, PadOptionsSettingsScreen_GotoVeerAdjust_Button), /* control block */
+    (void *) &PadOptionsSettingsScreen_GotoVeerAdjust_Button_properties /* extended properties */
+};
 
 GX_CONST GX_STUDIO_WIDGET PadOptionsSettingsScreen_OK_Button_define =
 {
@@ -2610,7 +2858,7 @@ GX_CONST GX_STUDIO_WIDGET PadOptionsSettingsScreen_OK_Button_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {230, 164, 309, 227},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &PadOptionsSettingsScreen_GotoVeerAdjust_Button_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK, PadOptionsSettingsScreen_OK_Button), /* control block */
     (void *) &PadOptionsSettingsScreen_OK_Button_properties /* extended properties */
@@ -2632,7 +2880,7 @@ GX_CONST GX_STUDIO_WIDGET PadOptionsSettingsScreen_GotoUserSettings_lButton_defi
     gx_studio_text_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {17, 88, 206, 151},                      /* widget size                    */
+    {16, 89, 205, 152},                      /* widget size                    */
     &PadOptionsSettingsScreen_OK_Button_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK, PadOptionsSettingsScreen_GotoUserSettings_lButton), /* control block */
@@ -2733,7 +2981,7 @@ GX_CONST GX_STUDIO_WIDGET SettingsScreen_FeaturesSettings_Button_define =
     gx_studio_text_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {18, 164, 207, 227},                     /* widget size                    */
+    {16, 165, 205, 228},                     /* widget size                    */
     GX_NULL,                                 /* no next widget                 */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(SETTINGSSCREEN_CONTROL_BLOCK, SettingsScreen_FeaturesSettings_Button), /* control block */
@@ -2779,7 +3027,7 @@ GX_CONST GX_STUDIO_WIDGET SettingsScreen_GotoUserSettings_lButton_define =
     gx_studio_text_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {18, 88, 207, 151},                      /* widget size                    */
+    {16, 89, 205, 152},                      /* widget size                    */
     &SettingsScreen_OK_Button_define,        /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(SETTINGSSCREEN_CONTROL_BLOCK, SettingsScreen_GotoUserSettings_lButton), /* control block */
@@ -2802,7 +3050,7 @@ GX_CONST GX_STUDIO_WIDGET SettingsScreen_GotoPadSettings_Button_define =
     gx_studio_text_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {18, 14, 207, 77},                       /* widget size                    */
+    {16, 14, 205, 77},                       /* widget size                    */
     &SettingsScreen_GotoUserSettings_lButton_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(SETTINGSSCREEN_CONTROL_BLOCK, SettingsScreen_GotoPadSettings_Button), /* control block */
@@ -3508,7 +3756,7 @@ GX_CONST GX_STUDIO_WIDGET HHP_Start_Screen_Settings_Button_define =
     gx_studio_text_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {16, 88, 205, 151},                      /* widget size                    */
+    {16, 89, 205, 152},                      /* widget size                    */
     &HHP_Start_Screen_OK_Button_define,      /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(HHP_START_SCREEN_CONTROL_BLOCK, HHP_Start_Screen_Settings_Button), /* control block */
@@ -4039,6 +4287,7 @@ GX_CONST GX_STUDIO_WIDGET Main_User_Screen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
+    { &VeerAdjustScreen_define, (GX_WIDGET *) &VeerAdjustScreen },
     { &OON_Screen_define, (GX_WIDGET *) &OON_Screen },
     { &DiagnosticScreen_define, (GX_WIDGET *) &DiagnosticScreen },
     { &ReadyScreen_define, (GX_WIDGET *) &ReadyScreen },

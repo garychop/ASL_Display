@@ -40,6 +40,8 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_FEATURE_SET = 0x39,
     HHP_HA_ACTIVE_FEATURE_SET = 0x3a,
     HHP_HA_HEART_BEAT = 0x3b,
+    HHP_HA_NEUTRAL_DAC_GET = 0x3c,
+    HHP_HA_NEUTRAL_DAC_SET = 0x3d
 } HHP_HA_MESSAGES_ENUM;
 
 // This structure is used to send messages from the GUI to the Head Array Communication Task
@@ -84,6 +86,10 @@ typedef struct GUI_MSG_S
         } SendFeatureActiveList;
         struct
         {
+            int16_t m_DAC_Setting;
+        } SendNeutralDAC_Setting;
+        struct
+        {
             uint32_t m_MsgArray[15];
         } WholeMsg;
     };
@@ -101,6 +107,8 @@ extern void SendGetCalDataCommnd (PHYSICAL_PAD_ENUM pad);
 extern void SendCalibrationData (PHYSICAL_PAD_ENUM pad, uint16_t min, uint16_t max);
 extern void SendFeatureGetCommand (void);
 extern void SendFeatureSetting (uint8_t myActiveFeatures, uint8_t g_TimeoutValue);
+extern void SendNeutralDAC_GetCommand (void);
+extern void SendNeutralDAC_Set (int16_t newDAC_Setting);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -157,6 +165,12 @@ typedef struct HHP_HA_MSG_S
         } GetFeatureResponse;
         struct
         {
+            int16_t m_DAC_Constant;
+            int16_t m_NeutralDAC_Value;
+            int16_t m_Range;
+        } NeutralDAC_Get_Response;
+        struct
+        {
             uint32_t m_MsgArray[15];
         } WholeMsg;
     };
@@ -180,5 +194,8 @@ extern char TranslatePadType_EnumToChar (PAD_TYPE_ENUM padType);
 
 extern FEATURE_ID_ENUM TranslateFeature_CharToEnum (char feature);
 extern char TranslateFeature_EnumToChar (FEATURE_ID_ENUM feature);
+
+extern void SendNeutralDAC_GetResponse (int16_t constant, int16_t DAC_Value, int16_t Range);
+
 
 #endif /* QUEUEDEFINITION_H_ */

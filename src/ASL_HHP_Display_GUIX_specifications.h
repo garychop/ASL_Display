@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  2. 1.2020   Time (hh:mm): 18:17                        */
+/*  Date (dd.mm.yyyy): 10. 1.2020   Time (hh:mm): 14:23                        */
 /*******************************************************************************/
 
 
@@ -22,109 +22,113 @@ extern   "C" {
 
 /* Define widget ids                                                           */
 
-#define OON_SCREEN_ID 1
-#define OON_OK_BTN_ID 2
-#define CENTER_PAD_DIGITAL_BTN_ID 3
-#define INSTRUCT_PROMPT_ID 4
-#define LEFT_PAD_DIGITAL_BTN_ID 5
-#define OK_BTN_ID 6
-#define RIGHT_PAD_DIGITAL_BTN_ID 7
-#define CENTER_PAD_PROP_BTN_ID 8
-#define LEFT_PAD_PROP_BTN_ID 9
-#define RIGHT_PAD_PROP_BTN_ID 10
-#define CENTER_PAD_OFF_BTN_ID 11
-#define LEFT_PAD_OFF_BTN_ID 12
-#define RIGHT_PAD_OFF_BTN_ID 13
-#define LEFT_PAD_RAW_VALUE_PROMPT 14
-#define RIGHT_PAD_RAW_VALUE_PROMPT 15
-#define CENTER_PAD_RAW_VALUE_PROMPT 16
-#define LEFT_PAD_ADJUSTED_PROMPT 17
-#define RIGHT_PAD_ADJUSTED_PROMPT 18
-#define CENTER_PAD_ADJUSTED_PROMPT 19
-#define READY_SCREEN_ID 20
-#define POWER_LARGE_ORANGE_PROMPT_ID 21
-#define PRESS_SWITCH_PROMPT_ID 22
-#define STARTUP_SPLASH_SCREEN_ID 23
-#define STATUS_PROMPT_ID 24
-#define HB_OK_ID 25
-#define HB_TIMEOUT_ID 26
-#define POWER_OFF_ID 27
-#define POWER_ON_ID 28
-#define HB_OON_ID 29
-#define CENTER_PAD_ON_BTN_ID 30
-#define MINIMUM_INSTRUCT_PROMPT_ID 31
-#define LEFT_PAD_ON_BTN_ID 32
-#define RIGHT_PAD_ON_BTN_ID 33
-#define MAXIMUM_INSTRUCT_PROMPT_ID 34
-#define VALUE_PROMPT_ID 35
-#define PAD_VALUE_PROMPT_ID 36
-#define CENTER_PAD_PROPORTIONAL_BTN_ID 37
-#define LEFT_PAD_PROPORTIONAL_BTN_ID 38
-#define RIGHT_PAD_PROPORTIONAL_BTN_ID 39
-#define SETTING_PROMPT01_ID 40
-#define CLICKS_BTN_ID 41
-#define CLICKS_PROMPT_ID 42
-#define CLICKS_ACTIVE_ICON 43
-#define CLICKS_INACTIVE_ICON 44
-#define TIMER_OFF_BTN_ID 45
-#define TIMER_10_BTN_ID 46
-#define TIMER_15_BTN_ID 47
-#define TIMER_20_BTN_ID 48
-#define TIMER_25_BTN_ID 49
-#define TIMER_30_BTN_ID 50
-#define TIMER_40_BTN_ID 51
-#define TIMER_50_BTN_ID 52
-#define POWER_BTN_ID 53
-#define POWER_PROMPT_ID 54
-#define POWER_ACTIVE_ICON 55
-#define POWER_INACTIVE_ICON 56
-#define BLUETOOTH_PROMPT_ID 57
-#define BLUETOOTH_BTN_ID 58
-#define BLUETOOTH_ACTIVE_ICON 59
-#define BLUETOOTH_INACTIVE_ICON 60
-#define NEXT_FUNCTION_PROMPT_ID 61
-#define NEXT_FUNCTION_BTN_ID 62
-#define NEXT_FUNCTION_ACTIVE_ICON 63
-#define NEXT_FUNCTION_INACTIVE_ICON 64
-#define NEXT_PROFILE_PROMPT_ID 65
-#define NEXT_PROFILE_BTN_ID 66
-#define NEXT_PROFILE_ACTIVE_ICON 67
-#define NEXT_PROFILE_INACTIVE_ICON 68
-#define GOTO_PAD_TYPE_BTN_ID 69
-#define GOTO_PAD_DIRECTIONS_BTN_ID 70
-#define GOTO_PAD_SETTINGS_BTN_ID 71
-#define GOTO_USER_SETTINGS_BTN_ID 72
-#define FEATURES_SETTINGS_BTN_ID 73
-#define CENTER_PAD_FORWARD_ARROW_BTN_ID 74
-#define LEFT_PAD_LEFT_ARROW_BTN_ID 75
-#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 76
-#define LEFT_PAD_RIGHT_ARROW_BTN_ID 77
-#define LEFT_PAD_FORWARD_ARROW_BTN_ID 78
-#define RIGHT_PAD_LEFT_ARROW_BTN_ID 79
-#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 80
-#define CENTER_PAD_LEFT_ARROW_BTN_ID 81
-#define CENTER_PAD_RIGHT_ARROW_BTN_ID 82
-#define CENTER_PAD_QUESTION_BTN_ID 83
-#define LEFT_PAD_QUESTION_BTN_ID 84
-#define RIGHT_PAD_QUESTION_BTN_ID 85
-#define DIAGNOSTIC_BTN_ID 86
-#define SETTINGS_BTN_ID 87
-#define VERSION_PROMPT_ID 88
-#define HEAD_ARRAY_VERSION_PROMPT_ID 89
-#define MAIN_USER_SCREEN_ID 90
-#define RIGHT_PAD_OFF_ID 91
-#define PROFILE_NEXT_SMALL_PROMPT_ID 92
-#define PROFILE_NEXT_LARGE_PROMPT_ID 93
-#define POWER_SMALL_PROMPT_ID 94
-#define POWER_LARGE_PROMPT_ID 95
-#define FUNCTION_NEXT_SMALL_PROMPT_ID 96
-#define FUNCITON_NET_LARGE_PROMPT_ID 97
-#define CENTER_PAD_ON_ID 98
-#define BLUETOOTH_LARGE_PROMPT_ID 99
-#define BLUETOOTH_SMALL_PROMPT_ID 100
-#define UP_ARROW_BTN_ID 101
-#define DOWN_ARROW_BTN_ID 102
-#define BOTH_ARROW_BTN_ID 103
+#define VEER_ADJUST_SCREEN_ID 1
+#define VEER_SLIDER_ID 2
+#define OK_BTN_ID 3
+#define SLIDE_VALUE_BUTTON 4
+#define OON_SCREEN_ID 5
+#define OON_OK_BTN_ID 6
+#define CENTER_PAD_DIGITAL_BTN_ID 7
+#define INSTRUCT_PROMPT_ID 8
+#define LEFT_PAD_DIGITAL_BTN_ID 9
+#define RIGHT_PAD_DIGITAL_BTN_ID 10
+#define CENTER_PAD_PROP_BTN_ID 11
+#define LEFT_PAD_PROP_BTN_ID 12
+#define RIGHT_PAD_PROP_BTN_ID 13
+#define CENTER_PAD_OFF_BTN_ID 14
+#define LEFT_PAD_OFF_BTN_ID 15
+#define RIGHT_PAD_OFF_BTN_ID 16
+#define LEFT_PAD_RAW_VALUE_PROMPT 17
+#define RIGHT_PAD_RAW_VALUE_PROMPT 18
+#define CENTER_PAD_RAW_VALUE_PROMPT 19
+#define LEFT_PAD_ADJUSTED_PROMPT 20
+#define RIGHT_PAD_ADJUSTED_PROMPT 21
+#define CENTER_PAD_ADJUSTED_PROMPT 22
+#define READY_SCREEN_ID 23
+#define POWER_LARGE_ORANGE_PROMPT_ID 24
+#define PRESS_SWITCH_PROMPT_ID 25
+#define STARTUP_SPLASH_SCREEN_ID 26
+#define STATUS_PROMPT_ID 27
+#define HB_OK_ID 28
+#define HB_TIMEOUT_ID 29
+#define POWER_OFF_ID 30
+#define POWER_ON_ID 31
+#define HB_OON_ID 32
+#define CENTER_PAD_ON_BTN_ID 33
+#define MINIMUM_INSTRUCT_PROMPT_ID 34
+#define LEFT_PAD_ON_BTN_ID 35
+#define RIGHT_PAD_ON_BTN_ID 36
+#define MAXIMUM_INSTRUCT_PROMPT_ID 37
+#define VALUE_PROMPT_ID 38
+#define PAD_VALUE_PROMPT_ID 39
+#define CENTER_PAD_PROPORTIONAL_BTN_ID 40
+#define LEFT_PAD_PROPORTIONAL_BTN_ID 41
+#define RIGHT_PAD_PROPORTIONAL_BTN_ID 42
+#define SETTING_PROMPT01_ID 43
+#define CLICKS_BTN_ID 44
+#define CLICKS_PROMPT_ID 45
+#define CLICKS_ACTIVE_ICON 46
+#define CLICKS_INACTIVE_ICON 47
+#define TIMER_OFF_BTN_ID 48
+#define TIMER_10_BTN_ID 49
+#define TIMER_15_BTN_ID 50
+#define TIMER_20_BTN_ID 51
+#define TIMER_25_BTN_ID 52
+#define TIMER_30_BTN_ID 53
+#define TIMER_40_BTN_ID 54
+#define TIMER_50_BTN_ID 55
+#define POWER_BTN_ID 56
+#define POWER_PROMPT_ID 57
+#define POWER_ACTIVE_ICON 58
+#define POWER_INACTIVE_ICON 59
+#define BLUETOOTH_PROMPT_ID 60
+#define BLUETOOTH_BTN_ID 61
+#define BLUETOOTH_ACTIVE_ICON 62
+#define BLUETOOTH_INACTIVE_ICON 63
+#define NEXT_FUNCTION_PROMPT_ID 64
+#define NEXT_FUNCTION_BTN_ID 65
+#define NEXT_FUNCTION_ACTIVE_ICON 66
+#define NEXT_FUNCTION_INACTIVE_ICON 67
+#define NEXT_PROFILE_PROMPT_ID 68
+#define NEXT_PROFILE_BTN_ID 69
+#define NEXT_PROFILE_ACTIVE_ICON 70
+#define NEXT_PROFILE_INACTIVE_ICON 71
+#define GOTO_PAD_TYPE_BTN_ID 72
+#define GOTO_PAD_DIRECTIONS_BTN_ID 73
+#define GOTO_VEER_ADJUST_BTN_ID 74
+#define GOTO_PAD_SETTINGS_BTN_ID 75
+#define GOTO_USER_SETTINGS_BTN_ID 76
+#define FEATURES_SETTINGS_BTN_ID 77
+#define CENTER_PAD_FORWARD_ARROW_BTN_ID 78
+#define LEFT_PAD_LEFT_ARROW_BTN_ID 79
+#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 80
+#define LEFT_PAD_RIGHT_ARROW_BTN_ID 81
+#define LEFT_PAD_FORWARD_ARROW_BTN_ID 82
+#define RIGHT_PAD_LEFT_ARROW_BTN_ID 83
+#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 84
+#define CENTER_PAD_LEFT_ARROW_BTN_ID 85
+#define CENTER_PAD_RIGHT_ARROW_BTN_ID 86
+#define CENTER_PAD_QUESTION_BTN_ID 87
+#define LEFT_PAD_QUESTION_BTN_ID 88
+#define RIGHT_PAD_QUESTION_BTN_ID 89
+#define DIAGNOSTIC_BTN_ID 90
+#define SETTINGS_BTN_ID 91
+#define VERSION_PROMPT_ID 92
+#define HEAD_ARRAY_VERSION_PROMPT_ID 93
+#define MAIN_USER_SCREEN_ID 94
+#define RIGHT_PAD_OFF_ID 95
+#define PROFILE_NEXT_SMALL_PROMPT_ID 96
+#define PROFILE_NEXT_LARGE_PROMPT_ID 97
+#define POWER_SMALL_PROMPT_ID 98
+#define POWER_LARGE_PROMPT_ID 99
+#define FUNCTION_NEXT_SMALL_PROMPT_ID 100
+#define FUNCITON_NET_LARGE_PROMPT_ID 101
+#define CENTER_PAD_ON_ID 102
+#define BLUETOOTH_LARGE_PROMPT_ID 103
+#define BLUETOOTH_SMALL_PROMPT_ID 104
+#define UP_ARROW_BTN_ID 105
+#define DOWN_ARROW_BTN_ID 106
+#define BOTH_ARROW_BTN_ID 107
 
 
 /* Define animation ids                                                        */
@@ -185,6 +189,23 @@ typedef struct
 
 typedef struct
 {
+    int min_val;
+    int max_val;
+    int current_val;
+    int increment;
+    GX_VALUE min_travel;
+    GX_VALUE max_travel;
+    GX_VALUE needle_width;
+    GX_VALUE needle_height;
+    GX_VALUE needle_inset;
+    GX_VALUE needle_hotspot;
+    GX_RESOURCE_ID lower_pixelmap;
+    GX_RESOURCE_ID upper_pixelmap;
+    GX_RESOURCE_ID needle_pixelmap;
+} GX_PIXELMAP_SLIDER_PROPERTIES;
+
+typedef struct
+{
     GX_RESOURCE_ID string_id;
     GX_RESOURCE_ID font_id;
     GX_RESOURCE_ID normal_text_color_id;
@@ -222,6 +243,16 @@ typedef struct
 
 
 /* Declare top-level control blocks                                            */
+
+typedef struct VEERADJUSTSCREEN_CONTROL_BLOCK_STRUCT
+{
+    GX_WINDOW_MEMBERS_DECLARE
+    GX_PIXELMAP_SLIDER VeerAdjustScreen_VeerSlider;
+    GX_TEXT_BUTTON VeerAdjustScreen_OK_Button;
+    GX_TEXT_BUTTON VeerAdjustScreen_SliderValue_Button;
+    GX_PROMPT VeerAdjustScreen_InstructionLine_1;
+    GX_PROMPT VeerAdjustScreen_InstructionLine_2;
+} VEERADJUSTSCREEN_CONTROL_BLOCK;
 
 typedef struct OON_SCREEN_CONTROL_BLOCK_STRUCT
 {
@@ -345,6 +376,7 @@ typedef struct PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK_STRUCT
     GX_TEXT_BUTTON PadOptionsSettingsScreen_GotoPadSettings_Button;
     GX_TEXT_BUTTON PadOptionsSettingsScreen_GotoUserSettings_lButton;
     GX_TEXT_BUTTON PadOptionsSettingsScreen_OK_Button;
+    GX_TEXT_BUTTON PadOptionsSettingsScreen_GotoVeerAdjust_Button;
 } PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK;
 
 typedef struct SETTINGSSCREEN_CONTROL_BLOCK_STRUCT
@@ -411,6 +443,7 @@ typedef struct MAIN_USER_SCREEN_CONTROL_BLOCK_STRUCT
 /* extern statically defined control blocks                                    */
 
 #ifndef GUIX_STUDIO_GENERATED_FILE
+extern VEERADJUSTSCREEN_CONTROL_BLOCK VeerAdjustScreen;
 extern OON_SCREEN_CONTROL_BLOCK OON_Screen;
 extern DIAGNOSTICSCREEN_CONTROL_BLOCK DiagnosticScreen;
 extern READYSCREEN_CONTROL_BLOCK ReadyScreen;
@@ -488,6 +521,10 @@ VOID _gx_synergy_jpeg_draw (GX_DRAW_CONTEXT *p_context, INT x, INT y, GX_PIXELMA
 
 /* Declare event process functions, draw functions, and callback functions     */
 
+UINT VeerAdjust_Screen_event_handler(GX_WINDOW *widget, GX_EVENT *event_ptr);
+VOID VeerAdjust_Screen_draw_function(GX_WINDOW *widget);
+UINT VeerSlider_event_function(GX_PIXELMAP_SLIDER *widget, GX_EVENT *event_ptr);
+VOID Slider_Draw_Function(GX_PIXELMAP_SLIDER *widget);
 UINT OON_Screen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 VOID OON_Screen_draw_function(GX_WINDOW *widget);
 UINT DiagnosticScreen_event_handler(GX_WINDOW *widget, GX_EVENT *event_ptr);
@@ -538,6 +575,7 @@ typedef struct GX_STUDIO_DISPLAY_INFO_STRUCT
 UINT gx_studio_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_text_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_pixelmap_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
+UINT gx_studio_pixelmap_slider_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_numeric_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_pixelmap_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);

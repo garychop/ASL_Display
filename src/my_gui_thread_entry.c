@@ -11,11 +11,6 @@
 #include "HeadArray_CommunicationThread.h"
 
 //-------------------------------------------------------------------------
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.0.0";
-GX_CHAR g_HeadArrayVersionString[20] = "";
-uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
-
-//-------------------------------------------------------------------------
 // Typdefs and defines
 //-------------------------------------------------------------------------
 
@@ -70,11 +65,6 @@ GX_RECTANGLE g_CalibrationPromptLocations[] = {
     {20, 4, 38+239, 4+33},          // Max and Min Prompt location
     {GRAPH_CENTER_PT_XPOS-25, GRAPH_CENTER_PT_YPOS-26-60, GRAPH_CENTER_PT_XPOS-25+50, GRAPH_CENTER_PT_YPOS-26-60+26},       // Pad Value prompt location
     {0,0,0,0}};
-
-int g_ChangeScreen_WIP;
-GX_WINDOW *g_GoBackScreen = GX_NULL;
-GX_WINDOW *g_CalibrationScreen = GX_NULL;
-GX_WIDGET *g_ActiveScreen = GX_NULL;
 
 // Timeout information
 uint8_t g_TimeoutValue;
@@ -139,14 +129,29 @@ struct PadInfoStruct
                                             // gx_prompt_text_set calls.
 } g_PadSettings[3];
 
+//-------------------------------------------------------------------------
+// Global Variables.
+//-------------------------------------------------------------------------
+
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.0.0";
+GX_CHAR g_HeadArrayVersionString[20] = "";
+uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
+
 int g_SettingsChanged;
 int g_CalibrationPadNumber;
 int g_CalibrationStepNumber;
 int g_ClicksActive = FALSE;
 FEATURE_ID_ENUM g_ActiveFeature = POWER_ONOFF_ID;     // this indicates the active feature.
-
+int g_ChangeScreen_WIP;
+GX_WINDOW *g_GoBackScreen = GX_NULL;
+GX_WINDOW *g_CalibrationScreen = GX_NULL;
+GX_WIDGET *g_ActiveScreen = GX_NULL;
 GX_WINDOW_ROOT * p_window_root;
 bool g_UseNewPrompt = false;
+char g_SliderValue[20] = "gc";
+int16_t g_NeutralDAC_Constant = 2048;
+int16_t g_NeutralDAC_Setting = 2048;
+int16_t g_NeutralDAC_Range = 400;
 
 //-------------------------------------------------------------------------
 // Forward declarations.
@@ -323,6 +328,7 @@ void my_gui_thread_entry(void)
 	gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("Main_User_Screen", GX_NULL, GX_NULL);    // Create and show first startup screen.
     gx_studio_named_widget_create("ReadyScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
+    gx_studio_named_widget_create("VeerAdjustScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("StartupSplashScreen", (GX_WIDGET *)p_window_root, &p_first_screen);    // Create and show first startup screen.
 
     /* Attach the first screen to the root so we can see it when the root is shown */
@@ -596,6 +602,12 @@ void ProcessCommunicationMsgs ()
             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
             gxe.gx_event_display_handle = 0;
             gx_system_event_send(&gxe);
+            break;
+
+        case HHP_HA_NEUTRAL_DAC_GET:
+            g_NeutralDAC_Constant = HeadArrayMsg.NeutralDAC_Get_Response.m_DAC_Constant;
+            g_NeutralDAC_Setting = HeadArrayMsg.NeutralDAC_Get_Response.m_NeutralDAC_Value;
+            g_NeutralDAC_Range= HeadArrayMsg.NeutralDAC_Get_Response.m_Range;
             break;
 
         default:
@@ -954,9 +966,11 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_Version_Prompt, ASL110_DISPLAY_VERSION_STRING);
             gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_HeadArray_Version_Prompt, g_HeadArrayVersionString);
 
-            SendGetCalDataCommnd (LEFT_PAD);        // We send the commmands to the Head Array to get the Calibration Data for all 3 pads.
+            // We're entering the HHP feature, it's a good time to request "one-time" information.
+            SendGetCalDataCommnd (LEFT_PAD);        // We send the commands to the Head Array to get the Calibration Data for all 3 pads.
             SendGetCalDataCommnd (RIGHT_PAD);
             SendGetCalDataCommnd (CENTER_PAD);
+            SendNeutralDAC_GetCommand();            // We'll need the Neutral DAC "calibration" value.
             break;
     }
 
@@ -1107,6 +1121,10 @@ UINT PadOptionsSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_
         case GX_SIGNAL(GOTO_PAD_DIRECTIONS_BTN_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)&SetPadDirectionScreen, window);
             break;
+
+        case GX_SIGNAL(GOTO_VEER_ADJUST_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&VeerAdjustScreen, window);
+            break;
     } // end switch
 
     gx_window_event_process(window, event_ptr);
@@ -1231,6 +1249,96 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 
     return GX_SUCCESS;
 }
+
+//*************************************************************************************
+// Function Name: VeerAdjust_Screen_event_handler and Slider_Draw_function
+//
+// Description: These handle the Veer Adjust Screen.
+//
+//*************************************************************************************
+
+//*************************************************************************************
+
+VOID VeerAdjust_Screen_draw_function (GX_WINDOW *window)
+{
+    gx_window_draw(window);
+}
+
+//*************************************************************************************
+
+UINT VeerSlider_event_function(GX_PIXELMAP_SLIDER *widget, GX_EVENT *event_ptr)
+{
+    int16_t newVal, myOffset;
+    int16_t totalSteps;
+    int16_t increment;
+
+    gx_pixelmap_slider_event_process(widget, event_ptr);    // This must be before the processing
+                                                            // to allow the values to be stored in the widget.
+
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_EVENT_SHOW:
+        break;
+    case GX_EVENT_PEN_DOWN:
+    case GX_EVENT_PEN_DRAG:
+    case GX_EVENT_PEN_UP:
+        newVal = (int16_t) widget->gx_slider_info.gx_slider_info_current_val;
+        totalSteps = (int16_t)(widget->gx_slider_info.gx_slider_info_max_val - widget->gx_slider_info.gx_slider_info_min_val);
+        newVal = (int16_t) (newVal - (totalSteps / 2));
+
+        increment = (int16_t) (g_NeutralDAC_Range / totalSteps / 2);   // This is how many going Plus and Minus.
+        myOffset = (int16_t) (newVal * increment);
+        newVal = (int16_t) (g_NeutralDAC_Constant + myOffset);
+        g_NeutralDAC_Setting = newVal;
+        // Send the new data to the Head Array, but only when the process of Pen Down, Drag and Up are done. No sense sending it multiple times.
+        if (event_ptr->gx_event_type == GX_EVENT_PEN_UP)
+        {
+            SendNeutralDAC_Set(g_NeutralDAC_Setting);
+            SendNeutralDAC_GetCommand();
+        }
+        break;
+    default:
+        break;
+    } // end swtich
+
+    return GX_SUCCESS;
+}
+
+//*************************************************************************************
+
+VOID Slider_Draw_Function (GX_PIXELMAP_SLIDER *slider)
+{
+    int myVal;
+
+    gx_pixelmap_slider_draw (slider);
+    myVal = slider->gx_slider_info.gx_slider_info_current_val - (slider->gx_slider_info.gx_slider_info_max_val/2);
+    sprintf (g_SliderValue, "%2d", myVal);
+
+    gx_text_button_text_set (&VeerAdjustScreen.VeerAdjustScreen_SliderValue_Button, g_SliderValue);
+}
+
+//*************************************************************************************
+
+UINT VeerAdjust_Screen_event_handler (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
+        break;
+
+    case GX_EVENT_PEN_DOWN:
+        break;
+
+    case GX_EVENT_PEN_UP:
+        break;
+    }
+
+    gx_window_event_process(window, event_ptr);
+
+    return GX_SUCCESS;
+}
+
 
 //*************************************************************************************
 // Function Name: UserSettingsScreen_event_process

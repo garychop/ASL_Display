@@ -377,3 +377,45 @@ void SendFeatureSetting (uint8_t activeFeatures, uint8_t timeoutValue)
 
     tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
+
+//****************************************************************************
+// This sends the Neutral DAC Setting Get command
+//****************************************************************************
+
+//****************************************************************************
+// Function called by GUI to send data to COMM task via Queue
+void SendNeutralDAC_GetCommand ()
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_NEUTRAL_DAC_GET;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+//****************************************************************************
+// Function called by COMM task to send data to GUI handler via Queue
+void SendNeutralDAC_GetResponse (int16_t DAC_Constant, int16_t DAC_Value, int16_t RangeValue)
+{
+    HHP_HA_MSG_STRUCT HHP_Msg;
+
+    HHP_Msg.m_MsgType = HHP_HA_NEUTRAL_DAC_GET;
+    HHP_Msg.NeutralDAC_Get_Response.m_DAC_Constant = DAC_Constant;
+    HHP_Msg.NeutralDAC_Get_Response.m_NeutralDAC_Value = DAC_Value;
+    HHP_Msg.NeutralDAC_Get_Response.m_Range = RangeValue;
+
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+
+}
+
+//****************************************************************************
+// Function called by GUI to send data to COMM task via Queue
+void SendNeutralDAC_Set (int16_t newDAC_Setting)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_NEUTRAL_DAC_SET;
+    q_Msg.SendNeutralDAC_Setting.m_DAC_Setting = newDAC_Setting;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
