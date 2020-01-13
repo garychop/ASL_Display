@@ -133,7 +133,7 @@ struct PadInfoStruct
 // Global Variables.
 //-------------------------------------------------------------------------
 
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.0.0";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.1.0";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -152,6 +152,7 @@ char g_SliderValue[20] = "gc";
 int16_t g_NeutralDAC_Constant = 2048;
 int16_t g_NeutralDAC_Setting = 2048;
 int16_t g_NeutralDAC_Range = 400;
+bool g_WaitingForVeerResponse = false;
 
 //-------------------------------------------------------------------------
 // Forward declarations.
@@ -608,6 +609,13 @@ void ProcessCommunicationMsgs ()
             g_NeutralDAC_Constant = HeadArrayMsg.NeutralDAC_Get_Response.m_DAC_Constant;
             g_NeutralDAC_Setting = HeadArrayMsg.NeutralDAC_Get_Response.m_NeutralDAC_Value;
             g_NeutralDAC_Range= HeadArrayMsg.NeutralDAC_Get_Response.m_Range;
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            g_WaitingForVeerResponse = false;
             break;
 
         default:
@@ -1268,9 +1276,11 @@ VOID VeerAdjust_Screen_draw_function (GX_WINDOW *window)
 
 UINT VeerSlider_event_function(GX_PIXELMAP_SLIDER *widget, GX_EVENT *event_ptr)
 {
-    int16_t newVal, myOffset;
+    int16_t newVal;
     int16_t totalSteps;
     int16_t increment;
+    int16_t sliderAsFound;
+    int16_t minimumDAC;
 
     gx_pixelmap_slider_event_process(widget, event_ptr);    // This must be before the processing
                                                             // to allow the values to be stored in the widget.
@@ -1281,25 +1291,25 @@ UINT VeerSlider_event_function(GX_PIXELMAP_SLIDER *widget, GX_EVENT *event_ptr)
         break;
     case GX_EVENT_PEN_DOWN:
     case GX_EVENT_PEN_DRAG:
-    case GX_EVENT_PEN_UP:
-        newVal = (int16_t) widget->gx_slider_info.gx_slider_info_current_val;
+//    case GX_EVENT_PEN_UP:
+        sliderAsFound = (int16_t) widget->gx_slider_info.gx_slider_info_current_val;
         totalSteps = (int16_t)(widget->gx_slider_info.gx_slider_info_max_val - widget->gx_slider_info.gx_slider_info_min_val);
-        newVal = (int16_t) (newVal - (totalSteps / 2));
-
-        increment = (int16_t) (g_NeutralDAC_Range / totalSteps / 2);   // This is how many going Plus and Minus.
-        myOffset = (int16_t) (newVal * increment);
-        newVal = (int16_t) (g_NeutralDAC_Constant + myOffset);
-        g_NeutralDAC_Setting = newVal;
+        //minimumDAC = (int16_t)(g_NeutralDAC_Constant - g_NeutralDAC_Range);       // lowest value.
+        //increment = (int16_t) ((g_NeutralDAC_Range*2) / totalSteps);   // This is how many ADC Counts for each slider step.
+        increment = 5;      // This means that each slider step is worth 5 DAC counts.
+        minimumDAC = (int16_t)(g_NeutralDAC_Constant - (increment * (totalSteps/2)));       // lowest value.
+        newVal = (int16_t) (minimumDAC + (increment * sliderAsFound));
         // Send the new data to the Head Array, but only when the process of Pen Down, Drag and Up are done. No sense sending it multiple times.
-        if (event_ptr->gx_event_type == GX_EVENT_PEN_UP)
+        if (!g_WaitingForVeerResponse)
         {
-            SendNeutralDAC_Set(g_NeutralDAC_Setting);
+            SendNeutralDAC_Set(newVal);
             SendNeutralDAC_GetCommand();
+            g_WaitingForVeerResponse = true;
         }
         break;
     default:
         break;
-    } // end swtich
+    } // end switch
 
     return GX_SUCCESS;
 }
@@ -1308,8 +1318,48 @@ UINT VeerSlider_event_function(GX_PIXELMAP_SLIDER *widget, GX_EVENT *event_ptr)
 
 VOID Slider_Draw_Function (GX_PIXELMAP_SLIDER *slider)
 {
-    int myVal;
+    int myVal, totalSteps; // offset, increment,
+    int DACCountsPerStep, MinimumDAC_Counts, MaximumDAC_Counts;
 
+    // We need to convert the target DAC Counts Setting to the number of Slider Steps.
+    // The slider is 0-20 representing the extreme left to the extreme right of the slider.
+
+//
+//    // Get the number of steps in the Screen's Slider widget.
+//    totalSteps = (int16_t)(slider->gx_slider_info.gx_slider_info_max_val - slider->gx_slider_info.gx_slider_info_min_val);
+//    // Get the number of DAC Counts between the new setting and the midpoint.
+//    offset = g_NeutralDAC_Constant - g_NeutralDAC_Setting;
+//    // Determine the number of DAC counts for each Slider Step.
+//    increment = (int16_t) (g_NeutralDAC_Range / totalSteps);   // This is how many going Plus and Minus.
+//
+//    offset /= increment;        // Create the number of steps the Setting represents.
+//    myVal = (totalSteps/2) - offset;
+
+//    // Get the number of steps in the Screen's Slider widget.
+//    totalSteps = (int16_t)(slider->gx_slider_info.gx_slider_info_max_val - slider->gx_slider_info.gx_slider_info_min_val);
+//    // Get the number of DAC Counts between the new setting and the midpoint.
+//    offset = g_NeutralDAC_Constant - g_NeutralDAC_Range;
+//    myVal = g_NeutralDAC_Setting - offset;
+//    // Determine the number of DAC counts for each Slider Step.
+//    increment = (int16_t) ((g_NeutralDAC_Range*2) / totalSteps);   // This is how many going Plus and Minus.
+//    myVal /= increment;
+
+    // Get the number of steps in the Screen's Slider widget.
+    totalSteps = (int16_t)(slider->gx_slider_info.gx_slider_info_max_val - slider->gx_slider_info.gx_slider_info_min_val);
+    // Get the number of DAC Counts between the new setting and the midpoint.
+    DACCountsPerStep = 5;
+    MinimumDAC_Counts = g_NeutralDAC_Constant - (DACCountsPerStep * (totalSteps/2));
+    MaximumDAC_Counts = g_NeutralDAC_Constant + (DACCountsPerStep * (totalSteps/2));
+    // Check for DAC Setting outside of displayable range and set to min or max slider position.
+    if (g_NeutralDAC_Setting < MinimumDAC_Counts)
+        myVal = slider->gx_slider_info.gx_slider_info_min_val;
+    else if (g_NeutralDAC_Setting > MaximumDAC_Counts)
+        myVal = slider->gx_slider_info.gx_slider_info_max_val;
+    else
+        myVal = (g_NeutralDAC_Setting - MinimumDAC_Counts) / DACCountsPerStep;
+
+
+    slider->gx_slider_info.gx_slider_info_current_val = myVal;
     gx_pixelmap_slider_draw (slider);
     myVal = slider->gx_slider_info.gx_slider_info_current_val - (slider->gx_slider_info.gx_slider_info_max_val/2);
     sprintf (g_SliderValue, "%2d", myVal);
@@ -1327,7 +1377,9 @@ UINT VeerAdjust_Screen_event_handler (GX_WINDOW *window, GX_EVENT *event_ptr)
         screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
         break;
 
-    case GX_EVENT_PEN_DOWN:
+    case GX_EVENT_SHOW:
+        g_WaitingForVeerResponse = false;
+        SendNeutralDAC_GetCommand();
         break;
 
     case GX_EVENT_PEN_UP:

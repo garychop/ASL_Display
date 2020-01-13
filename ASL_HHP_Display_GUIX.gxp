@@ -3787,7 +3787,7 @@
 <visible_at_startup>FALSE</visible_at_startup>
 <tick_count>0</tick_count>
 <minval>0</minval>
-<maxval>20</maxval>
+<maxval>40</maxval>
 <current_val>10</current_val>
 <increment>1</increment>
 <min_travel>24</min_travel>
@@ -4211,9 +4211,9 @@
 <type>prompt</type>
 <app_name>LeftPad_RawValue_Prompt</app_name>
 <size>
-<left>84</left>
+<left>400</left>
 <top>210</top>
-<right>121</right>
+<right>437</right>
 <bottom>229</bottom>
 </size>
 <style>1342193668</style>
@@ -4235,9 +4235,9 @@
 <type>prompt</type>
 <app_name>RightPad_RawValue_Prompt</app_name>
 <size>
-<left>159</left>
+<left>400</left>
 <top>210</top>
-<right>196</right>
+<right>437</right>
 <bottom>229</bottom>
 </size>
 <style>1342193668</style>
@@ -4259,9 +4259,9 @@
 <type>prompt</type>
 <app_name>CenterPad_RawValue_Prompt</app_name>
 <size>
-<left>122</left>
+<left>400</left>
 <top>210</top>
-<right>159</right>
+<right>437</right>
 <bottom>229</bottom>
 </size>
 <style>1342193668</style>

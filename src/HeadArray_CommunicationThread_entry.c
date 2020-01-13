@@ -817,22 +817,25 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = MSG_OK;
             }
 #endif
-            HB_Response[1] = (uint8_t) (gDEBUG_NeutralDAC_Constant >> 8);
-            HB_Response[2] = (uint8_t) (gDEBUG_NeutralDAC_Constant & 0xff);
-            HB_Response[3] = (uint8_t) (gDEBUG_NeutralDAC_Value >> 8);
-            HB_Response[4] = (uint8_t) (gDEBUG_NeutralDAC_Value & 0xff);
-            HB_Response[5] = (uint8_t) (gDEBUG_RangeValue >> 8);
-            HB_Response[6] = (uint8_t) (gDEBUG_RangeValue & 0xff);
+//            HB_Response[1] = (uint8_t) (gDEBUG_NeutralDAC_Constant >> 8);
+//            HB_Response[2] = (uint8_t) (gDEBUG_NeutralDAC_Constant & 0xff);
+//            HB_Response[3] = (uint8_t) (gDEBUG_NeutralDAC_Value >> 8);
+//            HB_Response[4] = (uint8_t) (gDEBUG_NeutralDAC_Value & 0xff);
+//            HB_Response[5] = (uint8_t) (gDEBUG_RangeValue >> 8);
+//            HB_Response[6] = (uint8_t) (gDEBUG_RangeValue & 0xff);
 
-            NeutralDAC_Constant = (int16_t) ((HB_Response[1]<<8) + HB_Response[2]);
-            NeutralDAC_Value = (int16_t) ((HB_Response[3]<<8) + HB_Response[4]);
-            RangeValue = (int16_t) ((HB_Response[5]<<8) + HB_Response[6]);
-            SendNeutralDAC_GetResponse (NeutralDAC_Constant, NeutralDAC_Value, RangeValue);
+            if (msgStatus == MSG_OK)
+            {
+                NeutralDAC_Constant = (int16_t) ((HB_Response[1]<<8) + HB_Response[2]);
+                NeutralDAC_Value = (int16_t) ((HB_Response[3]<<8) + HB_Response[4]);
+                RangeValue = (int16_t) ((HB_Response[5]<<8) + HB_Response[6]);
+                SendNeutralDAC_GetResponse (NeutralDAC_Constant, NeutralDAC_Value, RangeValue);
+            }
             break;
 
         case HHP_HA_NEUTRAL_DAC_SET:
             HA_Msg[0] = 0x05;     // msg length
-            HA_Msg[1] = HHP_HA_NEUTRAL_DAC_GET;
+            HA_Msg[1] = HHP_HA_NEUTRAL_DAC_SET;
             HA_Msg[2] = (uint8_t) ((GUI_Msg.SendNeutralDAC_Setting.m_DAC_Setting >> 8) & 0xff);
             HA_Msg[3] = (uint8_t) ((GUI_Msg.SendNeutralDAC_Setting.m_DAC_Setting & 0xff));
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));

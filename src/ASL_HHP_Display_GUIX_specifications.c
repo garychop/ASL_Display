@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 10. 1.2020   Time (hh:mm): 14:23                        */
+/*  Date (dd.mm.yyyy): 13. 1.2020   Time (hh:mm): 10:41                        */
 /*******************************************************************************/
 
 
@@ -184,7 +184,7 @@ GX_WINDOW_PROPERTIES VeerAdjustScreen_properties =
 GX_PIXELMAP_SLIDER_PROPERTIES VeerAdjustScreen_VeerSlider_properties =
 {
     0,                                       /* minimum value                  */
-    20,                                      /* maximum value                  */
+    40,                                      /* maximum value                  */
     10,                                      /* current value                  */
     1,                                       /* increment                      */
     24,                                      /* minimum travel                 */
@@ -643,7 +643,7 @@ GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_CenterPad_RawValue_Prompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {122, 210, 159, 229},                    /* widget size                    */
+    {400, 210, 437, 229},                    /* widget size                    */
     &DiagnosticScreen_LeftPad_Adjusted_Prompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_CenterPad_RawValue_Prompt), /* control block */
@@ -666,7 +666,7 @@ GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_RightPad_RawValue_Prompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {159, 210, 196, 229},                    /* widget size                    */
+    {400, 210, 437, 229},                    /* widget size                    */
     &DiagnosticScreen_CenterPad_RawValue_Prompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_RightPad_RawValue_Prompt), /* control block */
@@ -689,7 +689,7 @@ GX_CONST GX_STUDIO_WIDGET DiagnosticScreen_LeftPad_RawValue_Prompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {84, 210, 121, 229},                     /* widget size                    */
+    {400, 210, 437, 229},                    /* widget size                    */
     &DiagnosticScreen_RightPad_RawValue_Prompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(DIAGNOSTICSCREEN_CONTROL_BLOCK, DiagnosticScreen_LeftPad_RawValue_Prompt), /* control block */
