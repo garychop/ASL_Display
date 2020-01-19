@@ -979,6 +979,7 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             SendGetCalDataCommnd (RIGHT_PAD);
             SendGetCalDataCommnd (CENTER_PAD);
             SendNeutralDAC_GetCommand();            // We'll need the Neutral DAC "calibration" value.
+            SendFeatureGetCommand();        // Send command to get the current users settings.
             break;
     }
 
@@ -1092,12 +1093,12 @@ UINT SettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
         case GX_SIGNAL(GOTO_USER_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)&UserSettingsScreen, window);
-            SendFeatureGetCommand();        // Send command to get the current users settings.
+            //SendFeatureGetCommand();        // Send command to get the current users settings.
             break;
 
         case GX_SIGNAL(FEATURES_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)&FeatureSettingsScreen, window);
-            SendFeatureGetCommand();        // Send command to get the current users settings.
+            //SendFeatureGetCommand();        // Send command to get the current users settings.
             break;
     } // end switch
 
