@@ -142,11 +142,11 @@ const ioport_pin_cfg_t g_bsp_pin_cfg_data[] = {
 	},
 	{
 		.pin = IOPORT_PORT_05_PIN_01,
-		.pin_cfg = (IOPORT_CFG_DRIVE_MID | IOPORT_CFG_PORT_DIRECTION_OUTPUT | IOPORT_CFG_PORT_OUTPUT_HIGH),
+		.pin_cfg = (IOPORT_CFG_PORT_DIRECTION_INPUT),
 	},
 	{
 		.pin = IOPORT_PORT_05_PIN_02,
-		.pin_cfg = (IOPORT_CFG_PORT_DIRECTION_INPUT),
+		.pin_cfg = (IOPORT_CFG_PORT_DIRECTION_OUTPUT | IOPORT_CFG_PORT_OUTPUT_HIGH),
 	},
 	{
 		.pin = IOPORT_PORT_05_PIN_03,

@@ -352,15 +352,15 @@
   <v1:propertySetting propertyId="p310.symbolic_name" value="GPIO5"/>
   <v1:propertySetting propertyId="p306.symbolic_name" value="GPIO18"/>
   <v1:propertySetting propertyId="p307.symbolic_name" value="GPIO19"/>
-  <v1:configSetting configurationId="p501.gpio_mode" altId="p501.gpio_mode.gpio_mode_out.high"/>
+  <v1:configSetting configurationId="p501.gpio_mode" altId="p501.gpio_mode.gpio_mode_in"/>
   <v1:configSetting configurationId="p504.gpio_mode" altId="p504.gpio_mode.gpio_mode_in"/>
   <v1:configSetting configurationId="p503.gpio_mode" altId="p503.gpio_mode.gpio_mode_in"/>
-  <v1:configSetting configurationId="p502" altId="p502.input"/>
-  <v1:configSetting configurationId="p501" altId="p501.output.high"/>
+  <v1:configSetting configurationId="p502" altId="p502.output.high"/>
+  <v1:configSetting configurationId="p501" altId="p501.input"/>
   <v1:configSetting configurationId="p504" altId="p504.input"/>
   <v1:configSetting configurationId="p503" altId="p503.input"/>
-  <v1:configSetting configurationId="p502.gpio_mode" altId="p502.gpio_mode.gpio_mode_in"/>
-  <v1:configSetting configurationId="p501.gpio_drivecapacity" altId="p501.gpio_speed.gpio_speed_medium"/>
+  <v1:configSetting configurationId="p502.gpio_mode" altId="p502.gpio_mode.gpio_mode_out.high"/>
+  <v1:configSetting configurationId="p501.gpio_drivecapacity" altId="p501.gpio_speed.gpio_speed_low"/>
   <v1:configSetting configurationId="p405" altId="p405.output.high"/>
   <v1:configSetting configurationId="p405.gpio_mode" altId="p405.gpio_mode.gpio_mode_out.high"/>
   <v1:propertySetting propertyId="p501.symbolic_name" value="GPIO7"/>

@@ -412,7 +412,7 @@ OPS0: GTIU
 QSPI0: QSPCLK
 SDHI1: CLK
 USBFS0: VBUSEN"
-"P501","114","GPIO","GPIO7","Medium","None","Output mode (Initial High)","CMOS","None","ADC1: AN16
+"P501","114","GPIO","GPIO7","","None","Input mode","","None","ADC1: AN16
 AGT0: AGTOB
 CMP0: IVREF1
 GPT11: GTIOCB
@@ -423,7 +423,7 @@ SCI5: SDA
 SCI5: TXD_MOSI
 SDHI1: CMD
 USBFS0: OVRCURA"
-"P502","115","GPIO","","","None","Input mode","","None","ADC0: AN17
+"P502","115","GPIO","","Low","None","Output mode (Initial High)","CMOS","None","ADC0: AN17
 CMP0: IVCMP0
 GPT12: GTIOCA
 IRQ0: IRQ12

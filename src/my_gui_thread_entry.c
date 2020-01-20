@@ -133,7 +133,7 @@ struct PadInfoStruct
 // Global Variables.
 //-------------------------------------------------------------------------
 
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.1.0";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.1.1";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
