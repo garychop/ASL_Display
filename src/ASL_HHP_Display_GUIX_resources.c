@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 13. 1.2020   Time (hh:mm): 10:41                        */
+/*  Date (dd.mm.yyyy): 23. 1.2020   Time (hh:mm): 09:56                        */
 /*******************************************************************************/
 
 
@@ -35001,10 +35001,11 @@ GX_CONST GX_UBYTE main_display_STRING_53_English[23] = "Slide the anchor point";
 GX_CONST GX_UBYTE main_display_STRING_56_1_English[21] = "to eliminate veering";
 GX_CONST GX_UBYTE main_display_STRING_51_English[16] = "SET VEER ADJUST";
 GX_CONST GX_UBYTE main_display_STRING_25_English[2] = "0";
+GX_CONST GX_UBYTE main_display_STRING_62_English[14] = "POWER UP IDLE";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[71] =
+GX_CONST GX_UBYTE *main_display_English_string_table[72] =
 {
     GX_NULL,
     main_display_STRING_15_English,
@@ -35076,7 +35077,8 @@ GX_CONST GX_UBYTE *main_display_English_string_table[71] =
     main_display_STRING_53_English,
     main_display_STRING_56_1_English,
     main_display_STRING_51_English,
-    main_display_STRING_25_English
+    main_display_STRING_25_English,
+    main_display_STRING_62_English
 
 };
 

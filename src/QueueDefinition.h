@@ -41,7 +41,8 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_ACTIVE_FEATURE_SET = 0x3a,
     HHP_HA_HEART_BEAT = 0x3b,
     HHP_HA_NEUTRAL_DAC_GET = 0x3c,
-    HHP_HA_NEUTRAL_DAC_SET = 0x3d
+    HHP_HA_NEUTRAL_DAC_SET = 0x3d,
+    HHP_HA_SAVE_PARAMETERS_CMD = 0x3e
 } HHP_HA_MESSAGES_ENUM;
 
 // This structure is used to send messages from the GUI to the Head Array Communication Task
@@ -109,6 +110,7 @@ extern void SendFeatureGetCommand (void);
 extern void SendFeatureSetting (uint8_t myActiveFeatures, uint8_t g_TimeoutValue);
 extern void SendNeutralDAC_GetCommand (void);
 extern void SendNeutralDAC_Set (int16_t newDAC_Setting);
+extern void SendSaveParameters (void);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S

@@ -85,7 +85,7 @@ TimeoutInfo_S g_TimeoutInfo[] = {
     {&UserSettingsScreen.UserSettingsScreen_Timer_50_Button, 50},
     {GX_NULL, 0} };
 GX_RECTANGLE g_TimeoutValueLocation[] = {
-    {140, 60, 140+88, 60+70},
+    {225, 50, 225+88, 50+70},
     {0,0,0,0}};
 
 // This is used for setting the colors in the Calibration Pies, but can be used generically.
@@ -133,7 +133,7 @@ struct PadInfoStruct
 // Global Variables.
 //-------------------------------------------------------------------------
 
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.1.1";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.2.2";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -141,6 +141,7 @@ int g_SettingsChanged;
 int g_CalibrationPadNumber;
 int g_CalibrationStepNumber;
 int g_ClicksActive = FALSE;
+int g_PowerUpInIdle = false;
 FEATURE_ID_ENUM g_ActiveFeature = POWER_ONOFF_ID;     // this indicates the active feature.
 int g_ChangeScreen_WIP;
 GX_WINDOW *g_GoBackScreen = GX_NULL;
@@ -597,6 +598,7 @@ void ProcessCommunicationMsgs ()
             g_ScreenPrompts[2].m_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x04 ? true : false); // Next Function
             g_ScreenPrompts[3].m_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x08 ? true : false); // Next Profile
             g_ClicksActive = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x10 ? true : false);              // Clicks on/off
+            g_PowerUpInIdle = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x20 ? true : false);              // Clicks on/off
             // Redraw the current window.
             gxe.gx_event_type = GX_EVENT_REDRAW;
             gxe.gx_event_sender = GX_ID_NONE;
@@ -683,7 +685,7 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                     screen_toggle((GX_WINDOW *)&Main_User_Screen, window);
                     g_StartupDelayCounter = -1; // This prevents us from doing a "startup" delay should the Heart Beat stop.
                 }
-                else if (g_StartupDelayCounter == 2)    // We need to send a Version Request to the Head Array.
+                else if (g_StartupDelayCounter == 10)    // We need to send a Version Request to the Head Array.
                 {
                     SendGetVersionCommand ();
                 }
@@ -968,6 +970,7 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
         case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)g_GoBackScreen, window);
+            SendSaveParameters ();      // Tell the Head Array to save parameters.
             break;
 
         case GX_EVENT_SHOW:
@@ -1422,7 +1425,7 @@ int LocateNextTimeoutIndex (void)
 
 void ShowUserSettingsItems (void)
 {
-    int feature;
+    int index;
 
     if (g_ClicksActive)
     {
@@ -1434,13 +1437,26 @@ void ShowUserSettingsItems (void)
         gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_InactiveIcon);
         gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_ActiveIcon);
     }
-    // Show the Timeout Value
-    for (feature = 0; g_TimeoutInfo[feature].m_TimeoutIcon != GX_NULL; ++feature)
+
+    // Power Up in Idle
+    if (g_PowerUpInIdle)    // If powering up in idle state is enable
     {
-        if (g_TimeoutInfo[feature].m_TimeoutValue == g_TimeoutValue)
-            gx_widget_resize ((GX_WIDGET*) g_TimeoutInfo[feature].m_TimeoutIcon, &g_TimeoutValueLocation[0]); // show it
+        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
+        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_InactiveIcon);
+    }
+    else
+    {
+        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_InactiveIcon);
+        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
+    }
+
+    // Show the Timeout Value
+    for (index = 0; g_TimeoutInfo[index].m_TimeoutIcon != GX_NULL; ++index)
+    {
+        if (g_TimeoutInfo[index].m_TimeoutValue == g_TimeoutValue)
+            gx_widget_resize ((GX_WIDGET*) g_TimeoutInfo[index].m_TimeoutIcon, &g_TimeoutValueLocation[0]); // show it
         else
-            gx_widget_resize ((GX_WIDGET*) g_TimeoutInfo[feature].m_TimeoutIcon, &g_TimeoutValueLocation[1]); // hide it off screen.
+            gx_widget_resize ((GX_WIDGET*) g_TimeoutInfo[index].m_TimeoutIcon, &g_TimeoutValueLocation[1]); // hide it off screen.
     }
 }
 
@@ -1457,6 +1473,7 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)&SettingsScreen, window);
 
+            myActiveFeatures = 0x0;
             myMask = 0x01;
             for (feature = 0; feature < 4; ++feature)
             {
@@ -1470,6 +1487,9 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             // Add clicks in D4 of byte.
             if (g_ClicksActive)
                 myActiveFeatures |= 0x10;
+            // Add power up in D5 of byte;
+            if (g_PowerUpInIdle)
+                myActiveFeatures |= 0x20;
             SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
             break;
 
@@ -1477,6 +1497,18 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         case GX_SIGNAL(CLICKS_INACTIVE_ICON, GX_EVENT_CLICKED):
         case GX_SIGNAL(CLICKS_ACTIVE_ICON, GX_EVENT_CLICKED):
             g_ClicksActive = (g_ClicksActive == TRUE ? FALSE : TRUE);
+            break;
+
+            // Power Up in Idle button push handling
+        case GX_SIGNAL(POWER_UP_INACTIVE_ICON, GX_EVENT_CLICKED):
+            gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
+            gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_InactiveIcon);
+            g_PowerUpInIdle = true;
+            break;
+        case GX_SIGNAL(POWER_UP_ACTIVE_ICON, GX_EVENT_CLICKED):
+            gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_InactiveIcon);
+            gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
+            g_PowerUpInIdle = false;
             break;
 
         case GX_SIGNAL(TIMER_OFF_BTN_ID, GX_EVENT_CLICKED):

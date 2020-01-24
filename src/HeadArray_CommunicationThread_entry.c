@@ -872,6 +872,18 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             NeutralDAC_Value = GUI_Msg.SendNeutralDAC_Setting.m_DAC_Setting;
             break;
 
+        case HHP_HA_SAVE_PARAMETERS_CMD:
+            HA_Msg[0] = 0x03;     // msg length
+            HA_Msg[1] = HHP_HA_SAVE_PARAMETERS_CMD;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+            }
+            break;
+
         default:
             msgSent = false;
             break;

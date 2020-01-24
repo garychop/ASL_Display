@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 13. 1.2020   Time (hh:mm): 10:41                        */
+/*  Date (dd.mm.yyyy): 23. 1.2020   Time (hh:mm): 09:56                        */
 /*******************************************************************************/
 
 
@@ -1915,6 +1915,123 @@ GX_PIXELMAP_BUTTON_PROPERTIES UserSettingsScreen_Timer_50_Button_properties =
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };
+GX_PROMPT_PROPERTIES UserSettingsScreen_PowerUpIdle_Prompt_properties =
+{
+    GX_STRING_ID_STRING_62,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES UserSettingsScreen_PowerUpButtonBackground_properties =
+{
+    GX_PIXELMAP_ID_SWITCH_BG,                /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES UserSettingsScreen_PowerUp_ActiveIcon_properties =
+{
+    GX_PIXELMAP_ID_SWITCH_ACTIVE,            /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES UserSettingsScreen_PowerUp_InactiveIcon_properties =
+{
+    GX_PIXELMAP_ID_SWITCH_DISACTIVE,         /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+
+GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_PowerUp_InactiveIcon_define =
+{
+    "PowerUp_InactiveIcon",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    POWER_UP_INACTIVE_ICON,                  /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {154, 72, 180, 98},                      /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_PowerUp_InactiveIcon), /* control block */
+    (void *) &UserSettingsScreen_PowerUp_InactiveIcon_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_PowerUp_ActiveIcon_define =
+{
+    "PowerUp_ActiveIcon",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    POWER_UP_ACTIVE_ICON,                    /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {174, 72, 200, 98},                      /* widget size                    */
+    &UserSettingsScreen_PowerUp_InactiveIcon_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_PowerUp_ActiveIcon), /* control block */
+    (void *) &UserSettingsScreen_PowerUp_ActiveIcon_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_PowerUpButtonBackground_define =
+{
+    "PowerUpButtonBackground",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    PWR_UP_BCKGND_ID,                        /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_SLIDER_GROOVE_BOTTOM,        /* normal color id                */
+    GX_COLOR_ID_SLIDER_GROOVE_TOP,           /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {148, 68, 207, 102},                     /* widget size                    */
+    &UserSettingsScreen_PowerUp_ActiveIcon_define, /* next widget definition   */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_PowerUpButtonBackground), /* control block */
+    (void *) &UserSettingsScreen_PowerUpButtonBackground_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_PowerUpIdle_Prompt_define =
+{
+    "PowerUpIdle_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    POWERUP_IDLE_PROMPT_ID,                  /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_RIGHT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {12, 63, 141, 102},                      /* widget size                    */
+    &UserSettingsScreen_PowerUpButtonBackground_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_PowerUpIdle_Prompt), /* control block */
+    (void *) &UserSettingsScreen_PowerUpIdle_Prompt_properties /* extended properties */
+};
 
 GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Timer_50_Button_define =
 {
@@ -1932,8 +2049,8 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Timer_50_Button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {140, 60, 227, 129},                     /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    {225, 50, 312, 119},                     /* widget size                    */
+    &UserSettingsScreen_PowerUpIdle_Prompt_define, /* next widget definition   */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_Timer_50_Button), /* control block */
     (void *) &UserSettingsScreen_Timer_50_Button_properties /* extended properties */
@@ -1955,7 +2072,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Timer_40_Button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {140, 60, 227, 129},                     /* widget size                    */
+    {225, 50, 312, 119},                     /* widget size                    */
     &UserSettingsScreen_Timer_50_Button_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_Timer_40_Button), /* control block */
@@ -1978,7 +2095,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Timer_30_Button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {140, 60, 227, 129},                     /* widget size                    */
+    {225, 50, 312, 119},                     /* widget size                    */
     &UserSettingsScreen_Timer_40_Button_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_Timer_30_Button), /* control block */
@@ -2001,7 +2118,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Timer_25_Button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {140, 60, 227, 129},                     /* widget size                    */
+    {225, 50, 312, 119},                     /* widget size                    */
     &UserSettingsScreen_Timer_30_Button_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_Timer_25_Button), /* control block */
@@ -2024,7 +2141,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Timer_20_Button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {140, 60, 227, 129},                     /* widget size                    */
+    {225, 50, 312, 119},                     /* widget size                    */
     &UserSettingsScreen_Timer_25_Button_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_Timer_20_Button), /* control block */
@@ -2047,7 +2164,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Timer_15_Button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {140, 60, 227, 129},                     /* widget size                    */
+    {225, 50, 312, 119},                     /* widget size                    */
     &UserSettingsScreen_Timer_20_Button_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_Timer_15_Button), /* control block */
@@ -2070,7 +2187,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Timer_10_Button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {140, 60, 227, 129},                     /* widget size                    */
+    {225, 50, 312, 119},                     /* widget size                    */
     &UserSettingsScreen_Timer_15_Button_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_Timer_10_Button), /* control block */
@@ -2093,7 +2210,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Timer_Off_Button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {140, 60, 227, 129},                     /* widget size                    */
+    {225, 50, 312, 119},                     /* widget size                    */
     &UserSettingsScreen_Timer_10_Button_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_Timer_Off_Button), /* control block */
@@ -2116,7 +2233,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Tmeout_Prompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {53, 80, 132, 103},                      /* widget size                    */
+    {229, 21, 308, 44},                      /* widget size                    */
     &UserSettingsScreen_Timer_Off_Button_define, /* next widget definition     */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_Tmeout_Prompt), /* control block */
