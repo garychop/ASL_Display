@@ -74,20 +74,20 @@ typedef struct TIMEOUT_STRUCT
     uint8_t m_TimeoutValue;
 } TimeoutInfo_S;
 
-TimeoutInfo_S g_TimeoutInfo[] = {
-    {&UserSettingsScreen.UserSettingsScreen_Timer_Off_Button, 0},
-    {&UserSettingsScreen.UserSettingsScreen_Timer_10_Button, 10},
-    {&UserSettingsScreen.UserSettingsScreen_Timer_15_Button, 15},
-    {&UserSettingsScreen.UserSettingsScreen_Timer_20_Button, 20},
-    {&UserSettingsScreen.UserSettingsScreen_Timer_25_Button, 25},
-    {&UserSettingsScreen.UserSettingsScreen_Timer_30_Button, 30},
-    {&UserSettingsScreen.UserSettingsScreen_Timer_40_Button, 40},
-    {&UserSettingsScreen.UserSettingsScreen_Timer_50_Button, 50},
-    {GX_NULL, 0} };
-GX_RECTANGLE g_TimeoutValueLocation[] = {
-    {225, 50, 225+88, 50+70},
-    {0,0,0,0}};
-
+//TimeoutInfo_S g_TimeoutInfo[] = {
+//    {&UserSettingsScreen.UserSettingsScreen_Timer_Off_Button, 0},
+//    {&UserSettingsScreen.UserSettingsScreen_Timer_10_Button, 10},
+//    {&UserSettingsScreen.UserSettingsScreen_Timer_15_Button, 15},
+//    {&UserSettingsScreen.UserSettingsScreen_Timer_20_Button, 20},
+//    {&UserSettingsScreen.UserSettingsScreen_Timer_25_Button, 25},
+//    {&UserSettingsScreen.UserSettingsScreen_Timer_30_Button, 30},
+//    {&UserSettingsScreen.UserSettingsScreen_Timer_40_Button, 40},
+//    {&UserSettingsScreen.UserSettingsScreen_Timer_50_Button, 50},
+//    {GX_NULL, 0} };
+//GX_RECTANGLE g_TimeoutValueLocation[] = {
+//    {225, 50, 225+88, 50+70},
+//    {0,0,0,0}};
+//
 // This is used for setting the colors in the Calibration Pies, but can be used generically.
 typedef struct myColorS
 {
@@ -142,18 +142,22 @@ int g_CalibrationPadNumber;
 int g_CalibrationStepNumber;
 int g_ClicksActive = FALSE;
 int g_PowerUpInIdle = false;
-FEATURE_ID_ENUM g_ActiveFeature = POWER_ONOFF_ID;     // this indicates the active feature.
+int16_t g_StartupDelayCounter = 0;
 int g_ChangeScreen_WIP;
+FEATURE_ID_ENUM g_ActiveFeature = POWER_ONOFF_ID;     // this indicates the active feature.
 GX_WINDOW *g_GoBackScreen = GX_NULL;
 GX_WINDOW *g_CalibrationScreen = GX_NULL;
 GX_WIDGET *g_ActiveScreen = GX_NULL;
 GX_WINDOW_ROOT * p_window_root;
-bool g_UseNewPrompt = false;
+//bool g_UseNewPrompt = false;
 char g_SliderValue[20] = "gc";
 int16_t g_NeutralDAC_Constant = 2048;
 int16_t g_NeutralDAC_Setting = 2048;
 int16_t g_NeutralDAC_Range = 400;
 bool g_WaitingForVeerResponse = false;
+int g_MinimumDriveValue = 20;       // Percentage, Minimum Drive value
+char g_MinimuDriveString[8] = "20%";
+char g_TimeoutValueString[8] = "OFF";
 
 //-------------------------------------------------------------------------
 // Forward declarations.
@@ -170,7 +174,6 @@ static void reset_check(void);
 UINT SettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
-int LocateNextTimeoutIndex (void);
 UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
@@ -318,19 +321,26 @@ void my_gui_thread_entry(void)
     /* Create the widgets we have defined with the GUIX data structures and resources. */
     GX_WIDGET * p_first_screen = NULL;
     
+    gx_studio_named_widget_create("DiagnosticScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("Main_User_Screen", GX_NULL, GX_NULL);    // Create and show first startup screen.
+    gx_studio_named_widget_create("MinimumDriveScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("MoreSelectionScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("NextPadScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("OON_Screen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("PadCalibrationScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("PadOptionsSettingsScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ReadyScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
+    gx_studio_named_widget_create("ResetScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ResetFinishScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("SetPadDirectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("SetPadTypeScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("PadCalibrationScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("PadOptionsSettingsScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("SettingsScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("DiagnosticScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("UserSettingsScreen", GX_NULL, GX_NULL);
-	gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("Main_User_Screen", GX_NULL, GX_NULL);    // Create and show first startup screen.
-    gx_studio_named_widget_create("ReadyScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
+    gx_studio_named_widget_create("UserSelectionScreen", GX_NULL, GX_NULL);
+    //gx_studio_named_widget_create("SettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("VeerAdjustScreen", GX_NULL, GX_NULL);
+
     gx_studio_named_widget_create("StartupSplashScreen", (GX_WIDGET *)p_window_root, &p_first_screen);    // Create and show first startup screen.
 
     /* Attach the first screen to the root so we can see it when the root is shown */
@@ -381,7 +391,7 @@ void my_gui_thread_entry(void)
 		g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);	//Error
 	}
 		
-	Process_Touches();      // This accepts the Touch screen information and sends it to the GUIX process.
+//	Process_Touches();      // This accepts the Touch screen information and sends it to the GUIX process.
 
     R_BSP_SoftwareDelay(100, BSP_DELAY_UNITS_MILLISECONDS);
  	
@@ -651,20 +661,15 @@ VOID screen_toggle(GX_WINDOW *new_win, GX_WINDOW *old_win)
 // Startup Screen
 //*************************************************************************************
 
-//const char g_NewPrompt[] = "New Prompt";
-
 VOID StartupSplashScreen_draw_function (GX_WINDOW *window)
 {
 
     g_ActiveScreen = (GX_WIDGET*) window;
 
-//        myErr = gx_prompt_text_set ((GX_PROMPT*)&StartupSplashScreen.StartupSplashScreen_StatusPrompt, g_NewPrompt);
-
     gx_window_draw(window);
 }
 
 //*************************************************************************************
-int16_t g_StartupDelayCounter = 0;
 
 UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
@@ -960,31 +965,34 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
     {
-        case GX_SIGNAL(DIAGNOSTIC_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&DiagnosticScreen, window);
-            break;
+    case GX_SIGNAL(PAD_SETTINGS_BTN_ID, GX_EVENT_CLICKED):      // When selected, goto Main Pad Setting scree.
+        screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
+        break;
 
-        case GX_SIGNAL(SETTINGS_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&SettingsScreen, window);
-            break;
+    case GX_SIGNAL(USER_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
+        break;
 
-        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)g_GoBackScreen, window);
-            SendSaveParameters ();      // Tell the Head Array to save parameters.
-            break;
+    case GX_SIGNAL(MORE_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&MoreSelectionScreen, window);
+        break;
 
-        case GX_EVENT_SHOW:
-            gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_Version_Prompt, ASL110_DISPLAY_VERSION_STRING);
-            gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_HeadArray_Version_Prompt, g_HeadArrayVersionString);
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)g_GoBackScreen, window);
+        break;
 
-            // We're entering the HHP feature, it's a good time to request "one-time" information.
-            SendGetCalDataCommnd (LEFT_PAD);        // We send the commands to the Head Array to get the Calibration Data for all 3 pads.
-            SendGetCalDataCommnd (RIGHT_PAD);
-            SendGetCalDataCommnd (CENTER_PAD);
-            SendNeutralDAC_GetCommand();            // We'll need the Neutral DAC "calibration" value.
-            SendFeatureGetCommand();        // Send command to get the current users settings.
-            break;
-    }
+    case GX_EVENT_SHOW:
+//        gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_Version_Prompt, ASL110_DISPLAY_VERSION_STRING);
+//        gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_HeadArray_Version_Prompt, g_HeadArrayVersionString);
+
+        // We're entering the HHP feature, it's a good time to request "one-time" information.
+        SendGetCalDataCommnd (LEFT_PAD);        // We send the commands to the Head Array to get the Calibration Data for all 3 pads.
+        SendGetCalDataCommnd (RIGHT_PAD);
+        SendGetCalDataCommnd (CENTER_PAD);
+        SendNeutralDAC_GetCommand();            // We'll need the Neutral DAC "calibration" value.
+        SendFeatureGetCommand();        // Send command to get the current users settings.
+        break;
+    } // end switch
 
     gx_window_event_process(window, event_ptr);
 
@@ -1064,7 +1072,7 @@ UINT DiagnosticScreen_event_handler(GX_WINDOW *window, GX_EVENT *event_ptr)
             break;
 
         case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+                screen_toggle((GX_WINDOW *)&MoreSelectionScreen, window);
             SendGetDataCommand (STOP_SENDING_DATA, INVALID_PAD);
             break;
 
@@ -1082,6 +1090,7 @@ UINT DiagnosticScreen_event_handler(GX_WINDOW *window, GX_EVENT *event_ptr)
 //
 //*************************************************************************************
 
+#ifdef OLD_SCHOOL
 UINT SettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
@@ -1109,6 +1118,7 @@ UINT SettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     return (GX_SUCCESS);
 }
+#endif
 
 //*************************************************************************************
 // Function Name: PadOptionsSettingsScreen_event_process
@@ -1122,22 +1132,86 @@ UINT PadOptionsSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_
 
     switch (event_ptr->gx_event_type)
     {
-        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&SettingsScreen, window);
-            break;
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+        break;
 
-        case GX_SIGNAL(GOTO_PAD_TYPE_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&SetPadTypeScreen, window);
-            break;
+    case GX_SIGNAL(GOTO_PAD_TYPE_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&SetPadTypeScreen, window);
+        break;
 
-        case GX_SIGNAL(GOTO_PAD_DIRECTIONS_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&SetPadDirectionScreen, window);
-            break;
+    case GX_SIGNAL(GOTO_PAD_DIRECTIONS_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&SetPadDirectionScreen, window);
+        break;
 
-        case GX_SIGNAL(GOTO_VEER_ADJUST_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&VeerAdjustScreen, window);
-            break;
-    } // end switch
+    case GX_SIGNAL(PERFORMANCE_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&NextPadScreen, window);
+        break;
+    }
+
+    gx_window_event_process(window, event_ptr);
+
+    return GX_SUCCESS;
+}
+
+//*************************************************************************************
+// Function Name: NextPadScreen_event_process
+//
+// Description: This dispatches the Pad Option Settings Screen messages
+//
+//*************************************************************************************
+
+UINT NextPadScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
+        break;
+
+    case GX_SIGNAL(GOTO_VEER_ADJUST_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&VeerAdjustScreen, window);
+        break;
+
+    case GX_SIGNAL(MINIMUM_DRIVE_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&MinimumDriveScreen, window);
+        break;
+    }
+
+    gx_window_event_process(window, event_ptr);
+
+    return GX_SUCCESS;
+}
+
+//*************************************************************************************
+// Function Name: MinimumDriveScreen_event_process
+//
+// Description: This dispatches the Pad Option Settings Screen messages
+//
+//*************************************************************************************
+
+UINT MinimumDriveScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&NextPadScreen, window);
+        break;
+
+    case GX_SIGNAL (DRIVE_PERCENTAGE_BTN_ID, GX_EVENT_CLICKED):
+        if (g_MinimumDriveValue >= 30)
+        {
+            g_MinimumDriveValue = 0;
+            strcpy (g_MinimuDriveString, "OFF");
+        }
+        else
+        {
+            g_MinimumDriveValue += 5;
+            sprintf (g_MinimuDriveString, "%d%%", g_MinimumDriveValue);
+            gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_DriverPencentage_Button, g_MinimuDriveString);
+        }
+        break;
+    }
 
     gx_window_event_process(window, event_ptr);
 
@@ -1295,11 +1369,8 @@ UINT VeerSlider_event_function(GX_PIXELMAP_SLIDER *widget, GX_EVENT *event_ptr)
         break;
     case GX_EVENT_PEN_DOWN:
     case GX_EVENT_PEN_DRAG:
-//    case GX_EVENT_PEN_UP:
         sliderAsFound = (int16_t) widget->gx_slider_info.gx_slider_info_current_val;
         totalSteps = (int16_t)(widget->gx_slider_info.gx_slider_info_max_val - widget->gx_slider_info.gx_slider_info_min_val);
-        //minimumDAC = (int16_t)(g_NeutralDAC_Constant - g_NeutralDAC_Range);       // lowest value.
-        //increment = (int16_t) ((g_NeutralDAC_Range*2) / totalSteps);   // This is how many ADC Counts for each slider step.
         increment = 5;      // This means that each slider step is worth 5 DAC counts.
         minimumDAC = (int16_t)(g_NeutralDAC_Constant - (increment * (totalSteps/2)));       // lowest value.
         newVal = (int16_t) (minimumDAC + (increment * sliderAsFound));
@@ -1327,26 +1398,6 @@ VOID Slider_Draw_Function (GX_PIXELMAP_SLIDER *slider)
 
     // We need to convert the target DAC Counts Setting to the number of Slider Steps.
     // The slider is 0-20 representing the extreme left to the extreme right of the slider.
-
-//
-//    // Get the number of steps in the Screen's Slider widget.
-//    totalSteps = (int16_t)(slider->gx_slider_info.gx_slider_info_max_val - slider->gx_slider_info.gx_slider_info_min_val);
-//    // Get the number of DAC Counts between the new setting and the midpoint.
-//    offset = g_NeutralDAC_Constant - g_NeutralDAC_Setting;
-//    // Determine the number of DAC counts for each Slider Step.
-//    increment = (int16_t) (g_NeutralDAC_Range / totalSteps);   // This is how many going Plus and Minus.
-//
-//    offset /= increment;        // Create the number of steps the Setting represents.
-//    myVal = (totalSteps/2) - offset;
-
-//    // Get the number of steps in the Screen's Slider widget.
-//    totalSteps = (int16_t)(slider->gx_slider_info.gx_slider_info_max_val - slider->gx_slider_info.gx_slider_info_min_val);
-//    // Get the number of DAC Counts between the new setting and the midpoint.
-//    offset = g_NeutralDAC_Constant - g_NeutralDAC_Range;
-//    myVal = g_NeutralDAC_Setting - offset;
-//    // Determine the number of DAC counts for each Slider Step.
-//    increment = (int16_t) ((g_NeutralDAC_Range*2) / totalSteps);   // This is how many going Plus and Minus.
-//    myVal /= increment;
 
     // Get the number of steps in the Screen's Slider widget.
     totalSteps = (int16_t)(slider->gx_slider_info.gx_slider_info_max_val - slider->gx_slider_info.gx_slider_info_min_val);
@@ -1378,7 +1429,7 @@ UINT VeerAdjust_Screen_event_handler (GX_WINDOW *window, GX_EVENT *event_ptr)
     switch (event_ptr->gx_event_type)
     {
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
+        screen_toggle((GX_WINDOW *)&NextPadScreen, window);
         break;
 
     case GX_EVENT_SHOW:
@@ -1397,35 +1448,44 @@ UINT VeerAdjust_Screen_event_handler (GX_WINDOW *window, GX_EVENT *event_ptr)
 
 
 //*************************************************************************************
+// Function Name: UserSelectionScreen_event_process
+//
+// Description: This handles the User Settings Screen messages
+//
+//*************************************************************************************
+
+UINT UserSelectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+        break;
+
+    case GX_SIGNAL(GOTO_USER_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&UserSettingsScreen, window);
+        break;
+
+    case GX_SIGNAL(GOTO_FEATURE_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&FeatureSettingsScreen, window);
+        break;
+    }
+
+    gx_window_event_process(window, event_ptr);
+
+    return GX_SUCCESS;
+}
+
+//*************************************************************************************
 // Function Name: UserSettingsScreen_event_process
 //
 // Description: This handles the User Settings Screen messages
 //
 //*************************************************************************************
 
-int LocateNextTimeoutIndex (void)
-{
-    int i;
-    int found = 0;
-
-    for (i=0; g_TimeoutInfo[i].m_TimeoutIcon != GX_NULL; ++i)
-    {
-        if (g_TimeoutInfo[i].m_TimeoutValue == g_TimeoutValue)
-        {
-            found = i+1;
-            if (g_TimeoutInfo[found].m_TimeoutIcon == GX_NULL)  // wrap around to the beginning.
-                found = 0;
-            break;
-        }
-    }
-    return found;
-}
-
-//*************************************************************************************
-
 void ShowUserSettingsItems (void)
 {
-    int index;
+    char tmpChar[8];
 
     if (g_ClicksActive)
     {
@@ -1450,15 +1510,31 @@ void ShowUserSettingsItems (void)
         gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
     }
 
-    // Show the Timeout Value
-    for (index = 0; g_TimeoutInfo[index].m_TimeoutIcon != GX_NULL; ++index)
+    // Populate the Timeout button with the current setting or "OFF".
+    if (g_TimeoutValue == 0)
+        strcpy (g_TimeoutValueString, "OFF");
+    else
     {
-        if (g_TimeoutInfo[index].m_TimeoutValue == g_TimeoutValue)
-            gx_widget_resize ((GX_WIDGET*) g_TimeoutInfo[index].m_TimeoutIcon, &g_TimeoutValueLocation[0]); // show it
-        else
-            gx_widget_resize ((GX_WIDGET*) g_TimeoutInfo[index].m_TimeoutIcon, &g_TimeoutValueLocation[1]); // hide it off screen.
+        // sprintf (g_TimeoutValueString, "%1.1g", (float) (g_TimeoutValue / 10.0f));
+        // Floating point doesn't work for some odd reason.
+        // I'm doing a hack to display the value in a X.X format.
+        sprintf (g_TimeoutValueString, "%d.", g_TimeoutValue / 10);
+        sprintf (tmpChar, "%d", g_TimeoutValue % 10);
+        strcat (g_TimeoutValueString, tmpChar);
     }
+    gx_text_button_text_set (&UserSettingsScreen.UserSettingsScreen_Timeout_Button, g_TimeoutValueString);
+
+//    // Show the Timeout Value
+//    for (index = 0; g_TimeoutInfo[index].m_TimeoutIcon != GX_NULL; ++index)
+//    {
+//        if (g_TimeoutInfo[index].m_TimeoutValue == g_TimeoutValue)
+//            gx_widget_resize ((GX_WIDGET*) g_TimeoutInfo[index].m_TimeoutIcon, &g_TimeoutValueLocation[0]); // show it
+//        else
+//            gx_widget_resize ((GX_WIDGET*) g_TimeoutInfo[index].m_TimeoutIcon, &g_TimeoutValueLocation[1]); // hide it off screen.
+//    }
 }
+
+//*************************************************************************************
 
 UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
@@ -1467,61 +1543,70 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     switch (event_ptr->gx_event_type)
     {
-        case GX_EVENT_SHOW:
-            break;
+    case GX_EVENT_SHOW:
+        break;
 
-        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&SettingsScreen, window);
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
 
-            myActiveFeatures = 0x0;
-            myMask = 0x01;
-            for (feature = 0; feature < 4; ++feature)
+        myActiveFeatures = 0x0;
+        myMask = 0x01;
+        for (feature = 0; feature < 4; ++feature)
+        {
+            if (g_ScreenPrompts[feature].m_Active)
             {
-                if (g_ScreenPrompts[feature].m_Active)
-                {
-                    // Create the byte to send to the COMM Task to tell Head Array what features are active.
-                    myActiveFeatures |= myMask;     // Set bit.
-                }
-                myMask = (uint8_t)(myMask << 1);    // Rotate the bit.
+                // Create the byte to send to the COMM Task to tell Head Array what features are active.
+                myActiveFeatures |= myMask;     // Set bit.
             }
-            // Add clicks in D4 of byte.
-            if (g_ClicksActive)
-                myActiveFeatures |= 0x10;
-            // Add power up in D5 of byte;
-            if (g_PowerUpInIdle)
-                myActiveFeatures |= 0x20;
-            SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
-            break;
+            myMask = (uint8_t)(myMask << 1);    // Rotate the bit.
+        }
+        // Add clicks in D4 of byte.
+        if (g_ClicksActive)
+            myActiveFeatures |= 0x10;
+        // Add power up in D5 of byte;
+        if (g_PowerUpInIdle)
+            myActiveFeatures |= 0x20;
+        SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
+        break;
 
-            // Click (Audio) Feature handling
-        case GX_SIGNAL(CLICKS_INACTIVE_ICON, GX_EVENT_CLICKED):
-        case GX_SIGNAL(CLICKS_ACTIVE_ICON, GX_EVENT_CLICKED):
-            g_ClicksActive = (g_ClicksActive == TRUE ? FALSE : TRUE);
-            break;
+        // Click (Audio) Feature handling
+    case GX_SIGNAL(CLICKS_INACTIVE_ICON, GX_EVENT_CLICKED):
+    case GX_SIGNAL(CLICKS_ACTIVE_ICON, GX_EVENT_CLICKED):
+        g_ClicksActive = (g_ClicksActive == TRUE ? FALSE : TRUE);
+        break;
 
-            // Power Up in Idle button push handling
-        case GX_SIGNAL(POWER_UP_INACTIVE_ICON, GX_EVENT_CLICKED):
-            gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
-            gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_InactiveIcon);
-            g_PowerUpInIdle = true;
-            break;
-        case GX_SIGNAL(POWER_UP_ACTIVE_ICON, GX_EVENT_CLICKED):
-            gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_InactiveIcon);
-            gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
-            g_PowerUpInIdle = false;
-            break;
+        // Power Up in Idle button push handling
+    case GX_SIGNAL(POWER_UP_INACTIVE_ICON, GX_EVENT_CLICKED):
+        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
+        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_InactiveIcon);
+        g_PowerUpInIdle = true;
+        break;
+    case GX_SIGNAL(POWER_UP_ACTIVE_ICON, GX_EVENT_CLICKED):
+        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_InactiveIcon);
+        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
+        g_PowerUpInIdle = false;
+        break;
+    case GX_SIGNAL(TIMEOUT_BTN_ID, GX_EVENT_CLICKED):
+        switch (g_TimeoutValue)
+        {
+            case 0:
+                g_TimeoutValue = 10;
+                break;
+            case 10:
+            case 15:
+            case 20:
+            case 25:
+                g_TimeoutValue =  (uint8_t)(g_TimeoutValue + 5);
+                break;
+            case 30:
+            case 40:
+                g_TimeoutValue = (uint8_t)(g_TimeoutValue + 10);
+                break;
+            case 50:
+                g_TimeoutValue = 0;
+                break;
+        } // end switch
 
-        case GX_SIGNAL(TIMER_OFF_BTN_ID, GX_EVENT_CLICKED):
-        case GX_SIGNAL(TIMER_10_BTN_ID, GX_EVENT_CLICKED):
-        case GX_SIGNAL(TIMER_15_BTN_ID, GX_EVENT_CLICKED):
-        case GX_SIGNAL(TIMER_20_BTN_ID, GX_EVENT_CLICKED):
-        case GX_SIGNAL(TIMER_25_BTN_ID, GX_EVENT_CLICKED):
-        case GX_SIGNAL(TIMER_30_BTN_ID, GX_EVENT_CLICKED):
-        case GX_SIGNAL(TIMER_40_BTN_ID, GX_EVENT_CLICKED):
-        case GX_SIGNAL(TIMER_50_BTN_ID, GX_EVENT_CLICKED):
-            feature = LocateNextTimeoutIndex();
-            g_TimeoutValue = g_TimeoutInfo[feature].m_TimeoutValue;
-            break;
     } // end switch
 
     ShowUserSettingsItems();
@@ -1614,7 +1699,7 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
             break;
 
         case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&SettingsScreen, window);
+            screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
             // This sets the screen location of any active features.
             myActiveFeatures = 0;
             myMask = 0x01;
@@ -2033,6 +2118,75 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     gx_window_event_process(window, event_ptr);
 
     return GX_SUCCESS;
+}
+
+//*************************************************************************************
+// Function Name: MoreSelectionScreen_event_process
+//
+// Description: This functions handles the More Selection screen and dispatches
+//      to the Diagnostic Screen or the Reset System screen.
+//
+//*************************************************************************************
+
+UINT MoreSelectionScreen_event_process(GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_EVENT_SHOW:
+        // TODO: Show versions here.
+        break;
+
+    case GX_SIGNAL(GOTO_DIAGNOSTICS_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&DiagnosticScreen, window);
+        break;
+
+    case GX_SIGNAL(GOTO_RESET_SCREEN_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&ResetScreen, window);
+        break;
+
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+        break;
+
+    } // end switch
+    return gx_window_event_process(window, event_ptr);
+}
+
+//*************************************************************************************
+// Function Name: ResetScreen_event_process
+//
+// Description: This handles the Diagnostic Screen messages
+//
+//*************************************************************************************
+
+UINT ResetScreen_event_process(GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&MoreSelectionScreen, window);
+        break;
+
+    case GX_SIGNAL(CONTINUE_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&ResetFinishScreen, window);
+        break;
+    } // end switch
+    return gx_window_event_process(window, event_ptr);
+}
+
+//*************************************************************************************
+
+UINT ResetFinishScreen_event_process(GX_WINDOW *window, GX_EVENT *event_ptr)
+{
+    switch (event_ptr->gx_event_type)
+    {
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+        break;
+
+    } // end switch
+    return gx_window_event_process(window, event_ptr);
 }
 
 //-------------------------------------------------------------------------
