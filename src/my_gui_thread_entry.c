@@ -133,7 +133,7 @@ struct PadInfoStruct
 // Global Variables.
 //-------------------------------------------------------------------------
 
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.2.2";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.3.2";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -200,6 +200,36 @@ void my_gui_thread_entry(void)
 //    g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
   	g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
 	g_ioport.p_api->pinWrite(beep_out, IOPORT_LEVEL_LOW);
+
+//    gx_system_focus_claim(p_first_screen);
+    R_BSP_SoftwareDelay(250, BSP_DELAY_UNITS_MILLISECONDS);
+
+    /** Open the SPI driver to initialize the LCD **/
+    err = g_rspi_lcdc.p_api->open(g_rspi_lcdc.p_ctrl, g_rspi_lcdc.p_cfg);
+    if(SSP_SUCCESS != err)
+    {
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
+    }
+
+    // Open the I2C driver for CLOCK
+    err = g_i2c1.p_api->open(g_i2c1.p_ctrl, g_i2c1.p_cfg);
+    if(SSP_SUCCESS != err)
+    {
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
+    }
+
+    // Open the ADC driver for Thermistor
+    err = g_adc0.p_api->open(g_adc0.p_ctrl, g_adc0.p_cfg);
+    if(SSP_SUCCESS != err)
+    {
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
+    }
+
+        g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
+
+
+    // Setup the ILI9341V LCD Driver and Touchscreen.
+    ILI9341V_Init();
 
     /* Initializes GUIX. */
     status = gx_system_initialize();
@@ -354,35 +384,6 @@ void my_gui_thread_entry(void)
     /* Lets GUIX run. */
     gx_system_start();
 
-//    gx_system_focus_claim(p_first_screen);
-
-    /** Open the SPI driver to initialize the LCD **/
-    err = g_rspi_lcdc.p_api->open(g_rspi_lcdc.p_ctrl, g_rspi_lcdc.p_cfg);
-    if(SSP_SUCCESS != err)
-    {
-        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
-    }
-
-    // Open the I2C driver for CLOCK 
-    err = g_i2c1.p_api->open(g_i2c1.p_ctrl, g_i2c1.p_cfg);
-    if(SSP_SUCCESS != err)
-    {
-        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
-    }
-
-    // Open the ADC driver for Thermistor 
-    err = g_adc0.p_api->open(g_adc0.p_ctrl, g_adc0.p_cfg);
-    if(SSP_SUCCESS != err)
-    {
-        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
-    }
-		
-		g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
-
-
-    // Setup the ILI9341V LCD Driver and Touchscreen.
-    ILI9341V_Init();
-		
 	g_ioport.p_api->pinWrite(BACKLIGHT_CONTROL_PIN, IOPORT_LEVEL_HIGH);      // Turn off the backlight
 
 	err = g_timer0.p_api->open(g_timer0.p_ctrl, g_timer0.p_cfg);
