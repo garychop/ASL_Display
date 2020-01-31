@@ -133,7 +133,7 @@ struct PadInfoStruct
 // Global Variables.
 //-------------------------------------------------------------------------
 
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "DSP: 1.3.2";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "Display: 1.3.3";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -980,12 +980,10 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)g_GoBackScreen, window);
+        SendSaveParameters();
         break;
 
     case GX_EVENT_SHOW:
-//        gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_Version_Prompt, ASL110_DISPLAY_VERSION_STRING);
-//        gx_prompt_text_set ((GX_PROMPT*)&HHP_Start_Screen.HHP_Start_Screen_HeadArray_Version_Prompt, g_HeadArrayVersionString);
-
         // We're entering the HHP feature, it's a good time to request "one-time" information.
         SendGetCalDataCommnd (LEFT_PAD);        // We send the commands to the Head Array to get the Calibration Data for all 3 pads.
         SendGetCalDataCommnd (RIGHT_PAD);
@@ -2134,7 +2132,8 @@ UINT MoreSelectionScreen_event_process(GX_WINDOW *window, GX_EVENT *event_ptr)
     switch (event_ptr->gx_event_type)
     {
     case GX_EVENT_SHOW:
-        // TODO: Show versions here.
+        gx_prompt_text_set ((GX_PROMPT*)&MoreSelectionScreen.MoreSelectionScreen_VersionPrompt, ASL110_DISPLAY_VERSION_STRING);
+        gx_prompt_text_set ((GX_PROMPT*)&MoreSelectionScreen.MoreSelectionScreen_HeadArray_VersionPrompt, g_HeadArrayVersionString);
         break;
 
     case GX_SIGNAL(GOTO_DIAGNOSTICS_BTN_ID, GX_EVENT_CLICKED):

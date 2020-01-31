@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 29. 1.2020   Time (hh:mm): 15:27                        */
+/*  Date (dd.mm.yyyy): 31. 1.2020   Time (hh:mm): 13:48                        */
 /*******************************************************************************/
 
 
@@ -330,14 +330,14 @@ GX_TEXT_BUTTON_PROPERTIES MoreSelectionScreen_GotoResetSettings_lButton_properti
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
-GX_PROMPT_PROPERTIES MoreSelectionScreen_HA_VersionPrompt_properties =
+GX_PROMPT_PROPERTIES MoreSelectionScreen_HeadArray_VersionPrompt_properties =
 {
     GX_STRING_ID_STRING_65_1,                /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
-GX_PROMPT_PROPERTIES MoreSelectionScreen_HA_VersionPrompt_1_properties =
+GX_PROMPT_PROPERTIES MoreSelectionScreen_VersionPrompt_properties =
 {
     GX_STRING_ID_STRING_69_1,                /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
@@ -375,11 +375,11 @@ GX_CONST GX_STUDIO_WIDGET MoreSelectionScreen_OK_Button_define =
     (void *) &MoreSelectionScreen_OK_Button_properties /* extended properties  */
 };
 
-GX_CONST GX_STUDIO_WIDGET MoreSelectionScreen_HA_VersionPrompt_1_define =
+GX_CONST GX_STUDIO_WIDGET MoreSelectionScreen_VersionPrompt_define =
 {
-    "HA_VersionPrompt_1",
+    "VersionPrompt",
     GX_TYPE_PROMPT,                          /* widget type                    */
-    HA_VERSION_PROMPT_ID,                    /* widget id                      */
+    DISPLAY_VERSION_PROMPT_ID,               /* widget id                      */
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
@@ -394,15 +394,15 @@ GX_CONST GX_STUDIO_WIDGET MoreSelectionScreen_HA_VersionPrompt_1_define =
     {33, 189, 185, 212},                     /* widget size                    */
     &MoreSelectionScreen_OK_Button_define,   /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
-    offsetof(MORESELECTIONSCREEN_CONTROL_BLOCK, MoreSelectionScreen_HA_VersionPrompt_1), /* control block */
-    (void *) &MoreSelectionScreen_HA_VersionPrompt_1_properties /* extended properties */
+    offsetof(MORESELECTIONSCREEN_CONTROL_BLOCK, MoreSelectionScreen_VersionPrompt), /* control block */
+    (void *) &MoreSelectionScreen_VersionPrompt_properties /* extended properties */
 };
 
-GX_CONST GX_STUDIO_WIDGET MoreSelectionScreen_HA_VersionPrompt_define =
+GX_CONST GX_STUDIO_WIDGET MoreSelectionScreen_HeadArray_VersionPrompt_define =
 {
-    "HA_VersionPrompt",
+    "HeadArray_VersionPrompt",
     GX_TYPE_PROMPT,                          /* widget type                    */
-    HA_VERSION_PROMPT_ID,                    /* widget id                      */
+    HEAD_ARRAY_VERSION_PROMPT_ID,            /* widget id                      */
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
@@ -415,10 +415,10 @@ GX_CONST GX_STUDIO_WIDGET MoreSelectionScreen_HA_VersionPrompt_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {34, 163, 175, 186},                     /* widget size                    */
-    &MoreSelectionScreen_HA_VersionPrompt_1_define, /* next widget definition  */
+    &MoreSelectionScreen_VersionPrompt_define, /* next widget definition       */
     GX_NULL,                                 /* no child widgets               */ 
-    offsetof(MORESELECTIONSCREEN_CONTROL_BLOCK, MoreSelectionScreen_HA_VersionPrompt), /* control block */
-    (void *) &MoreSelectionScreen_HA_VersionPrompt_properties /* extended properties */
+    offsetof(MORESELECTIONSCREEN_CONTROL_BLOCK, MoreSelectionScreen_HeadArray_VersionPrompt), /* control block */
+    (void *) &MoreSelectionScreen_HeadArray_VersionPrompt_properties /* extended properties */
 };
 
 GX_CONST GX_STUDIO_WIDGET MoreSelectionScreen_GotoResetSettings_lButton_define =
@@ -438,7 +438,7 @@ GX_CONST GX_STUDIO_WIDGET MoreSelectionScreen_GotoResetSettings_lButton_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {16, 89, 205, 152},                      /* widget size                    */
-    &MoreSelectionScreen_HA_VersionPrompt_define, /* next widget definition    */
+    &MoreSelectionScreen_HeadArray_VersionPrompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MORESELECTIONSCREEN_CONTROL_BLOCK, MoreSelectionScreen_GotoResetSettings_lButton), /* control block */
     (void *) &MoreSelectionScreen_GotoResetSettings_lButton_properties /* extended properties */

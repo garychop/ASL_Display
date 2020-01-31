@@ -3883,7 +3883,7 @@
 </widget>
 <widget>
 <type>prompt</type>
-<app_name>HA_VersionPrompt</app_name>
+<app_name>HeadArray_VersionPrompt</app_name>
 <size>
 <left>34</left>
 <top>163</top>
@@ -3896,7 +3896,7 @@
 <normal_fill_color>SELECTED_TEXT</normal_fill_color>
 <selected_fill_color>BTN_TEXT</selected_fill_color>
 <disabled_fill_color>BTN_TEXT</disabled_fill_color>
-<id_name>HA_VERSION_PROMPT_ID</id_name>
+<id_name>HEAD_ARRAY_VERSION_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
 <string_id>STRING_65_1</string_id>
@@ -3907,7 +3907,7 @@
 </widget>
 <widget>
 <type>prompt</type>
-<app_name>HA_VersionPrompt_1</app_name>
+<app_name>VersionPrompt</app_name>
 <size>
 <left>33</left>
 <top>189</top>
@@ -3920,7 +3920,7 @@
 <normal_fill_color>SELECTED_TEXT</normal_fill_color>
 <selected_fill_color>BTN_TEXT</selected_fill_color>
 <disabled_fill_color>BTN_TEXT</disabled_fill_color>
-<id_name>HA_VERSION_PROMPT_ID</id_name>
+<id_name>DISPLAY_VERSION_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
 <string_id>STRING_69_1</string_id>
