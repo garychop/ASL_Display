@@ -133,7 +133,7 @@ struct PadInfoStruct
 // Global Variables.
 //-------------------------------------------------------------------------
 
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "Display: 1.3.3";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "Display: 1.4.1";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -2169,6 +2169,7 @@ UINT ResetScreen_event_process(GX_WINDOW *window, GX_EVENT *event_ptr)
         break;
 
     case GX_SIGNAL(CONTINUE_BTN_ID, GX_EVENT_CLICKED):
+        SendResetParameters();          // Send the RESET PARAMETERS command to the Head Array via the Msg Queue.
         screen_toggle((GX_WINDOW *)&ResetFinishScreen, window);
         break;
     } // end switch

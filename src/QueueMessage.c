@@ -433,3 +433,18 @@ void SendSaveParameters (void)
 
     tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
+
+//****************************************************************************
+// Function called by GUI to send to COMM task via Queue to tell the
+// head array to Reset all parameters.
+//****************************************************************************
+
+void SendResetParameters (void)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_RESET_PARAMETERS_CMD;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
