@@ -3196,7 +3196,7 @@
 <English>TRUE</English>
 <string_table>
 <sort_column>-1</sort_column>
-<num_strings>88</num_strings>
+<num_strings>89</num_strings>
 <num_languages>1</num_languages>
 <string_record>
 <id>STRING_15</id>
@@ -3633,6 +3633,11 @@
 <font>0</font>
 <val>SET DIGITAL MINIMUM</val>
 </string_record>
+<string_record>
+<id>STRING_30</id>
+<font>0</font>
+<val>SET MINIMUM SPEED</val>
+</string_record>
 </string_table>
 <widget_folder>
 <folder_name>default_folder</folder_name>
@@ -3698,7 +3703,7 @@
 <id_name>MINIMUM_DRIVE_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_95</text_id>
+<text_id>STRING_30</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>

@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  2. 2.2020   Time (hh:mm): 13:31                        */
+/*  Date (dd.mm.yyyy):  2. 2.2020   Time (hh:mm): 13:41                        */
 /*******************************************************************************/
 
 
@@ -208,7 +208,7 @@ GX_TEXT_BUTTON_PROPERTIES NextPadScreen_GotoVeerAdjust_Button_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES NextPadScreen_MinimumDrive_lButton_properties =
 {
-    GX_STRING_ID_STRING_95,                  /* string id                      */
+    GX_STRING_ID_STRING_30,                  /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */

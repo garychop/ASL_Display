@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  2. 2.2020   Time (hh:mm): 13:31                        */
+/*  Date (dd.mm.yyyy):  2. 2.2020   Time (hh:mm): 13:41                        */
 /*******************************************************************************/
 
 
@@ -33176,10 +33176,11 @@ GX_CONST GX_UBYTE main_display_STRING_83_1_English[20] = "MINIMUM DRIVE SPEED";
 GX_CONST GX_UBYTE main_display_STRING_65_1_English[17] = "ASL110: 00.00.00";
 GX_CONST GX_UBYTE main_display_STRING_69_1_English[18] = "Display: 00.00.00";
 GX_CONST GX_UBYTE main_display_STRING_95_English[20] = "SET DIGITAL MINIMUM";
+GX_CONST GX_UBYTE main_display_STRING_30_English[18] = "SET MINIMUM SPEED";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[88] =
+GX_CONST GX_UBYTE *main_display_English_string_table[89] =
 {
     GX_NULL,
     main_display_STRING_15_English,
@@ -33268,7 +33269,8 @@ GX_CONST GX_UBYTE *main_display_English_string_table[88] =
     main_display_STRING_83_1_English,
     main_display_STRING_65_1_English,
     main_display_STRING_69_1_English,
-    main_display_STRING_95_English
+    main_display_STRING_95_English,
+    main_display_STRING_30_English
 
 };
 
