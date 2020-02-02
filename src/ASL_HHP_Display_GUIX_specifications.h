@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 31. 1.2020   Time (hh:mm): 13:48                        */
+/*  Date (dd.mm.yyyy):  2. 2.2020   Time (hh:mm): 13:31                        */
 /*******************************************************************************/
 
 
@@ -600,6 +600,7 @@ VOID _gx_synergy_jpeg_draw (GX_DRAW_CONTEXT *p_context, INT x, INT y, GX_PIXELMA
 UINT NextPadScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT MoreSelectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT MinimumDriveScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
+VOID MinimumDriveScreen_draw_function(GX_WINDOW *widget);
 UINT UserSelectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT ResetScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT ResetFinishScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);

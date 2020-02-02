@@ -448,3 +448,47 @@ void SendResetParameters (void)
     tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 
+//****************************************************************************
+// Function: SendDriveOffsetGet
+// Description: Function called by GUI task to retrieve the Drive Offset
+//          value from the Head Array via the Communication Task.
+//****************************************************************************
+
+void SendDriveOffsetGet (void)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_DRIVE_OFFSET_GET;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+//****************************************************************************
+// Function: SendDriveOffsetGet
+// Description: Function called by COMM task to send Drive Offset value to GUI via Queue
+//****************************************************************************
+
+void SendDriveOffsetSet (uint8_t driveOffset)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_DRIVE_OFFSET_SET;
+    q_Msg.SendDriveOffset.m_DriveOffset = driveOffset;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+//****************************************************************************
+// Function: SendDriveOffsetGet
+// Description: Function called by COMM task to send Drive Offset value to GUI via Queue
+//****************************************************************************
+
+void SendDriveOffsetGetResponse (uint8_t value)
+{
+    HHP_HA_MSG_STRUCT HHP_Msg;
+
+    HHP_Msg.m_MsgType = HHP_HA_DRIVE_OFFSET_GET;
+    HHP_Msg.DriveOffset_Get_Response.m_DriveOffset = value;
+
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}

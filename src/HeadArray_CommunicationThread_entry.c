@@ -896,6 +896,32 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             }
             break;
 
+        case HHP_HA_DRIVE_OFFSET_GET:
+            HA_Msg[0] = 0x03;     // msg length
+            HA_Msg[1] = HHP_HA_DRIVE_OFFSET_GET;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                SendDriveOffsetGetResponse (HB_Response[1]);
+            }
+            break;
+
+        case HHP_HA_DRIVE_OFFSET_SET:
+            HA_Msg[0] = 0x04;     // msg length
+            HA_Msg[1] = HHP_HA_DRIVE_OFFSET_SET;
+            HA_Msg[2] = GUI_Msg.SendDriveOffset.m_DriveOffset;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+            }
+            break;
+
         default:
             msgSent = false;
             break;

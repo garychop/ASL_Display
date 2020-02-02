@@ -155,7 +155,7 @@ int16_t g_NeutralDAC_Constant = 2048;
 int16_t g_NeutralDAC_Setting = 2048;
 int16_t g_NeutralDAC_Range = 400;
 bool g_WaitingForVeerResponse = false;
-int g_MinimumDriveValue = 20;       // Percentage, Minimum Drive value
+uint8_t g_MinimumDriveValue = 20;       // Percentage, Minimum Drive value
 char g_MinimuDriveString[8] = "20%";
 char g_TimeoutValueString[8] = "OFF";
 
@@ -183,6 +183,7 @@ void AdjustActiveFeature (FEATURE_ID_ENUM newMode);
 void ShowPadTypes (void);
 void ShowActiveFeatures (void);
 void ShowUserSettingsItems (void);
+void ShowMinimumValue ();
 
 void ProcessCommunicationMsgs ();
 
@@ -631,6 +632,16 @@ void ProcessCommunicationMsgs ()
             g_WaitingForVeerResponse = false;
             break;
 
+        case HHP_HA_DRIVE_OFFSET_GET:
+            g_MinimumDriveValue = HeadArrayMsg.DriveOffset_Get_Response.m_DriveOffset;
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            break;
+
         default:
             break;
     } // end switch
@@ -989,7 +1000,8 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         SendGetCalDataCommnd (RIGHT_PAD);
         SendGetCalDataCommnd (CENTER_PAD);
         SendNeutralDAC_GetCommand();            // We'll need the Neutral DAC "calibration" value.
-        SendFeatureGetCommand();        // Send command to get the current users settings.
+        SendFeatureGetCommand();                // Send command to get the current users settings.
+        SendDriveOffsetGet();                   // Send command to get the Drive Offset.
         break;
     } // end switch
 
@@ -1188,7 +1200,27 @@ UINT NextPadScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 // Description: This dispatches the Pad Option Settings Screen messages
 //
 //*************************************************************************************
+void ShowMinimumValue ()
+{
+    if (g_MinimumDriveValue == 0)
+    {
+        strcpy (g_MinimuDriveString, "OFF");
+    }
+    else
+    {
+        sprintf (g_MinimuDriveString, "%d%%", g_MinimumDriveValue);
+        gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_DriverPencentage_Button, g_MinimuDriveString);
+    }
+}
 
+//*************************************************************************************
+VOID MinimumDriveScreen_draw_function (GX_WINDOW *window)
+{
+    ShowMinimumValue();         // Show the minimum value in the button.
+    gx_window_draw(window);
+}
+
+//*************************************************************************************
 UINT MinimumDriveScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
@@ -1201,14 +1233,18 @@ UINT MinimumDriveScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         if (g_MinimumDriveValue >= 30)
         {
             g_MinimumDriveValue = 0;
-            strcpy (g_MinimuDriveString, "OFF");
+        }
+        else if (g_MinimumDriveValue == 0)
+        {
+            g_MinimumDriveValue = 15;       // 5, 10 and even 15 may exceed the neutral window of the control system.
         }
         else
         {
-            g_MinimumDriveValue += 5;
-            sprintf (g_MinimuDriveString, "%d%%", g_MinimumDriveValue);
-            gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_DriverPencentage_Button, g_MinimuDriveString);
+            g_MinimumDriveValue = (uint8_t) (g_MinimumDriveValue + 5);
         }
+        //ShowMinimumValue();
+        SendDriveOffsetSet (g_MinimumDriveValue);
+        SendDriveOffsetGet();
         break;
     }
 

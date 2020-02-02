@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 31. 1.2020   Time (hh:mm): 13:48                        */
+/*  Date (dd.mm.yyyy):  2. 2.2020   Time (hh:mm): 13:31                        */
 /*******************************************************************************/
 
 
@@ -628,7 +628,7 @@ GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_define =
     GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
     GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
     gx_studio_window_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
+    (VOID (*)(GX_WIDGET *)) MinimumDriveScreen_draw_function, /* drawing function override */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) MinimumDriveScreen_event_process, /* event function override */
     {0, 0, 319, 255},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
@@ -2113,7 +2113,7 @@ GX_WINDOW_PROPERTIES StartupSplashScreen_properties =
 };
 GX_PIXELMAP_BUTTON_PROPERTIES StartupSplashScreen_pixelmap_button_properties =
 {
-    GX_PIXELMAP_ID_FUSION_LOGO_WBLK_300X104, /* normal pixelmap id             */
+    GX_PIXELMAP_ID_FUSION_LOGO_REDWHITE,     /* normal pixelmap id             */
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };
@@ -2256,7 +2256,7 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_StatusPrompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {47, 163, 276, 192},                     /* widget size                    */
+    {400, 163, 629, 192},                    /* widget size                    */
     &StartupSplashScreen_HB_OK_Button_define, /* next widget definition        */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_StatusPrompt), /* control block */
@@ -2279,7 +2279,7 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_pixelmap_button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {7, 18, 305, 115},                       /* widget size                    */
+    {8, 42, 306, 139},                       /* widget size                    */
     &StartupSplashScreen_StatusPrompt_define, /* next widget definition        */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_pixelmap_button), /* control block */
