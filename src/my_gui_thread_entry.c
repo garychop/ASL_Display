@@ -133,7 +133,7 @@ struct PadInfoStruct
 // Global Variables.
 //-------------------------------------------------------------------------
 
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "Display: 1.4.1";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "Display: 1.4.2";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -933,6 +933,11 @@ UINT Ready_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         case GX_SIGNAL(POWER_ON_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)&Main_User_Screen, window);
             break;
+
+        case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+            g_ChangeScreen_WIP = TRUE;
+            break;
     } // end switch
 
     gx_window_event_process(window, event_ptr);
@@ -960,6 +965,11 @@ UINT OON_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         case GX_SIGNAL (OON_OK_BTN_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)&Main_User_Screen, window);
             SendGetVersionCommand ();
+            break;
+
+        case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+            g_ChangeScreen_WIP = TRUE;
             break;
     } // end switch
 

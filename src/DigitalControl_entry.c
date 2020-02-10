@@ -215,7 +215,7 @@ void Read_Arrow_Buttons(void)
             {
                 if (++g_Counter > 200)
                 {
-                    gxe.gx_event_type = GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED);
+                    gxe.gx_event_type = GX_SIGNAL(BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED);
                     gxe.gx_event_sender = GX_ID_NONE;
                     gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
                     gxe.gx_event_display_handle = 0;
