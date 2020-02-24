@@ -25,18 +25,6 @@ enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PAD_ACTIVE
 // Local variables
 //-------------------------------------------------------------------------
 
-struct MainScreenFeatureInfo_struct
-{
-    int m_Location;     // This indicates the Main Screen location, 0=Top most, 3=bottom most
-    int m_Enabled;      // Indicates if this feature is active.
-    int m_Active;       // Features specific. RNet DRIVE = 0, RNet SEATING = 1; All others this is not used.
-    GX_RESOURCE_ID m_SmallIcon;
-    GX_RESOURCE_ID m_LargeIcon;
-    GX_RESOURCE_ID m_LargeOnDescriptionID;
-    GX_RESOURCE_ID m_LargeOffDescriptionID;
-    GX_RESOURCE_ID m_SmallDescriptionID;
-} g_MainScreenFeatureInfo[5];
-
 GX_RECTANGLE g_HiddenRectangle = {0,0,0,0};
 
 GX_RECTANGLE g_DiagnosticWidgetLocations[] = {
@@ -83,8 +71,18 @@ typedef struct myColorS
         } rgb;
     };
 } RGB16_Struct;
-
 RGB16_Struct g_Color;
+
+struct MainScreenFeatureInfo_struct
+{
+    int m_Location;     // This indicates the Main Screen location, 0=Top most, 3=bottom most
+    int m_Enabled;      // Indicates if this feature is active.
+    int m_Active;       // Features specific. RNet DRIVE = 0, RNet SEATING = 1; All others this is not used.
+    GX_RESOURCE_ID m_SmallIcon;
+    GX_RESOURCE_ID m_LargeIcon;
+    GX_RESOURCE_ID m_SmallDescriptionID;
+    GX_RESOURCE_ID m_LargeDescriptionID;
+} g_MainScreenFeatureInfo[NUM_FEATURES];
 
 struct PadInfoStruct
 {
@@ -160,6 +158,7 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 
 UINT DisplayMainScreenActiveFeatures ();
 void AdjustActiveFeature (FEATURE_ID_ENUM newMode);
+void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures);
 void ShowPadTypes (void);
 void ShowActiveFeatures (void);
 void ShowUserSettingsItems (void);
@@ -242,9 +241,8 @@ void my_gui_thread_entry(void)
     // "Power ON/OFF" information and description
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = TRUE;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Location = 0;
-    g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Active = 0;
-    g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_LargeOnDescriptionID = GX_STRING_ID_POWER_ONOFF; //"POWER ON/OFF"
-    g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_LargeOffDescriptionID = GX_STRING_ID_POWER_ONOFF;
+    g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Active = TRUE;
+    g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_LargeDescriptionID = GX_STRING_ID_POWER_ONOFF; //"POWER ON/OFF"
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_SmallDescriptionID = GX_STRING_ID_POWER_ONOFF;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_SmallIcon = GX_PIXELMAP_ID_POWERICON_30X30;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_LargeIcon = GX_PIXELMAP_ID_POWERICON_LARGE;
@@ -252,9 +250,8 @@ void my_gui_thread_entry(void)
     // "Bluetooth" information and description
     g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = TRUE;
     g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Location = 1;
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Active = 0;
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_LargeOnDescriptionID = GX_STRING_ID_BLUETOOTH;
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_LargeOffDescriptionID = GX_STRING_ID_BLUETOOTH;
+    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Active = TRUE;
+    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_LargeDescriptionID = GX_STRING_ID_BLUETOOTH;
     g_MainScreenFeatureInfo[BLUETOOTH_ID].m_SmallDescriptionID = GX_STRING_ID_BLUETOOTH;
     g_MainScreenFeatureInfo[BLUETOOTH_ID].m_SmallIcon = GX_PIXELMAP_ID_BLUETOOTH_30X30;
     g_MainScreenFeatureInfo[BLUETOOTH_ID].m_LargeIcon = GX_PIXELMAP_ID_BLUETOOTH_70X70;
@@ -262,9 +259,8 @@ void my_gui_thread_entry(void)
     // "Next Function" information and description
     g_MainScreenFeatureInfo[NEXT_FUNCTION_ID].m_Enabled = TRUE;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_ID].m_Location = 2;
-    g_MainScreenFeatureInfo[NEXT_FUNCTION_ID].m_Active = 0;
-    g_MainScreenFeatureInfo[NEXT_FUNCTION_ID].m_LargeOnDescriptionID = GX_STRING_ID_NEXT_FUNCTION; // "NEXT FUNCTION")
-    g_MainScreenFeatureInfo[NEXT_FUNCTION_ID].m_LargeOffDescriptionID = GX_STRING_ID_NEXT_FUNCTION;
+    g_MainScreenFeatureInfo[NEXT_FUNCTION_ID].m_Active = TRUE;
+    g_MainScreenFeatureInfo[NEXT_FUNCTION_ID].m_LargeDescriptionID = GX_STRING_ID_NEXT_FUNCTION; // "NEXT FUNCTION")
     g_MainScreenFeatureInfo[NEXT_FUNCTION_ID].m_SmallDescriptionID = GX_STRING_ID_NEXT_FUNCTION;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_ID].m_SmallIcon = GX_PIXELMAP_ID_FUNCTIONNEXT_30X30;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_ID].m_LargeIcon = GX_PIXELMAP_ID_FUNCTIONNEXT_70X70;
@@ -272,22 +268,29 @@ void my_gui_thread_entry(void)
     // "Next Profile" information and description
     g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_Enabled = TRUE;
     g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_Location = 3;
-    g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_Active = 0;
-    g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_LargeOnDescriptionID = GX_STRING_ID_NEXT_PROFILE; // "NEXT PROFILE"
-    g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_LargeOffDescriptionID = GX_STRING_ID_NEXT_PROFILE;
+    g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_Active = TRUE;
+    g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_LargeDescriptionID = GX_STRING_ID_NEXT_PROFILE; // "NEXT PROFILE"
     g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_SmallDescriptionID = GX_STRING_ID_NEXT_PROFILE;
     g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_SmallIcon = GX_PIXELMAP_ID_PROFILENEXT_30X30;
     g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_LargeIcon = GX_PIXELMAP_ID_PROFILENEXT_70X70;
 
-    // "RNet Menu" information and description
-    g_MainScreenFeatureInfo[RNET_MENU_ID].m_Enabled = FALSE;
-    g_MainScreenFeatureInfo[RNET_MENU_ID].m_Location = 3;
-    g_MainScreenFeatureInfo[RNET_MENU_ID].m_Active = 0;    // 0 = RNet Drive is active, 1 = SEATING is active.
-    g_MainScreenFeatureInfo[RNET_MENU_ID].m_LargeOnDescriptionID = GX_STRING_ID_RNET_DRIVE;
-    g_MainScreenFeatureInfo[RNET_MENU_ID].m_LargeOffDescriptionID = GX_STRING_ID_RNET_SEATING;
-    g_MainScreenFeatureInfo[RNET_MENU_ID].m_SmallDescriptionID = GX_STRING_ID_RNET_MENU;
-    g_MainScreenFeatureInfo[RNET_MENU_ID].m_SmallIcon = GX_PIXELMAP_ID_RNET_LOGO_30X30;
-    g_MainScreenFeatureInfo[RNET_MENU_ID].m_LargeIcon = GX_PIXELMAP_ID_RNET_LOGO_70X70;
+    // "RNet Drive" information and description
+    g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Enabled = FALSE;
+    g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Location = 3;
+    g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Active = FALSE;
+    g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_LargeDescriptionID = GX_STRING_ID_RNET_DRIVE;
+    g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_SmallDescriptionID = GX_STRING_ID_RNET_MENU;
+    g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_SmallIcon = GX_PIXELMAP_ID_RNET_LOGO_30X30;
+    g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_LargeIcon = GX_PIXELMAP_ID_RNET_LOGO_70X70;
+
+    // "RNet SEATING" information and description
+    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled = FALSE;
+    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Location = 3;
+    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Active = FALSE;    // 0 = RNet Drive is active, 1 = SEATING is active.
+    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_LargeDescriptionID = GX_STRING_ID_RNET_SEATING;
+    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_SmallDescriptionID = GX_STRING_ID_RNET_MENU;
+    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_SmallIcon = GX_PIXELMAP_ID_RNET_LOGO_30X30;
+    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_LargeIcon = GX_PIXELMAP_ID_RNET_LOGO_70X70;
 
 
     // Populate the default Pad settings.
@@ -621,10 +624,16 @@ void ProcessCommunicationMsgs ()
             g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x08 ? true : false); // Next Profile
             g_ClicksActive = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x10 ? true : false);              // Clicks on/off
             g_PowerUpInIdle = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x20 ? true : false);              // Clicks on/off
-            g_MainScreenFeatureInfo[RNET_MENU_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x40 ? true : false); // Process RNet
-            // If RNet is Active, we need to disable NEXT PROFILE.
-            if (g_MainScreenFeatureInfo[RNET_MENU_ID].m_Enabled)
-                g_MainScreenFeatureInfo[NEXT_PROFILE_ID].m_Enabled = false;
+            g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x40 ? true : false); // Process RNet
+            g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x80 ? true : false); // Process RNet
+            // RNet features need consideration
+            if (g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Enabled && g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled)
+            {
+                // It is possible for both to be enabled but neither one of them to be active. We need at least one to be active.
+                if ((g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Active == FALSE) && (g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Active == FALSE))
+                    g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Active = TRUE;
+            }
+            AdjustActiveFeature (g_ActiveFeature);   // This function also store "g_ActiveFeature" if appropriate.
             // Redraw the current window.
             gxe.gx_event_type = GX_EVENT_REDRAW;
             gxe.gx_event_sender = GX_ID_NONE;
@@ -737,21 +746,21 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 //*************************************************************************************
 void AdjustActiveFeature (FEATURE_ID_ENUM newMode)
 {
+    uint8_t featureCount, myMode, lineNumber;
+
     // newMode is translated when received from the Head Array.
     // Power ON/OFF is "0" from "1" as described in the HHP Protocol
 
-    uint8_t featureCount, myMode, lineNumber;
-
-    // The RNet processing is special. If it's 0x05 then it's RNet DRIVE, 0x06 = RNet SEATING
-    // However, RNet is only RNET_MENU_ID so we need to adjust accordingly.
-    if (newMode == RNET_MENU_ID)    // RNet Driving?  It's translated by one when it gets here.
+    // We need to consider displaying either RNet_DRIVE or RNet_SEATING but not both
+    if(newMode == RNET_DRIVE_ID)
     {
-        g_MainScreenFeatureInfo[RNET_MENU_ID].m_Active = false;
+        g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Active = true;
+        g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Active = false;
     }
-    else if (newMode == (RNET_MENU_ID + 1))    // RNet Seating?  It's translated by one when it gets here.
+    if(newMode == RNET_SEATING_ID)
     {
-        g_MainScreenFeatureInfo[RNET_MENU_ID].m_Active = true;
-        newMode = RNET_MENU_ID;     // We are forcing it to be RNet.
+        g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Active = false;
+        g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Active = true;
     }
 
     if (newMode >= NUM_FEATURES)    // Check for valid mode
@@ -763,7 +772,7 @@ void AdjustActiveFeature (FEATURE_ID_ENUM newMode)
 
     for (featureCount = 0; featureCount < NUM_FEATURES; ++featureCount)
     {
-        if (g_MainScreenFeatureInfo[myMode].m_Enabled)                   // Start with the first active feature.
+        if ((g_MainScreenFeatureInfo[myMode].m_Enabled) && (g_MainScreenFeatureInfo[myMode].m_Active))
         {
             g_MainScreenFeatureInfo[myMode].m_Location = lineNumber;
             ++lineNumber;
@@ -791,29 +800,30 @@ UINT DisplayMainScreenActiveFeatures ()
     // Locate the first feature to display
     for (feature = 0; feature < NUM_FEATURES; ++feature)
     {
-        if (g_MainScreenFeatureInfo[feature].m_Enabled)
+        if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Active))
         {
             ++enabledCount;
             switch (g_MainScreenFeatureInfo[feature].m_Location)
             {
             case 0: // Show the first line
-                if (g_MainScreenFeatureInfo[feature].m_Active == 0)
-                    myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, g_MainScreenFeatureInfo[feature].m_LargeOnDescriptionID);
-                else
-                    myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, g_MainScreenFeatureInfo[feature].m_LargeOffDescriptionID);
+                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, g_MainScreenFeatureInfo[feature].m_LargeDescriptionID);
                 myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FirstIcon, g_MainScreenFeatureInfo[feature].m_LargeIcon);
                 break;
             case 1: // Show second line item
                 myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_SecondPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
                 myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_SecondIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
-            case 2: // Process third line item, move to the 2nd line
+            case 2: // Show third line item
                 myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_ThirdPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
                 myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_ThirdIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
-            case 3: // Process fourth line item, move to the 3rd line.
+            case 3: // Show fourth line item
                 myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
                 myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
+                break;
+            case 4: // Show fifth line item
+                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
+                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
             }
         }
@@ -839,6 +849,9 @@ UINT DisplayMainScreenActiveFeatures ()
             myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, GX_STRING_ID_BLANK);
             myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
+        case 4: // Show fifth line item
+            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, GX_STRING_ID_BLANK);
+            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, GX_PIXELMAP_ID_BLANK_30X30);
         } // end of switch
     } // end of for
     return myErr;
@@ -893,25 +906,30 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             activeCount = 0;
             for (feature = 0; feature < NUM_FEATURES; ++feature)
             {
-                if (g_MainScreenFeatureInfo[feature].m_Enabled)
+                if ( (g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Active))
                     ++activeCount;
             }
             // Move Top Feature to Bottom and move Bottom upward.
             for (feature = 0; feature < NUM_FEATURES; ++feature)
             {
-                if (g_MainScreenFeatureInfo[feature].m_Enabled)
+                if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Active))
                 {
                     if (g_MainScreenFeatureInfo[feature].m_Location == 0)
                         g_MainScreenFeatureInfo[feature].m_Location = activeCount-1;
                     else if (g_MainScreenFeatureInfo[feature].m_Location == 1)
+                    {
                         g_MainScreenFeatureInfo[feature].m_Location = 0;
+                        SendModeChangeCommand (feature);        // Send this to the Head Array
+                    }
                     else if (g_MainScreenFeatureInfo[feature].m_Location == 2)
                         g_MainScreenFeatureInfo[feature].m_Location = min (1, activeCount-1);
                     else if (g_MainScreenFeatureInfo[feature].m_Location == 3)
                         g_MainScreenFeatureInfo[feature].m_Location = min (2, activeCount-1);
+                    else if (g_MainScreenFeatureInfo[feature].m_Location == 4)
+                        g_MainScreenFeatureInfo[feature].m_Location = min (3, activeCount-1);
                 }
             }
-            DisplayMainScreenActiveFeatures();
+            //DisplayMainScreenActiveFeatures();
             break;
 
         case GX_SIGNAL(UP_ARROW_BTN_ID, GX_EVENT_CLICKED):
@@ -925,28 +943,32 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             activeCount = 0;
             for (feature = 0; feature < NUM_FEATURES; ++feature)
             {
-                if (g_MainScreenFeatureInfo[feature].m_Enabled)
+                if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Active))
                     ++activeCount;
             }
+            --activeCount;  // Translate the Number of items to Based Zero line number.
 
             // Move the features downward, limiting the movement by the number of Active Features.
             for (feature = 0; feature < NUM_FEATURES; ++feature)
             {
-                if (g_MainScreenFeatureInfo[feature].m_Enabled)
+                if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Active))
                 {
-                    if (g_MainScreenFeatureInfo[feature].m_Location == 0)
+                    if (g_MainScreenFeatureInfo[feature].m_Location == activeCount)
+                    {
+                        g_MainScreenFeatureInfo[feature].m_Location = 0;
+                        SendModeChangeCommand (feature);        // Send this to the Head Array
+                    }
+                    else if (g_MainScreenFeatureInfo[feature].m_Location == 0)
                         g_MainScreenFeatureInfo[feature].m_Location = min (1, activeCount);
                     else if (g_MainScreenFeatureInfo[feature].m_Location == 1)
                         g_MainScreenFeatureInfo[feature].m_Location = min (2, activeCount);
                     else if (g_MainScreenFeatureInfo[feature].m_Location == 2)
                         g_MainScreenFeatureInfo[feature].m_Location = min (3, activeCount);
                     else if (g_MainScreenFeatureInfo[feature].m_Location == 3)
-                        g_MainScreenFeatureInfo[feature].m_Location = 0;
-                    if (g_MainScreenFeatureInfo[feature].m_Location == activeCount)
-                        g_MainScreenFeatureInfo[feature].m_Location = 0;
+                        g_MainScreenFeatureInfo[feature].m_Location = min (4, activeCount);
                 }
             }
-            DisplayMainScreenActiveFeatures();
+            //DisplayMainScreenActiveFeatures();
             break;
 
         case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
@@ -1592,7 +1614,38 @@ UINT UserSelectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 // Description: This handles the User Settings Screen messages
 //
 //*************************************************************************************
+void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures)
+{
+    uint8_t myMask;
+    uint8_t feature;
 
+    *myActiveFeatures = 0x0;
+    myMask = 0x01;
+    for (feature = 0; feature < 4 /*NUM_FEATURES*/; ++feature)  // Because the RNet feature is in 0x40.
+    {
+        if (g_MainScreenFeatureInfo[feature].m_Enabled)
+        {
+            // Create the byte to send to the COMM Task to tell Head Array what features are active.
+            *myActiveFeatures |= myMask;     // Set bit.
+        }
+        myMask = (uint8_t)(myMask << 1);    // Rotate the bit.
+    }
+
+    // Add clicks in D4 of byte.
+    if (g_ClicksActive)
+        *myActiveFeatures |= 0x10;
+    // Add power up in D5 of byte;
+    if (g_PowerUpInIdle)
+        *myActiveFeatures |= 0x20;
+    // Process the RNet features uniquely.
+    if (g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Enabled)
+        *myActiveFeatures |= 0x40;
+    if (g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled)
+        *myActiveFeatures |= 0x80;
+
+}
+
+//*************************************************************************************
 void ShowUserSettingsItems (void)
 {
     char tmpChar[8];
@@ -1620,7 +1673,7 @@ void ShowUserSettingsItems (void)
         gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
     }
     // RNet Enabled setting
-    if (g_MainScreenFeatureInfo[RNET_MENU_ID].m_Enabled)
+    if (g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Enabled || g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled)
     {
         gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_RNet_ActiveIcon);
         gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_RNet_InactiveIcon);
@@ -1650,8 +1703,7 @@ void ShowUserSettingsItems (void)
 
 UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
-    int feature;
-    uint8_t myActiveFeatures, myMask;
+    uint8_t myActiveFeatures;
 
     switch (event_ptr->gx_event_type)
     {
@@ -1660,29 +1712,9 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
-
-        myActiveFeatures = 0x0;
-        myMask = 0x01;
-        for (feature = 0; feature < 4 /*NUM_FEATURES*/; ++feature)  // Because the RNet feature is in 0x40.
-        {
-            if (g_MainScreenFeatureInfo[feature].m_Enabled)
-            {
-                // Create the byte to send to the COMM Task to tell Head Array what features are active.
-                myActiveFeatures |= myMask;     // Set bit.
-            }
-            myMask = (uint8_t)(myMask << 1);    // Rotate the bit.
-        }
-        // Now do the RNet feature
-        if (g_MainScreenFeatureInfo[RNET_MENU_ID].m_Enabled)
-            myMask |= 0x40;
-
-        // Add clicks in D4 of byte.
-        if (g_ClicksActive)
-            myActiveFeatures |= 0x10;
-        // Add power up in D5 of byte;
-        if (g_PowerUpInIdle)
-            myActiveFeatures |= 0x20;
+        CreateEnabledFeatureStatus(&myActiveFeatures);
         SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
+        SendFeatureGetCommand();                // Send command to get the current users settings.
         break;
 
         // Click (Audio) Feature handling
@@ -1700,7 +1732,8 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     // Process the RNet setting button pushes.
     case GX_SIGNAL(RNET_INACTIVE_ICON, GX_EVENT_CLICKED):
     case GX_SIGNAL(RNET_ACTIVE_ICON, GX_EVENT_CLICKED):
-        g_MainScreenFeatureInfo[RNET_MENU_ID].m_Enabled = (g_MainScreenFeatureInfo[RNET_MENU_ID].m_Enabled == TRUE ? FALSE : TRUE);
+        g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Enabled = (g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Enabled == TRUE ? FALSE : TRUE);
+        g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled = g_MainScreenFeatureInfo[RNET_DRIVE_ID].m_Enabled;
         break;
 
     case GX_SIGNAL(TIMEOUT_BTN_ID, GX_EVENT_CLICKED):
@@ -1805,10 +1838,7 @@ void FeatureSettingsScreen_draw_function (GX_WINDOW *window)
 
 UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
-    int feature;
-    int numActive;
     uint8_t myActiveFeatures;
-    uint8_t myMask;
 
     switch (event_ptr->gx_event_type)
     {
@@ -1818,30 +1848,9 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 
         case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
-            // This sets the screen location of any active features.
-            myActiveFeatures = 0;
-            myMask = 0x01;
-            if (g_SettingsChanged)
-            {
-                numActive = 0;
-                for (feature = 0; feature < NUM_FEATURES; ++feature)
-                {
-                    if (g_MainScreenFeatureInfo[feature].m_Enabled)
-                    {
-                        // Create the byte to send to the COMM Task to tell Head Array what features are active.
-                        myActiveFeatures |= myMask;     // Set bit.
-                        if (numActive == 0)
-                            SendModeChangeCommand ((FEATURE_ID_ENUM) feature);
-                        g_MainScreenFeatureInfo[feature].m_Location = numActive;
-                        ++numActive;
-                    }
-                    myMask = (uint8_t)(myMask << 1);    // Rotate the bit.
-                }
-                // Add clicks in D4.
-                if (g_ClicksActive)
-                    myActiveFeatures |= 0x10;
-                SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
-            }
+            CreateEnabledFeatureStatus(&myActiveFeatures);
+            SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
+            SendFeatureGetCommand();                // Send command to get the current users settings.
             break;
 
             // Power Feature handling

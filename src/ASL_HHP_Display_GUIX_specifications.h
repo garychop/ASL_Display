@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 23. 2.2020   Time (hh:mm): 18:49                        */
+/*  Date (dd.mm.yyyy): 24. 2.2020   Time (hh:mm): 14:15                        */
 /*******************************************************************************/
 
 
@@ -145,6 +145,8 @@ extern   "C" {
 #define THIRD_ICON 121
 #define THIRD_PROMPT 122
 #define BOTH_ARROW_BTN_ID 123
+#define Fifth_ICON 124
+#define FIFTH_PROMPT 125
 
 
 /* Define animation ids                                                        */
@@ -514,6 +516,8 @@ typedef struct MAINUSERSCREEN_CONTROL_BLOCK_STRUCT
     GX_ICON_BUTTON MainUserScreen_ThirdIcon;
     GX_PROMPT MainUserScreen_ThirdPrompt;
     GX_BUTTON MainUserScreen_BothArrowButtonID_VirtualButton;
+    GX_ICON_BUTTON MainUserScreen_FifthIcon;
+    GX_PROMPT MainUserScreen_FifthPrompt;
 } MAINUSERSCREEN_CONTROL_BLOCK;
 
 

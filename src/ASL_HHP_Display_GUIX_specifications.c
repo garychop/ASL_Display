@@ -6,14 +6,14 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 23. 2.2020   Time (hh:mm): 18:49                        */
+/*  Date (dd.mm.yyyy): 24. 2.2020   Time (hh:mm): 14:15                        */
 /*******************************************************************************/
 
 
 #define GUIX_STUDIO_GENERATED_FILE
 #include <stddef.h>
-#include "ASL_HHP_Display_GUIX_resources.h"
-#include "ASL_HHP_Display_GUIX_specifications.h"
+#include "asl_hhp_display_guix_resources.h"
+#include "asl_hhp_display_guix_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
 NEXTPADSCREEN_CONTROL_BLOCK NextPadScreen;
@@ -4736,7 +4736,7 @@ GX_ICON_BUTTON_PROPERTIES MainUserScreen_FourthIcon_properties =
 };
 GX_PROMPT_PROPERTIES MainUserScreen_FourthPrompt_properties =
 {
-    GX_STRING_ID_STRING_110,                 /* string id                      */
+    GX_STRING_ID_STRING_1,                   /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_BTN_BORDER,                  /* normal text color              */
     GX_COLOR_ID_BTN_BORDER                   /* selected text color            */
@@ -4747,7 +4747,7 @@ GX_ICON_BUTTON_PROPERTIES MainUserScreen_SecondIcon_properties =
 };
 GX_PROMPT_PROPERTIES MainUserScreen_SecondPrompt_properties =
 {
-    GX_STRING_ID_STRING_108,                 /* string id                      */
+    GX_STRING_ID_STRING_1,                   /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_BTN_BORDER,                  /* normal text color              */
     GX_COLOR_ID_BTN_BORDER                   /* selected text color            */
@@ -4758,10 +4758,67 @@ GX_ICON_BUTTON_PROPERTIES MainUserScreen_ThirdIcon_properties =
 };
 GX_PROMPT_PROPERTIES MainUserScreen_ThirdPrompt_properties =
 {
-    GX_STRING_ID_STRING_109,                 /* string id                      */
+    GX_STRING_ID_STRING_1,                   /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_BTN_BORDER,                  /* normal text color              */
     GX_COLOR_ID_BTN_BORDER                   /* selected text color            */
+};
+GX_ICON_BUTTON_PROPERTIES MainUserScreen_FifthIcon_properties =
+{
+    0                                        /* pixelmap id                    */
+};
+GX_PROMPT_PROPERTIES MainUserScreen_FifthPrompt_properties =
+{
+    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_BTN_BORDER,                  /* normal text color              */
+    GX_COLOR_ID_BTN_BORDER                   /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_FifthPrompt_define =
+{
+    "FifthPrompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    FIFTH_PROMPT,                            /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {102, 202, 281, 231},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_FifthPrompt), /* control block */
+    (void *) &MainUserScreen_FifthPrompt_properties /* extended properties     */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_FifthIcon_define =
+{
+    "FifthIcon",
+    GX_TYPE_ICON_BUTTON,                     /* widget type                    */
+    Fifth_ICON,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_icon_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {60, 202, 89, 231},                      /* widget size                    */
+    &MainUserScreen_FifthPrompt_define,      /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_FifthIcon), /* control block */
+    (void *) &MainUserScreen_FifthIcon_properties /* extended properties       */
 };
 
 GX_CONST GX_STUDIO_WIDGET MainUserScreen_BothArrowButtonID_VirtualButton_define =
@@ -4781,7 +4838,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_BothArrowButtonID_VirtualButton_define 
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {340, 1, 347, 8},                        /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &MainUserScreen_FifthIcon_define,        /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_BothArrowButtonID_VirtualButton), /* control block */
     (void *) GX_NULL                         /* no extended properties         */
@@ -4826,7 +4883,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_ThirdIcon_define =
     gx_studio_icon_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {30, 130, 59, 159},                      /* widget size                    */
+    {60, 130, 89, 159},                      /* widget size                    */
     &MainUserScreen_ThirdPrompt_define,      /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_ThirdIcon), /* control block */
@@ -4872,7 +4929,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_SecondIcon_define =
     gx_studio_icon_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {30, 94, 59, 123},                       /* widget size                    */
+    {60, 94, 89, 123},                       /* widget size                    */
     &MainUserScreen_SecondPrompt_define,     /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_SecondIcon), /* control block */
@@ -4918,7 +4975,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_FourthIcon_define =
     gx_studio_icon_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {30, 166, 59, 195},                      /* widget size                    */
+    {61, 166, 90, 195},                      /* widget size                    */
     &MainUserScreen_FourthPrompt_define,     /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_FourthIcon), /* control block */
@@ -4993,7 +5050,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_define =
     0,                                       /* control block                  */
     (void *) &MainUserScreen_properties      /* extended properties            */
 };
-GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
+GX_CONST GX_STUDIO_WIDGET_ENTRY asl_hhp_display_guix_widget_table[] =
 {
     { &NextPadScreen_define, (GX_WIDGET *) &NextPadScreen },
     { &MoreSelectionScreen_define, (GX_WIDGET *) &MoreSelectionScreen },
@@ -5110,7 +5167,7 @@ GX_WIDGET *gx_studio_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *
 UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **new_widget)
 {
     UINT status = GX_FAILURE;
-    GX_CONST GX_STUDIO_WIDGET_ENTRY *entry = ASL_HHP_Display_GUIX_widget_table;
+    GX_CONST GX_STUDIO_WIDGET_ENTRY *entry = asl_hhp_display_guix_widget_table;
     GX_WIDGET *widget = GX_NULL;
 
     while(entry->widget_information)
@@ -5137,7 +5194,7 @@ UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **ne
 extern GX_CONST GX_THEME *main_display_theme_table[];
 extern GX_CONST GX_CHAR **main_display_language_table[];
 
-GX_STUDIO_DISPLAY_INFO ASL_HHP_Display_GUIX_display_table[1] =
+GX_STUDIO_DISPLAY_INFO asl_hhp_display_guix_display_table[1] =
 {
     {
     "main_display",
@@ -5163,7 +5220,7 @@ UINT gx_studio_display_configure(USHORT display, UINT (*driver)(GX_DISPLAY *),
     GX_CONST GX_THEME *theme_ptr;
     GX_RECTANGLE size;
 
-    GX_STUDIO_DISPLAY_INFO *display_info = &ASL_HHP_Display_GUIX_display_table[display];
+    GX_STUDIO_DISPLAY_INFO *display_info = &asl_hhp_display_guix_display_table[display];
 
 
 /* create the requested display                                                */
