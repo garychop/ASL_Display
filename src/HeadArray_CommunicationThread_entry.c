@@ -449,12 +449,10 @@ uint8_t ExecuteHeartBeat(void)
     HB_Response[3] = g_HeadArray_Status;
 #endif
 
-    //--HB_Response[2];           // Translate the Active Feature from COMM protocol (1-based) to GUI Array position (0-based).
-
     // Prepare and send Heart Message to GUI.
     HeadArrayMsg.HeartBeatMsg.m_HB_OK = false;
     HeadArrayMsg.HeartBeatMsg.m_HB_Count = HB_Response[1];
-    HeadArrayMsg.HeartBeatMsg.m_ActiveMode = TranslateFeature_CharToEnum ((char) HB_Response[2]);
+    HeadArrayMsg.HeartBeatMsg.m_ActiveMode = TranslateFeature_CharToEnum ((char) HB_Response[2]);// Translate the Active Feature from COMM protocol (1-based) to GUI Array position (0-based).
     HeadArrayMsg.HeartBeatMsg.m_HA_Status = HB_Response[3];
 
     HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;

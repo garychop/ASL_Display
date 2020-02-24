@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  2. 2.2020   Time (hh:mm): 13:41                        */
+/*  Date (dd.mm.yyyy): 23. 2.2020   Time (hh:mm): 18:49                        */
 /*******************************************************************************/
 
 
@@ -97,52 +97,54 @@ extern   "C" {
 #define POWER_UP_ACTIVE_ICON 73
 #define POWER_UP_INACTIVE_ICON 74
 #define TIMEOUT_BTN_ID 75
-#define POWER_BTN_ID 76
-#define POWER_PROMPT_ID 77
-#define POWER_ACTIVE_ICON 78
-#define POWER_INACTIVE_ICON 79
-#define BLUETOOTH_PROMPT_ID 80
-#define BLUETOOTH_BTN_ID 81
-#define BLUETOOTH_ACTIVE_ICON 82
-#define BLUETOOTH_INACTIVE_ICON 83
-#define NEXT_FUNCTION_PROMPT_ID 84
-#define NEXT_FUNCTION_BTN_ID 85
-#define NEXT_FUNCTION_ACTIVE_ICON 86
-#define NEXT_FUNCTION_INACTIVE_ICON 87
-#define NEXT_PROFILE_PROMPT_ID 88
-#define NEXT_PROFILE_BTN_ID 89
-#define NEXT_PROFILE_ACTIVE_ICON 90
-#define NEXT_PROFILE_INACTIVE_ICON 91
-#define GOTO_PAD_TYPE_BTN_ID 92
-#define GOTO_PAD_DIRECTIONS_BTN_ID 93
-#define PERFORMANCE_BTN_ID 94
-#define CENTER_PAD_FORWARD_ARROW_BTN_ID 95
-#define LEFT_PAD_LEFT_ARROW_BTN_ID 96
-#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 97
-#define LEFT_PAD_RIGHT_ARROW_BTN_ID 98
-#define LEFT_PAD_FORWARD_ARROW_BTN_ID 99
-#define RIGHT_PAD_LEFT_ARROW_BTN_ID 100
-#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 101
-#define CENTER_PAD_LEFT_ARROW_BTN_ID 102
-#define CENTER_PAD_RIGHT_ARROW_BTN_ID 103
-#define CENTER_PAD_QUESTION_BTN_ID 104
-#define LEFT_PAD_QUESTION_BTN_ID 105
-#define RIGHT_PAD_QUESTION_BTN_ID 106
-#define PAD_SETTINGS_BTN_ID 107
-#define USER_SETTINGS_BTN_ID 108
-#define MORE_BTN_ID 109
-#define MAIN_USER_SCREEN_ID 110
-#define RIGHT_PAD_OFF_ID 111
-#define PROFILE_NEXT_SMALL_PROMPT_ID 112
-#define PROFILE_NEXT_LARGE_PROMPT_ID 113
-#define POWER_SMALL_PROMPT_ID 114
-#define POWER_LARGE_PROMPT_ID 115
-#define FUNCTION_NEXT_SMALL_PROMPT_ID 116
-#define FUNCITON_NET_LARGE_PROMPT_ID 117
-#define CENTER_PAD_ON_ID 118
-#define BLUETOOTH_LARGE_PROMPT_ID 119
-#define BLUETOOTH_SMALL_PROMPT_ID 120
-#define BOTH_ARROW_BTN_ID 121
+#define RNET_BACKGROUND_ID 76
+#define RNET_ACTIVE_ICON 77
+#define RNET_INACTIVE_ICON 78
+#define RNET_ACTIVE_PROMPT_ID 79
+#define POWER_BTN_ID 80
+#define POWER_PROMPT_ID 81
+#define POWER_ACTIVE_ICON 82
+#define POWER_INACTIVE_ICON 83
+#define BLUETOOTH_PROMPT_ID 84
+#define BLUETOOTH_BTN_ID 85
+#define BLUETOOTH_ACTIVE_ICON 86
+#define BLUETOOTH_INACTIVE_ICON 87
+#define NEXT_FUNCTION_PROMPT_ID 88
+#define NEXT_FUNCTION_BTN_ID 89
+#define NEXT_FUNCTION_ACTIVE_ICON 90
+#define NEXT_FUNCTION_INACTIVE_ICON 91
+#define NEXT_PROFILE_PROMPT_ID 92
+#define NEXT_PROFILE_BTN_ID 93
+#define NEXT_PROFILE_ACTIVE_ICON 94
+#define NEXT_PROFILE_INACTIVE_ICON 95
+#define GOTO_PAD_TYPE_BTN_ID 96
+#define GOTO_PAD_DIRECTIONS_BTN_ID 97
+#define PERFORMANCE_BTN_ID 98
+#define CENTER_PAD_FORWARD_ARROW_BTN_ID 99
+#define LEFT_PAD_LEFT_ARROW_BTN_ID 100
+#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 101
+#define LEFT_PAD_RIGHT_ARROW_BTN_ID 102
+#define LEFT_PAD_FORWARD_ARROW_BTN_ID 103
+#define RIGHT_PAD_LEFT_ARROW_BTN_ID 104
+#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 105
+#define CENTER_PAD_LEFT_ARROW_BTN_ID 106
+#define CENTER_PAD_RIGHT_ARROW_BTN_ID 107
+#define CENTER_PAD_QUESTION_BTN_ID 108
+#define LEFT_PAD_QUESTION_BTN_ID 109
+#define RIGHT_PAD_QUESTION_BTN_ID 110
+#define PAD_SETTINGS_BTN_ID 111
+#define USER_SETTINGS_BTN_ID 112
+#define MORE_BTN_ID 113
+#define MAIN_USER_SCREEN_ID 114
+#define FIRST_ICON 115
+#define FIRST_PROMPT 116
+#define FOURTH_ICON 117
+#define FOURTH_PROMPT 118
+#define SECOND_ICON 119
+#define SECOND_PROMPT 120
+#define THIRD_ICON 121
+#define THIRD_PROMPT 122
+#define BOTH_ARROW_BTN_ID 123
 
 
 /* Define animation ids                                                        */
@@ -193,6 +195,11 @@ typedef struct
     GX_RESOURCE_ID normal_text_color_id;
     GX_RESOURCE_ID selected_text_color_id;
 } GX_TEXT_BUTTON_PROPERTIES;
+
+typedef struct
+{
+    GX_RESOURCE_ID pixelmap_id;
+} GX_ICON_BUTTON_PROPERTIES;
 
 typedef struct
 {
@@ -426,6 +433,10 @@ typedef struct USERSETTINGSSCREEN_CONTROL_BLOCK_STRUCT
     GX_PIXELMAP_BUTTON UserSettingsScreen_PowerUp_ActiveIcon;
     GX_PIXELMAP_BUTTON UserSettingsScreen_PowerUp_InactiveIcon;
     GX_TEXT_BUTTON UserSettingsScreen_Timeout_Button;
+    GX_PIXELMAP_BUTTON UserSettingsScreen_RNetButtonBackground;
+    GX_PIXELMAP_BUTTON UserSettingsScreen_RNet_ActiveIcon;
+    GX_PIXELMAP_BUTTON UserSettingsScreen_RNet_InactiveIcon;
+    GX_PROMPT UserSettingsScreen_RNetActive_Prompt;
 } USERSETTINGSSCREEN_CONTROL_BLOCK;
 
 typedef struct FEATURESETTINGSSCREEN_CONTROL_BLOCK_STRUCT
@@ -491,23 +502,19 @@ typedef struct HHP_START_SCREEN_CONTROL_BLOCK_STRUCT
     GX_TEXT_BUTTON HHP_Start_Screen_MainMore_Button;
 } HHP_START_SCREEN_CONTROL_BLOCK;
 
-typedef struct MAIN_USER_SCREEN_CONTROL_BLOCK_STRUCT
+typedef struct MAINUSERSCREEN_CONTROL_BLOCK_STRUCT
 {
     GX_WINDOW_MEMBERS_DECLARE
-    GX_PIXELMAP_PROMPT Main_User_Screen_RightPadOFF;
-    GX_PIXELMAP_PROMPT Main_User_Screen_ProfileNextSmallPrompt;
-    GX_PIXELMAP_PROMPT Main_User_Screen_ProfileNextLargePrompt;
-    GX_PIXELMAP_PROMPT Main_User_Screen_PowerSmallPrompt;
-    GX_PIXELMAP_PROMPT Main_User_Screen_PowerLargePrompt;
-    GX_PIXELMAP_PROMPT Main_User_Screen_FunctionNextSmallPrompt;
-    GX_PIXELMAP_PROMPT Main_User_Screen_FunctionNextLargePrompt;
-    GX_PIXELMAP_PROMPT Main_User_Screen_CenterPadON;
-    GX_PIXELMAP_PROMPT Main_User_Screen_BluetoothLargePrompt;
-    GX_PIXELMAP_PROMPT Main_User_Screen_BluetoothSmallPrompt;
-    GX_TEXT_BUTTON Main_User_Screen_UpArrowBtn;
-    GX_TEXT_BUTTON Main_User_Screen_DownArrowBtn;
-    GX_TEXT_BUTTON Main_User_Screen_BothButton;
-} MAIN_USER_SCREEN_CONTROL_BLOCK;
+    GX_ICON_BUTTON MainUserScreen_FirstIcon;
+    GX_PROMPT MainUserScreen_FirstPrompt;
+    GX_ICON_BUTTON MainUserScreen_FourthIcon;
+    GX_PROMPT MainUserScreen_FourthPrompt;
+    GX_ICON_BUTTON MainUserScreen_SecondIcon;
+    GX_PROMPT MainUserScreen_SecondPrompt;
+    GX_ICON_BUTTON MainUserScreen_ThirdIcon;
+    GX_PROMPT MainUserScreen_ThirdPrompt;
+    GX_BUTTON MainUserScreen_BothArrowButtonID_VirtualButton;
+} MAINUSERSCREEN_CONTROL_BLOCK;
 
 
 /* extern statically defined control blocks                                    */
@@ -532,7 +539,7 @@ extern FEATURESETTINGSSCREEN_CONTROL_BLOCK FeatureSettingsScreen;
 extern PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK PadOptionsSettingsScreen;
 extern SETPADDIRECTIONSCREEN_CONTROL_BLOCK SetPadDirectionScreen;
 extern HHP_START_SCREEN_CONTROL_BLOCK HHP_Start_Screen;
-extern MAIN_USER_SCREEN_CONTROL_BLOCK Main_User_Screen;
+extern MAINUSERSCREEN_CONTROL_BLOCK MainUserScreen;
 #endif
 
 /* Prototype Synergy display driver specific functions                         */
@@ -628,8 +635,8 @@ UINT PadOptionsSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_p
 UINT SetPadDirectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 VOID SetPadDirectionScreen_draw_function(GX_WINDOW *widget);
 UINT HHP_Start_Screen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
-UINT Main_User_Screen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
-VOID Main_User_Screen_draw_function(GX_WINDOW *widget);
+UINT MainUserScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
+VOID MainUserScreen_draw_function(GX_WINDOW *widget);
 
 /* Declare the GX_STUDIO_DISPLAY_INFO structure                                */
 
@@ -657,6 +664,7 @@ typedef struct GX_STUDIO_DISPLAY_INFO_STRUCT
 
 UINT gx_studio_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_text_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
+UINT gx_studio_icon_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_pixelmap_button_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_icon_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
 UINT gx_studio_pixelmap_slider_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent);
