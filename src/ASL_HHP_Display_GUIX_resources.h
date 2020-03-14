@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 24. 2.2020   Time (hh:mm): 14:15                        */
+/*  Date (dd.mm.yyyy): 14. 3.2020   Time (hh:mm): 16:23                        */
 /*******************************************************************************/
 
 
@@ -123,16 +123,19 @@
 #define GX_PIXELMAP_ID_RIGHTWHITEARROW 34
 #define GX_PIXELMAP_ID_RNET_LOGO_30X30 35
 #define GX_PIXELMAP_ID_RNET_LOGO_70X70 36
-#define GX_PIXELMAP_ID_SLIDER_THIN_HORIZONTAL 37
-#define GX_PIXELMAP_ID_SLIDER_THIN_NUB_HORIZONTAL 38
-#define GX_PIXELMAP_ID_SWITCH_ACTIVE 39
-#define GX_PIXELMAP_ID_SWITCH_BG 40
-#define GX_PIXELMAP_ID_SWITCH_DISACTIVE 41
-#define GX_PIXELMAP_ID_UPARROW 42
-#define GX_PIXELMAP_ID_UPWHITEARROW 43
-#define GX_PIXELMAP_ID_WARNINGICON 44
-#define GX_PIXELMAP_ID_YELLOWQUESTION 45
-#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 46
+#define GX_PIXELMAP_ID_RNET_MENU_30X30 37
+#define GX_PIXELMAP_ID_RNET_SEATING_30X30 38
+#define GX_PIXELMAP_ID_RNET_TOGGLEFR_30X30 39
+#define GX_PIXELMAP_ID_SLIDER_THIN_HORIZONTAL 40
+#define GX_PIXELMAP_ID_SLIDER_THIN_NUB_HORIZONTAL 41
+#define GX_PIXELMAP_ID_SWITCH_ACTIVE 42
+#define GX_PIXELMAP_ID_SWITCH_BG 43
+#define GX_PIXELMAP_ID_SWITCH_DISACTIVE 44
+#define GX_PIXELMAP_ID_UPARROW 45
+#define GX_PIXELMAP_ID_UPWHITEARROW 46
+#define GX_PIXELMAP_ID_WARNINGICON 47
+#define GX_PIXELMAP_ID_YELLOWQUESTION 48
+#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 49
 
 /* String Ids                                                                  */
 
@@ -205,11 +208,11 @@
 #define GX_STRING_ID_STRING_110 67
 #define GX_STRING_ID_STRING_108 68
 #define GX_STRING_ID_STRING_109 69
-#define GX_STRING_ID_RNET_DRIVE 70
-#define GX_STRING_ID_RNET_SEATING 71
-#define GX_STRING_ID_RNET_MENU 72
-#define GX_STRING_ID_BLANK 73
-#define GX_STRING_ID_RNET_ENABLE 74
+#define GX_STRING_ID_RNET_SEATING 70
+#define GX_STRING_ID_RNET_MENU 71
+#define GX_STRING_ID_BLANK 72
+#define GX_STRING_ID_RNET_ENABLE 73
+#define GX_STRING_ID_RNET_TOGGLE 74
 #define MAIN_DISPLAY_STRING_TABLE_SIZE 75
 
 #endif                                       /* sentry                         */
