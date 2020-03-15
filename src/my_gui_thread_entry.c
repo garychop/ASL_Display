@@ -1781,6 +1781,25 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
 void ShowActiveFeatures (void)
 {
+    // Show RNet or NEXT FUNCITON and NEXT PROFILE depending on RNet setting.
+    // Adjust the displayed information based upon the RNet setting.
+    // .. If RNet is enabled, the NEXT FUNCTION feature becomes RNet TOGGLE
+    // .. and NEXT PROFILE feature become RNet MENU.
+    if (g_MainScreenFeatureInfo[RNET_ID].m_Enabled)
+    {
+        // Display as "RNet TOGGLE"
+        gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextFunctionPrompt, GX_STRING_ID_RNET_TOGGLE);
+        // Display as "RNET USER MENU"
+        gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextProfilePrompt, GX_STRING_ID_RNET_MENU);
+    }
+    else
+    {
+        // Display as NEXT FUNCTION
+        gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextFunctionPrompt, GX_STRING_ID_NEXT_FUNCTION);
+        // Display as NEXT PROFILE
+        gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextProfilePrompt, GX_STRING_ID_NEXT_PROFILE);
+    }
+
     // Power status
     if (g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled)
     {
@@ -2113,6 +2132,8 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
         g_Color.rgb.blue = 0;
         g_Color.rgb.green = 0x20;
         brush->gx_brush_fill_color = g_Color.gx_color; //  GX_COLOR_GREEN;
+        brush->gx_brush_line_color = g_Color.gx_color;
+        gx_context_brush_set(brush);        // Not really required. It seems to change the color to yellow without this call.
         gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 54, pieSide, 180);
     }
 
@@ -2130,6 +2151,7 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
     if (pieSide > 175)              // Anything less than 175-180 is too small of a pie to see.
         pieSide = 175;
     brush->gx_brush_fill_color = GX_COLOR_YELLOW;   // Draw in yellow.
+    brush->gx_brush_line_color = GX_COLOR_YELLOW;
     brush->gx_brush_width = 1;
     gx_context_brush_set(brush);        // Not really required. It seems to change the color to yellow without this call.
     gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 40, pieSide, 180);
@@ -2145,6 +2167,7 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
     g_Color.rgb.blue = 0;
     g_Color.rgb.green = 0b01011;
     brush->gx_brush_fill_color = g_Color.gx_color; //  GX_COLOR_GREEN;
+    brush->gx_brush_line_color = g_Color.gx_color;
     brush->gx_brush_width = 1;
     gx_context_brush_set(brush);        // Not really required. It seems to change the color to yellow without this call.
     gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 40, 0, pieSide);
