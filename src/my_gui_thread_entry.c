@@ -365,7 +365,7 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("MainUserScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
     gx_studio_named_widget_create("MinimumDriveScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("MoreSelectionScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("NextPadScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("PerformanceSelectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("OON_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("PadCalibrationScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("PadOptionsSettingsScreen", GX_NULL, GX_NULL);
@@ -1083,7 +1083,7 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
         break;
 
-    case GX_SIGNAL(USER_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
+    case GX_SIGNAL(SETTINGS_BTN_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
         break;
 
@@ -1250,16 +1250,12 @@ UINT PadOptionsSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_
         screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
         break;
 
-    case GX_SIGNAL(GOTO_PAD_TYPE_BTN_ID, GX_EVENT_CLICKED):
+    case GX_SIGNAL(PAD_TYPE_BTN_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&SetPadTypeScreen, window);
         break;
 
-    case GX_SIGNAL(GOTO_PAD_DIRECTIONS_BTN_ID, GX_EVENT_CLICKED):
+    case GX_SIGNAL(PAD_DIRECTIONS_BTN_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&SetPadDirectionScreen, window);
-        break;
-
-    case GX_SIGNAL(PERFORMANCE_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&NextPadScreen, window);
         break;
     }
 
@@ -1269,18 +1265,18 @@ UINT PadOptionsSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_
 }
 
 //*************************************************************************************
-// Function Name: NextPadScreen_event_process
+// Function Name: PerformanceSelectionScreen_event_process
 //
 // Description: This dispatches the Pad Option Settings Screen messages
 //
 //*************************************************************************************
 
-UINT NextPadScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
+UINT PerformanceSelectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     switch (event_ptr->gx_event_type)
     {
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
+        screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
         break;
 
     case GX_SIGNAL(GOTO_VEER_ADJUST_BTN_ID, GX_EVENT_CLICKED):
@@ -1329,7 +1325,7 @@ UINT MinimumDriveScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     switch (event_ptr->gx_event_type)
     {
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&NextPadScreen, window);
+        screen_toggle((GX_WINDOW *)&PerformanceSelectionScreen, window);
         break;
 
     case GX_SIGNAL (DRIVE_PERCENTAGE_BTN_ID, GX_EVENT_CLICKED):
@@ -1569,7 +1565,7 @@ UINT VeerAdjust_Screen_event_handler (GX_WINDOW *window, GX_EVENT *event_ptr)
     switch (event_ptr->gx_event_type)
     {
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&NextPadScreen, window);
+        screen_toggle((GX_WINDOW *)&PerformanceSelectionScreen, window);
         break;
 
     case GX_EVENT_SHOW:
@@ -1602,12 +1598,16 @@ UINT UserSelectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
         break;
 
-    case GX_SIGNAL(GOTO_USER_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
+    case GX_SIGNAL(USER_SETTINGS_BTN_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&UserSettingsScreen, window);
         break;
 
-    case GX_SIGNAL(GOTO_FEATURE_BTN_ID, GX_EVENT_CLICKED):
+    case GX_SIGNAL(FEATURE_BTN_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&FeatureSettingsScreen, window);
+        break;
+
+    case GX_SIGNAL(PERFORMANCE_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&PerformanceSelectionScreen, window);
         break;
     }
 
