@@ -64,6 +64,16 @@ void g_lcd_spi_callback(spi_callback_args_t *p_args);
 #undef SYNERGY_NOT_DEFINED
 
 #define g_rspi_lcdc_P_EXTEND (&g_rspi_lcdc_cfg_extend)
+/* Transfer on DTC Instance. */
+extern const transfer_instance_t g_transfer5;
+#ifndef NULL
+void NULL(transfer_callback_args_t *p_args);
+#endif
+/* Transfer on DTC Instance. */
+extern const transfer_instance_t g_transfer4;
+#ifndef NULL
+void NULL(transfer_callback_args_t *p_args);
+#endif
 extern const i2c_cfg_t g_i2c1_cfg;
 /** I2C on RIIC Instance. */
 extern const i2c_master_instance_t g_i2c1;
@@ -74,15 +84,15 @@ void NULL(i2c_callback_args_t *p_args);
 extern riic_instance_ctrl_t g_i2c1_ctrl;
 extern const riic_extended_cfg g_i2c1_extend;
 #define SYNERGY_NOT_DEFINED (1)            
-#if (SYNERGY_NOT_DEFINED == SYNERGY_NOT_DEFINED)
+#if (SYNERGY_NOT_DEFINED == g_transfer4)
 #define g_i2c1_P_TRANSFER_TX (NULL)
 #else
-#define g_i2c1_P_TRANSFER_TX (&SYNERGY_NOT_DEFINED)
+#define g_i2c1_P_TRANSFER_TX (&g_transfer4)
 #endif
-#if (SYNERGY_NOT_DEFINED == SYNERGY_NOT_DEFINED)
+#if (SYNERGY_NOT_DEFINED == g_transfer5)
 #define g_i2c1_P_TRANSFER_RX (NULL)
 #else
-#define g_i2c1_P_TRANSFER_RX (&SYNERGY_NOT_DEFINED)
+#define g_i2c1_P_TRANSFER_RX (&g_transfer5)
 #endif
 #undef SYNERGY_NOT_DEFINED
 #define g_i2c1_P_EXTEND (&g_i2c1_extend)

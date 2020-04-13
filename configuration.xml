@@ -7,7 +7,7 @@
     <option key="#TargetARCHITECTURE#" value="cortex-m4"/>
     <option key="#RTOS#" value="Express Logic ThreadX"/>
     <option key="#pinconfiguration#" value="R7FS7G27H3A01CFB.pincfg"/>
-    <option key="#SSPVersion#" value="1.7.0"/>
+    <option key="#SSPVersion#" value="1.7.5"/>
     <option key="#DefaultLinkerScript#" value="s7g2.ld"/>
     <option key="#SELECTED_TOOLCHAIN#" value="gcc-arm-embedded"/>
   </generalSettings>
@@ -96,121 +96,121 @@
     <node id="board.clock.fclk.display" option="board.clock.fclk.display.value"/>
   </synergyClockConfiguration>
   <synergyComponentSelection>
-    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="device" variant="R7FS7G27H3A01CFB" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="device" variant="R7FS7G27H3A01CFB" vendor="Renesas" version="1.7.5">
       <description>Board support package for R7FS7G27H3A01CFB</description>
-      <originalPack>Renesas.Synergy_mcu_s7g2.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy_mcu_s7g2.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="device" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="device" variant="" vendor="Renesas" version="1.7.5">
       <description>Board support package for S7G2</description>
-      <originalPack>Renesas.Synergy_mcu_s7g2.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy_mcu_s7g2.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="ssp" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="BSP" condition="" group="s7g2" subgroup="ssp" variant="" vendor="Renesas" version="1.7.5">
       <description>Board support package for S7G2</description>
-      <originalPack>Renesas.Synergy_mcu_s7g2.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy_mcu_s7g2.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="BSP" condition="" group="Board" subgroup="custom" variant="" vendor="Renesas" version="1.7.0">
-      <description>CUSTOM Board Support Files</description>
-      <originalPack>Renesas.Synergy_board_custom.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="touch panel" subgroup="touch_panel_i2c_sx8654" variant="" vendor="Renesas" version="1.7.0">
-      <description>TOUCH_PANEL_I2C_SX8654 Drivers</description>
-      <originalPack>Renesas.Synergy_touch_panel_i2c_sx8654.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="Common" condition="" group="all" subgroup="ssp_common" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="Common" condition="" group="all" subgroup="ssp_common" variant="" vendor="Renesas" version="1.7.5">
       <description>SSP Common Code</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_el_gx" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_el_gx" variant="" vendor="Renesas" version="1.7.5">
       <description>SF_EL_GX GUIX Adaptation Framework: Provides=[SSP GUIX Adaptation Framework] , Requires=[ThreadX ,GUIX]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_external_irq" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_external_irq" variant="" vendor="Renesas" version="1.7.5">
       <description>Framework External IRQ: Provides=[Framework External IRQ] , Requires=[External IRQ ,ThreadX]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_jpeg_decode" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_jpeg_decode" variant="" vendor="Renesas" version="1.7.5">
       <description>Framework JPEG Decode: Provides=[SF JPEG Decode] , Requires=[ThreadX ,JPEG Decode]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_message" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_message" variant="" vendor="Renesas" version="1.7.5">
       <description>Messaging Framework: Provides=[Message] , Requires=[ThreadX]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_tes_2d_drw" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_tes_2d_drw" variant="" vendor="Renesas" version="1.7.5">
       <description>TES D/AVE 2D Port: Provides=[D/AVE 2D Port] , Requires=[ThreadX ,D/AVE 2D]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_touch_panel_i2c" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_touch_panel_i2c" variant="" vendor="Renesas" version="1.7.5">
       <description>Framework Touch Panel using I2C: Provides=[Framework Touch Panel] , Requires=[ThreadX ,Message ,I2C ,Framework External IRQ]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="TES" condition="" group="all" subgroup="dave2d" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="TES" condition="" group="all" subgroup="dave2d" variant="" vendor="Renesas" version="1.7.5">
       <description>TES D/AVE 2D: Provides=[D/AVE 2D]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_adc" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_adc" variant="" vendor="Renesas" version="1.7.5">
       <description>A/D Converter: Provides=[ADC]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_cgc" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_cgc" variant="" vendor="Renesas" version="1.7.5">
       <description>Clock Generation Circuit: Provides=[CGC]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_elc" variant="" vendor="Renesas" version="1.7.0">
-      <description>Event Link Controller: Provides=[ELC]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_fmi" variant="" vendor="Renesas" version="1.7.0">
-      <description>Factory MCU Information Module: Provides=[FMI]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_glcd" variant="" vendor="Renesas" version="1.7.0">
-      <description>Graphics LCD: Provides=[Display]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_gpt" variant="" vendor="Renesas" version="1.7.0">
-      <description>General Purpose Timer: Provides=[Timer ,GPT]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_icu" variant="" vendor="Renesas" version="1.7.0">
-      <description>External IRQ: Provides=[External IRQ]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_ioport" variant="" vendor="Renesas" version="1.7.0">
-      <description>I/O Port: Provides=[IO Port]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_jpeg_common" variant="" vendor="Renesas" version="1.7.0">
-      <description>JPEG Common</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_jpeg_decode" variant="" vendor="Renesas" version="1.7.0">
-      <description>JPEG Decode: Provides=[JPEG Decode]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_riic" variant="" vendor="Renesas" version="1.7.0">
-      <description>RIIC: Provides=[I2C Master]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_wdt" variant="" vendor="Renesas" version="1.7.0">
-      <description>Watchdog Timer: Provides=[WDT]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="gx" variant="" vendor="Renesas" version="1.7.0">
-      <description>Express Logic GUIX: Provides=[GUIX] , Requires=[ThreadX]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="tx" variant="" vendor="Renesas" version="1.7.0">
-      <description>Express Logic ThreadX: Provides=[ThreadX]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_sci_spi" variant="" vendor="Renesas" version="1.7.0">
-      <description>SCI SPI: Provides=[SPI] , Requires=[SCI Common]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_dtc" variant="" vendor="Renesas" version="1.7.0">
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_dtc" variant="" vendor="Renesas" version="1.7.5">
       <description>Data Transfer Controller: Provides=[Transfer]</description>
-      <originalPack>Renesas.Synergy.1.7.0.pack</originalPack>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_elc" variant="" vendor="Renesas" version="1.7.5">
+      <description>Event Link Controller: Provides=[ELC]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_fmi" variant="" vendor="Renesas" version="1.7.5">
+      <description>Factory MCU Information Module: Provides=[FMI]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_glcd" variant="" vendor="Renesas" version="1.7.5">
+      <description>Graphics LCD: Provides=[Display]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_gpt" variant="" vendor="Renesas" version="1.7.5">
+      <description>General Purpose Timer: Provides=[Timer ,GPT]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_icu" variant="" vendor="Renesas" version="1.7.5">
+      <description>External IRQ: Provides=[External IRQ]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_ioport" variant="" vendor="Renesas" version="1.7.5">
+      <description>I/O Port: Provides=[IO Port]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_jpeg_common" variant="" vendor="Renesas" version="1.7.5">
+      <description>JPEG Common</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_jpeg_decode" variant="" vendor="Renesas" version="1.7.5">
+      <description>JPEG Decode: Provides=[JPEG Decode]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_riic" variant="" vendor="Renesas" version="1.7.5">
+      <description>RIIC: Provides=[I2C Master]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_sci_spi" variant="" vendor="Renesas" version="1.7.5">
+      <description>SCI SPI: Provides=[SPI] , Requires=[SCI Common]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_wdt" variant="" vendor="Renesas" version="1.7.5">
+      <description>Watchdog Timer: Provides=[WDT]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="gx" variant="" vendor="Renesas" version="1.7.5">
+      <description>Express Logic GUIX: Provides=[GUIX] , Requires=[ThreadX]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="Express Logic" condition="" group="all" subgroup="tx" variant="" vendor="Renesas" version="1.7.5">
+      <description>Express Logic ThreadX: Provides=[ThreadX]</description>
+      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="touch panel" subgroup="touch_panel_i2c_sx8654" variant="" vendor="Renesas" version="1.7.5">
+      <description>TOUCH_PANEL_I2C_SX8654 Drivers</description>
+      <originalPack>Renesas.Synergy_touch_panel_i2c_sx8654.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="BSP" condition="" group="Board" subgroup="custom" variant="" vendor="Renesas" version="1.7.5">
+      <description>CUSTOM Board Support Files</description>
+      <originalPack>Renesas.Synergy_board_custom.1.7.5.pack</originalPack>
     </component>
   </synergyComponentSelection>
   <synergyIcuConfiguration/>
@@ -629,6 +629,10 @@
       <property id="module.driver.adc.scan_end_b_ipl" value="board.icu.common.irq.disabled"/>
       <property id="module.driver.adc.voltage_ref" value="module.driver.adc.voltage_ref.ref"/>
       <property id="module.driver.adc.over_current" value="module.driver.adc.over_current.enable"/>
+      <property id="module.driver.adc.pga" value="module.driver.adc.pga.default"/>
+      <property id="module.driver.adc.pga0" value="module.driver.adc.pga.disabled"/>
+      <property id="module.driver.adc.pga1" value="module.driver.adc.pga.disabled"/>
+      <property id="module.driver.adc.pga2" value="module.driver.adc.pga.disabled"/>
     </module>
     <module id="module.driver.timer_on_gpt.465575669">
       <property id="module.driver.timer.name" value="g_timer2"/>
@@ -745,6 +749,40 @@
       <property id="module.driver.transfer.p_callback" value="NULL"/>
       <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
     </module>
+    <module id="module.driver.transfer_on_dtc.1196225792">
+      <property id="module.driver.transfer.name" value="g_transfer4"/>
+      <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
+      <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
+      <property id="module.driver.transfer.dest_addr_mode" value="module.driver.transfer.dest_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.src_addr_mode" value="module.driver.transfer.src_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.repeat_area" value="module.driver.transfer.repeat_area.repeat_area_source"/>
+      <property id="module.driver.transfer.interrupt" value="module.driver.transfer.interrupt.interrupt_end"/>
+      <property id="module.driver.transfer.p_dest" value="NULL"/>
+      <property id="module.driver.transfer.p_src" value="NULL"/>
+      <property id="module.driver.transfer.length" value="0"/>
+      <property id="module.driver.transfer.num_blocks" value="0"/>
+      <property id="module.driver.transfer.activation_source" value="module.driver.transfer.event.event_elc_software_event_0"/>
+      <property id="module.driver.transfer.auto_enable" value="module.driver.transfer.auto_enable.true"/>
+      <property id="module.driver.transfer.p_callback" value="NULL"/>
+      <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
+    </module>
+    <module id="module.driver.transfer_on_dtc.1068471444">
+      <property id="module.driver.transfer.name" value="g_transfer5"/>
+      <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
+      <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
+      <property id="module.driver.transfer.dest_addr_mode" value="module.driver.transfer.dest_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.src_addr_mode" value="module.driver.transfer.src_addr_mode.addr_mode_fixed"/>
+      <property id="module.driver.transfer.repeat_area" value="module.driver.transfer.repeat_area.repeat_area_source"/>
+      <property id="module.driver.transfer.interrupt" value="module.driver.transfer.interrupt.interrupt_end"/>
+      <property id="module.driver.transfer.p_dest" value="NULL"/>
+      <property id="module.driver.transfer.p_src" value="NULL"/>
+      <property id="module.driver.transfer.length" value="0"/>
+      <property id="module.driver.transfer.num_blocks" value="0"/>
+      <property id="module.driver.transfer.activation_source" value="module.driver.transfer.event.event_elc_software_event_0"/>
+      <property id="module.driver.transfer.auto_enable" value="module.driver.transfer.auto_enable.true"/>
+      <property id="module.driver.transfer.p_callback" value="NULL"/>
+      <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
+    </module>
     <context id="_hal.0">
       <stack module="module.driver.ioport_on_ioport.0"/>
       <stack module="module.driver.elc_on_elc.0"/>
@@ -787,7 +825,10 @@
       <stack module="module.driver.timer_on_gpt.425844007"/>
       <stack module="module.driver.adc_on_adc.1219062132"/>
       <stack module="module.driver.timer_on_gpt.465575669"/>
-      <stack module="module.driver.i2c_on_riic.37101057"/>
+      <stack module="module.driver.i2c_on_riic.37101057">
+        <stack module="module.driver.transfer_on_dtc.1196225792" requires="module.driver.i2c_on_riic.requires.transfer_tx"/>
+        <stack module="module.driver.transfer_on_dtc.1068471444" requires="module.driver.i2c_on_riic.requires.transfer_rx"/>
+      </stack>
       <stack module="module.driver.spi_on_sci_spi.303810437">
         <stack module="module.driver.transfer_on_dtc.1658006710" requires="module.driver.spi_on_sci_spi.requires.transfer_tx"/>
         <stack module="module.driver.transfer_on_dtc.1816837643" requires="module.driver.spi_on_sci_spi.requires.transfer_rx"/>
@@ -874,6 +915,7 @@
     <config id="config.el.gx">
       <property id="config.el.gx.enable_synergy_drw" value="config.el.gx.enable_synergy_drw.yes"/>
       <property id="config.el.gx.enable_synergy_jpeg" value="config.el.gx.enable_synergy_jpeg.yes"/>
+      <property id="config.el.gx.enable_gui_legacy_api" value="config.el.gx.enable_gui_legacy_api.yes"/>
     </config>
     <config id="config.framework.sf_tes_2d_drw">
       <property id="module.framework.sf_tes_2d_drw.work_memory_size" value="12288"/>

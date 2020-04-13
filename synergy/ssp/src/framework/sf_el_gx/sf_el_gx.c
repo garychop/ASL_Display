@@ -403,9 +403,9 @@ UINT SF_EL_GX_Setup (GX_DISPLAY * p_display)
         return (UINT)GX_FAILURE;
     }
 
-    p_display->gx_display_color_format = sf_el_gx_setup_display_color_format_set
+    p_display->gx_display_color_format = (GX_UBYTE) sf_el_gx_setup_display_color_format_set
                                                         (p_ctrl_temp->p_display_instance->p_cfg->input[0].format);
-    if ((GX_VALUE)(GX_COLOR_FORMAT_INVALID) == p_display->gx_display_color_format)
+    if (GX_COLOR_FORMAT_INVALID == (INT) p_display->gx_display_color_format)
     {
         /* Informs user application the driver setup error */
         cb_args.device = SF_EL_GX_DEVICE_NONE;
@@ -866,7 +866,7 @@ static void sf_el_gx_canvas_clear (GX_DISPLAY * p_display, sf_el_gx_instance_ctr
     int32_t   divisor;
     ULONG   * put;
 
-    switch (p_display->gx_display_color_format)
+    switch ((INT) p_display->gx_display_color_format)
     {
     case GX_COLOR_FORMAT_565RGB:  ///< RGB565, 16 bits
         /* No break intentionally */
@@ -918,7 +918,7 @@ static d2_s32 sf_el_gx_d2_open_format_set (GX_DISPLAY * p_display)
     d2_s32 format = d2_mode_rgb565;
 
     /** Gets output color format of D/AVE 2D interface */
-    switch (p_display->gx_display_color_format)
+    switch ((INT) p_display->gx_display_color_format)
     {
     case GX_COLOR_FORMAT_565RGB:  ///< RGB565, 16 bits
         /* Initial value applied */

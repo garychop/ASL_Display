@@ -249,6 +249,7 @@ Synergy Configuration
   Module "GUIX on gx"
     Enable Synergy 2D Drawing Engine Support: Yes(default)
     Enable Synergy JPEG Support: Yes(default)
+    Enable GUI Legacy API Support: Yes(default)
     
   Module "Touch Panel Framework on sf_touch_panel_i2c"
     Parameter Checking: Enabled
@@ -735,6 +736,10 @@ Synergy Configuration
       Scan End Group B Interrupt Priority: Disabled
       Voltage reference(Only for S1JA): External VREFH0
       Over current protection(Only for S1JA): Enabled
+      Programmable Gain Amplifier: Select PGA Channel from 'Channel Scan Mask,Gain from below options'
+      PGA 0: Disabled
+      PGA 1: Disabled
+      PGA 2: Disabled
       
     Instance "g_timer2 Timer Driver on r_gpt"
       Name: g_timer2
@@ -767,6 +772,40 @@ Synergy Configuration
       Transmit End Interrupt Priority: Priority 3
       Error Interrupt Priority: Priority 3
       
+      Instance "g_transfer4 Transfer Driver on r_dtc IIC0 TXI"
+        Name: g_transfer4
+        Mode: Normal
+        Transfer Size: 1 Byte
+        Destination Address Mode: Fixed
+        Source Address Mode: Incremented
+        Repeat Area (Unused in Normal Mode): Source
+        Interrupt Frequency: After all transfers have completed
+        Destination Pointer: NULL
+        Source Pointer: NULL
+        Number of Transfers: 0
+        Number of Blocks (Valid only in Block Mode): 0
+        Activation Source (Must enable IRQ): IIC0 TXI
+        Auto Enable: False
+        Callback (Only valid with Software start): NULL
+        ELC Software Event Interrupt Priority: Disabled
+        
+      Instance "g_transfer5 Transfer Driver on r_dtc IIC0 RXI"
+        Name: g_transfer5
+        Mode: Normal
+        Transfer Size: 1 Byte
+        Destination Address Mode: Incremented
+        Source Address Mode: Fixed
+        Repeat Area (Unused in Normal Mode): Destination
+        Interrupt Frequency: After all transfers have completed
+        Destination Pointer: NULL
+        Source Pointer: NULL
+        Number of Transfers: 0
+        Number of Blocks (Valid only in Block Mode): 0
+        Activation Source (Must enable IRQ): IIC0 RXI
+        Auto Enable: False
+        Callback (Only valid with Software start): NULL
+        ELC Software Event Interrupt Priority: Disabled
+        
     Instance "g_rspi_lcdc SPI Driver on r_sci_spi"
       Name: g_rspi_lcdc
       Channel: 0

@@ -1,6 +1,6 @@
 /**************************************************************************/ 
 /*                                                                        */ 
-/*            Copyright (c) 1996-2018 by Express Logic Inc.               */ 
+/*            Copyright (c) 1996-2019 by Express Logic Inc.               */ 
 /*                                                                        */ 
 /*  This software is copyrighted by and is the sole property of Express   */ 
 /*  Logic, Inc.  All rights, title, ownership, or other interests         */ 
@@ -38,7 +38,7 @@
 /*  APPLICATION INTERFACE DEFINITION                       RELEASE        */ 
 /*                                                                        */ 
 /*    tx_api.h                                            PORTABLE C      */ 
-/*                                                           5.8 SP4      */ 
+/*                                                           5.9          */ 
 /*  AUTHOR                                                                */ 
 /*                                                                        */ 
 /*    William E. Lamie, Express Logic, Inc.                               */ 
@@ -120,18 +120,12 @@
 /*                                            definitions, added support  */ 
 /*                                            for optional extensions,    */ 
 /*                                            resulting in version 5.8    */ 
-/*  03-11-2018     William E. Lamie         Modified comment(s), added    */ 
-/*                                            a macro to disable warning  */ 
-/*                                            of parameter not used,      */ 
-/*                                            resulting in version 5.8 SP1*/ 
-/*  06-30-2018     William E. Lamie         Modified comment(s), added    */ 
-/*                                            a symbol for identifying    */ 
-/*                                            service pack release number,*/ 
-/*                                            resulting in version 5.8 SP2*/ 
-/*  08-03-2018     William E. Lamie         Modified comment(s), and      */ 
-/*                                            changed to SP3              */ 
-/*  10-10-2018     William E. Lamie         Modified comment(s), and      */ 
-/*                                            changed to SP4              */ 
+/*  02-01-2019     William E. Lamie         Modified comment(s), changed  */ 
+/*                                            minor version constant, and */ 
+/*                                            added a macro to disable    */ 
+/*                                            warning of parameter not    */ 
+/*                                            used, resulting in          */ 
+/*                                            version 5.9                 */ 
 /*                                                                        */ 
 /**************************************************************************/ 
 
@@ -163,8 +157,7 @@ extern   "C" {
    
 #define EL_PRODUCT_THREADX
 #define THREADX_MAJOR_VERSION           5
-#define THREADX_MINOR_VERSION           8
-#define THREADX_SERVICE_PACK_VERSION    4
+#define THREADX_MINOR_VERSION           9
 
 
 /* API input parameters and general constants.  */

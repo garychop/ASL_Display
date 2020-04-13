@@ -412,10 +412,99 @@ __STATIC_INLINE void HW_ADC_TempSensorDisable(R_TSN_Control_Type * p_tsn_regs)
 {
     p_tsn_regs->TSCR = 0UL;
 }
-__STATIC_INLINE void HW_ADC_ADPGADCR0_Set(ADC_BASE_PTR p_regs, uint16_t value)
+
+__STATIC_INLINE void HW_ADC_ADPGADCR0_Set(ADC_BASE_PTR p_regs, adc_cfg_t const * const p_cfg)
 {
-    p_regs->ADPGADCR0 = value;
+
+    if(( DIFFERENTIAL_INPUT_GAIN_1 <= p_cfg->pga0 ) && (DIFFERENTIAL_INPUT_GAIN_4 >= p_cfg->pga0))
+    {
+        p_regs->ADPGADCR0_b.P000DG = (0x03U & (p_cfg->pga0 >> 4U));  /*PGA-0 Differential input Gain setting(0,1,2,3).*/
+        p_regs->ADPGADCR0_b.P000DEN = 1U;                            /*PGA-0 Differential input Enabled.*/
+    }
+    else
+    {
+        p_regs->ADPGADCR0_b.P000DEN = 0U;                           /* Single end mode Enabled */
+    }
+
+    if(( DIFFERENTIAL_INPUT_GAIN_1 <= p_cfg->pga1 ) && (DIFFERENTIAL_INPUT_GAIN_4 >= p_cfg->pga1))
+    {
+        p_regs->ADPGADCR0_b.P001DG = (0x03U & (p_cfg->pga1 >> 4U)); /* PGA-1 Differential input Gain setting(0,1,2,3).*/
+        p_regs->ADPGADCR0_b.P001DEN = 1U;                           /* PGA-1 Differential input Enabled.*/
+    }
+    else
+    {
+        p_regs->ADPGADCR0_b.P001DEN = 0U;                           /* Single end mode Enabled.*/
+    }
+
+    if(( DIFFERENTIAL_INPUT_GAIN_1 <= p_cfg->pga2 ) && (DIFFERENTIAL_INPUT_GAIN_4 >= p_cfg->pga2))
+    {
+        p_regs->ADPGADCR0_b.P002DG = (0x03U & (p_cfg->pga2 >> 4U)); /* PGA-2 Differential input Gain setting(0,1,2,3).*/
+        p_regs->ADPGADCR0_b.P002DEN = 1U;                           /* PGA-2 Differential input Enabled.*/
+    }
+    else
+    {
+        p_regs->ADPGADCR0_b.P002DEN = 0U;                           /* Single end mode Enabled.*/
+    }
 }
+
+__STATIC_INLINE void HW_ADC_ADPGAGS0_Set(ADC_BASE_PTR p_regs, adc_cfg_t const * const p_cfg)
+{
+    /* Gain level setting for PGA0,PGA1,PGA2 */
+    p_regs->ADPGAGS0_b.P000GAIN = (uint16_t)(p_cfg->pga0 & 0x000F ); /* PGA-0 Single Ended(0-15) & Differential input(1,5,9,11) gain setting Register. */
+    p_regs->ADPGAGS0_b.P001GAIN = (uint16_t)(p_cfg->pga1 & 0x000F ); /* PGA-1 Single Ended(0-15) & Differential input(1,5,9,11) gain setting Register. */
+    p_regs->ADPGAGS0_b.P002GAIN = (uint16_t)(p_cfg->pga2 & 0x000F ); /* PGA-2 Single Ended(0-15) & Differential input(1,5,9,11) gain setting Register. */
+}
+
+__STATIC_INLINE void HW_ADC_ADPGACR_Set(ADC_BASE_PTR p_regs,adc_cfg_t const * const p_cfg)
+{
+
+    /* PGA-0, PGA-1, PGA-2 Enable  Gain Setting.*/
+    p_regs->ADPGACR_b.P000GEN = 1U;
+    p_regs->ADPGACR_b.P001GEN = 1U;
+    p_regs->ADPGACR_b.P002GEN = 1U;
+
+    /* PGA-0 Bypass/Enable/Disable */
+    if (PGA_DISABLE == p_cfg->pga0)
+    {
+        p_regs->ADPGACR_b.P000SEL0 = 1U;
+        p_regs->ADPGACR_b.P000SEL1 = 0U;
+        p_regs->ADPGACR_b.P000ENAMP = 0U;
+    }
+    else
+    {
+        p_regs->ADPGACR_b.P000SEL0 = 0U;
+        p_regs->ADPGACR_b.P000SEL1 = 1U;
+        p_regs->ADPGACR_b.P000ENAMP = 1U;
+    }
+
+    /* PGA-1 Bypass/Enable/Disable */
+    if (PGA_DISABLE == p_cfg->pga1)
+    {
+        p_regs->ADPGACR_b.P001SEL0 = 1U;
+        p_regs->ADPGACR_b.P001SEL1 = 0U;
+        p_regs->ADPGACR_b.P001ENAMP = 0U;
+    }
+    else
+    {
+        p_regs->ADPGACR_b.P001SEL0 = 0U;
+        p_regs->ADPGACR_b.P001SEL1 = 1U;
+        p_regs->ADPGACR_b.P001ENAMP = 1U;
+    }
+    /* PGA-2 Bypass/Enable/Disable */
+    if (PGA_DISABLE == p_cfg->pga2)
+    {
+        p_regs->ADPGACR_b.P002SEL0 = 1U;
+        p_regs->ADPGACR_b.P002SEL1 = 0U;
+        p_regs->ADPGACR_b.P002ENAMP = 0U;
+    }
+    else
+    {
+        p_regs->ADPGACR_b.P002SEL0 = 0U;
+        p_regs->ADPGACR_b.P002SEL1 = 1U;
+        p_regs->ADPGACR_b.P002ENAMP = 1U;
+    }
+}
+
 __STATIC_INLINE void HW_ADC_VREFAMPCNT_Set(ADC_BASE_PTR p_regs, uint8_t value)
 {
     p_regs->VREFAMPCNT_b.VREFADCG = (value & 3U);
@@ -434,11 +523,7 @@ __STATIC_INLINE void HW_ADC_OVERCURRENT_Set(ADC_BASE_PTR p_regs, adc_over_curren
     p_regs->VREFAMPCNT_b.OLDETEN = value;
 }
 
-__STATIC_INLINE void HW_ADC_ADPGACR_Set(ADC_BASE_PTR p_regs, uint16_t value)
-{
-    p_regs->ADPGACR = value;
-}
-/* Common macro for SSP header files. There is also a corresponding SSP_HEADER macro at the top of this file. */
+/* Common macro for SSP header files. There is also a corresponding SSP_HEADER macro at the top of this file.*/
 SSP_FOOTER
 
 #endif /* HW_ADC_PRIVATE_H */

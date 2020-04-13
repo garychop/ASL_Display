@@ -497,6 +497,21 @@ __STATIC_INLINE elc_event_t HW_GPT_GetCounterOverFlowEvent(uint8_t const channel
            (channel * ((uint32_t) ELC_EVENT_GPT1_COUNTER_OVERFLOW - (uint32_t) ELC_EVENT_GPT0_COUNTER_OVERFLOW)));
 }
 
+/*******************************************************************************************************************//**
+ * Clears the counter counts.
+ * @param  p_gpt_base   Pointer to base register of GPT channel.
+ * @param  channel      Channel number from 0 to 6
+ **********************************************************************************************************************/
+__STATIC_INLINE void HW_GPT_ClearCounter (GPT_BASE_PTR p_gpt_base, uint8_t channel)
+{
+    /* Setting CCLR bit in GTCSR enables GTCLR register to reset GTCNT register */
+    p_gpt_base->GTCSR_b.CCLR = 1U;
+    /* Clears the GTCNT counter operation for the particular channel */
+    p_gpt_base->GTCLR = (1UL << channel);
+    /* clear CCLR bit */
+    p_gpt_base->GTCSR_b.CCLR = 0U;
+}
+
 /* Common macro for SSP header files. There is also a corresponding SSP_HEADER macro at the top of this file. */
 SSP_FOOTER
 

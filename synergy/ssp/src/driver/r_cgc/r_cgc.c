@@ -83,12 +83,19 @@
  **********************************************************************************************************************/
 static ssp_err_t r_cgc_clock_start_stop(cgc_clock_change_t clock_state, cgc_clock_t clock_to_change, cgc_clocks_cfg_t const *p_clk_cfg);
 static ssp_err_t r_cgc_stabilization_wait(cgc_clock_t clock);
+
+#if (CGC_CFG_PARAM_CHECKING_ENABLE == 1)
 static ssp_err_t r_cgc_check_peripheral_clocks(cgc_system_clocks_t clock);
+static ssp_err_t r_cgc_check_dividers(cgc_system_clock_cfg_t const * const p_clock_cfg, uint32_t min_div);
+static ssp_err_t r_cgc_check_config_dividers(cgc_system_clock_cfg_t const * const p_clock_cfg);
+#if BSP_FEATURE_HAS_CGC_PLL
+static bool r_cgc_clockcfg_valid_check (cgc_clock_cfg_t * cfg);
+#endif
+#endif
+
 static bool r_cgc_subosc_mode_possible(void);
 static bool r_cgc_low_speed_mode_possible(void);
 static void r_cgc_operating_mode_set(cgc_clock_t const clock_source, uint32_t const current_system_clock);
-static ssp_err_t r_cgc_check_dividers(cgc_system_clock_cfg_t const * const p_clock_cfg, uint32_t min_div);
-static ssp_err_t r_cgc_check_config_dividers(cgc_system_clock_cfg_t const * const p_clock_cfg);
 static ssp_err_t r_cgc_wait_to_complete(cgc_clock_t const clock_source, cgc_clock_change_t option);
 static ssp_err_t r_cgc_clock_running_status_check(cgc_clock_t const clock_source);
 static void r_cgc_adjust_subosc_speed_mode(void);
@@ -128,7 +135,6 @@ static void r_cgc_pll_multiplier_set (R_SYSTEM_Type * p_system_reg, float multip
 static float r_cgc_pll_multiplier_get (R_SYSTEM_Type * p_system_reg);
 static void r_cgc_pll_divider_set (R_SYSTEM_Type * p_system_reg, cgc_pll_div_t divider);
 static uint16_t r_cgc_pll_divider_get (R_SYSTEM_Type * p_system_reg);
-static bool r_cgc_clockcfg_valid_check (cgc_clock_cfg_t * cfg);
 #endif /* #if BSP_FEATURE_HAS_CGC_PLL */
 
 #if (CGC_CFG_SUBCLOCK_AT_RESET_ENABLE == 1)
@@ -355,9 +361,11 @@ ssp_err_t R_CGC_ClocksCfg(cgc_clocks_cfg_t const * const p_clock_cfg)
 #endif /* CGC_CFG_PARAM_CHECKING_ENABLE */
     ssp_err_t err = SSP_SUCCESS;
     cgc_clock_t requested_system_clock = p_clock_cfg->system_clock;
+#if CGC_CFG_PARAM_CHECKING_ENABLE
 #if BSP_FEATURE_HAS_CGC_PLL
     cgc_clock_cfg_t * p_pll_cfg = (cgc_clock_cfg_t *)&(p_clock_cfg->pll_cfg);
 #endif /* BSP_FEATURE_HAS_CGC_PLL */
+#endif
     cgc_system_clock_cfg_t sys_cfg = {
         .pclka_div = CGC_SYS_CLOCK_DIV_1,
         .pclkb_div = CGC_SYS_CLOCK_DIV_1,
@@ -1394,6 +1402,7 @@ static ssp_err_t r_cgc_clock_start_stop(cgc_clock_change_t clock_state, cgc_cloc
     return SSP_SUCCESS;
 }
 
+#if (CGC_CFG_PARAM_CHECKING_ENABLE == 1)
 /*******************************************************************************************************************//**
  * @brief  Check if the given peripheral clock is valid for the current MCU.
  * @param[in] clock                     current system clock
@@ -1444,6 +1453,7 @@ static ssp_err_t r_cgc_check_peripheral_clocks (cgc_system_clocks_t clock)
         return SSP_ERR_INVALID_ARGUMENT;
     }
 }
+#endif
 
 /*******************************************************************************************************************//**
  * @brief  Verifies if Sub-osc Mode is possible
@@ -1563,6 +1573,7 @@ static void r_cgc_operating_mode_set(cgc_clock_t const clock_source, uint32_t co
 #endif /* BSP_FEATURE_HAS_CGC_MIDDLE_SPEED */
 }
 
+#if (CGC_CFG_PARAM_CHECKING_ENABLE == 1)
 /*******************************************************************************************************************//**
  * @brief  Check dividers values
  * @param[in] p_clock_cfg       pointer to the clock configuration structure
@@ -1652,6 +1663,7 @@ static ssp_err_t r_cgc_check_config_dividers(cgc_system_clock_cfg_t const * cons
 
     return SSP_SUCCESS;
 }
+#endif
 
 /*******************************************************************************************************************//**
  * @brief  Wait for the specified clock to complete the start or stop operation
@@ -2303,6 +2315,7 @@ static void r_cgc_system_dividers_get (R_SYSTEM_Type * p_system_reg, cgc_system_
     cfg->iclk_div  = (cgc_sys_clock_div_t) p_system_reg->SCKDIVCR_b.ICK;
 }
 
+#if (CGC_CFG_PARAM_CHECKING_ENABLE == 1)
 #if BSP_FEATURE_HAS_CGC_PLL
 /*******************************************************************************************************************//**
  * @brief      This function tests the clock configuration for validity (only for systems with PLL)
@@ -2339,6 +2352,7 @@ static bool r_cgc_clockcfg_valid_check (cgc_clock_cfg_t * cfg)
 
     return true;
 }
+#endif
 #endif
 
 /*******************************************************************************************************************//**

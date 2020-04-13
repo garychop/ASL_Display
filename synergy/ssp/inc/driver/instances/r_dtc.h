@@ -54,7 +54,7 @@ SSP_HEADER
  * Macro definitions
  **********************************************************************************************************************/
 #define DTC_CODE_VERSION_MAJOR (1U)
-#define DTC_CODE_VERSION_MINOR (11U)
+#define DTC_CODE_VERSION_MINOR (12U)
 
 /** Length limited to 256 transfers for repeat and block mode */
 #define DTC_REPEAT_BLOCK_MAX_LENGTH (0x100)

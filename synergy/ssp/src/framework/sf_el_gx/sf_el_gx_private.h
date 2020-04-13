@@ -49,6 +49,6 @@
  **********************************************************************************************************************/
 /** SSP GUIX adaptation framework code version */
 #define SF_EL_GX_CODE_VERSION_MAJOR (1U)
-#define SF_EL_GX_CODE_VERSION_MINOR (14U)
+#define SF_EL_GX_CODE_VERSION_MINOR (15U)
 
 #endif /* SF_EL_GX_PRIVATE_H */

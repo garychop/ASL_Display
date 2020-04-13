@@ -484,6 +484,23 @@ __STATIC_INLINE void HW_JPEG_ImageSizeGet (R_JPEG_Type * p_jpeg_reg, uint16_t * 
     *p_vertical   = (upper | lower);
 }
 
+/*******************************************************************************
+ * Set JPEG image size (horizontal and vertical)
+ * @param	p_jpeg_reg      JPEG register
+ * @param	p_horizontal    Horizontal image size to set
+ * @param	p_vertical      Vertical image size to set
+ *******************************************************************************/
+__STATIC_INLINE void HW_JPEG_ImageSizeSet (R_JPEG_Type * p_jpeg_reg, uint16_t horizontal, uint16_t vertical)
+{
+    /* Vertical image size */
+    p_jpeg_reg->JCVSZU_b.VSZU = (uint8_t)((vertical) >> 8);
+    p_jpeg_reg->JCVSZD_b.VSZD = (uint8_t)((vertical) &  0xff);
+
+    /* Horizontal image size */
+    p_jpeg_reg->JCHSZU_b.HSZU = (uint8_t)((horizontal) >> 8);
+    p_jpeg_reg->JCHSZD_b.HSZD = (uint8_t)((horizontal) &  0xff);
+}
+
 /* Common macro for SSP header files. There is also a corresponding SSP_HEADER macro at the top of this file. */
 SSP_FOOTER
 

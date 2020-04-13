@@ -355,7 +355,7 @@ ssp_err_t R_WDT_CfgGet (wdt_ctrl_t * const p_api_ctrl, wdt_cfg_t * const p_cfg)
  * @brief Read timeout information for the watchdog timer. Implements wdt_api_t::timeoutGet.
  *
  *
- * @retval SSP_SUCCESS              WDT successfully refreshed.
+ * @retval SSP_SUCCESS              WDT timeout value successfully read.
  * @retval SSP_ERR_ASSERTION        Null Pointer.
  * @retval SSP_ERR_ABORTED          Invalid clock divider for this watchdog
  *

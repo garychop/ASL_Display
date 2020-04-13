@@ -344,7 +344,8 @@ ssp_err_t R_GPT_Reset (timer_ctrl_t * const p_api_ctrl)
     GPT_BASE_PTR p_gpt_reg = (GPT_BASE_PTR) p_ctrl->p_reg;
     gpt_start_status_t status = HW_GPT_CounterStartBitGet(p_gpt_reg);
     HW_GPT_CounterStartStop(p_gpt_reg, GPT_STOP);
-    HW_GPT_CounterSet(p_gpt_reg, 0);
+    /* Reset the gpt counter value to 0 */
+    HW_GPT_ClearCounter (p_gpt_reg, p_ctrl->channel);
     HW_GPT_CounterStartStop(p_gpt_reg, status);
 
     SSP_CRITICAL_SECTION_EXIT;

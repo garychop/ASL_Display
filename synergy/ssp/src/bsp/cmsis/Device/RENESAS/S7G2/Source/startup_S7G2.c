@@ -88,14 +88,14 @@ void Default_Handler (void)
 /* Main stack */
 /*LDRA_INSPECTED 219 s - This is an allowed exception to LDRA standard 219 S "User name starts with underscore."*/
 /*LDRA_INSPECTED 57 D - This global is being initialized at it's declaration below. */
-static uint8_t g_main_stack[BSP_CFG_STACK_MAIN_BYTES] BSP_ALIGN_VARIABLE_V2(BSP_STACK_ALIGNMENT) BSP_PLACE_IN_SECTION_V2(BSP_SECTION_STACK) = {0U};
+static uint8_t g_main_stack[BSP_CFG_STACK_MAIN_BYTES] BSP_ALIGN_VARIABLE_V2(BSP_STACK_ALIGNMENT) BSP_PLACE_IN_SECTION_V2(BSP_SECTION_STACK);
 
 /* Process stack */
 #if (BSP_CFG_STACK_PROCESS_BYTES > 0)
 /*LDRA_INSPECTED 219 s - This is an allowed exception to LDRA standard 219 S "User name starts with underscore."*/
 /*LDRA_INSPECTED 57 D - This global is being initialized at it's declaration below. */
 BSP_DONT_REMOVE static uint8_t g_process_stack[BSP_CFG_STACK_PROCESS_BYTES] BSP_PLACE_IN_SECTION_V2(BSP_SECTION_STACK) \
-                                                                            BSP_ALIGN_VARIABLE_V2(BSP_STACK_ALIGNMENT) = {0U};
+                                                                            BSP_ALIGN_VARIABLE_V2(BSP_STACK_ALIGNMENT);
 #endif
 
 /* Heap */
@@ -103,7 +103,7 @@ BSP_DONT_REMOVE static uint8_t g_process_stack[BSP_CFG_STACK_PROCESS_BYTES] BSP_
 /*LDRA_INSPECTED 219 s - This is an allowed exception to LDRA standard 219 S "User name starts with underscore."*/
 /*LDRA_INSPECTED 57 D - This global is being initialized at it's declaration below. */
 BSP_DONT_REMOVE static uint8_t g_heap[BSP_CFG_HEAP_BYTES] BSP_ALIGN_VARIABLE_V2(BSP_STACK_ALIGNMENT) \
-                                                          BSP_PLACE_IN_SECTION_V2(BSP_SECTION_HEAP) = {0U};
+                                                          BSP_PLACE_IN_SECTION_V2(BSP_SECTION_HEAP);
 #endif
 
 /* All system exceptions in the vector table are weak references to Default_Handler. If the user wishes to handle

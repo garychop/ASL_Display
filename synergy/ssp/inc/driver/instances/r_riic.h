@@ -46,7 +46,7 @@ SSP_HEADER
 Macro definitions
 ***********************************************************************************************************************/
 #define RIIC_MASTER_CODE_VERSION_MAJOR   (1U)
-#define RIIC_MASTER_CODE_VERSION_MINOR   (14U)
+#define RIIC_MASTER_CODE_VERSION_MINOR   (15U)
 
 /***********************************************************************************************************************
 Typedef definitions

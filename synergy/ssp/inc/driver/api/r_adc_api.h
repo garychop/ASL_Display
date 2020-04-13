@@ -64,7 +64,7 @@ SSP_HEADER
  **********************************************************************************************************************/
 /** Version Number of API.  */
 #define ADC_API_VERSION_MAJOR   (1U)
-#define ADC_API_VERSION_MINOR   (11U)
+#define ADC_API_VERSION_MINOR   (12U)
 
 /*****************************************************************************
 Typedef definitions
@@ -90,6 +90,33 @@ typedef enum e_adc_resolution
     ADC_RESOLUTION_16_BIT = 4, ///< 16 bit resolution
     ADC_RESOLUTION_24_BIT = 5, ///< 24 bit resolution
 } adc_resolution_t;
+
+/** ADC pga setting definitions */
+typedef enum e_adc_pga
+{
+    PGA_DISABLE = 0xFF,
+    SINGLE_INPUT_GAIN_1 = 0x0,        ///< Single ended input Gain_1
+    SINGLE_INPUT_GAIN_2 = 0x1,        ///< Single ended input Gain_2
+    SINGLE_INPUT_GAIN_3 = 0x2,        ///< Single ended input Gain_3
+    SINGLE_INPUT_GAIN_4 = 0x3,        ///< Single ended input Gain_4
+    SINGLE_INPUT_GAIN_5 = 0x4,        ///< Single ended input Gain_5
+    SINGLE_INPUT_GAIN_6 = 0x5,        ///< Single ended input Gain_6
+    SINGLE_INPUT_GAIN_7 = 0x6,        ///< Single ended input Gain_7
+    SINGLE_INPUT_GAIN_8 = 0x7,        ///< Single ended input Gain_8
+    SINGLE_INPUT_GAIN_9 = 0x8,        ///< Single ended input Gain_9
+    SINGLE_INPUT_GAIN_10 = 0x9,      ///< Single ended input Gain_10
+    SINGLE_INPUT_GAIN_11 = 0xA,      ///< Single ended input Gain_11
+    SINGLE_INPUT_GAIN_12 = 0xB,      ///< Single ended input Gain_12
+    SINGLE_INPUT_GAIN_13 = 0xC,      ///< Single ended input Gain_13
+    SINGLE_INPUT_GAIN_14 = 0xD,      ///< Single ended input Gain_14
+    SINGLE_INPUT_GAIN_15 = 0xE,      ///< Single ended input Gain_15
+    /* This values required to set 2 low level register to configure differential amplifier. */
+    /* LSB to set bit field ADPGAGS0 , MSB to set bit field ADPGADCR0 */
+    DIFFERENTIAL_INPUT_GAIN_1 = 0x81, ///< Differential input Gain_1 ADPGADCR0 = 0x8, ADPGAGS0 = 0x1
+    DIFFERENTIAL_INPUT_GAIN_2 = 0x95, ///< Differential input Gain_2
+    DIFFERENTIAL_INPUT_GAIN_3 = 0xA9, ///< Differential input Gain_3
+    DIFFERENTIAL_INPUT_GAIN_4 = 0xBB, ///< Differential input Gain_4
+} adc_pga_t;
 
 /** ADC data alignment definitions  */
 typedef enum e_adc_alignment
@@ -283,6 +310,10 @@ typedef struct st_adc_cfg
     void const     * p_extend;         ///< Extension parameter for hardware specific settings
     adc_voltage_reference_t voltage_ref;  ///< ADC reference voltage selection. Default is VREF
     adc_over_current_t over_current;      ///< ADC reference voltage selection. Default is Over current
+    adc_pga_t        pga0;             ///< PGA0 setting
+    adc_pga_t        pga1;             ///< PGA1 setting
+    adc_pga_t        pga2;             ///< PGA2 setting
+
 } adc_cfg_t;
 
 /** ADC control block. Allocate using driver instance control structure from driver instance header file. */

@@ -478,7 +478,7 @@ extern void * __RAM_segment_used_end__;
 
 #ifdef TX_THREAD_INIT
 CHAR                            _tx_version_id[] = 
-                                    "Copyright (c) 1996-2018 Express Logic Inc. * ThreadX Synergy/GNU Version G5.8sp4 SN: 4154-280-5000 *";
+                                    "Copyright (c) 1996-2018 Express Logic Inc. * ThreadX Synergy/GNU Version G5.9 SN: 4154-280-5000 *";
 #else
 extern  CHAR                    _tx_version_id[100];
 #endif

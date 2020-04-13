@@ -55,7 +55,7 @@ Macro definitions
 ***********************************************************************************************************************/
 /** Version of code that implements the API defined in this file */
 #define ADC_CODE_VERSION_MAJOR  (1U)
-#define ADC_CODE_VERSION_MINOR  (10U)
+#define ADC_CODE_VERSION_MINOR  (11U)
 
 /** Typical values that can be used to modify the sample states.
  * The minimum sample state count value is either 6 or 7 depending on the clock ratios.
@@ -139,6 +139,9 @@ typedef struct
     IRQn_Type                scan_end_b_irq;  ///< Scan end group B IRQ number
     adc_voltage_reference_t  voltage_ref;     ///< ADC reference voltage selection. Default is VREF
     adc_over_current_t       over_current;    ///< ADC reference voltage selection. Default is Over current
+    adc_pga_t                pga0;            ///< PGA0 setting
+    adc_pga_t                pga1;            ///< PGA1 setting
+    adc_pga_t                pga2;            ///< PGA2 setting
 } adc_instance_ctrl_t;
 
 /**********************************************************************************************************************

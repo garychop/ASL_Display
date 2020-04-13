@@ -50,7 +50,7 @@ SSP_HEADER
  * Macro definitions
  **********************************************************************************************************************/
 #define WDT_CODE_VERSION_MAJOR (1U)
-#define WDT_CODE_VERSION_MINOR (7U)
+#define WDT_CODE_VERSION_MINOR (8U)
 
 /***********************************************************************************************************************
  * Typedef definitions

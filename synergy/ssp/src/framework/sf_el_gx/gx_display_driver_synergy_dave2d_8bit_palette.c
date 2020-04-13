@@ -23,7 +23,7 @@
 
 /***********************************************************************************************************************
  * Copyright [2017] Renesas Electronics Corporation and/or its licensors. All Rights Reserved.
- * 
+ *
  * This file is part of Renesas SynergyTM Software Package (SSP)
  *
  * The contents of this file (the "contents") are proprietary and confidential to Renesas Electronics Corporation
@@ -164,6 +164,8 @@ static VOID     gx_dave2d_rotate_canvas_to_working_8bpp(GX_CANVAS * canvas, GX_R
 extern VOID         gx_log_dave_error(d2_s32 status);
 extern INT          gx_get_dave_error(INT get_index);
 #endif
+extern VOID         gx_dave2d_display_list_count(GX_DISPLAY *display);
+extern GX_BOOL      gx_dave2d_convex_polygon_test(GX_POINT *vertex, INT num);
 extern VOID         gx_display_list_flush(GX_DISPLAY * display);
 extern VOID         gx_display_list_open(GX_DISPLAY * display);
 extern d2_device  * gx_dave2d_context_clip_set(GX_DRAW_CONTEXT *context);
@@ -181,6 +183,8 @@ extern void     sf_el_gx_display_8bit_palette_assign(ULONG display_handle);
 /***********************************************************************************************************************
  * Synergy GUIX display driver function prototypes (called by GUIX)
  **********************************************************************************************************************/
+/*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
+extern VOID         _gx_dave2d_drawing_initiate(GX_DISPLAY *display, GX_CANVAS * canvas);
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
 VOID _gx_synergy_buffer_toggle_8bpp(GX_CANVAS * canvas, GX_RECTANGLE * dirty);
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
@@ -263,17 +267,14 @@ VOID _gx_dave2d_buffer_toggle_8bpp (GX_CANVAS * canvas, GX_RECTANGLE * dirty);
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
 VOID _gx_dave2d_drawing_initiate_8bpp(GX_DISPLAY * display, GX_CANVAS * canvas)
 {
-    /** Make sure previous display list is done executing. */
-    CHECK_DAVE_STATUS(d2_endframe(display -> gx_display_accelerator))
+    /** Close previous frame and set new canvas drawing address. */
+    _gx_dave2d_drawing_initiate(display, canvas);
 
-    /** Trigger execution of previous display list, switch to new display list. */
-    CHECK_DAVE_STATUS(d2_startframe(display -> gx_display_accelerator))
-    CHECK_DAVE_STATUS(d2_framebuffer(display -> gx_display_accelerator,
-                                     canvas -> gx_canvas_memory,
-                                     (d2_s32)(canvas -> gx_canvas_x_resolution),
-                                     (d2_u32)(canvas -> gx_canvas_x_resolution),
-                                     (d2_u32)(canvas -> gx_canvas_y_resolution),
-                                     d2_mode_alpha8))
+    d2_device  *dave = display -> gx_display_accelerator;
+
+    /* Set default mode */
+    CHECK_DAVE_STATUS(d2_setalphablendmode(dave, d2_bm_one, d2_bm_zero))
+    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
 }
 
 /*******************************************************************************************************************//**
@@ -285,13 +286,10 @@ VOID _gx_dave2d_drawing_initiate_8bpp(GX_DISPLAY * display, GX_CANVAS * canvas)
 VOID _gx_dave2d_drawing_complete_8bpp(GX_DISPLAY * display, GX_CANVAS * canvas)
 {
     /*LDRA_INSPECTED 57 Statement with no side effect. */
+    GX_PARAMETER_NOT_USED(display);
+
+    /*LDRA_INSPECTED 57 Statement with no side effect. */
     GX_PARAMETER_NOT_USED(canvas);
-
-    d2_device * dave;
-    dave = display->gx_display_accelerator;
-
-    /** Set alpha value to opaque to make sure the alpha value would not influence next draw. */
-    CHECK_DAVE_STATUS(d2_setalpha(dave, 0xff))
 }
 
 /*******************************************************************************************************************//**
@@ -308,21 +306,19 @@ VOID _gx_dave2d_drawing_complete_8bpp(GX_DISPLAY * display, GX_CANVAS * canvas)
 VOID _gx_dave2d_horizontal_line_8bpp(GX_DRAW_CONTEXT * context,
                                INT xstart, INT xend, INT ypos, INT width, GX_COLOR color)
 {
-    gx_display_list_flush(context -> gx_draw_context_display);
-
-    d2_device * dave = gx_dave2d_context_clip_set(context);
+    d2_device *dave = gx_dave2d_context_clip_set(context);
 
     CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_color))
     CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
     CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)color))
+
     CHECK_DAVE_STATUS(d2_renderbox(dave, (d2_point)(D2_FIX4((USHORT)xstart)),
                                          (d2_point)(D2_FIX4((USHORT)ypos)),
                                          (d2_width)(D2_FIX4((USHORT)(xend - xstart) + 1)),
                                          (d2_width)(D2_FIX4((USHORT)width))))
-    gx_display_list_open(context -> gx_draw_context_display);
 
+    /** Count the used display list size. */
+    gx_dave2d_display_list_count(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -343,14 +339,14 @@ VOID _gx_dave2d_vertical_line_8bpp(GX_DRAW_CONTEXT * context,
     d2_device * dave = gx_dave2d_context_clip_set(context);
     CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
     CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_color))
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
     CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)color))
     CHECK_DAVE_STATUS(d2_renderbox(dave, (d2_point)(D2_FIX4((USHORT)xpos)),
                                          (d2_point)(D2_FIX4((USHORT)ystart)),
                                          (d2_width)(D2_FIX4((USHORT)width)),
                                          (d2_width)(D2_FIX4((USHORT)((yend - ystart) + 1)))))
 
+    /** Count the used display list size. */
+    gx_dave2d_display_list_count(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -365,17 +361,21 @@ VOID _gx_dave2d_vertical_line_8bpp(GX_DRAW_CONTEXT * context,
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
 VOID _gx_dave2d_simple_line_draw_8bpp(GX_DRAW_CONTEXT * context, INT xstart, INT ystart, INT xend, INT yend)
 {
-    d2_device * dave = gx_dave2d_context_clip_set(context);
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
+    d2_device *dave = gx_dave2d_context_clip_set(context);
+    GX_BRUSH  *brush = &context->gx_draw_context_brush;
+
     CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
-    CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)(context -> gx_draw_context_brush.gx_brush_line_color)))
+    CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)(brush->gx_brush_line_color)))
+
     CHECK_DAVE_STATUS(d2_renderline(dave, (d2_point)(D2_FIX4((USHORT)xstart)),
                                           (d2_point)(D2_FIX4((USHORT)ystart)),
                                           (d2_point)(D2_FIX4((USHORT)xend)),
                                           (d2_point)(D2_FIX4((USHORT)yend)),
-                                          (d2_width)(D2_FIX4((USHORT)context -> gx_draw_context_brush.gx_brush_width)),
+                                          (d2_width)(D2_FIX4((USHORT)brush->gx_brush_width)),
                                           d2_le_exclude_none))
+
+     /** Count the used display list size. */
+     gx_dave2d_display_list_count(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -391,20 +391,31 @@ VOID _gx_dave2d_simple_line_draw_8bpp(GX_DRAW_CONTEXT * context, INT xstart, INT
 VOID _gx_dave2d_simple_wide_line_8bpp(GX_DRAW_CONTEXT * context, INT xstart, INT ystart,
                                 INT xend, INT yend)
 {
+    d2_device *dave = gx_dave2d_context_clip_set(context);
+    GX_BRUSH  *brush = &context->gx_draw_context_brush;
 
-    d2_device * dave = gx_dave2d_context_clip_set(context);
-
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
     CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
-    CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)(context -> gx_draw_context_brush.gx_brush_line_color)))
+    CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)(brush->gx_brush_line_color)))
+
+    /** Set the lineend style based on brush style. */
+    if(brush->gx_brush_style & GX_BRUSH_ROUND)
+    {
+        CHECK_DAVE_STATUS(d2_setlinecap(dave, d2_lc_round))
+    }
+    else
+    {
+        CHECK_DAVE_STATUS(d2_setlinecap(dave, d2_lc_butt))
+    }
+
     CHECK_DAVE_STATUS(d2_renderline(dave, (d2_point)(D2_FIX4((USHORT)xstart)),
                                           (d2_point)(D2_FIX4((USHORT)ystart)),
                                           (d2_point)(D2_FIX4((USHORT)xend)),
                                           (d2_point)(D2_FIX4((USHORT)yend)),
-                                          (d2_width)(D2_FIX4((USHORT)context -> gx_draw_context_brush.gx_brush_width)),
+                                          (d2_width)(D2_FIX4((USHORT)brush->gx_brush_width)),
                                           d2_le_exclude_none))
 
+    /** Count the used display list size. */
+    gx_dave2d_display_list_count(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -418,20 +429,14 @@ VOID _gx_dave2d_simple_wide_line_8bpp(GX_DRAW_CONTEXT * context, INT xstart, INT
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
 VOID _gx_dave2d_horizontal_pattern_line_draw_8bpp(GX_DRAW_CONTEXT * context, INT xstart, INT xend, INT ypos)
 {
-    d2_device * dave = gx_dave2d_context_clip_set(context);
+    /** Flush D/AVE 2D display list first to insure order of operation. */
+    gx_display_list_flush(context->gx_draw_context_display);
 
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
-    CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
-    CHECK_DAVE_STATUS(d2_setpatternsize(dave, 32))
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
-    CHECK_DAVE_STATUS(d2_setpattern(dave, context->gx_draw_context_brush.gx_brush_line_pattern))
-    CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)(context -> gx_draw_context_brush.gx_brush_line_color)))
-    CHECK_DAVE_STATUS(d2_renderline(dave, (d2_point)(D2_FIX4((USHORT)xstart)),
-                                          (d2_point)(D2_FIX4((USHORT)ypos)),
-                                          (d2_point)(D2_FIX4((USHORT)xend)),
-                                          (d2_point)(D2_FIX4((USHORT)ypos)),
-                                          (d2_width)(D2_FIX4((USHORT)context -> gx_draw_context_brush.gx_brush_width)),
-                                          d2_le_exclude_none))
+    /** Call GUIX 8bpp horizontal pattern line draw function. */
+    _gx_display_driver_8bpp_horizontal_pattern_line_draw(context, xstart, xend, ypos);
+
+    /** Open next display list before we go. */
+    gx_display_list_open(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -445,20 +450,14 @@ VOID _gx_dave2d_horizontal_pattern_line_draw_8bpp(GX_DRAW_CONTEXT * context, INT
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
 VOID _gx_dave2d_vertical_pattern_line_draw_8bpp(GX_DRAW_CONTEXT * context, INT ystart, INT yend, INT xpos)
 {
-    d2_device * dave = gx_dave2d_context_clip_set(context);
+    /** Flush D/AVE 2D display list first to insure order of operation. */
+    gx_display_list_flush(context->gx_draw_context_display);
 
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
-    CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
-    CHECK_DAVE_STATUS(d2_setpatternsize(dave, 32))
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
-    CHECK_DAVE_STATUS(d2_setpattern(dave, context->gx_draw_context_brush.gx_brush_line_pattern))
-    CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)(context -> gx_draw_context_brush.gx_brush_line_color)))
-    CHECK_DAVE_STATUS(d2_renderline(dave, (d2_point)(D2_FIX4((USHORT)xpos)),
-                                          (d2_point)(D2_FIX4((USHORT)ystart)),
-                                          (d2_point)(D2_FIX4((USHORT)xpos)),
-                                          (d2_point)(D2_FIX4((USHORT)yend)),
-                                          (d2_width)(D2_FIX4((USHORT)context -> gx_draw_context_brush.gx_brush_width)),
-                                          d2_le_exclude_none))
+    /** Call GUIX 8bpp horizontal vertical line draw function. */
+    _gx_display_driver_8bpp_vertical_pattern_line_draw(context, ystart, yend, xpos);
+
+    /** Open next display list before we go. */
+    gx_display_list_open(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -472,22 +471,34 @@ VOID _gx_dave2d_vertical_pattern_line_draw_8bpp(GX_DRAW_CONTEXT * context, INT y
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
 VOID _gx_dave2d_pixelmap_draw_8bpp(GX_DRAW_CONTEXT * context, INT xpos, INT ypos, GX_PIXELMAP * pixelmap)
 {
+    /** If Pixelmap is transparent. */
+    if(pixelmap->gx_pixelmap_flags & GX_PIXELMAP_TRANSPARENT)
+    {
+        /** Flush D/AVE 2D display list first to insure order of operation. */
+        gx_display_list_flush(context->gx_draw_context_display);
+
+        /** Call GUIX 8bpp pixelmap draw function. */
+        _gx_display_driver_8bpp_pixelmap_draw(context, xpos, ypos, pixelmap);
+
+        /** Open next display list before we go. */
+        gx_display_list_open(context->gx_draw_context_display);
+
+        return;
+    }
     d2_u32 mode = d2_mode_alpha8;
-    gx_display_list_flush(context -> gx_draw_context_display);
 
     if (pixelmap -> gx_pixelmap_flags & GX_PIXELMAP_COMPRESSED)
     {
         mode |= d2_mode_rle;
     }
 
-    d2_device * dave = gx_dave2d_context_clip_set(context);
+    d2_device *dave = gx_dave2d_context_clip_set(context);
 
-    d2_setalphablendmode(dave,d2_bm_one, d2_bm_zero);
-    d2_setalpha(dave, 0xff);
+    CHECK_DAVE_STATUS(d2_setalpha(dave, 0xff))
 
     CHECK_DAVE_STATUS(d2_setblitsrc(dave, (void *)pixelmap -> gx_pixelmap_data,
-                           pixelmap -> gx_pixelmap_width, pixelmap -> gx_pixelmap_width,
-                           pixelmap -> gx_pixelmap_height, mode))
+                                    pixelmap -> gx_pixelmap_width, pixelmap -> gx_pixelmap_width,
+                                    pixelmap -> gx_pixelmap_height, mode))
 
     /*LDRA_INSPECTED 96 S D/AVE 2D uses mixed mode arithmetic for the macro d2_bf_no_blitctxbackup. */
     mode = d2_bf_no_blitctxbackup;
@@ -496,16 +507,18 @@ VOID _gx_dave2d_pixelmap_draw_8bpp(GX_DRAW_CONTEXT * context, INT xpos, INT ypos
     mode |= d2_bf_usealpha;
 
     CHECK_DAVE_STATUS(d2_blitcopy(dave,
-                         pixelmap -> gx_pixelmap_width,
-                         pixelmap -> gx_pixelmap_height,
-                         0,
-                         0,
-                         (d2_point)(D2_FIX4((USHORT)pixelmap -> gx_pixelmap_width)),
-                         (d2_point)(D2_FIX4((USHORT)pixelmap -> gx_pixelmap_height)),
-                         (d2_point)(D2_FIX4((USHORT)xpos)),
-                         (d2_point)(D2_FIX4((USHORT)ypos)),
-                         mode))
-    gx_display_list_open(context -> gx_draw_context_display);
+                                  pixelmap -> gx_pixelmap_width,
+                                  pixelmap -> gx_pixelmap_height,
+                                  0,
+                                  0,
+                                  (d2_point)(D2_FIX4((USHORT)pixelmap -> gx_pixelmap_width)),
+                                  (d2_point)(D2_FIX4((USHORT)pixelmap -> gx_pixelmap_height)),
+                                  (d2_point)(D2_FIX4((USHORT)xpos)),
+                                  (d2_point)(D2_FIX4((USHORT)ypos)),
+                                  mode))
+
+    /** Count the used display list size. */
+    gx_dave2d_display_list_count(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -519,24 +532,18 @@ VOID _gx_dave2d_pixelmap_draw_8bpp(GX_DRAW_CONTEXT * context, INT xpos, INT ypos
 VOID _gx_dave2d_polygon_draw_8bpp(GX_DRAW_CONTEXT * context, GX_POINT * vertex, INT num)
 {
     INT loop;
-    INT index;
+    INT index = 0;
     GX_VALUE val;
     d2_point data[MAX_POLYGON_VERTICES * 2] = {0};
     GX_BRUSH *brush = &context->gx_draw_context_brush;
-    d2_color brush_color = brush->gx_brush_line_color;
-    UINT temp_style = 0;
 
-    /** Return to caller if the polygon is filled, the outline has already been drawn. */
-    if (brush->gx_brush_style & ((UINT)GX_BRUSH_SOLID_FILL|(UINT)GX_BRUSH_PIXELMAP_FILL))
+    /** Return to caller if brush width is 0. */
+    if (brush->gx_brush_width < 1)
     {
-        temp_style = brush->gx_brush_style;
-        brush->gx_brush_style = (UINT)(brush->gx_brush_style
-                                                & (UINT)(~((UINT)GX_BRUSH_SOLID_FILL|(UINT)GX_BRUSH_PIXELMAP_FILL)));
+        return;
     }
 
     /** Convert incoming point data to d2_point type. */
-    gx_display_list_flush(context -> gx_draw_context_display);
-    index = 0;
     for (loop = 0; loop < num; loop++)
     {
         val = vertex[loop].gx_point_x;
@@ -545,17 +552,12 @@ VOID _gx_dave2d_polygon_draw_8bpp(GX_DRAW_CONTEXT * context, GX_POINT * vertex, 
         data[index++] = (d2_point)(D2_FIX4((USHORT)val));
     }
 
-    d2_device * dave = gx_dave2d_context_clip_set(context);
+    d2_device *dave = gx_dave2d_context_clip_set(context);
 
-    /** Make sure anti-aliasing is off. */
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave,0))
     CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_outline))
     CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_color))
     CHECK_DAVE_STATUS(d2_outlinewidth(dave, (d2_width)(D2_FIX4((USHORT)brush->gx_brush_width))))
-
-    CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)brush_color))
-
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
+    CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)brush->gx_brush_line_color))
 
     if (brush->gx_brush_style & GX_BRUSH_ROUND)
     {
@@ -568,11 +570,8 @@ VOID _gx_dave2d_polygon_draw_8bpp(GX_DRAW_CONTEXT * context, GX_POINT * vertex, 
 
     CHECK_DAVE_STATUS(d2_renderpolygon(dave, (d2_point *)data, (d2_u32)num, 0))
 
-    if(temp_style != 0U)
-    {
-        brush->gx_brush_style = temp_style ;
-    }
-    gx_display_list_open(context -> gx_draw_context_display);
+    /** Count the used display list size. */
+    gx_dave2d_display_list_count(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -585,17 +584,27 @@ VOID _gx_dave2d_polygon_draw_8bpp(GX_DRAW_CONTEXT * context, GX_POINT * vertex, 
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
 VOID _gx_dave2d_polygon_fill_8bpp(GX_DRAW_CONTEXT * context, GX_POINT * vertex, INT num)
 {
-    gx_display_list_flush(context -> gx_draw_context_display);
+    /** Check if polygon to be render is convex polygon. */
+    if(!gx_dave2d_convex_polygon_test(vertex, num))
+    {
+        /** Flush D/AVE 2D display list first to insure order of operation. */
+        gx_display_list_flush(context->gx_draw_context_display);
+
+        /** Open next display list before we go. */
+        gx_display_list_open(context->gx_draw_context_display);
+
+        _gx_display_driver_generic_polygon_fill(context, vertex, num);
+
+        return;
+    }
 
     INT loop;
-    INT index;
+    INT index = 0;
     GX_VALUE val;
     d2_point data[MAX_POLYGON_VERTICES * 2] = { 0 };
     GX_BRUSH * brush = &context->gx_draw_context_brush;
-    GX_COLOR brush_color = brush->gx_brush_fill_color;
 
     /** Convert incoming point data to d2_point type. */
-    index = 0;
     for (loop = 0; loop < num; loop++)
     {
         val = vertex[loop].gx_point_x;
@@ -604,20 +613,14 @@ VOID _gx_dave2d_polygon_fill_8bpp(GX_DRAW_CONTEXT * context, GX_POINT * vertex, 
         data[index++] = (d2_point)(D2_FIX4((USHORT)val));
     }
 
-    d2_device * dave = gx_dave2d_context_clip_set(context);
-    gx_display_list_flush(context -> gx_draw_context_display);
-
-    GX_VALUE temp_width = brush->gx_brush_width;
-    brush->gx_brush_width = 0;
+    d2_device *dave = gx_dave2d_context_clip_set(context);
 
     CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
-
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave,0))
-    CHECK_DAVE_STATUS(d2_setalpha(dave, 0xff))
 
     if (brush->gx_brush_style & GX_BRUSH_PIXELMAP_FILL)
     {
         CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_texture))
+        CHECK_DAVE_STATUS(d2_setalpha(dave, 0xff))
         gx_dave2d_set_texture_8bpp(context,
                                    dave,
                                    context->gx_draw_context_clip->gx_rectangle_left,
@@ -627,13 +630,13 @@ VOID _gx_dave2d_polygon_fill_8bpp(GX_DRAW_CONTEXT * context, GX_POINT * vertex, 
     else
     {
         CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_color))
-        CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)brush_color))
+        CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)brush->gx_brush_fill_color))
     }
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
+
     CHECK_DAVE_STATUS(d2_renderpolygon(dave, (d2_point *)data, (d2_u32)num, 0))
 
-    brush->gx_brush_width = temp_width;
-    gx_display_list_open(context -> gx_draw_context_display);
+    /** Count the used display list size. */
+    gx_dave2d_display_list_count(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -736,19 +739,26 @@ VOID _gx_dave2d_glyph_4bit_draw_8bpp(GX_DRAW_CONTEXT * context, GX_RECTANGLE * d
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
 VOID _gx_dave2d_circle_draw_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycenter, UINT r)
 {
-    GX_BRUSH  * brush = &context->gx_draw_context_brush;
-    d2_device * dave;
+    GX_BRUSH * brush = &context->gx_draw_context_brush;
 
-    /** Return to caller if the polygon is filled, the outline has already been drawn. */
-    if (brush->gx_brush_style & ((UINT)GX_BRUSH_SOLID_FILL|(UINT)GX_BRUSH_PIXELMAP_FILL))
+    /** Return to caller if brush width is 0. */
+    if (brush->gx_brush_width < 1)
     {
         return;
     }
 
-    dave = gx_dave2d_context_clip_set(context);
+    if (r < (UINT)((brush->gx_brush_width + 1) / 2))
+    {
+        r = 0U;
+    }
+    else
+    {
+        r = (UINT)(r - (UINT)((brush->gx_brush_width + 1) / 2));
+    }
+
+    d2_device *dave = gx_dave2d_context_clip_set(context);
 
     /** Make sure anti-aliasing is off. */
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
     CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_outline))
     CHECK_DAVE_STATUS(d2_outlinewidth(dave, (d2_width)(D2_FIX4((USHORT)brush->gx_brush_width))))
     CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_color))
@@ -759,6 +769,8 @@ VOID _gx_dave2d_circle_draw_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT yce
                                             (d2_width)(D2_FIX4((USHORT)r)),
                                             0))
 
+    /** Count the used display list size. */
+    gx_dave2d_display_list_count(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -772,41 +784,35 @@ VOID _gx_dave2d_circle_draw_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT yce
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
 VOID _gx_dave2d_circle_fill_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycenter, UINT r)
 {
-    GX_BRUSH  * brush = &context->gx_draw_context_brush;
-    GX_COLOR    brush_color = brush->gx_brush_fill_color;
+    GX_BRUSH  *brush = &context->gx_draw_context_brush;
+    d2_device *dave = gx_dave2d_context_clip_set(context);
 
-    d2_device * dave = gx_dave2d_context_clip_set(context);
-
-    /** Make sure anti-aliasing is off. */
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
-
-    CHECK_DAVE_STATUS(d2_setalpha(dave, 0xff))
-
-    GX_VALUE temp_width = brush->gx_brush_width;
-    brush->gx_brush_width = 0;
     CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
 
     if (brush->gx_brush_style & GX_BRUSH_PIXELMAP_FILL)
     {
         CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_texture))
+        CHECK_DAVE_STATUS(d2_setalpha(dave, GX_ALPHA_VALUE_OPAQUE))
+
         gx_dave2d_set_texture_8bpp(context,
                                    dave,
-                                   context->gx_draw_context_clip->gx_rectangle_left,
-                                   context->gx_draw_context_clip->gx_rectangle_top,
+                                   xcenter - (INT)r,
+                                   ycenter - (INT)r,
                                    brush->gx_brush_pixelmap);
     }
     else
     {
         CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_color))
-        CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)brush_color))
+        CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)brush->gx_brush_fill_color))
     }
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
+
     CHECK_DAVE_STATUS(d2_rendercircle(dave, (d2_point)(D2_FIX4((USHORT)xcenter)),
                                             (d2_point)(D2_FIX4((USHORT)ycenter)),
                                             (d2_width)(D2_FIX4((USHORT)r)),
                                             0))
 
-    brush->gx_brush_width = temp_width;
+    /** Count the used display list size. */
+    gx_dave2d_display_list_count(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -829,23 +835,23 @@ VOID _gx_dave2d_arc_draw_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycente
     INT         sin2;
     INT         cos2;
     d2_u32      flags;
-    UINT        temp_style = 0;
 
-    if (brush->gx_brush_style & ((UINT)GX_BRUSH_SOLID_FILL|(UINT)GX_BRUSH_PIXELMAP_FILL))
+    if(brush->gx_brush_width < 1)
     {
-        temp_style = brush->gx_brush_style;
-        brush->gx_brush_style = (UINT)(brush->gx_brush_style &
-                                                    (UINT)(~((UINT)GX_BRUSH_SOLID_FILL|(UINT)GX_BRUSH_PIXELMAP_FILL)));
+        return;
     }
 
-    INT s_angle =  - start_angle;
-    INT e_angle =  - end_angle;
+    INT s_angle;
+    INT e_angle;
 
-    sin1 = gx_utility_math_sin((s_angle - 90) * 256);
-    cos1 = gx_utility_math_cos((s_angle - 90) * 256);
+    s_angle=  - start_angle;
+    e_angle=  - end_angle;
 
-    sin2 = gx_utility_math_sin((e_angle + 90) * 256);
-    cos2 = gx_utility_math_cos((e_angle + 90) * 256);
+    sin1 = (INT) _gx_utility_math_sin((GX_FIXED_VAL)((UINT) (s_angle - 90) << GX_FIXED_VAL_SHIFT));
+    cos1 = (INT) _gx_utility_math_cos((GX_FIXED_VAL)((UINT) (s_angle - 90) << GX_FIXED_VAL_SHIFT));
+
+    sin2 = (INT) _gx_utility_math_sin((GX_FIXED_VAL)((UINT) (e_angle + 90) << GX_FIXED_VAL_SHIFT));
+    cos2 = (INT) _gx_utility_math_cos((GX_FIXED_VAL)((UINT) (e_angle + 90) << GX_FIXED_VAL_SHIFT));
 
     /** Set d2_wf_concave flag if the pie object to draw is concave shape. */
     if (((s_angle - e_angle) > 180) || ((s_angle - e_angle) < 0))
@@ -858,26 +864,65 @@ VOID _gx_dave2d_arc_draw_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycente
         flags = 0;
     }
 
-    d2_device * dave = gx_dave2d_context_clip_set(context);
+    d2_device *dave = gx_dave2d_context_clip_set(context);
 
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
-    CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_color))
     CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_outline))
-    CHECK_DAVE_STATUS(d2_outlinewidth(dave, (d2_width)(D2_FIX4((USHORT)brush->gx_brush_width))))
+    CHECK_DAVE_STATUS(d2_outlinewidth(dave, (d2_width)((D2_FIX4((USHORT)brush->gx_brush_width)) >> 1)))
+    CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_color))
     CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)(brush->gx_brush_line_color)))
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
+
     CHECK_DAVE_STATUS(d2_renderwedge(dave, (d2_point)(D2_FIX4((USHORT)xcenter)),
                                            (d2_point)(D2_FIX4((USHORT)ycenter)),
                                            (d2_width)(D2_FIX4((USHORT)r)),
                                            0,
-                                           (d2_s32)((UINT)cos1 << 8),
-                                           (d2_s32)((UINT)sin1 << 8),
-                                           (d2_s32)((UINT)cos2 << 8),
-                                           (d2_s32)((UINT)sin2 << 8),
+                                           (d2_s32)((UINT)cos1 << 6),
+                                           (d2_s32)((UINT)sin1 << 6),
+                                           (d2_s32)((UINT)cos2 << 6),
+                                           (d2_s32)((UINT)sin2 << 6),
                                            flags))
-    if(0 != temp_style)
+
+    /** Count the used display list size. */
+    gx_dave2d_display_list_count(context->gx_draw_context_display);
+
+    /** Check if line connection style is circle segment. */
+    if (brush -> gx_brush_style & GX_BRUSH_ROUND)
     {
-        brush->gx_brush_style = temp_style;
+        UINT brush_width = (UINT)brush->gx_brush_width;
+        GX_POINT  startp = {0};
+        GX_POINT  endp = {0};
+
+        /** Set a rendering mode to solid. */
+        CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
+
+        r = (UINT)(r - (UINT)(brush_width >> 1));
+
+        /** Get the point on circle with specified angle and radius. */
+        _gx_utility_circle_point_get(xcenter, ycenter, r, start_angle, &startp);
+        _gx_utility_circle_point_get(xcenter, ycenter, r + (UINT)brush_width, start_angle, &endp);
+
+        /** Render a circle. */
+        CHECK_DAVE_STATUS(d2_rendercircle(dave,
+                                          (d2_point)(D2_FIX4((USHORT) (startp.gx_point_x + endp.gx_point_x)) >> 1),
+                                          (d2_point)(D2_FIX4((USHORT) (startp.gx_point_y + endp.gx_point_y)) >> 1),
+                                          (d2_width)(D2_FIX4(brush_width) >> 1),
+                                          0))
+
+        /** Count the used display list size. */
+        gx_dave2d_display_list_count(context->gx_draw_context_display);
+
+        /** Get the point on circle with specified angle and radius. */
+        _gx_utility_circle_point_get(xcenter, ycenter, r, end_angle, &startp);
+        _gx_utility_circle_point_get(xcenter, ycenter, r + (UINT)brush_width, end_angle, &endp);
+
+        /** Render a circle. */
+        CHECK_DAVE_STATUS(d2_rendercircle(dave,
+                                          (d2_point)(D2_FIX4((USHORT) (startp.gx_point_x + endp.gx_point_x)) >> 1),
+                                          (d2_point)(D2_FIX4((USHORT) (startp.gx_point_y + endp.gx_point_y)) >> 1),
+                                          (d2_width)(D2_FIX4(brush_width) >> 1),
+                                          0))
+
+        /** Count the used display list size. */
+        gx_dave2d_display_list_count(context->gx_draw_context_display);
     }
 }
 
@@ -895,16 +940,14 @@ VOID _gx_dave2d_arc_draw_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycente
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
 VOID _gx_dave2d_arc_fill_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycenter, UINT r, INT start_angle, INT end_angle)
 {
-    /** D/AVE 2D doesn't support chord (filled arc), so approximate with pie. */
-    gx_display_list_flush(context -> gx_draw_context_display);
+    /** Flush D/AVE 2D display list first to insure order of operation. */
+    gx_display_list_flush(context->gx_draw_context_display);
 
-    GX_BRUSH *brush = &context->gx_draw_context_brush;
-    GX_COLOR temp_color = brush->gx_brush_line_color;
-    brush->gx_brush_line_color = brush->gx_brush_fill_color;
+    /** Open next display list before we go. */
+    gx_display_list_open(context->gx_draw_context_display);
 
-    _gx_display_driver_generic_arc_fill(context, xcenter, ycenter, r,start_angle, end_angle);
-    brush->gx_brush_line_color = temp_color;
-    gx_display_list_open(context -> gx_draw_context_display);
+    /** Call the GUIX generic arc fill routine. */
+    _gx_display_driver_generic_arc_fill(context, xcenter, ycenter, r, start_angle, end_angle);
 }
 
 /*******************************************************************************************************************//**
@@ -918,7 +961,8 @@ VOID _gx_dave2d_arc_fill_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycente
  * @param   end_angle[in]      End angle in degree
  **********************************************************************************************************************/
 /*LDRA_INSPECTED 219 S GUIX defined functions start with underscore. */
-VOID _gx_dave2d_pie_fill_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycenter, UINT r, INT start_angle, INT end_angle)
+VOID _gx_dave2d_pie_fill_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycenter, UINT r,
+                              INT start_angle, INT end_angle)
 {
     GX_BRUSH  * brush = &context->gx_draw_context_brush;
     INT         sin1;
@@ -932,11 +976,11 @@ VOID _gx_dave2d_pie_fill_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycente
     INT s_angle =  - start_angle;
     INT e_angle =  - end_angle;
 
-    sin1 = gx_utility_math_sin((s_angle - 90) * 256);
-    cos1 = gx_utility_math_cos((s_angle - 90) * 256);
+    sin1 = (INT) _gx_utility_math_sin((GX_FIXED_VAL)((UINT) (s_angle - 90) << GX_FIXED_VAL_SHIFT));
+    cos1 = (INT) _gx_utility_math_cos((GX_FIXED_VAL)((UINT) (s_angle - 90) << GX_FIXED_VAL_SHIFT));
 
-    sin2 = gx_utility_math_sin((e_angle + 90) * 256);
-    cos2 = gx_utility_math_cos((e_angle + 90) * 256);
+    sin2 = (INT) _gx_utility_math_sin((GX_FIXED_VAL)((UINT) (e_angle + 90) << GX_FIXED_VAL_SHIFT));
+    cos2 = (INT) _gx_utility_math_cos((GX_FIXED_VAL)((UINT) (e_angle + 90) << GX_FIXED_VAL_SHIFT));
 
     /** Set d2_wf_concave flag if the pie object to draw is concave shape. */
     if (((s_angle - e_angle) > 180) || ((s_angle - e_angle) < 0))
@@ -949,21 +993,16 @@ VOID _gx_dave2d_pie_fill_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycente
         flags = 0;
     }
 
-    CHECK_DAVE_STATUS(d2_setalpha(dave, 0xff))
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0))
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
-
-    GX_VALUE temp_width = brush->gx_brush_width;
-    brush->gx_brush_width = 0;
     CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
 
     if (brush->gx_brush_style & GX_BRUSH_PIXELMAP_FILL)
     {
         CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_texture))
+        CHECK_DAVE_STATUS(d2_setalpha(dave, GX_ALPHA_VALUE_OPAQUE))
         gx_dave2d_set_texture_8bpp(context,
                                    dave,
-                                   context->gx_draw_context_clip->gx_rectangle_left,
-                                   context->gx_draw_context_clip->gx_rectangle_top,
+                                   xcenter - (INT)r,
+                                   ycenter - (INT)r,
                                    brush->gx_brush_pixelmap);
     }
     else
@@ -971,17 +1010,19 @@ VOID _gx_dave2d_pie_fill_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT ycente
         CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_color))
         CHECK_DAVE_STATUS(d2_setalpha(dave, (d2_alpha)(brush_color)))
     }
-    CHECK_DAVE_STATUS(d2_setblendmode(dave, d2_bm_zero, d2_bm_zero))
+
     CHECK_DAVE_STATUS(d2_renderwedge(dave, (d2_point)(D2_FIX4((USHORT)xcenter)),
                                            (d2_point)(D2_FIX4((USHORT)ycenter)),
-                                           (d2_point)(D2_FIX4((USHORT)r)),
+                                           (d2_point)(D2_FIX4((USHORT)(r + 1))),
                                            0,
-                                           (d2_s32)((UINT)cos1 << 8),
-                                           (d2_s32)((UINT)sin1 << 8),
-                                           (d2_s32)((UINT)cos2 << 8),
-                                           (d2_s32)((UINT)sin2 << 8),
+                                           (d2_s32)((UINT)cos1 << 6),
+                                           (d2_s32)((UINT)sin1 << 6),
+                                           (d2_s32)((UINT)cos2 << 6),
+                                           (d2_s32)((UINT)sin2 << 6),
                                            flags))
-    brush->gx_brush_width = temp_width;
+
+    /** Count the used display list size. */
+    gx_dave2d_display_list_count(context->gx_draw_context_display);
 }
 
 /*******************************************************************************************************************//**
@@ -1046,11 +1087,11 @@ VOID _gx_dave2d_ellipse_fill_8bpp(GX_DRAW_CONTEXT * context, INT xcenter, INT yc
     /** Flush D/AVE 2D display list first to insure order of operation. */
     gx_display_list_flush(context -> gx_draw_context_display);
 
-    /** Call the GUIX generic ellipse fill routine. */
-    _gx_display_driver_generic_ellipse_fill(context, xcenter, ycenter, a, b);
-
     /** Open next display list before we go. */
     gx_display_list_open(context -> gx_draw_context_display);
+
+    /** Call the GUIX generic ellipse fill routine. */
+    _gx_display_driver_generic_ellipse_fill(context, xcenter, ycenter, a, b);
 }
 #endif  /* is GUIX arc drawing support enabled? */
 
@@ -1220,6 +1261,8 @@ static VOID gx_dave2d_set_texture_8bpp(GX_DRAW_CONTEXT * context, d2_device * da
             map->gx_pixelmap_height,
             format))
 
+    /** Set texture mode. */
+    CHECK_DAVE_STATUS(d2_settexturemode(dave, d2_tm_wrapu|d2_tm_wrapv))
     CHECK_DAVE_STATUS(d2_settextureoperation(dave, d2_to_copy, d2_to_zero, d2_to_zero, d2_to_zero));
     CHECK_DAVE_STATUS(d2_settexelcenter(dave, 0, 0))
     CHECK_DAVE_STATUS(d2_settexturemapping(dave,
@@ -1261,13 +1304,10 @@ static VOID gx_dave2d_rotate_canvas_to_working_8bpp(GX_CANVAS * canvas, GX_RECTA
 
     /** Align copy region on 32-bit boundary. */
     param.copy_clip.gx_rectangle_left   = (GX_VALUE)((USHORT)param.copy_clip.gx_rectangle_left & 0xfffcU);
-    param.copy_clip.gx_rectangle_top    = (GX_VALUE)((USHORT)param.copy_clip.gx_rectangle_top  & 0xfffcU);
     param.copy_clip.gx_rectangle_right  = (GX_VALUE)((USHORT)param.copy_clip.gx_rectangle_right  | 3U);
-    param.copy_clip.gx_rectangle_bottom = (GX_VALUE)((USHORT)param.copy_clip.gx_rectangle_bottom | 3U);
     mode = d2_mode_alpha8;
 
-    d2_setalphablendmode(dave,d2_bm_one,d2_bm_zero);
-    d2_setalpha(dave,0xff);
+    CHECK_DAVE_STATUS(d2_setalpha(dave,0xff))
 
     /** Offset canvas within frame buffer. */
     _gx_utility_rectangle_shift(&param.copy_clip,
@@ -1284,7 +1324,7 @@ static VOID gx_dave2d_rotate_canvas_to_working_8bpp(GX_CANVAS * canvas, GX_RECTA
     }
 
     pGetRow = (uint8_t *) canvas->gx_canvas_memory;
-    pGetRow = pGetRow + 
+    pGetRow = pGetRow +
         (INT)((canvas->gx_canvas_display_offset_y + param.copy_clip.gx_rectangle_top) * display->gx_display_width);
     pGetRow = pGetRow + (INT)(canvas->gx_canvas_display_offset_x + param.copy_clip.gx_rectangle_left);
 
@@ -1297,13 +1337,11 @@ static VOID gx_dave2d_rotate_canvas_to_working_8bpp(GX_CANVAS * canvas, GX_RECTA
                                      (d2_s32)param.x_resolution,
                                      (d2_u32)param.x_resolution,
                                      (d2_u32)param.y_resolution,
-                                     (d2_s32)mode));
+                                     (d2_s32)mode))
 
-    CHECK_DAVE_STATUS(d2_cliprect(dave, param.xmin, param.ymin, param.xmax, param.ymax));
-
-    CHECK_DAVE_STATUS(d2_setantialiasing(dave, 0));
-    CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid));
-    CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_texture));
+    CHECK_DAVE_STATUS(d2_cliprect(dave, param.xmin, param.ymin, param.xmax, param.ymax))
+    CHECK_DAVE_STATUS(d2_selectrendermode(dave, d2_rm_solid))
+    CHECK_DAVE_STATUS(d2_setfillmode(dave, d2_fm_texture))
 
     CHECK_DAVE_STATUS(d2_settexture(dave, pGetRow, display->gx_display_width, param.copy_width, param.copy_height, mode));
 
@@ -1324,6 +1362,9 @@ static VOID gx_dave2d_rotate_canvas_to_working_8bpp(GX_CANVAS * canvas, GX_RECTA
                         (d2_point)D2_FIX4((USHORT)param.ymin),
                         (d2_width)D2_FIX4((UINT)param.copy_width_rotated),
                         (d2_width)D2_FIX4((UINT)param.copy_height_rotated)));
+
+        /** Count the used display list size. */
+        gx_dave2d_display_list_count(canvas->gx_canvas_display);
     }
     else
     {
@@ -1336,6 +1377,9 @@ static VOID gx_dave2d_rotate_canvas_to_working_8bpp(GX_CANVAS * canvas, GX_RECTA
                             (d2_point)D2_FIX4((USHORT)param.ymin),
                             (d2_width)D2_FIX4(1U),
                             (d2_width)D2_FIX4((UINT)param.copy_height_rotated)));
+
+            /** Count the used display list size. */
+            gx_dave2d_display_list_count(canvas->gx_canvas_display);
         }
     }
 
@@ -1388,8 +1432,8 @@ static VOID gx_dave2d_copy_visible_to_working_8bpp(GX_CANVAS * canvas, GX_RECTAN
     pGetRow = (ULONG *) visible_frame;
     pPutRow = (ULONG *) working_frame;
 
-    d2_setalphablendmode(dave,d2_bm_one, d2_bm_zero);
-    d2_setalpha(dave,0xff);
+    CHECK_DAVE_STATUS(d2_setalphablendmode(dave,d2_bm_one, d2_bm_zero))
+    CHECK_DAVE_STATUS(d2_setalpha(dave,0xff))
 
     CHECK_DAVE_STATUS(d2_framebuffer(dave, pPutRow,
                       (d2_u32)(canvas -> gx_canvas_x_resolution), (d2_u32)(canvas -> gx_canvas_x_resolution),

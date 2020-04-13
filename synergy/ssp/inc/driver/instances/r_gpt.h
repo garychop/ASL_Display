@@ -52,7 +52,7 @@ SSP_HEADER
  * Macro definitions
  **********************************************************************************************************************/
 #define GPT_CODE_VERSION_MAJOR (1U)
-#define GPT_CODE_VERSION_MINOR (12U)
+#define GPT_CODE_VERSION_MINOR (13U)
 
 /***********************************************************************************************************************
  * Typedef definitions

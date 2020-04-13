@@ -121,6 +121,80 @@ const spi_cfg_t g_rspi_lcdc_cfg =
 /* Instance structure to use this module. */
 const spi_instance_t g_rspi_lcdc =
 { .p_ctrl = &g_rspi_lcdc_ctrl, .p_cfg = &g_rspi_lcdc_cfg, .p_api = &g_spi_on_sci };
+#if (BSP_IRQ_DISABLED) != BSP_IRQ_DISABLED
+#if !defined(SSP_SUPPRESS_ISR_g_transfer5) && !defined(SSP_SUPPRESS_ISR_DTCELC_EVENT_IIC0_RXI)
+#define DTC_ACTIVATION_SRC_ELC_EVENT_IIC0_RXI
+#if defined(DTC_ACTIVATION_SRC_ELC_EVENT_ELC_SOFTWARE_EVENT_0) && !defined(DTC_VECTOR_DEFINED_SOFTWARE_EVENT_0)
+SSP_VECTOR_DEFINE(elc_software_event_isr, ELC, SOFTWARE_EVENT_0);
+#define DTC_VECTOR_DEFINED_SOFTWARE_EVENT_0
+#endif
+#if defined(DTC_ACTIVATION_SRC_ELC_EVENT_ELC_SOFTWARE_EVENT_1) && !defined(DTC_VECTOR_DEFINED_SOFTWARE_EVENT_1)
+SSP_VECTOR_DEFINE(elc_software_event_isr, ELC, SOFTWARE_EVENT_1);
+#define DTC_VECTOR_DEFINED_SOFTWARE_EVENT_1
+#endif
+#endif
+#endif
+
+dtc_instance_ctrl_t g_transfer5_ctrl;
+transfer_info_t g_transfer5_info =
+{ .dest_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED,
+  .repeat_area = TRANSFER_REPEAT_AREA_DESTINATION,
+  .irq = TRANSFER_IRQ_END,
+  .chain_mode = TRANSFER_CHAIN_MODE_DISABLED,
+  .src_addr_mode = TRANSFER_ADDR_MODE_FIXED,
+  .size = TRANSFER_SIZE_1_BYTE,
+  .mode = TRANSFER_MODE_NORMAL,
+  .p_dest = (void *) NULL,
+  .p_src = (void const *) NULL,
+  .num_blocks = 0,
+  .length = 0, };
+const transfer_cfg_t g_transfer5_cfg =
+{ .p_info = &g_transfer5_info,
+  .activation_source = ELC_EVENT_IIC0_RXI,
+  .auto_enable = false,
+  .p_callback = NULL,
+  .p_context = &g_transfer5,
+  .irq_ipl = (BSP_IRQ_DISABLED) };
+/* Instance structure to use this module. */
+const transfer_instance_t g_transfer5 =
+{ .p_ctrl = &g_transfer5_ctrl, .p_cfg = &g_transfer5_cfg, .p_api = &g_transfer_on_dtc };
+#if (BSP_IRQ_DISABLED) != BSP_IRQ_DISABLED
+#if !defined(SSP_SUPPRESS_ISR_g_transfer4) && !defined(SSP_SUPPRESS_ISR_DTCELC_EVENT_IIC0_TXI)
+#define DTC_ACTIVATION_SRC_ELC_EVENT_IIC0_TXI
+#if defined(DTC_ACTIVATION_SRC_ELC_EVENT_ELC_SOFTWARE_EVENT_0) && !defined(DTC_VECTOR_DEFINED_SOFTWARE_EVENT_0)
+SSP_VECTOR_DEFINE(elc_software_event_isr, ELC, SOFTWARE_EVENT_0);
+#define DTC_VECTOR_DEFINED_SOFTWARE_EVENT_0
+#endif
+#if defined(DTC_ACTIVATION_SRC_ELC_EVENT_ELC_SOFTWARE_EVENT_1) && !defined(DTC_VECTOR_DEFINED_SOFTWARE_EVENT_1)
+SSP_VECTOR_DEFINE(elc_software_event_isr, ELC, SOFTWARE_EVENT_1);
+#define DTC_VECTOR_DEFINED_SOFTWARE_EVENT_1
+#endif
+#endif
+#endif
+
+dtc_instance_ctrl_t g_transfer4_ctrl;
+transfer_info_t g_transfer4_info =
+{ .dest_addr_mode = TRANSFER_ADDR_MODE_FIXED,
+  .repeat_area = TRANSFER_REPEAT_AREA_SOURCE,
+  .irq = TRANSFER_IRQ_END,
+  .chain_mode = TRANSFER_CHAIN_MODE_DISABLED,
+  .src_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED,
+  .size = TRANSFER_SIZE_1_BYTE,
+  .mode = TRANSFER_MODE_NORMAL,
+  .p_dest = (void *) NULL,
+  .p_src = (void const *) NULL,
+  .num_blocks = 0,
+  .length = 0, };
+const transfer_cfg_t g_transfer4_cfg =
+{ .p_info = &g_transfer4_info,
+  .activation_source = ELC_EVENT_IIC0_TXI,
+  .auto_enable = false,
+  .p_callback = NULL,
+  .p_context = &g_transfer4,
+  .irq_ipl = (BSP_IRQ_DISABLED) };
+/* Instance structure to use this module. */
+const transfer_instance_t g_transfer4 =
+{ .p_ctrl = &g_transfer4_ctrl, .p_cfg = &g_transfer4_cfg, .p_api = &g_transfer_on_dtc };
 #if !defined(SSP_SUPPRESS_ISR_g_i2c1) && !defined(SSP_SUPPRESS_ISR_IIC0)
 SSP_VECTOR_DEFINE_CHAN(iic_rxi_isr, IIC, RXI, 0);
 #endif
@@ -139,15 +213,15 @@ const riic_extended_cfg g_i2c1_extend =
 const i2c_cfg_t g_i2c1_cfg =
 { .channel = 0, .rate = I2C_RATE_STANDARD, .slave = 0x6f, .addr_mode = I2C_ADDR_MODE_7BIT, .sda_delay = 300,
 #define SYNERGY_NOT_DEFINED (1)            
-#if (SYNERGY_NOT_DEFINED == SYNERGY_NOT_DEFINED)
+#if (SYNERGY_NOT_DEFINED == g_transfer4)
   .p_transfer_tx = NULL,
 #else
-  .p_transfer_tx = &SYNERGY_NOT_DEFINED,
+  .p_transfer_tx = &g_transfer4,
 #endif
-#if (SYNERGY_NOT_DEFINED == SYNERGY_NOT_DEFINED)
+#if (SYNERGY_NOT_DEFINED == g_transfer5)
   .p_transfer_rx = NULL,
 #else
-  .p_transfer_rx = &SYNERGY_NOT_DEFINED,
+  .p_transfer_rx = &g_transfer5,
 #endif
 #undef SYNERGY_NOT_DEFINED	
   .p_callback = NULL,
@@ -209,7 +283,10 @@ const adc_cfg_t g_adc0_cfg =
   .scan_end_b_ipl = (BSP_IRQ_DISABLED),
   .calib_adc_skip = false,
   .voltage_ref = ADC_EXTERNAL_VOLTAGE,
-  .over_current = OVER_CURRENT_DETECTION_ENABLE, };
+  .over_current = OVER_CURRENT_DETECTION_ENABLE,
+  .pga0 = PGA_DISABLE,
+  .pga1 = PGA_DISABLE,
+  .pga2 = PGA_DISABLE, };
 const adc_channel_cfg_t g_adc0_channel_cfg =
 { .scan_mask = (uint32_t) (
         ((uint64_t) ADC_MASK_CHANNEL_0) | ((uint64_t) 0) | ((uint64_t) 0) | ((uint64_t) 0) | ((uint64_t) 0)

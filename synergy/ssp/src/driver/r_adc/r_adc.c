@@ -57,7 +57,6 @@ Includes   <System Includes> , "Project Includes"
 #define ADC_VARIANT_PGA_MASK (0x20U)
 #define ADC_VARIANT_PGA_SHIFT (5)
 
-
 /** Maximum number of units on any Synergy ADC. */
 #define ADC_MAX_UNITS                  (2)
 
@@ -142,7 +141,7 @@ static ssp_err_t r_adc_scan_cfg(adc_instance_ctrl_t     * const p_ctrl,
                                 adc_channel_cfg_t const * const p_cfg,
                                 uint32_t          const * const p_valid_channels);
 static ssp_err_t r_adc_sensor_sample_state_calculation(uint32_t  * const p_sample_states);
-static ssp_err_t r_adc_unused_register_handling(adc_instance_ctrl_t * const p_ctrl);
+void r_adc_open_configure_pga_settings(adc_instance_ctrl_t * const p_ctrl,adc_cfg_t     const * const p_cfg);
 static ssp_err_t r_adc_retrieve_temp_sensor_type(adc_instance_ctrl_t * const p_ctrl);
 void adc_scan_end_b_isr(void);
 void adc_scan_end_isr(void);
@@ -261,6 +260,15 @@ ssp_err_t R_ADC_Open(adc_ctrl_t * p_api_ctrl,  adc_cfg_t const * const p_cfg)
     /** Store the over_current into the control structure */
     p_ctrl->over_current = p_cfg->over_current;
 
+    /** pga0 setting*/
+    p_ctrl->pga0 =  p_cfg->pga0;
+
+    /** pga1 setting*/
+    p_ctrl->pga1 =  p_cfg->pga1;
+
+    /** pga2 setting*/
+    p_ctrl->pga2 =  p_cfg->pga2;
+
     /** Confirm the requested unit exists on this MCU and record available channels. */
     ssp_feature_t ssp_feature = {{(ssp_ip_t) 0U}};
     ssp_feature.channel = p_cfg->unit;
@@ -298,8 +306,8 @@ ssp_err_t R_ADC_Open(adc_ctrl_t * p_api_ctrl,  adc_cfg_t const * const p_cfg)
         r_adc_close_sub(p_ctrl->p_reg, p_ctrl);
         return err;
     }
-    /** Set unused registers to known state (Disable ADC PGA on MCUs that have it) */
-    r_adc_unused_register_handling(p_ctrl);
+    /** Configure PGA for the supported MCU's */
+    r_adc_open_configure_pga_settings(p_ctrl,p_cfg);
     /** Invalid scan mask (initialized for later). */
     p_ctrl->scan_mask = 0U;
     /** Mark driver as opened by initializing it to "RADC" in its ASCII equivalent for this unit. */
@@ -993,25 +1001,22 @@ static ssp_err_t r_adc_fmi_query(adc_instance_ctrl_t * const p_ctrl,
     return SSP_SUCCESS;
 }
 /*******************************************************************************************************************//**
- * @brief   r_adc_unused_register_handling
+ * @brief   Handle PGA configuration for the supported MCU's
  *
- * This function disables the unused ADC PGA feature (on MCUs where it is available) since the feature is enabled
- * out of RESET on some MCUs and disabled on others and affect the operation of the normal ADC channels that are
- * multiplexed with the PGA.
+ * This function enables/disables the ADC PGA feature on supported MCUs.
  *
  * @param[in]  p_ctrl          :  ADC control structure.
- * @retval  SSP_SUCCESS           PGA disabled on MCUs that have PGA feature
 ***********************************************************************************************************************/
-static ssp_err_t r_adc_unused_register_handling(adc_instance_ctrl_t * const p_ctrl)
+void r_adc_open_configure_pga_settings(adc_instance_ctrl_t * const p_ctrl,adc_cfg_t     const * const p_cfg)
 {
-
+    /** If PGA is supported, configures corresponding register */
     if (1U == p_ctrl->pga_available)
     {
-        HW_ADC_ADPGADCR0_Set(p_ctrl->p_reg, ADC_ADPGADCR0_DISABLE_PGA);
-        HW_ADC_ADPGACR_Set(p_ctrl->p_reg, ADC_ADPGACR_DISABLE_PGA);
+        /** PGA registers configuration */
+        HW_ADC_ADPGAGS0_Set(p_ctrl->p_reg,p_cfg);
+        HW_ADC_ADPGACR_Set(p_ctrl->p_reg,p_cfg);
+        HW_ADC_ADPGADCR0_Set(p_ctrl->p_reg,p_cfg);
     }
-
-    return SSP_SUCCESS;
 }
 
 /*******************************************************************************************************************//**

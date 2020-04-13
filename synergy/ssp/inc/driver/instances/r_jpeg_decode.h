@@ -43,7 +43,7 @@
  * Macro definitions
  **********************************************************************************************************************/
 #define JPEG_DECODE_CODE_VERSION_MAJOR (1U)
-#define JPEG_DECODE_CODE_VERSION_MINOR (9U)
+#define JPEG_DECODE_CODE_VERSION_MINOR (10U)
 
 /***********************************************************************************************************************
  * Typedef definitions

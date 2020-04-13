@@ -6,4 +6,8 @@
 #endif
 #define GX_USE_SYNERGY_DRW  (1)
 #define GX_USE_SYNERGY_JPEG (1)
+#define GX_SYNERGY_FONT_FORMAT_SUPPORT
+#if (1)
+#define GUIX_5_4_0_COMPATIBILITY
+#endif
 #endif /* GX_USER_H_ */

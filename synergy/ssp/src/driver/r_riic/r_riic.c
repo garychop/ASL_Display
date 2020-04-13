@@ -874,9 +874,6 @@ static ssp_err_t riic_open_hw_master       (riic_instance_ctrl_t * const p_ctrl,
     /* Enable NACK reception transfer suspension */
     HW_RIIC_EnableNACKE(p_ctrl->p_reg, true);
 
-    /* Setup the interrupts for master mode */
-    riic_configure_interrupts_master(p_ctrl);
-
     /* Release IIC from internal reset */
     HW_RIIC_Reset(p_ctrl->p_reg, false);
 

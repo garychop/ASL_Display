@@ -325,7 +325,10 @@ ssp_err_t R_DTC_Start (transfer_ctrl_t         * const p_api_ctrl,
     DTC_ERROR_RETURN(TRANSFER_START_MODE_SINGLE == mode, SSP_ERR_UNSUPPORTED);
     DTC_ERROR_RETURN((ELC_EVENT_ELC_SOFTWARE_EVENT_0 == p_ctrl->trigger) ||
             (ELC_EVENT_ELC_SOFTWARE_EVENT_1 == p_ctrl->trigger), SSP_ERR_UNSUPPORTED);
+#else
+    SSP_PARAMETER_NOT_USED(mode);
 #endif
+
 
     /** Clear the interrupt status flag */
     R_BSP_IrqStatusClear(p_ctrl->irq);

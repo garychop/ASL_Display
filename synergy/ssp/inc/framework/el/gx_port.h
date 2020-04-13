@@ -36,7 +36,7 @@
 /*  APPLICATION INTERFACE DEFINITION                       RELEASE        */
 /*                                                                        */
 /*    gx_port.h                                            Synergy        */
-/*                                                           5.4          */
+/*                                                           5.6          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Express Logic, Inc.                               */
@@ -78,7 +78,6 @@
 #endif
 
 typedef INT    GX_BOOL;
-typedef signed   char GX_CHAR;
 typedef unsigned char GX_UCHAR;
 typedef SHORT  GX_VALUE;
 
@@ -165,7 +164,7 @@ typedef SHORT  GX_VALUE;
 
 #ifdef GX_SYSTEM_INIT
 CHAR _gx_version_id[] =
-    "Copyright (c) 1996-2018 Express Logic Inc. * GUIX Synergy Version G5.4.1.5.4 SN: 4154-280-5000 *";
+    "Copyright (c) 1996-2018 Express Logic Inc. * GUIX Synergy Version G5.6 SN: 4154-280-5000 *";
 #else
 extern  CHAR _nx_version_id[];
 #endif

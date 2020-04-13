@@ -1,6 +1,6 @@
 /**************************************************************************/ 
 /*                                                                        */ 
-/*            Copyright (c) 1996-2017 by Express Logic Inc.               */ 
+/*            Copyright (c) 1996-2019 by Express Logic Inc.               */ 
 /*                                                                        */ 
 /*  This software is copyrighted by and is the sole property of Express   */ 
 /*  Logic, Inc.  All rights, title, ownership, or other interests         */ 
@@ -37,7 +37,7 @@
 /*  COMPONENT DEFINITION                                   RELEASE        */ 
 /*                                                                        */ 
 /*    tx_trace.h                                          PORTABLE C      */ 
-/*                                                           5.8          */ 
+/*                                                           5.9          */ 
 /*  AUTHOR                                                                */ 
 /*                                                                        */ 
 /*    William E. Lamie, Express Logic, Inc.                               */ 
@@ -94,6 +94,8 @@
 /*                                            system state and current    */ 
 /*                                            thread pointer retrieval,   */ 
 /*                                            resulting in version 5.8    */ 
+/*  02-01-2019     William E. Lamie         Modified comment(s),          */ 
+/*                                            resulting in version 5.9    */ 
 /*                                                                        */ 
 /**************************************************************************/ 
 

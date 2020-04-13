@@ -242,6 +242,9 @@ ssp_err_t R_JPEG_Decode_Open (jpeg_decode_ctrl_t * const p_api_ctrl, jpeg_decode
     /** Provide power to the JPEG module.  */
     R_BSP_ModuleStart(&ssp_feature);
 
+    /** Clear the image horizontal and vertical size, before starting the JPEG decode */
+    HW_JPEG_ImageSizeSet(p_ctrl->p_reg, 0U, 0U);
+
     /** Perform bus reset */
     HW_JPEG_BusReset(p_ctrl->p_reg);
 

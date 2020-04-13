@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*                                                                        */
-/*            Copyright (c) 1996-2018 by Express Logic Inc.               */
+/*            Copyright (c) 1996-2019 by Express Logic Inc.               */
 /*                                                                        */
 /*  This software is copyrighted by and is the sole property of Express   */
 /*  Logic, Inc.  All rights, title, ownership, or other interests         */
@@ -36,10 +36,10 @@
 /*  APPLICATION INTERFACE DEFINITION                       RELEASE        */
 /*                                                                        */
 /*    gx_api.h                                            PORTABLE C      */
-/*                                                           5.4.1        */
+/*                                                           5.6          */
 /*  AUTHOR                                                                */
 /*                                                                        */
-/*    William E. Lamie, Express Logic, Inc.                               */
+/*    Kenneth Maxwell, Express Logic, Inc.                                */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
 /*                                                                        */
@@ -53,18 +53,18 @@
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  11-24-2014     William E. Lamie         Initial Version 5.2           */
-/*  01-16-2015     William E. Lamie         Modified comment(s),          */
+/*  11-24-2014     Kenneth Maxwell          Initial Version 5.2           */
+/*  01-16-2015     Kenneth Maxwell          Modified comment(s),          */
 /*                                            added missing API,          */
 /*                                            resulting in version 5.2.1  */
-/*  01-26-2015     William E. Lamie         Modified comment(s),          */
+/*  01-26-2015     Kenneth Maxwell          Modified comment(s),          */
 /*                                            resulting in version 5.2.2  */
-/*  03-01-2015     William E. Lamie         Modified comment(s),          */
+/*  03-01-2015     Kenneth Maxwell          Modified comment(s),          */
 /*                                            resulting in version 5.2.3  */
-/*  04-15-2015     William E. Lamie         Modified comment(s), added    */
+/*  04-15-2015     Kenneth Maxwell          Modified comment(s), added    */
 /*                                            JPEG image resource support,*/
 /*                                            resulting in version 5.2.4  */
-/*  08-21-2015     William E. Lamie         Modified comment(s), added    */
+/*  08-21-2015     Kenneth Maxwell          Modified comment(s), added    */
 /*                                            GX_SYSTEM_TIMER_MS so GUIX  */
 /*                                            timer value can be modified,*/
 /*                                            change GX_EVENT.target to   */
@@ -77,23 +77,23 @@
 /*                                            gx_widget_event_generate    */
 /*                                            API,                        */
 /*                                            resulting in version 5.2.5  */
-/*  09-21-2015     William E. Lamie         Modified comment(s), modified */
+/*  09-21-2015     Kenneth Maxwell          Modified comment(s), modified */
 /*                                            circular gauge support,     */
 /*                                            resulting in version 5.2.6  */
-/*  02-22-2016     William E. Lamie         Modified comment(s), added    */
+/*  02-22-2016     Kenneth Maxwell          Modified comment(s), added    */
 /*                                            new features and APIs, and  */
 /*                                            fixed compiler warnings,    */
 /*                                            resulting in version 5.3    */
-/*  04-05-2016     William E. Lamie         Modified comment(s), added    */
+/*  04-05-2016     Kenneth Maxwell          Modified comment(s), added    */
 /*                                            new features and APIs,      */
 /*                                            resulting in version 5.3.1  */
-/*  06-15-2016     William E. Lamie         Modified conmment(s) , added  */
+/*  06-15-2016     Kenneth Maxwell          Modified conmment(s) , added  */
 /*                                            new features and APIs,      */
 /*                                            resulting in version 5.3.2  */
-/*  03-01-2017     William E. Lamie         Modified conmment(s) , added  */
+/*  03-01-2017     Kenneth Maxwell          Modified conmment(s) , added  */
 /*                                            new features and APIs,      */
 /*                                            resulting in version 5.3.3  */
-/*  11-06-2017     William E. Lamie         Update GUIX version number,   */
+/*  11-06-2017     Kenneth Maxwell          Update GUIX version number,   */
 /*                                            add brush alpha support,    */
 /*                                            add numberic scroll wheel   */
 /*                                            buffer size, add numeric    */
@@ -101,17 +101,40 @@
 /*                                            widget types, add mouse     */
 /*                                            support, add animation pool */
 /*                                            resulting in version 5.4    */
-/*  04-15-2018     William E. Lamie         Update GUIX version number,   */
+/*  04-15-2018     Kenneth Maxwell          Update GUIX version number,   */
 /*                                            increase default event queue*/
 /*                                            size, fix prototypes for    */
 /*                                            several API functions       */
 /*                                            resulting in version 5.4.1  */
+/*  05-21-2018     Kenneth Maxwell          Modified comment(s), and      */
+/*                                            fixed return type of several*/
+/*                                            error checking functions,   */
+/*                                            added GX_STATUS_HIDDEN,     */
+/*                                            moved string table functions*/
+/*                                            from the gx_system component*/
+/*                                            to the gx_display component,*/
+/*                                            resulting in version 5.4.2  */
+/*  11-15-2018     Kenneth Maxwell          Modified comment(s),          */
+/*                                            Added unsigned qualifiers   */
+/*                                            to style and ID definitions,*/
+/*                                            resulting in version 5.5    */
+/*  08-15-2019     Kenneth Maxwell          Modified comment(s), added    */
+/*                                            new pixelmap flag, modified */
+/*                                            GX_FILL_PIXELMAP_INFO       */
+/*                                            structure, modified         */
+/*                                            pixelmap_line_draw parameter*/
+/*                                            list, and added new APIs,   */
+/*                                            added gx_widget apis for    */
+/*                                            child/parent/sibling lookup */
+/*                                            and added protptype for new */
+/*                                            API                         */
+/*                                            _gx_utility_circle_point_get*/
+/*                                            resulting in version 5.6    */
 /*                                                                        */
 /**************************************************************************/
 
 #ifndef GX_API_H
 #define GX_API_H
-
 
 /* Determine if a C++ compiler is being used.  If so, ensure that standard
    C is used to process the API information.  */
@@ -129,9 +152,7 @@ extern   "C" {
 
 #define __PRODUCT_GUIX__
 #define __GUIX_MAJOR_VERSION 5
-#define __GUIX_MINOR_VERSION 4
-
-#define GUIX_VALIDATION
+#define __GUIX_MINOR_VERSION 6
 
 /* Ensure that ThreadX error checking is disabled for GUIX source code.  */
 
@@ -140,7 +161,6 @@ extern   "C" {
 #define TX_DISABLE_ERROR_CHECKING
 #endif
 #endif
-
 
 /* Include ThreadX API and GUIX port-specific include file.  */
 #ifndef GX_DISABLE_THREADX_BINDING
@@ -178,6 +198,15 @@ typedef ULONG                                   GX_COLOR;
 /* Fixed point math data type */
 typedef signed long GX_FIXED_VAL;
 
+typedef char GX_CHAR;
+
+/* Define the String type. */
+typedef struct GX_STRING_STRUCT
+{
+    GX_CONST GX_CHAR  *gx_string_ptr;     /* Pointer to string. */
+    UINT               gx_string_length;  /* String length in bytes. */
+} GX_STRING;
+
 /* Define constants for GUIX.  */
 
 /* Define configuration-specific constants. These constants can be redefined externally.  */
@@ -185,6 +214,10 @@ typedef signed long GX_FIXED_VAL;
 /* Default 20ms GUIX system timer.  */
 #ifndef GX_SYSTEM_TIMER_MS
 #define GX_SYSTEM_TIMER_MS        20
+#endif
+
+#ifndef GX_DISABLE_DEPRECATED_STRING_API
+#define GX_ENABLE_DEPRECATED_STRING_API
 #endif
 
 #if defined(GX_THREADX_BINDING)
@@ -195,12 +228,10 @@ typedef signed long GX_FIXED_VAL;
 #endif
 
 
-
 /* Derive GX_SYSTEM_TIMER_TICKS based on GX_SYSTEM_TIMER_MS value. */
 #ifndef GX_SYSTEM_TIMER_TICKS
 #define GX_SYSTEM_TIMER_TICKS     ((GX_SYSTEM_TIMER_MS * TX_TIMER_TICKS_PER_SECOND) / 1000)
 #endif
-
 
 #endif /* GX_THREADX_BINDING */
 
@@ -226,6 +257,10 @@ typedef signed long GX_FIXED_VAL;
 
 #ifndef GX_DISABLE_BRUSH_ALPHA_SUPPORT
 #define GX_BRUSH_ALPHA_SUPPORT
+#endif
+
+#ifndef GX_DISABLE_EXPO_ELASTIC_EASING_SUPPORT
+#define GX_EXPO_ELASTIC_EASING_SUPPORT
 #endif
 
 #ifndef GX_REPEAT_BUTTON_INITIAL_TICS
@@ -299,6 +334,15 @@ typedef signed long GX_FIXED_VAL;
 #define GX_ANIMATION_POOL_SIZE 6
 #endif
 
+/* define maximum string length. */
+#ifndef GX_MAX_STRING_LENGTH
+#define GX_MAX_STRING_LENGTH 102400
+#endif
+
+#ifndef GX_PALETTE_MODE_AA_TEXT_COLORS
+#define GX_PALETTE_MODE_AA_TEXT_COLORS       8
+#endif
+
 #ifndef GX_PARAMETER_NOT_USED
 #define GX_PARAMETER_NOT_USED(p) ((void) (p))
 #endif /* GX_PARAMETER_NOT_USED */
@@ -341,7 +385,6 @@ typedef signed long GX_FIXED_VAL;
 #define GX_INVALID_HEIGHT                   0x1F
 #define GX_INVALID_CANVAS                   0x20
 #define GX_INVALID_COORDINATE               0x21
-#define GX_INVALID_RESOURCE_ID              0x22
 #define GX_INVALID_VALUE                    0x22
 #define GX_INVALID_DISPLAY_SIZE             0x23
 #define GX_INVALID_FORMAT                   0x24
@@ -353,6 +396,8 @@ typedef signed long GX_FIXED_VAL;
 #define GX_SYSTEM_MEMORY_ERROR              0x30
 #define GX_OUT_OF_ANIMATIONS                0x31
 #define GX_INVALID_ANIMATION                0x32
+#define GX_INVALID_RESOURCE_ID              0x33
+#define GX_INVALID_STRING_LENGTH            0x34
 #define GX_SYSTEM_ERROR                     0xFE
 
 
@@ -438,7 +483,13 @@ typedef signed long GX_FIXED_VAL;
 #define GX_COLOR_ID_SLIDER_NEEDLE_LINE1     23      /* LIGHTGRAY */
 #define GX_COLOR_ID_SLIDER_NEEDLE_LINE2     24      /* BTN_BORDER */
 
-#define GX_MAX_DEFAULT_COLORS               25
+/* Text widget color resource ids */
+#define GX_COLOR_ID_DISABLED_TEXT           25
+#define GX_COLOR_ID_DISABLED_FILL           26
+#define GX_COLOR_ID_READONLY_TEXT           27
+#define GX_COLOR_ID_READONLY_FILL           28
+
+#define GX_MAX_DEFAULT_COLORS               29
 #define GX_FIRST_USER_COLOR                 GX_MAX_DEFAULT_COLORS
 
 /* Default font Resource IDs.  */
@@ -522,7 +573,7 @@ typedef signed long GX_FIXED_VAL;
 #define GX_EVENT_LIST_SELECT                26
 #define GX_EVENT_VERTICAL_FLICK             27
 #define GX_EVENT_HORIZONTAL_FLICK           28
-#define GX_EVENT_MOVE                       29
+
 #define GX_EVENT_PARENT_SIZED               30
 #define GX_EVENT_CLOSE_POPUP                31
 #define GX_EVENT_ZOOM_IN                    32
@@ -532,7 +583,8 @@ typedef signed long GX_FIXED_VAL;
 #define GX_EVENT_ANIMATION_COMPLETE         36
 #define GX_EVENT_SPRITE_COMPLETE            37
 #define GX_EVENT_TEXT_EDITED                40
-#define GX_EVENT_TX_TIMER                   41
+#define GX_EVENT_ANIMATION_START            41
+
 #define GX_EVENT_FOCUS_NEXT                 42
 #define GX_EVENT_FOCUS_PREVIOUS             43
 #define GX_EVENT_FOCUS_GAIN_NOTIFY          44
@@ -541,16 +593,29 @@ typedef signed long GX_FIXED_VAL;
 #define GX_EVENT_PROGRESS_VALUE             47
 #define GX_EVENT_TOUCH_CALIBRATION_COMPLETE 48
 #define GX_EVENT_INPUT_RELEASE              49
-#define GX_EVENT_MENU_SELECT                50
+#define GX_EVENT_TREE_SELECT                50
 #define GX_EVENT_STYLE_CHANGED              51
 #define GX_EVENT_CLIENT_UPDATED             52
+#define GX_EVENT_CUT                        53
+#define GX_EVENT_COPY                       54
+#define GX_EVENT_PASTE                      55
+#define GX_EVENT_MARK_NEXT                  56
+#define GX_EVENT_MARK_PREVIOUS              57
+#define GX_EVENT_MARK_UP                    58
+#define GX_EVENT_MARK_DOWN                  59
+#define GX_EVENT_MARK_END                   60
+#define GX_EVENT_MARK_HOME                  61
 
 /* Define the pre-defined Widgets ID.        */
 #define ID_DROP_LIST_BUTTON                 65535
 
 /* Define the value of the first application defined event type.  */
 
-#define GX_FIRST_APP_EVENT                  0x40000000
+#define GX_FIRST_USER_EVENT                 0x40000000
+
+/* The following name has been deprecated, please use GX_FIRST_USER_EVENT */
+
+#define GX_FIRST_APP_EVENT                  GX_FIRST_USER_EVENT
 
 
 /* Define logical key values.  */
@@ -602,6 +667,7 @@ typedef signed long GX_FIXED_VAL;
 #define GX_TYPE_HORIZONTAL_SCROLL           23
 #define GX_TYPE_PROGRESS_BAR                24
 #define GX_TYPE_RADIAL_PROGRESS_BAR         25
+#define GX_TYPE_RADIAL_SLIDER               26
 
 #define GX_TYPE_PROMPT                      30
 #define GX_TYPE_NUMERIC_PROMPT              31
@@ -647,23 +713,40 @@ typedef signed long GX_FIXED_VAL;
 #define GX_STATUS_VISIBLE                   0x00000001UL
 #define GX_STATUS_SELECTABLE                0x00000002UL
 #define GX_STATUS_ACCEPTS_INPUT             0x00000004UL
+#define GX_STATUS_HIDDEN                    0x00000008UL
+
 #define GX_STATUS_DEFAULT_FOCUS             0x00000010UL
 #define GX_STATUS_ACCEPTS_FOCUS             0x00000020UL
 #define GX_STATUS_HAS_FOCUS                 0x00000040UL
 #define GX_STATUS_NOTIFY_ON_GAIN_FOCUS      0x00000080UL
+
 #define GX_STATUS_NAV_STOP                  0x00000100UL
 #define GX_STATUS_NAV_PARENT                0x00000200UL
+
 #define GX_STATUS_MOVABLE                   0x00001000UL
 #define GX_STATUS_BUTTON_DERIVED            0x00002000UL
 #define GX_STATUS_TOGGLE_UNLOCK             0x00004000UL
 #define GX_STATUS_DIRTY                     0x00008000UL
+
+/* define cursor status flags */
+#define GX_STATUS_CURSOR_SHOW               0x00010000UL
+#define GX_STATUS_CURSOR_DRAW               0x00020000UL
+#define GX_STATUS_MARK_PREVIOUS             0x00040000UL
+#define GX_STATUS_MARK_NEXT                 0x00080000UL
+
+/* Define radial slider status flags */
+#define GX_STATUS_ANIMATION_NONE            0x00010000UL
+#define GX_STATUS_TRACKING_START            0x00020000UL
+
+#define GX_STATUS_MODAL                     0x00100000UL
+
 #define GX_STATUS_RESIZE_NOTIFY             0x04000000UL
 #define GX_STATUS_STUDIO_CREATED            0x08000000UL
+
 #define GX_STATUS_TRANSPARENT               0x10000000UL
 #define GX_STATUS_NONCLIENT                 0x20000000UL
 #define GX_STATUS_OWNS_INPUT                0x40000000UL
 #define GX_STATUS_DYNAMICALLY_ALLOCATED     0x80000000UL
-
 
 /* Define Widget style flags.  */
 
@@ -718,86 +801,121 @@ typedef signed long GX_FIXED_VAL;
 
 /* Define Slider style flags.  */
 
-#define GX_STYLE_SHOW_NEEDLE                0x00000200
-#define GX_STYLE_SHOW_TICKMARKS             0x00000400
-#define GX_STYLE_SLIDER_VERTICAL            0x00000800
+#define GX_STYLE_SHOW_NEEDLE                0x00000200UL
+#define GX_STYLE_SHOW_TICKMARKS             0x00000400UL
+#define GX_STYLE_SLIDER_VERTICAL            0x00000800UL
 
 /* Define Pixelmap Slider flags.  */
 
-#define GX_STYLE_TILE_BACKGROUND            0x00001000
+#define GX_STYLE_TILE_BACKGROUND            0x00001000UL
 
 /* Define Progress Bar style flags.  */
 
-#define GX_STYLE_PROGRESS_PERCENT           0x00000010
-#define GX_STYLE_PROGRESS_TEXT_DRAW         0x00000020
-#define GX_STYLE_PROGRESS_VERTICAL          0x00000040
+#define GX_STYLE_PROGRESS_PERCENT           0x00000010UL
+#define GX_STYLE_PROGRESS_TEXT_DRAW         0x00000020UL
+#define GX_STYLE_PROGRESS_VERTICAL          0x00000040UL
 
-#define GX_STYLE_PROGRESS_SEGMENTED_FILL    0x00000100
+#define GX_STYLE_PROGRESS_SEGMENTED_FILL    0x00000100UL
 
 /* Define Radial Progress Bar style flags.  */
-#define GX_STYLE_RADIAL_PROGRESS_ALIAS      0x00000200
-#define GX_STYLE_RADIAL_PROGRESS_ROUND      0x00000400
+#define GX_STYLE_RADIAL_PROGRESS_ALIAS      0x00000200UL
+#define GX_STYLE_RADIAL_PROGRESS_ROUND      0x00000400UL
 
 /* Define Text alignment styles.  */
 
-#define GX_STYLE_TEXT_LEFT                  0x00001000
-#define GX_STYLE_TEXT_RIGHT                 0x00002000
-#define GX_STYLE_TEXT_CENTER                0x00004000
-#define GX_STYLE_TEXT_ALIGNMENT_MASK        0x00007000
-#define GX_STYLE_TEXT_COPY                  0x00008000
-
-/* define cursor status flags */
-#define GX_STATUS_CURSOR_SHOW               0x00001000
-#define GX_STATUS_CURSOR_DRAW               0x00002000
+#define GX_STYLE_TEXT_LEFT                  0x00001000UL
+#define GX_STYLE_TEXT_RIGHT                 0x00002000UL
+#define GX_STYLE_TEXT_CENTER                0x00004000UL
+#define GX_STYLE_TEXT_ALIGNMENT_MASK        0x00007000UL
+#define GX_STYLE_TEXT_COPY                  0x00008000UL
 
 /* define cursor style flags */
-#define GX_STYLE_CURSOR_BLINK               0x00000040
-#define GX_STYLE_CURSOR_ALWAYS              0x00000080
+#define GX_STYLE_CURSOR_BLINK               0x00000040UL
+#define GX_STYLE_CURSOR_ALWAYS              0x00000080UL
 
 /* text input style */
-#define GX_STYLE_TEXT_INPUT_NOTIFY_ALL      0x00000100
+#define GX_STYLE_TEXT_INPUT_NOTIFY_ALL      0x00000100UL
+#define GX_STYLE_TEXT_INPUT_READONLY        0x00000200UL
 
 /* Define Window styles.  */
-#define GX_STYLE_TILE_WALLPAPER             0x00040000
+#define GX_STYLE_TILE_WALLPAPER             0x00040000UL
 
 /* Define circular gauge styles.  */
-#define GX_STYLE_CIRCULAR_GAUGE_CCW         0x00000010
+#define GX_STYLE_CIRCULAR_GAUGE_CCW         0x00000010UL
 
 /* Define menu styles. */
-#define GX_STYLE_MENU_EXPANDED              0x00000010
+#define GX_STYLE_MENU_EXPANDED              0x00000010UL
 
 /* Define tree view styles. */
-#define GX_STYLE_TREE_VIEW_SHOW_ROOT_LINES  0x00000010
+#define GX_STYLE_TREE_VIEW_SHOW_ROOT_LINES  0x00000010UL
 
 /* Define Scroll Bar styles.  */
 
-#define GX_SCROLLBAR_BACKGROUND_TILE        0x00010000
-#define GX_SCROLLBAR_RELATIVE_THUMB         0x00020000
-#define GX_SCROLLBAR_END_BUTTONS            0x00040000
-#define GX_SCROLLBAR_VERTICAL               0x01000000
-#define GX_SCROLLBAR_HORIZONTAL             0x02000000
+#define GX_SCROLLBAR_BACKGROUND_TILE        0x00010000UL
+#define GX_SCROLLBAR_RELATIVE_THUMB         0x00020000UL
+#define GX_SCROLLBAR_END_BUTTONS            0x00040000UL
+#define GX_SCROLLBAR_VERTICAL               0x01000000UL
+#define GX_SCROLLBAR_HORIZONTAL             0x02000000UL
 
 /* Define Animation Styles.  */
 
 /* Define generic scroll wheel styles*/
-#define GX_STYLE_SCROLL_WHEEL_DRAG          0x00000200
+#define GX_STYLE_SCROLL_WHEEL_DRAG          0x00000200UL
 
 /* Define text scroll wheel styles*/
-#define GX_STYLE_TEXT_SCROLL_WHEEL_ROUND    0x00000100
+#define GX_STYLE_TEXT_SCROLL_WHEEL_ROUND    0x00000100UL
+
+/* Define animation status.  */
+#define GX_ANIMATION_IDLE                   0x01U
+#define GX_ANIMATION_ACTIVE                 0x02U
+#define GX_ANIMATION_SLIDE_TRACKING         0x03U
+#define GX_ANIMATION_SLIDE_LANDING          0x04U
 
 /* Define pre-defined animation type flags.  */
 
-#define GX_ANIMATION_NONE                   0x0000
-#define GX_ANIMATION_TRANSLATE              0x0001
-#define GX_ANIMATION_SCREEN_DRAG            0x0002
+#define GX_ANIMATION_NONE                   0x0000U
+#define GX_ANIMATION_TRANSLATE              0x0001U
+#define GX_ANIMATION_SCREEN_DRAG            0x0002U
 
 /* flags that can be used in combination with screen drag animation */
-#define GX_ANIMATION_WRAP                   0x0100
-#define GX_ANIMATION_HORIZONTAL             0x0200
-#define GX_ANIMATION_VERTICAL               0x0400
+#define GX_ANIMATION_WRAP                   0x0100U
+#define GX_ANIMATION_HORIZONTAL             0x0200U
+#define GX_ANIMATION_VERTICAL               0x0400U
 
 /* flag that can be used in combination with translate animation */
-#define GX_ANIMATION_DETACH                 0x8000
+#define GX_ANIMATION_PUSH_STACK             0x4000U
+#define GX_ANIMATION_DETACH                 0x8000U
+#define GX_ANIMATION_EASING_FUNC_MASK       0x10f0U
+#define GX_ANIMATION_BACK_EASE_IN           0x0010U
+#define GX_ANIMATION_BACK_EASE_OUT          0x0020U
+#define GX_ANIMATION_BACK_EASE_IN_OUT       0x0030U
+#define GX_ANIMATION_BOUNCE_EASE_IN         0x0040U
+#define GX_ANIMATION_BOUNCE_EASE_OUT        0x0050U
+#define GX_ANIMATION_BOUNCE_EASE_IN_OUT     0x0060U
+#define GX_ANIMATION_CIRC_EASE_IN           0x0070U
+#define GX_ANIMATION_CIRC_EASE_OUT          0x0080U
+#define GX_ANIMATION_CIRC_EASE_IN_OUT       0x0090U
+#define GX_ANIMATION_CUBIC_EASE_IN          0x00a0U
+#define GX_ANIMATION_CUBIC_EASE_OUT         0x00b0U
+#define GX_ANIMATION_CUBIC_EASE_IN_OUT      0x00c0U
+#define GX_ANIMATION_ELASTIC_EASE_IN        0x00d0U
+#define GX_ANIMATION_ELASTIC_EASE_OUT       0x00e0U
+#define GX_ANIMATION_ELASTIC_EASE_IN_OUT    0x00f0U
+#define GX_ANIMATION_EXPO_EASE_IN           0x1000U
+#define GX_ANIMATION_EXPO_EASE_OUT          0x1010U
+#define GX_ANIMATION_EXPO_EASE_IN_OUT       0x1020U
+#define GX_ANIMATION_QUAD_EASE_IN           0x1030U
+#define GX_ANIMATION_QUAD_EASE_OUT          0x1040U
+#define GX_ANIMATION_QUAD_EASE_IN_OUT       0x1050U
+#define GX_ANIMATION_QUART_EASE_IN          0x1060U
+#define GX_ANIMATION_QUART_EASE_OUT         0x1070U
+#define GX_ANIMATION_QUART_EASE_IN_OUT      0x1080U
+#define GX_ANIMATION_QUINT_EASE_IN          0x1090U
+#define GX_ANIMATION_QUINT_EASE_OUT         0x10a0U
+#define GX_ANIMATION_QUINT_EASE_IN_OUT      0x10b0U
+#define GX_ANIMATION_SINE_EASE_IN           0x10c0U
+#define GX_ANIMATION_SINE_EASE_OUT          0x10d0U
+#define GX_ANIMATION_SINE_EASE_IN_OUT       0x10e0U
 
 /* Sprite background operations */
 
@@ -812,12 +930,12 @@ typedef signed long GX_FIXED_VAL;
 
 /* Define Brush attributes.  */
 
-#define GX_BRUSH_OUTLINE                    0x0000              /* for rectangle, text, polygon              */
-#define GX_BRUSH_SOLID_FILL                 0x0001              /* For rectangle, text, polygon              */
-#define GX_BRUSH_PIXELMAP_FILL              0x0002              /* For rectangle, polygon                    */
-#define GX_BRUSH_ALIAS                      0x0004              /* For lines                                 */
-#define GX_BRUSH_UNDERLINE                  0x0008              /* Underlined text                           */
-#define GX_BRUSH_ROUND                      0x0010              /* For lines                                 */
+#define GX_BRUSH_OUTLINE                    0x0000U            /* for rectangle, text, polygon              */
+#define GX_BRUSH_SOLID_FILL                 0x0001U            /* For rectangle, text, polygon              */
+#define GX_BRUSH_PIXELMAP_FILL              0x0002U            /* For rectangle, polygon                    */
+#define GX_BRUSH_ALIAS                      0x0004U            /* For lines                                 */
+#define GX_BRUSH_UNDERLINE                  0x0008U            /* Underlined text                           */
+#define GX_BRUSH_ROUND                      0x0010U            /* For lines                                 */
 
 
 /* Define Canvas information.  */
@@ -836,16 +954,17 @@ typedef signed long GX_FIXED_VAL;
 
 /* Define pre-defined Widget Resource IDs.  */
 
-#define GX_ID_VERTICAL_SCROLL               0xff00
-#define GX_ID_HORIZONTAL_SCROLL             0xff01
-#define GX_ID_SCROLL_UP_LEFT                0xff02
-#define GX_ID_SCROLL_DOWN_RIGHT             0xff03
-#define GX_ID_SCROLL_THUMB                  0xff04
-#define GX_ID_DROP_BUTTON                   0xff05
+#define GX_ID_VERTICAL_SCROLL               0xff00U
+#define GX_ID_HORIZONTAL_SCROLL             0xff01U
+#define GX_ID_SCROLL_UP_LEFT                0xff02U
+#define GX_ID_SCROLL_DOWN_RIGHT             0xff03U
+#define GX_ID_SCROLL_THUMB                  0xff04U
+#define GX_ID_DROP_BUTTON                   0xff05U
 
 /* pre-defined timer IDs */
-#define GX_BUTTON_TIMER                     0xff00
-#define GX_CIRCULAR_GAUGE_TIMER             0xff00
+#define GX_BUTTON_TIMER                     0xff00U
+#define GX_CIRCULAR_GAUGE_TIMER             0xff01U
+#define GX_RADIAL_SLIDER_TIMER              0xff02U
 
 /* Define the echo mode of Single-line Text input.  */
 
@@ -868,6 +987,9 @@ typedef signed long GX_FIXED_VAL;
 #define   GX_ACTION_TYPE_ANIMATION              6
 #define   GX_ACTION_TYPE_WINDOW_EXECUTE         7
 #define   GX_ACTION_TYPE_WINDOW_EXECUTE_STOP    8
+#define   GX_ACTION_TYPE_SCREEN_STACK_PUSH      9
+#define   GX_ACTION_TYPE_SCREEN_STACK_POP      10
+#define   GX_ACTION_TYPE_SCREEN_STACK_RESET    11
 
 /* Gradient Styles */
 #define GX_GRADIENT_TYPE_VERTICAL   0x01
@@ -882,6 +1004,11 @@ typedef signed long GX_FIXED_VAL;
 /* Text input cursor flags */
 #define GX_CURSOR_USE_CUSTOM_HEIGHT         0x01
 
+/* Text render stlyles */
+#if defined(GX_THAI_GLYPH_SHAPING_SUPPORT)
+#define GX_TEXT_RENDER_THAI_GLYPH_SHAPING   0x01
+#endif
+
 /* Define macros used in GUIX.  */
 #ifndef GX_MIN
 #define GX_MIN(_a, _b)                      (((_a) < (_b)) ? (_a) : (_b))
@@ -893,10 +1020,6 @@ typedef signed long GX_FIXED_VAL;
 
 #ifndef GX_MEMCPY
 #define GX_MEMCPY(a, b, c)                  memcpy(a, b, c)
-#endif
-
-#ifndef GX_CHAR
-#define GX_CHAR                             char
 #endif
 
 #if defined(GX_UTF8_SUPPORT)
@@ -985,7 +1108,7 @@ typedef struct GX_VIEW_STRUCT
     GX_UBYTE           gx_glyph_advance;      /* Glyph advance                                   */ \
     GX_BYTE            gx_glyph_leading;      /* Pen x-pre-advance                               */ \
     GX_UBYTE           gx_glyph_width;                                                              \
-    GX_UBYTE           gx_glyph_height;
+    GX_UBYTE           gx_glyph_height;                                                             
 
 /* Define the Glyph type.  */
 typedef struct GX_GLYPH_STRUCT
@@ -993,10 +1116,19 @@ typedef struct GX_GLYPH_STRUCT
     GX_GLYPH_MEMBERS_DECLARE
 } GX_GLYPH;
 
+#if defined (GX_FONT_KERNING_SUPPORT)
+/* Define the Kerning Glyph type.  */
+typedef struct GX_KERNING_GLYPH_STRUCT
+{
+    GX_GLYPH_MEMBERS_DECLARE                                                   
+    GX_CONST GX_UBYTE *gx_kerning_table;                   /* Kerning table */ 
+} GX_KERNING_GLYPH;
+#endif
+
 /* Define the Compressed Glyph type.  */
 typedef struct GX_COMPRESSED_GLYPH_STRUCT
 {
-    GX_GLYPH_MEMBERS_DECLARE                     \
+    GX_GLYPH_MEMBERS_DECLARE                                                     
     USHORT             gx_glyph_map_size;                       /* Glyph size */
 } GX_COMPRESSED_GLYPH;
 
@@ -1010,8 +1142,14 @@ typedef struct GX_FONT_STRUCT
     GX_UBYTE                     gx_font_baseline;              /* Font baseline                            */
     GX_CHAR_CODE                 gx_font_first_glyph;           /* First glyph on this page                 */
     GX_CHAR_CODE                 gx_font_last_glyph;            /* Last glyph on this page                  */
-    GX_CONST GX_GLYPH           *gx_font_glyphs;                /* Array of GX_GLYPH structures             */
-    GX_CONST struct GX_FONT_STRUCT *gx_font_next_page;             /* For multiple page fonts (Unicode)        */
+    union {
+        GX_CONST GX_GLYPH            *gx_font_normal_glyphs;        /* Array of GX_GLYPH structures             */
+        GX_CONST GX_COMPRESSED_GLYPH *gx_font_compressed_glyphs;    /* Array of GX_COMPRESSED_GLYPH structures  */
+        #if defined (GX_FONT_KERNING_SUPPORT)
+        GX_CONST GX_KERNING_GLYPH    *gx_font_kerning_glyphs;       /* Array of GX_KERNING_GLYPH structures     */
+        #endif
+    } gx_font_glyphs;
+    GX_CONST struct GX_FONT_STRUCT *gx_font_next_page;         /* For multiple page fonts (Unicode)        */
 } GX_FONT;
 
 #define GX_FONT_FORMAT_BPP_MASK   0x0F
@@ -1020,9 +1158,10 @@ typedef struct GX_FONT_STRUCT
 #define GX_FONT_FORMAT_4BPP       0x04
 #define GX_FONT_FORMAT_8BPP       0x08
 
-#define GX_FONT_FORMAT_COMPRESSED 0x10
-#define GX_FONT_FORMAT_FREETYPE   0x20
-
+#define GX_FONT_FORMAT_COMPRESSED     0x10
+#define GX_FONT_FORMAT_FREETYPE       0x20
+#define GX_FONT_FORMAT_KERNING        0x40
+#define GX_FONT_FORMAT_REVERSED_ORDER 0x80  /* For 4bpp font, half bytes order reversed. For 1bpp font, bits order reversed with least signigicant bit in left. */
 
 /* Define Pixelmap type.  */
 
@@ -1049,6 +1188,9 @@ typedef struct GX_PIXELMAP_STRUCT
 #define GX_PIXELMAP_ALPHA          0x04                         /* Pixelmap has alpha channel               */
 #define GX_PIXELMAP_TARGA          0x08                         /* Pixelmap uses Targa format compresssion  */
 #define GX_PIXELMAP_RAW_FORMAT     0x10                         /* RAW JPG/PNG format                       */
+#if defined(GX_USE_SYNERGY_DRW)
+#define GX_PIXELMAP_DYNAMICALLY_ALLOCATED  0x20                 /* Pixelmap is dynamically allocated        */
+#endif
 
 #define PIXELMAP_IS_TRANSPARENT(a) (a -> gx_pixelmap_flags & (GX_PIXELMAP_TRANSPARENT | GX_PIXELMAP_ALPHA))
 
@@ -1133,7 +1275,6 @@ typedef struct GX_SLIDER_INFO_STRUCT
     INT      gx_slider_info_increment;
     GX_VALUE gx_slider_info_min_travel;
     GX_VALUE gx_slider_info_max_travel;
-    GX_VALUE gx_slider_info_needle_pos;
     GX_VALUE gx_slider_info_needle_width;
     GX_VALUE gx_slider_info_needle_height;
     GX_VALUE gx_slider_info_needle_inset;
@@ -1143,7 +1284,6 @@ typedef struct GX_SLIDER_INFO_STRUCT
 
 typedef struct GX_PIXELMAP_SLIDER_INFO_STRUCT
 {
-    GX_VALUE       gx_pixelmap_slider_info_needle_inset;
     GX_RESOURCE_ID gx_pixelmap_slider_info_lower_background_pixelmap;
     GX_RESOURCE_ID gx_pixelmap_slider_info_upper_background_pixelmap;
     GX_RESOURCE_ID gx_pixelmap_slider_info_needle_pixelmap;
@@ -1160,6 +1300,7 @@ typedef struct GX_PROGRESS_BAR_INFO_STRUCT
     GX_RESOURCE_ID gx_progress_bar_font_id;
     GX_RESOURCE_ID gx_progress_bar_normal_text_color;
     GX_RESOURCE_ID gx_progress_bar_selected_text_color;
+    GX_RESOURCE_ID gx_progress_bar_disabled_text_color;
     GX_RESOURCE_ID gx_progress_bar_fill_pixelmap;
 } GX_PROGRESS_BAR_INFO;
 
@@ -1196,12 +1337,30 @@ typedef struct GX_RADIAL_PROGRESS_BAR_INFO_STRUCT
     GX_RESOURCE_ID gx_radial_progress_bar_info_font_id;
     GX_RESOURCE_ID gx_radial_progress_bar_info_normal_text_color;      /* resource ID of color for normal text.  */
     GX_RESOURCE_ID gx_radial_progress_bar_info_selected_text_color;    /* resource ID of color for selected text.  */
+    GX_RESOURCE_ID gx_radial_progress_bar_info_disabled_text_color;
     GX_VALUE       gx_radial_progress_bar_info_normal_brush_width;     /* width of lower track.  */
     GX_VALUE       gx_radial_progress_bar_info_selected_brush_width;   /* width of upper track.  */
     GX_RESOURCE_ID gx_radial_progress_bar_info_normal_brush_color;     /* resource ID of color for lower track.  */
     GX_RESOURCE_ID gx_radial_progress_bar_info_selected_brush_color;   /* resource ID of color for upper track.  */
     
 } GX_RADIAL_PROGRESS_BAR_INFO;
+
+/* Define radial slider information structure, this structure is used to
+   define the appearance of the radial slider widget.  */
+typedef struct GX_RADIAL_SLIDER_INFO_STRUCT
+{
+    GX_VALUE       gx_radial_slider_info_xcenter;
+    GX_VALUE       gx_radial_slider_info_ycenter;
+    USHORT         gx_radial_slider_info_radius;
+    USHORT         gx_radial_slider_info_track_width;
+    GX_VALUE       gx_radial_slider_info_current_angle;
+    GX_VALUE       gx_radial_slider_info_min_angle;
+    GX_VALUE       gx_radial_slider_info_max_angle;
+    GX_VALUE      *gx_radial_slider_info_angle_list;
+    USHORT         gx_radial_slider_info_list_count;
+    GX_RESOURCE_ID gx_radial_slider_info_background_pixelmap;
+    GX_RESOURCE_ID gx_radial_slider_info_needle_pixelmap;
+}GX_RADIAL_SLIDER_INFO;
 
 /* Define GX_LINE_CHART information structure, this structure is used to
    define the appearance of the line chart widget.  */
@@ -1284,8 +1443,17 @@ typedef struct GX_DRAW_CONTEXT_STRUCT
     GX_VALUE                  gx_draw_context_pitch;
 } GX_DRAW_CONTEXT;
 
-/*Define fill map info type*/
-typedef struct GX_FILL_PIXELMAP_INFO_STRUCT GX_FILL_PIXELMAP_INFO;
+/* Define fill map info type.  */
+typedef struct GX_FILL_PIXELMAP_INFO_STRUCT
+{
+    GX_PIXELMAP *pixelmap;
+    GX_BOOL      draw;
+    GX_UBYTE    *current_pixel_ptr;
+    GX_UBYTE    *current_aux_ptr;
+    GX_UBYTE     mask;
+    INT          x_offset;
+    INT          y_offset;
+}GX_FILL_PIXELMAP_INFO;
 
 /* Display layer services structure type. These services may be provided by display drivers
    support multiple hardware graphics layers. */
@@ -1322,33 +1490,41 @@ typedef struct GX_DISPLAY_MOUSE_STRUCT
 } GX_DISPLAY_MOUSE;
 #endif
 
-/* Define the display type.  */
+/* Define the display control block structure.  */
 typedef struct GX_DISPLAY_STRUCT
 {
     /* Define the display ID and name. The display ID is used simply to see if the
        control block is valid.  */
-    ULONG                     gx_display_id;                    /* Control block ID                         */
+    ULONG                     gx_display_id;                    /* Control block ID GX_DISPLAY_ID           */
+    ULONG                     gx_display_handle;                /* used to identify unique display instance */
     GX_CONST GX_CHAR         *gx_display_name;                  /* Pointer to display's name                */
 
     struct GX_DISPLAY_STRUCT *gx_display_created_next;          /* Pointer to next control block            */
     struct GX_DISPLAY_STRUCT *gx_display_created_previous;      /* Pointer to previous control block        */
-
-    GX_VALUE                  gx_display_color_format;
-    GX_VALUE                  gx_display_width;
-    GX_VALUE                  gx_display_height;
 
     GX_COLOR                 *gx_display_color_table;           /* color ID to native value mapping table   */
     GX_PIXELMAP             **gx_display_pixelmap_table;        /* pixelmap ID to GX_PIXELMAP mapping table */
     GX_FONT                 **gx_display_font_table;            /* font ID to GX_FONT mapping table         */
     GX_COLOR                 *gx_display_palette;               /* only used for 8-bpp palette mode driver  */
 
+    #if defined(GX_ENABLE_DEPRECATED_STRING_API)
+    GX_CONST GX_CHAR       ***gx_display_language_table_deprecated;
+    #endif
+    GX_CONST GX_STRING      **gx_display_language_table;        /* Define the language table.               */
+
     UINT                      gx_display_color_table_size;
     UINT                      gx_display_pixelmap_table_size;
     UINT                      gx_display_font_table_size;
+    UINT                      gx_display_string_table_size;
     UINT                      gx_display_palette_size;          /* only used for 8-bpp palette mode driver */
 
-    ULONG                     gx_display_handle;
-    UINT                      gx_display_driver_ready;
+    GX_UBYTE                  gx_display_color_format;
+    GX_UBYTE                  gx_display_active_language;       /* Define the active language.              */
+    GX_UBYTE                  gx_display_language_table_size;
+    GX_UBYTE                  gx_display_driver_ready;
+
+    GX_VALUE                  gx_display_width;
+    GX_VALUE                  gx_display_height;
 
     VOID                     *gx_display_driver_data;
     VOID                     *gx_display_accelerator;           /* graphics accelerator handle/instance */
@@ -1382,8 +1558,7 @@ typedef struct GX_DISPLAY_STRUCT
 
     VOID                     (*gx_display_driver_horizontal_line_draw)(GX_DRAW_CONTEXT *context,
                                                                        INT x1, INT x2, INT ypos, INT width, GX_COLOR color);
-    VOID                     (*gx_display_driver_horizontal_pixelmap_line_draw)(GX_DRAW_CONTEXT *context, INT xpos, INT ypos,
-                                                                                INT xstart, INT xend, INT y, GX_FILL_PIXELMAP_INFO *info);
+    VOID                     (*gx_display_driver_horizontal_pixelmap_line_draw)(GX_DRAW_CONTEXT *context, INT xstart, INT xend, INT y, GX_FILL_PIXELMAP_INFO *info);
     VOID                     (*gx_display_driver_vertical_line_draw)(GX_DRAW_CONTEXT *context,
                                                                      INT y1, INT y2, INT xpos, INT width, GX_COLOR color);
     VOID                     (*gx_display_driver_horizontal_pattern_line_draw)(GX_DRAW_CONTEXT *context,
@@ -1623,21 +1798,23 @@ typedef struct GX_TEXT_INPUT_CURSOR_STRUCT
 /* Define pen configuration structure. */
 typedef struct GX_PEN_CONFIGURATION_STRUCT
 {
-    UINT    gx_pen_configuration_min_drag_dist;
-    UINT    gx_pen_configuration_max_pen_speed_ticks;
+    GX_FIXED_VAL gx_pen_configuration_min_drag_dist;
+    UINT         gx_pen_configuration_max_pen_speed_ticks;
 }GX_PEN_CONFIGURATION;
 
 
-#define GX_RESOURCE_HEADER_SIZE     20
-#define GX_THEME_HEADER_SIZE        114
-#define GX_COLOR_HEADER_SIZE        8
-#define GX_PALETTE_HEADER_SIZE      8
-#define GX_FONT_HEADER_SIZE         12
-#define GX_PAGE_HEADER_SIZE         21
-#define GX_GLYPH_HEADER_SIZE        18
-#define GX_PIXELMAP_HEADER_SIZE     28
-#define GX_STRING_HEADER_SIZE       10
-#define GX_LANGUAGE_HEADER_SIZE     72
+#define GX_RESOURCE_HEADER_SIZE      20
+#define GX_THEME_HEADER_SIZE         114
+#define GX_COLOR_HEADER_SIZE         8
+#define GX_PALETTE_HEADER_SIZE       8
+#define GX_FONT_HEADER_SIZE          16
+#define GX_PAGE_HEADER_SIZE          21
+#define GX_GLYPH_HEADER_SIZE         18
+#define GX_KERNING_GLYPH_HEADER_SIZE 20
+#define GX_PIXELMAP_HEADER_SIZE      32
+#define GX_STRING_HEADER_SIZE        10
+#define GX_LANGUAGE_HEADER_SIZE      72
+#define GX_LANGUAGE_HEADER_NAME_SIZE 64
 
 /* Degine binary resource header type. */
 typedef struct GX_RESOURCE_HEADER_STRUCT{
@@ -1648,7 +1825,7 @@ typedef struct GX_RESOURCE_HEADER_STRUCT{
     ULONG  gx_resource_header_theme_data_size;
     ULONG  gx_resource_header_string_data_size;
     ULONG  gx_resource_header_data_size;
-}GX_RESOURCE_HEADER;
+} GX_RESOURCE_HEADER;
 
 /* Define binary theme header type. */
 typedef struct GX_THEME_HEADER_STRUCT{
@@ -1667,7 +1844,7 @@ typedef struct GX_THEME_HEADER_STRUCT{
     ULONG                   gx_theme_header_font_data_size;
     ULONG                   gx_theme_header_pixelmap_data_size;
     ULONG                   gx_theme_header_data_size;
-}GX_THEME_HEADER;
+} GX_THEME_HEADER;
 
 /* Define binary color header type. */
 typedef struct GX_COLOR_HEADER_STRUCT{
@@ -1691,6 +1868,7 @@ typedef struct GX_FONT_HEADER_STRUCT{
     GX_UBYTE  gx_font_header_deault;
     GX_UBYTE  gx_font_header_bits;
     ULONG     gx_font_header_data_size;
+    ULONG     gx_font_header_data_offset;
 }GX_FONT_HEADER;
 
 /* Define font page header type. */
@@ -1707,17 +1885,29 @@ typedef struct GX_PAGE_HEADER_STRUCT{
     ULONG         gx_page_header_data_size;
 }GX_PAGE_HEADER;
 
-/* define glyph header type. */
-typedef struct GX_GLYPH_HEADER_STRUCT{
-    USHORT    gx_glyph_header_magic_number;
-    USHORT    gx_glyph_header_map_size;
-    USHORT    gx_glyph_header_index;
-    SHORT     gx_glyph_header_ascent;
-    SHORT     gx_glyph_header_descent;
-    GX_UBYTE  gx_glyph_header_advance;
-    GX_BYTE   gx_glyph_header_leading;
-    GX_UBYTE  gx_glyph_header_width;
+/* define glyph header type members. */
+#define GX_GLYPH_HEADER_MEMBERS_DECLARE                                              \
+    USHORT    gx_glyph_header_magic_number;                                          \
+    USHORT    gx_glyph_header_map_size;                                              \
+    USHORT    gx_glyph_header_index;                                                 \
+    SHORT     gx_glyph_header_ascent;                                                \
+    SHORT     gx_glyph_header_descent;                                               \
+    GX_UBYTE  gx_glyph_header_advance;                                               \
+    GX_BYTE   gx_glyph_header_leading;                                               \
+    GX_UBYTE  gx_glyph_header_width;                                                 \
     GX_UBYTE  gx_glyph_header_height;
+
+/* Used for Guix after version 5.3.4(include). */
+typedef struct GX_GLYPH_HEADER_STRUCT {
+    GX_GLYPH_HEADER_MEMBERS_DECLARE
+    ULONG     gx_glyph_header_data_size;
+    USHORT    gx_glyph_header_kerning_table_size;
+}GX_KERNING_GLYPH_HEADER;
+
+/* define glyph header type. */
+/* Used for Guix berfore Kerning. */
+typedef struct GX_GLYPH_HEADER_BEFORE_KERNING_STRUCT {
+    GX_GLYPH_HEADER_MEMBERS_DECLARE
     ULONG     gx_glyph_header_data_size;
 }GX_GLYPH_HEADER;
 
@@ -1735,6 +1925,7 @@ typedef struct GX_PIXELMAP_HEADER_STRUCT{
     USHORT      gx_pixelmap_header_width;
     USHORT      gx_pixelmap_header_height;
     ULONG       gx_pixelmap_header_data_size;
+    ULONG       gx_pixelmap_header_data_offset;
 }GX_PIXELMAP_HEADER;
 
 /* Define string header type. */
@@ -1749,7 +1940,7 @@ typedef struct GX_STRING_HEADER_STRUCT{
 typedef struct GX_LANGUAGE_HEADER_STRUCT{
     USHORT gx_language_header_magic_number;
     USHORT gx_language_header_index;
-    UCHAR  gx_language_header_name[64];
+    UCHAR  gx_language_header_name[GX_LANGUAGE_HEADER_NAME_SIZE];
     ULONG  gx_language_header_data_size;
 }GX_LANGUAGE_HEADER;
 
@@ -1781,33 +1972,35 @@ typedef struct GX_LANGUAGE_HEADER_STRUCT{
     struct GX_WIDGET_STRUCT *gx_widget_nav_previous;                                                         \
     GX_RECTANGLE             gx_widget_size;                                                                 \
     GX_RECTANGLE             gx_widget_clip;                                                                 \
-    UINT                     (*gx_widget_event_process_function)(struct GX_WIDGET_STRUCT *,  GX_EVENT *);    \
-    VOID                     (*gx_widget_draw_function)(struct GX_WIDGET_STRUCT *);                          \
-    ULONG          gx_widget_status;                                                                         \
-    ULONG          gx_widget_style;                                                                          \
-    GX_RESOURCE_ID gx_widget_normal_fill_color;                                                              \
-    GX_RESOURCE_ID gx_widget_selected_fill_color;                                                            \
-    USHORT         gx_widget_type;                                                                           \
-    USHORT         gx_widget_id;                                                                             \
+    UINT                   (*gx_widget_event_process_function)(struct GX_WIDGET_STRUCT *, GX_EVENT *);       \
+    VOID                   (*gx_widget_draw_function)(struct GX_WIDGET_STRUCT *);                            \
+    ULONG                    gx_widget_status;                                                               \
+    ULONG                    gx_widget_style;                                                                \
+    GX_RESOURCE_ID           gx_widget_normal_fill_color;                                                    \
+    GX_RESOURCE_ID           gx_widget_selected_fill_color;                                                  \
+    GX_RESOURCE_ID           gx_widget_disabled_fill_color;                                                  \
+    USHORT                   gx_widget_type;                                                                 \
+    USHORT                   gx_widget_id;                                                                   \
     GX_USER_DATA_FIELD                                                                                       \
     GX_WIDGET_ALPHA_FIELD
 
 
 /* Define macro for GX_PROMPT, based on GX_WIDGET.  */
 
-#define GX_PROMPT_MEMBERS_DECLARE                                                                     \
-    GX_WIDGET_MEMBERS_DECLARE                                                                         \
-    GX_CONST GX_CHAR *gx_prompt_string;                                                               \
-    VOID         (*gx_prompt_text_get_function)(struct GX_PROMPT_STRUCT *, GX_CONST GX_CHAR **);      \
-    GX_RESOURCE_ID gx_prompt_text_id;                                                                 \
-    GX_RESOURCE_ID gx_prompt_font_id;                                                                 \
-    GX_RESOURCE_ID gx_prompt_normal_text_color;                                                       \
-    GX_RESOURCE_ID gx_prompt_selected_text_color;
+#define GX_PROMPT_MEMBERS_DECLARE                                                           \
+    GX_WIDGET_MEMBERS_DECLARE                                                               \
+    GX_STRING         gx_prompt_string;                                                     \
+    VOID            (*gx_prompt_text_get_function)(struct GX_PROMPT_STRUCT *, GX_STRING *); \
+    GX_RESOURCE_ID    gx_prompt_text_id;                                                    \
+    GX_RESOURCE_ID    gx_prompt_font_id;                                                    \
+    GX_RESOURCE_ID    gx_prompt_normal_text_color;                                          \
+    GX_RESOURCE_ID    gx_prompt_selected_text_color;                                        \
+    GX_RESOURCE_ID    gx_prompt_disabled_text_color;
 
 #define GX_NUMERIC_PROMPT_MEMBERS_DECLARE                                              \
     GX_PROMPT_MEMBERS_DECLARE                                                          \
     GX_CHAR gx_numeric_prompt_buffer[GX_NUMERIC_PROMPT_BUFFER_SIZE];                   \
-    VOID  (*gx_numeric_prompt_format_function)(struct GX_NUMERIC_PROMPT_STRUCT *, INT);
+    VOID(*gx_numeric_prompt_format_function)(struct GX_NUMERIC_PROMPT_STRUCT *, INT);
 
 /* Define macro for PIXELMAP_PROMPT, based on GX_PROMPT.   */
 
@@ -1824,20 +2017,24 @@ typedef struct GX_LANGUAGE_HEADER_STRUCT{
 #define GX_NUMERIC_PIXELMAP_PROMPT_MEMBERS_DECLARE                            \
     GX_PIXELMAP_PROMPT_MEMBERS_DECLARE                                        \
     GX_CHAR gx_numeric_pixelmap_prompt_buffer[GX_NUMERIC_PROMPT_BUFFER_SIZE]; \
-    VOID  (*gx_numeric_pixelmap_prompt_format_function)(struct GX_NUMERIC_PIXELMAP_PROMPT_STRUCT *, INT);
+    VOID(*gx_numeric_pixelmap_prompt_format_function)(struct GX_NUMERIC_PIXELMAP_PROMPT_STRUCT *, INT);
 
 /* Define macro for GX_SINGLE_LINE_TEXT_INPUT, based on GX_PROMPT.  */
 
-#define GX_SINGLE_LINE_TEXT_INPUT_MEMBERS_DECLARE                   \
-    GX_PROMPT_MEMBERS_DECLARE                                       \
-    GX_CHAR             *gx_single_line_text_input_buffer;         \
-    UINT                 gx_single_line_text_input_buffer_size;     \
-    UINT                 gx_single_line_text_input_string_size;     \
-    GX_VALUE             gx_single_line_text_input_xoffset;         \
-    GX_VALUE             gx_single_line_text_input_yoffset;         \
-    UINT                 gx_single_line_text_input_insert_pos;      \
-    UINT                 gx_single_line_text_input_was_modified;    \
-    GX_TEXT_INPUT_CURSOR gx_single_line_text_input_cursor_instance;
+#define GX_SINGLE_LINE_TEXT_INPUT_MEMBERS_DECLARE                       \
+    GX_PROMPT_MEMBERS_DECLARE                                           \
+    GX_CHAR             *gx_single_line_text_input_buffer;              \
+    UINT                 gx_single_line_text_input_buffer_size;         \
+    UINT                 gx_single_line_text_input_string_size;         \
+    GX_VALUE             gx_single_line_text_input_xoffset;             \
+    GX_VALUE             gx_single_line_text_input_yoffset;             \
+    UINT                 gx_single_line_text_input_insert_pos;          \
+    UINT                 gx_single_line_text_input_was_modified;        \
+    GX_TEXT_INPUT_CURSOR gx_single_line_text_input_cursor_instance;     \
+    GX_RESOURCE_ID       gx_single_line_text_input_readonly_text_color; \
+    GX_RESOURCE_ID       gx_single_line_text_input_readonly_fill_color; \
+    UINT                 gx_single_line_text_input_start_mark;          \
+    UINT                 gx_single_line_text_input_end_mark;            \
 
 
 /* Define macro for GX_ICON, based on GX_WIDGET.  */
@@ -1862,26 +2059,26 @@ typedef struct GX_LANGUAGE_HEADER_STRUCT{
 #define GX_BUTTON_MEMBERS_DECLARE                         \
     GX_WIDGET_MEMBERS_DECLARE                             \
     VOID (*gx_button_select_handler)(GX_WIDGET *button);  \
-    VOID (*gx_button_deselect_handler)(GX_WIDGET *button);
+    VOID (*gx_button_deselect_handler)(GX_WIDGET *button, GX_BOOL gen_event);
 
 
 /* Define macro for GX_TEXT_BUTTON, based on GX_BUTTON.  */
 
-#define GX_TEXT_BUTTON_MEMBERS_DECLARE                  \
-    GX_BUTTON_MEMBERS_DECLARE                           \
-    GX_RESOURCE_ID gx_text_button_text_id;              \
-    GX_RESOURCE_ID gx_text_button_font_id;              \
-    GX_CONST GX_CHAR *gx_text_button_string;            \
-    GX_RESOURCE_ID gx_text_button_normal_text_color;    \
-    GX_RESOURCE_ID gx_text_button_selected_text_color;
+#define GX_TEXT_BUTTON_MEMBERS_DECLARE                     \
+    GX_BUTTON_MEMBERS_DECLARE                              \
+    GX_RESOURCE_ID     gx_text_button_text_id;             \
+    GX_RESOURCE_ID     gx_text_button_font_id;             \
+    GX_STRING          gx_text_button_string;              \
+    GX_RESOURCE_ID     gx_text_button_normal_text_color;   \
+    GX_RESOURCE_ID     gx_text_button_selected_text_color; \
+    GX_RESOURCE_ID     gx_text_button_disabled_text_color;
 
 /* Define macro for GX_MULTI_LINE_TEXT_BUTTON, based on GX_TEXT_BUTTON.  */
 
 #define GX_MULTI_LINE_TEXT_BUTTON_MEMBERS_DECLARE                                   \
     GX_TEXT_BUTTON_MEMBERS_DECLARE                                                  \
     INT      gx_multi_line_text_button_line_count;                                  \
-    INT      gx_multi_line_text_button_length[GX_MULTI_LINE_TEXT_BUTTON_MAX_LINES]; \
-    GX_CONST GX_CHAR *gx_multi_line_text_button_lines[GX_MULTI_LINE_TEXT_BUTTON_MAX_LINES];
+    GX_STRING gx_multi_line_text_button_lines[GX_MULTI_LINE_TEXT_BUTTON_MAX_LINES];
 
 /* Define macro for GX_RADIO_BUTTON, based on GX_TEXT_BUTTON.  */
 
@@ -2019,13 +2216,12 @@ typedef struct GX_LANGUAGE_HEADER_STRUCT{
     GX_RESOURCE_ID gx_multi_line_text_view_font_id;              \
     GX_RESOURCE_ID gx_multi_line_text_view_normal_text_color;    \
     GX_RESOURCE_ID gx_multi_line_text_view_selected_text_color;  \
-    UINT           gx_multi_line_text_view_string_byte_count;    \
-    UINT           gx_multi_line_text_view_string_char_count;    \
+    GX_RESOURCE_ID gx_multi_line_text_view_disabled_text_color;  \
     UINT           gx_multi_line_text_view_text_total_rows;      \
     UINT           gx_multi_line_text_view_text_visible_rows;    \
     INT            gx_multi_line_text_view_text_scroll_shift;    \
-    GX_CONST GX_CHAR *gx_multi_line_text_view_text;              \
-    GX_BYTE        gx_multi_line_text_view_whitespace;           \
+    GX_STRING      gx_multi_line_text_view_text;                 \
+    GX_UBYTE       gx_multi_line_text_view_whitespace;           \
     GX_BYTE        gx_multi_line_text_view_line_space;           \
     GX_BOOL        gx_multi_line_text_view_line_index_old;       \
     GX_UBYTE       gx_multi_line_text_view_cache_size;           \
@@ -2033,14 +2229,19 @@ typedef struct GX_LANGUAGE_HEADER_STRUCT{
     UINT           gx_multi_line_text_view_line_index[GX_MULTI_LINE_INDEX_CACHE_SIZE];
 
 /* GX_MULTI_LINE_TEXT_INPUT, based on GX_MULTI_LINE_TEXT_VIEW */
-#define GX_MULTI_LINE_TEXT_INPUT_MEMBERS_DECLARE                        \
-    GX_MULTI_LINE_TEXT_VIEW_MEMBERS_DECLARE                             \
-    GX_UBYTE             gx_multi_line_text_input_new_line_character[3];\
-    UINT                 gx_multi_line_text_input_buffer_size;          \
-    UINT                 gx_multi_line_text_input_text_insert_position; \
-    UINT                 gx_multi_line_text_input_text_was_modified;    \
-    UINT                 gx_multi_line_text_input_text_cursor_line;     \
-    GX_TEXT_INPUT_CURSOR gx_multi_line_text_input_cursor_instance;
+#define GX_MULTI_LINE_TEXT_INPUT_MEMBERS_DECLARE                          \
+    GX_MULTI_LINE_TEXT_VIEW_MEMBERS_DECLARE                               \
+    UINT                 gx_multi_line_text_input_buffer_size;            \
+    UINT                 gx_multi_line_text_input_text_insert_position;   \
+    UINT                 gx_multi_line_text_input_text_was_modified;      \
+    UINT                 gx_multi_line_text_input_text_cursor_line;       \
+    GX_TEXT_INPUT_CURSOR gx_multi_line_text_input_cursor_instance;        \
+    GX_RESOURCE_ID       gx_multi_line_text_input_readonly_text_color;    \
+    GX_RESOURCE_ID       gx_multi_line_text_input_readonly_fill_color;    \
+    UINT                 gx_multi_line_text_input_start_mark;             \
+    UINT                 gx_multi_line_text_input_end_mark;               \
+    GX_UBYTE             gx_multi_line_text_input_new_line_character[3];  \
+    GX_UBYTE             gx_multi_line_text_input_new_line_character_size;
 
 /* Define macro for GX_PROGRESS_BAR, based on GX_WIDGET.  */
 #define GX_PROGRESS_BAR_MEMBERS_DECLARE \
@@ -2068,6 +2269,19 @@ typedef struct GX_LANGUAGE_HEADER_STRUCT{
     GX_RADIAL_PROGRESS_BAR_INFO gx_radial_progress_bar_info;              \
     GX_RADIAL_PROGRESS_BAR_CANVAS_FIELD
 
+/* Define macro of GX_RADIAL_SLIDER members. */
+#define GX_RADIAL_SLIDER_MEMBERS_DECLARE                                \
+    GX_WIDGET_MEMBERS_DECLARE                                           \
+    GX_RADIAL_SLIDER_INFO       gx_radial_slider_info;                  \
+    GX_VALUE                    gx_radial_slider_start_angle;           \
+    GX_VALUE                    gx_radial_slider_target_angle;          \
+    GX_POINT                    gx_radial_slider_pendown_point;         \
+    USHORT                      gx_radial_slider_animation_total_steps; \
+    USHORT                      gx_radial_slider_animation_step;        \
+    USHORT                      gx_radial_slider_animation_delay;       \
+    USHORT                      gx_radial_slider_animation_style;       \
+    VOID                      (*gx_radial_slider_animation_update_callback)(struct GX_RADIAL_SLIDER_STRUCT *slider);
+
 /* Define macro for GX_LINE_CHART members. */
 #define GX_LINE_CHART_MEMBERS_DECLARE      \
     GX_WINDOW_MEMBERS_DECLARE              \
@@ -2092,19 +2306,42 @@ typedef struct GX_LANGUAGE_HEADER_STRUCT{
     GX_VALUE          gx_scroll_wheel_shift_error;
 
 /* Define macro for GX_TEXT_SCROLL_WHEEL_BASE members. */
-#define GX_TEXT_SCROLL_WHEEL_MEMBERS_DECLARE                    \
-    GX_SCROLL_WHEEL_MEMBERS_DECLARE                             \
-    GX_RESOURCE_ID    gx_text_scroll_wheel_normal_font;         \
-    GX_RESOURCE_ID    gx_text_scroll_wheel_selected_font;       \
-    GX_RESOURCE_ID    gx_text_scroll_wheel_normal_text_color;   \
-    GX_RESOURCE_ID    gx_text_scroll_wheel_selected_text_color; \
-    GX_CONST GX_CHAR *(*gx_text_scroll_wheel_text_get)(struct GX_TEXT_SCROLL_WHEEL_STRUCT *, INT); 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define GX_TEXT_SCROLL_WHEEL_MEMBERS_DECLARE                                                                   \
+    GX_SCROLL_WHEEL_MEMBERS_DECLARE                                                                            \
+    GX_RESOURCE_ID      gx_text_scroll_wheel_normal_font;                                                      \
+    GX_RESOURCE_ID      gx_text_scroll_wheel_selected_font;                                                    \
+    GX_RESOURCE_ID      gx_text_scroll_wheel_normal_text_color;                                                \
+    GX_RESOURCE_ID      gx_text_scroll_wheel_selected_text_color;                                              \
+    GX_RESOURCE_ID      gx_text_scroll_wheel_disabled_text_color;                                              \
+    GX_CONST GX_CHAR* (*gx_text_scroll_wheel_text_get_deprecated)(struct GX_TEXT_SCROLL_WHEEL_STRUCT*, INT);   \
+    UINT              (*gx_text_scroll_wheel_text_get)(struct GX_TEXT_SCROLL_WHEEL_STRUCT *, INT, GX_STRING *); 
+#else
+#define GX_TEXT_SCROLL_WHEEL_MEMBERS_DECLARE                                                                   \
+    GX_SCROLL_WHEEL_MEMBERS_DECLARE                                                                            \
+    GX_RESOURCE_ID      gx_text_scroll_wheel_normal_font;                                                      \
+    GX_RESOURCE_ID      gx_text_scroll_wheel_selected_font;                                                    \
+    GX_RESOURCE_ID      gx_text_scroll_wheel_normal_text_color;                                                \
+    GX_RESOURCE_ID      gx_text_scroll_wheel_selected_text_color;                                              \
+    GX_RESOURCE_ID      gx_text_scroll_wheel_disabled_text_color;                                              \
+    UINT              (*gx_text_scroll_wheel_text_get)(struct GX_TEXT_SCROLL_WHEEL_STRUCT *, INT, GX_STRING *); 
+#endif
 
 /* Define macro for GX_STRING_SCROLL_WHEEL members. */
-#define GX_STRING_SCROLL_WHEEL_MEMBERS_DECLARE                        \
-    GX_TEXT_SCROLL_WHEEL_MEMBERS_DECLARE                              \
-    GX_CONST GX_CHAR        **gx_string_scroll_wheel_string_list;     \
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define GX_STRING_SCROLL_WHEEL_MEMBERS_DECLARE                               \
+    GX_TEXT_SCROLL_WHEEL_MEMBERS_DECLARE                                     \
+    GX_CONST GX_CHAR        **gx_string_scroll_wheel_string_list_deprecated; \
+    GX_CONST GX_STRING       *gx_string_scroll_wheel_string_list;            \
+    USHORT                    gx_string_scroll_wheel_string_list_buffer_size;\
     GX_CONST GX_RESOURCE_ID  *gx_string_scroll_wheel_string_id_list;
+#else
+#define GX_STRING_SCROLL_WHEEL_MEMBERS_DECLARE                               \
+    GX_TEXT_SCROLL_WHEEL_MEMBERS_DECLARE                                     \
+    GX_CONST GX_STRING       *gx_string_scroll_wheel_string_list;            \
+    USHORT                    gx_string_scroll_wheel_string_list_buffer_size;\
+    GX_CONST GX_RESOURCE_ID  *gx_string_scroll_wheel_string_id_list;
+#endif
 
 /* Define macro for GX_RANGE_SCROLL_WHEEL members. */
 #define GX_NUMERIC_SCROLL_WHEEL_MEMBERS_DECLARE               \
@@ -2362,6 +2599,12 @@ typedef struct GX_RADIAL_PROGRESS_BAR_STRUCT
     GX_RADIAL_PROGRESS_BAR_MEMBERS_DECLARE
 } GX_RADIAL_PROGRESS_BAR;
 
+/* Define Radial Slider type. */
+typedef struct GX_RADIAL_SLIDER_STRUCT
+{
+    GX_RADIAL_SLIDER_MEMBERS_DECLARE
+}GX_RADIAL_SLIDER;
+
 /* Define GX_LINE_CHART control block type */
 typedef struct GX_LINE_CHART_STRUCT
 {
@@ -2445,11 +2688,13 @@ typedef struct GX_ANIMATION_STRUCT
     GX_VALUE                    gx_animation_slide_target_index_2;
     GX_VALUE                    gx_animation_slide_tracking_start_pos;
     GX_VALUE                    gx_animation_slide_tracking_current_pos;
+    USHORT                      gx_animation_landing_speed;
     USHORT                      gx_animation_timer;
     USHORT                      gx_animation_slide_screen_list_size;
     GX_UBYTE                    gx_animation_status;
     GX_UBYTE                    gx_animation_slide_direction;
     GX_UBYTE                    gx_animation_system_allocated;
+    GX_UBYTE                    gx_animation_total_steps;
 } GX_ANIMATION;
 
 typedef struct GX_PIXEL_STRUCT
@@ -2538,7 +2783,7 @@ typedef struct GX_RESISTIVE_TOUCH_STRUCT {
     GX_POINT                 *gx_resistive_touch_sample_ram;
     GX_POINT                  gx_resistive_touch_current_touch_coord;
     GX_POINT                  gx_resistive_touch_last_touch_coord;
-    GX_BOOL                 (*gx_resistive_touch_pen_down_detect)();
+    GX_BOOL                 (*gx_resistive_touch_pen_down_detect)(VOID);
     USHORT                  (*gx_resistive_touch_sample_read)(GX_VALUE axis);
     TOUCH_CALIBRATION_MATRIX  gx_resistive_touch_calibration_matrix;
 } GX_RESISTIVE_TOUCH;
@@ -2550,7 +2795,6 @@ typedef struct GX_RESISTIVE_TOUCH_STRUCT {
 #define GX_TOUCH_Y_AXIS         2
 
 /* GUIX fixed point math helpers */
-
 
 typedef struct GX_FIXED_POINT_STRUCT
 {
@@ -2593,16 +2837,22 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_accordion_menu_create(a, b, c, d, e, f)               _gx_accordion_menu_create(a, b, c, d, e, f)
 #define gx_accordion_menu_draw                                   _gx_accordion_menu_draw
 #define gx_accordion_menu_event_process                          _gx_accordion_menu_event_process
-#define gx_accordion_menu_position                               _gx_accordion_menu_position
+#define gx_accordion_menu_position(a)                            _gx_accordion_menu_position(a)
 
 #define gx_animation_canvas_define                               _gx_animation_canvas_define
 #define gx_animation_create                                      _gx_animation_create
 #define gx_animation_drag_disable                                _gx_animation_drag_disable
 #define gx_animation_drag_enable                                 _gx_animation_drag_enable
+#define gx_animation_landing_speed_set                           _gx_animation_landing_speed_set
 #define gx_animation_start                                       _gx_animation_start
 #define gx_animation_stop                                        _gx_animation_stop
 
+#define gx_binres_language_count_get                             _gx_binres_language_count_get
+#define gx_binres_language_info_load                             _gx_binres_language_info_load
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_binres_language_table_load                            _gx_binres_language_table_load
+#endif
+#define gx_binres_language_table_load_ext                        _gx_binres_language_table_load_ext
 #define gx_binres_theme_load                                     _gx_binres_theme_load
 
 #define gx_brush_default                                         _gx_brush_default
@@ -2627,23 +2877,33 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_canvas_hardware_layer_bind                            _gx_canvas_hardware_layer_bind
 #define gx_canvas_hide                                           _gx_canvas_hide
 #define gx_canvas_line_draw                                      _gx_canvas_line_draw
+#define gx_canvas_memory_define                                  _gx_canvas_memory_define
+
+#if defined (GX_MOUSE_SUPPORT)
 #define gx_canvas_mouse_define                                   _gx_canvas_mouse_define
 #define gx_canvas_mouse_hide                                     _gx_canvas_mouse_hide
 #define gx_canvas_mouse_show                                     _gx_canvas_mouse_show
+#endif
 #define gx_canvas_offset_set                                     _gx_canvas_offset_set
 #define gx_canvas_pixel_draw                                     _gx_canvas_pixel_draw
 #define gx_canvas_pixelmap_blend                                 _gx_canvas_pixelmap_blend
 #define gx_canvas_pixelmap_draw                                  _gx_canvas_pixelmap_draw
-#define gx_canvas_pixlemap_get                                   _gx_canvas_pixelmap_get
+#define gx_canvas_pixelmap_get                                   _gx_canvas_pixelmap_get
 #define gx_canvas_pixelmap_rotate                                _gx_canvas_pixelmap_rotate
 #define gx_canvas_pixelmap_tile                                  _gx_canvas_pixelmap_tile
 #define gx_canvas_polygon_draw                                   _gx_canvas_polygon_draw
 #define gx_canvas_pie_draw                                       _gx_canvas_pie_draw
 #define gx_canvas_rectangle_draw                                 _gx_canvas_rectangle_draw
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_canvas_rotated_text_draw                              _gx_canvas_rotated_text_draw
+#endif
+#define gx_canvas_rotated_text_draw_ext                          _gx_canvas_rotated_text_draw_ext
 #define gx_canvas_shift                                          _gx_canvas_shift
 #define gx_canvas_show                                           _gx_canvas_show
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_canvas_text_draw                                      _gx_canvas_text_draw
+#endif
+#define gx_canvas_text_draw_ext                                  _gx_canvas_text_draw_ext
 
 #define gx_checkbox_create(a, b, c, d, e, f, g)                  _gx_checkbox_create(a, b, (GX_WIDGET *)c, d, e, f, g)
 #define gx_checkbox_draw                                         _gx_checkbox_draw
@@ -2676,12 +2936,30 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_context_raw_brush_define                              _gx_context_raw_brush_define
 #define gx_context_raw_fill_color_set                            _gx_context_raw_fill_color_set
 #define gx_context_raw_line_color_set                            _gx_context_raw_line_color_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_context_string_get                                    _gx_context_string_get
+#endif
+#define gx_context_string_get_ext                                _gx_context_string_get_ext
 
+#define gx_display_active_language_set                           _gx_display_active_language_set
+#define gx_display_color_set                                     _gx_display_color_set
 #define gx_display_color_table_set                               _gx_display_color_table_set
 #define gx_display_create                                        _gx_display_create
 #define gx_display_delete                                        _gx_display_delete
 #define gx_display_font_table_set                                _gx_display_font_table_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_display_language_table_get                            _gx_display_language_table_get
+#define gx_display_language_table_set                            _gx_display_language_table_set
+#endif
+#define gx_display_language_table_get_ext                        _gx_display_language_table_get_ext
+#define gx_display_language_table_set_ext                        _gx_display_language_table_set_ext
 #define gx_display_pixelmap_table_set                            _gx_display_pixelmap_table_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_display_string_get                                    _gx_display_string_get
+#define gx_display_string_table_get                              _gx_display_string_table_get
+#endif
+#define gx_display_string_get_ext                                _gx_display_string_get_ext
+#define gx_display_string_table_get_ext                          _gx_display_string_table_get_ext
 #define gx_display_theme_install                                 _gx_display_theme_install
 
 #define gx_drop_list_close                                       _gx_drop_list_close
@@ -2735,15 +3013,38 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_multi_line_text_button_event_process                  _gx_multi_line_text_button_event_process
 #define gx_multi_line_text_button_text_draw                      _gx_multi_line_text_button_text_draw
 #define gx_multi_line_text_button_text_id_set                    _gx_multi_line_text_button_text_id_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_multi_line_text_button_text_set                       _gx_multi_line_text_button_text_set
+#endif
+#define gx_multi_line_text_button_text_set_ext                   _gx_multi_line_text_button_text_set_ext
 
+#define gx_multi_line_text_input_backspace                       _gx_multi_line_text_input_backspace
 #define gx_multi_line_text_input_buffer_clear                    _gx_multi_line_text_input_buffer_clear
 #define gx_multi_line_text_input_buffer_get                      _gx_multi_line_text_input_buffer_get
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_multi_line_text_input_char_insert                     _gx_multi_line_text_input_char_insert
+#endif
+#define gx_multi_line_text_input_char_insert_ext                 _gx_multi_line_text_input_char_insert_ext
 #define gx_multi_line_text_input_create(a, b, c, d, e, f, g, h)  _gx_multi_line_text_input_create(a, b, (GX_WIDGET *)c, d, e, f, g, h)
+#define gx_multi_line_text_input_cursor_pos_get                  _gx_multi_line_text_input_cursor_pos_get
+#define gx_multi_line_text_input_delete                          _gx_multi_line_text_input_delete
+#define gx_multi_line_text_input_down_arrow                      _gx_multi_line_text_input_down_arrow
+#define gx_multi_line_text_input_end                             _gx_multi_line_text_input_end
+#define gx_multi_line_text_input_event_process                   _gx_multi_line_text_input_event_process
+#define gx_multi_line_text_input_fill_color_set                  _gx_multi_line_text_input_fill_color_set
+#define gx_multi_line_text_input_home                            _gx_multi_line_text_input_home
+#define gx_multi_line_text_input_left_arrow                      _gx_multi_line_text_input_left_arrow
+#define gx_multi_line_text_input_right_arrow                     _gx_multi_line_text_input_right_arrow
 #define gx_multi_line_text_input_style_add                       _gx_multi_line_text_input_style_add
 #define gx_multi_line_text_input_style_remove                    _gx_multi_line_text_input_style_remove
 #define gx_multi_line_text_input_style_set                       _gx_multi_line_text_input_style_set
+#define gx_multi_line_text_input_text_color_set                  _gx_multi_line_text_input_text_color_set
+#define gx_multi_line_text_input_text_select                     _gx_multi_line_text_input_text_select
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_multi_line_text_input_text_set                        _gx_multi_line_text_input_text_set
+#endif
+#define gx_multi_line_text_input_text_set_ext                    _gx_multi_line_text_input_text_set_ext
+#define gx_multi_line_text_input_up_arrow                        _gx_multi_line_text_input_up_arrow
 
 #define gx_multi_line_text_view_create(a, b, c, d, e, f, g)      _gx_multi_line_text_view_create(a, b, (GX_WIDGET *)c, d, e, f, g)
 #define gx_multi_line_text_view_draw                             _gx_multi_line_text_view_draw
@@ -2751,9 +3052,16 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_multi_line_text_view_font_set                         _gx_multi_line_text_view_font_set
 #define gx_multi_line_text_view_line_space_set                   _gx_multi_line_text_view_line_space_set
 #define gx_multi_line_text_view_scroll_info_get                  _gx_multi_line_text_view_scroll_info_get
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_multi_line_text_view_text_color_set(a, b, c)          _gx_multi_line_text_view_text_color_set((GX_MUILTI_LINE_TEXT_VIEW *)a, b, c, b)
+#else
 #define gx_multi_line_text_view_text_color_set                   _gx_multi_line_text_view_text_color_set
+#endif
 #define gx_multi_line_text_view_text_id_set                      _gx_multi_line_text_view_text_id_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_multi_line_text_view_text_set                         _gx_multi_line_text_view_text_set
+#endif
+#define gx_multi_line_text_view_text_set_ext                     _gx_multi_line_text_view_text_set_ext
 #define gx_multi_line_text_view_whitespace_set                   _gx_multi_line_text_view_whitespace_set
 
 #define gx_numeric_pixelmap_prompt_create                        _gx_numeric_pixelmap_prompt_create
@@ -2781,6 +3089,7 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_pixelmap_slider_event_process                         _gx_pixelmap_slider_event_process
 #define gx_pixelmap_slider_pixelmap_set                          _gx_pixelmap_slider_pixelmap_set
 
+#define gx_progress_bar_background_draw                          _gx_progress_bar_background_draw
 #define gx_progress_bar_create(a, b, c, d, e, f, g)              _gx_progress_bar_create(a, b, (GX_WIDGET *)c, d, e, f, g)
 #define gx_progress_bar_draw                                     _gx_progress_bar_draw
 #define gx_progress_bar_event_process                            _gx_progress_bar_event_process
@@ -2788,18 +3097,33 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_progress_bar_info_set(a, b)                           _gx_progress_bar_info_set((GX_PROGRESS_BAR *)a, b)
 #define gx_progress_bar_pixelmap_set                             _gx_progress_bar_pixelmap_set
 #define gx_progress_bar_range_set                                _gx_progress_bar_range_set
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_progress_bar_text_color_set(a, b, c)                  _gx_progress_bar_text_color_set((GX_PROGRESS_BAR *)a, b, c, b)
+#else
 #define gx_progress_bar_text_color_set                           _gx_progress_bar_text_color_set
+#endif
 #define gx_progress_bar_text_draw                                _gx_progress_bar_text_draw
 #define gx_progress_bar_value_set                                _gx_progress_bar_value_set
 
 #define gx_prompt_create(a, b, c, d, e, f, g)                    _gx_prompt_create(a, b, (GX_WIDGET *)c, d, e, f, g)
 #define gx_prompt_draw                                           _gx_prompt_draw
 #define gx_prompt_font_set                                       _gx_prompt_font_set
+
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_prompt_text_color_set(a, b, c)                        _gx_prompt_text_color_set((GX_PROGRESS_BAR *)a, b, c, b)
+#else
 #define gx_prompt_text_color_set                                 _gx_prompt_text_color_set
+#endif
 #define gx_prompt_text_draw                                      _gx_prompt_text_draw
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_prompt_text_get                                       _gx_prompt_text_get
+#endif
+#define gx_prompt_text_get_ext                                   _gx_prompt_text_get_ext
 #define gx_prompt_text_id_set                                    _gx_prompt_text_id_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_prompt_text_set                                       _gx_prompt_text_set
+#endif
+#define gx_prompt_text_set_ext                                   _gx_prompt_text_set_ext
 
 #define gx_radial_progress_bar_anchor_set                        _gx_radial_progress_bar_anchor_set
 #define gx_radial_progress_bar_background_draw                   _gx_radial_progress_bar_background_draw
@@ -2808,9 +3132,24 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_radial_progress_bar_event_process                     _gx_radial_progress_bar_event_process
 #define gx_radial_progress_bar_font_set                          _gx_radial_progress_bar_font_set
 #define gx_radial_progress_bar_info_set                          _gx_radial_progress_bar_info_set
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_radial_progress_bar_text_color_set(a, b, c)           _gx_radial_progress_bar_text_color_set((GX_RADIAL_PROGRESS_BAR *)a, b, c, b)
+#else
 #define gx_radial_progress_bar_text_color_set                    _gx_radial_progress_bar_text_color_set
+#endif
 #define gx_radial_progress_bar_text_draw                         _gx_radial_progress_bar_text_draw
 #define gx_radial_progress_bar_value_set                         _gx_radial_progress_bar_value_set
+
+#define gx_radial_slider_anchor_angles_set                       _gx_radial_slider_anchor_anglees_set
+#define gx_radial_slider_animation_set                           _gx_radial_slider_animation_set
+#define gx_radial_slider_animation_start                         _gx_radial_slider_animation_start
+#define gx_radial_slider_create                                  _gx_radial_slider_create
+#define gx_radial_slider_draw                                    _gx_radial_slider_draw
+#define gx_radial_slider_event_process                           _gx_radial_slider_event_process
+#define gx_radial_slider_info_get                                _gx_radial_slider_info_get
+#define gx_radial_slider_info_set                                _gx_radial_slider_info_set
+#define gx_radial_slider_pixelmap_set                            _gx_radial_slider_pixelmap_set
+#define gx_radial_slider_angle_set                               _gx_radial_slider_angle_set
 
 #define gx_radio_button_create(a, b, c, d, e, f, g)              _gx_radio_button_create(a, b, (GX_WIDGET *)c, d, e, f, g)
 #define gx_radio_button_draw                                     _gx_radio_button_draw
@@ -2829,6 +3168,7 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_scrollbar_event_process                               _gx_scrollbar_event_process
 #define gx_scrollbar_limit_check                                 _gx_scrollbar_limit_check
 #define gx_scrollbar_reset                                       _gx_scrollbar_reset
+#define gx_scrollbar_value_set                                   _gx_scrollbar_value_set
 
 #define gx_scroll_wheel_create                                   _gx_scroll_wheel_create
 #define gx_scroll_wheel_event_process                            _gx_scroll_wheel_event_process
@@ -2847,8 +3187,10 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_single_line_text_input_character_insert(a, b, c)      _gx_single_line_text_input_character_insert(a, b, c)
 #define gx_single_line_text_input_create(a, b, c, d, e, f, g, h) _gx_single_line_text_input_create(a, b, (GX_WIDGET *)c, d, e, f, g, h)
 #define gx_single_line_text_input_draw(a)                        _gx_single_line_text_input_draw(a)
+#define gx_single_line_text_input_draw_position_get(a, b, c)     _gx_single_line_text_input_draw_position_get(a, b, c)
 #define gx_single_line_text_input_end(a)                         _gx_single_line_text_input_end((GX_SINGLE_LINE_TEXT_INPUT *)a)
 #define gx_single_line_text_input_event_process(a, b)            _gx_single_line_text_input_event_process((GX_SINGLE_LINE_TEXT_INPUT *)a, b)
+#define gx_single_line_text_input_fill_color_set(a, b, c, d, e)  _gx_single_line_text_input_fill_color_set((GX_SINGLE_LINE_TEXT_INPUT *)a, b, c, d, e)
 #define gx_single_line_text_input_home(a)                        _gx_single_line_text_input_home((GX_SINGLE_LINE_TEXT_INPUT *)a)
 #define gx_single_line_text_input_left_arrow(a)                  _gx_single_line_text_input_left_arrow((GX_SINGLE_LINE_TEXT_INPUT *)a)
 #define gx_single_line_text_input_position_get(a, b)             _gx_single_line_text_input_position_get(a, b)
@@ -2856,6 +3198,12 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_single_line_text_input_style_add(a, b)                _gx_single_line_text_input_style_add((GX_SINGLE_LINE_TEXT_INPUT *)a, b);
 #define gx_single_line_text_input_style_remove(a, b)             _gx_single_line_text_input_style_remove((GX_SINGLE_LINE_TEXT_INPUT *)a, b)
 #define gx_single_line_text_input_style_set(a, b)                _gx_single_line_text_input_style_set((GX_SINGLE_LINE_TEXT_INPUT *)a, b)
+#define gx_single_line_text_input_text_color_set(a, b, c, d, e)  _gx_single_line_text_input_text_color_set((GX_SINGLE_LINE_TEXT_INPUT *)a, b, c, d, e)
+#define gx_single_line_text_input_text_select                    _gx_single_line_text_input_text_select
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_single_line_text_input_text_set                       _gx_single_line_text_input_text_set
+#endif
+#define gx_single_line_text_input_text_set_ext                   _gx_single_line_text_input_text_set_ext
 
 #define gx_slider_create(a, b, c, d, e, f, g, h)                 _gx_slider_create(a, b, (GX_WIDGET *)c, d, e, f, g, h)
 #define gx_slider_draw                                           _gx_slider_draw
@@ -2874,15 +3222,28 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_sprite_start(a, b)                                    _gx_sprite_start(a, b)
 #define gx_sprite_stop(a)                                        _gx_sprite_stop(a)
 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_string_scroll_wheel_create(a, b, c, d, e, f, g, h)    _gx_string_scroll_wheel_create(a, b, c, d, e, f, g, h)
-#define gx_string_scroll_wheel_string_id_list_set                _gx_string_scroll_wheel_string_id_list_set
 #define gx_string_scroll_wheel_string_list_set                   _gx_string_scroll_wheel_string_list_set
+#endif
+#define gx_string_scroll_wheel_create_ext(a, b, c, d, e, f, g, h) _gx_string_scroll_wheel_create_ext(a, b, c, d, e, f, g, h)
+#define gx_string_scroll_wheel_string_id_list_set                _gx_string_scroll_wheel_string_id_list_set
+#define gx_string_scroll_wheel_string_list_set_ext               _gx_string_scroll_wheel_string_list_set_ext
 
 #define gx_system_active_language_set                            _gx_system_active_language_set
 
 #if (GX_ANIMATION_POOL_SIZE > 0)
 #define gx_system_animation_get                                  _gx_system_animation_get
 #define gx_system_animation_free                                 _gx_system_animation_free
+#endif
+
+#if defined(GX_DYNAMIC_BIDI_TEXT_SUPPORT)
+#define gx_system_bidi_text_enable                               _gx_system_bidi_text_enable
+#define gx_system_bidi_text_disable                              _gx_system_bidi_text_disable
+#endif
+
+#if defined(GX_THAI_GLYPH_SHAPING_SUPPORT)
+#define gx_system_text_render_style_set                          _gx_system_text_render_style_set
 #endif
 
 #define gx_system_canvas_refresh                                 _gx_system_canvas_refresh
@@ -2893,45 +3254,73 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_system_event_send                                     _gx_system_event_send
 #define gx_system_focus_claim(a)                                 _gx_system_focus_claim((GX_WIDGET *)a)
 #define gx_system_initialize                                     _gx_system_initialize
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_system_language_table_get                             _gx_system_language_table_get
 #define gx_system_language_table_set                             _gx_system_language_table_set
+#endif
 #define gx_system_memory_allocator_set                           _gx_system_memory_allocator_set
 #define gx_system_pen_configure                                  _gx_system_pen_configure
+#define gx_system_screen_stack_create                            _gx_system_screen_stack_create
+#define gx_system_screen_stack_get                               _gx_system_screen_stack_get
+#define gx_system_screen_stack_pop                               _gx_system_screen_stack_pop
+#define gx_system_screen_stack_push                              _gx_system_screen_stack_push
+#define gx_system_screen_stack_reset                             _gx_system_screen_stack_reset
 #define gx_system_scroll_appearance_get                          _gx_system_scroll_appearance_get
 #define gx_system_scroll_appearance_set                          _gx_system_scroll_appearance_set
 #define gx_system_start                                          _gx_system_start
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_system_string_get                                     _gx_system_string_get
 #define gx_system_string_table_get                               _gx_system_string_table_get
 #define gx_system_string_width_get                               _gx_system_string_width_get
+#endif
+#define gx_system_string_width_get_ext                           _gx_system_string_width_get_ext
+
 #define gx_system_timer_start(a, b, c, d)                        _gx_system_timer_start((GX_WIDGET *)a, b, c, d)
 #define gx_system_timer_stop(a, b)                               _gx_system_timer_stop((GX_WIDGET *)a, b)
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_system_version_string_get                             _gx_system_version_string_get
+#endif
+#define gx_system_version_string_get_ext                         _gx_system_version_string_get_ext
 #define gx_system_widget_find                                    _gx_system_widget_find
 
 #define gx_text_button_create(a, b, c, d, e, f, g)               _gx_text_button_create(a, b, (GX_WIDGET *)c, d, e, f, g)
 #define gx_text_button_draw                                      _gx_text_button_draw
 #define gx_text_button_font_set                                  _gx_text_button_font_set
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_text_button_text_color_set(a, b, c)                   _gx_text_button_text_color_set((GX_TEXT_BUTTON *)a, b, c)
+#else
 #define gx_text_button_text_color_set                            _gx_text_button_text_color_set
+#endif
 #define gx_text_button_text_draw                                 _gx_text_button_text_draw
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_text_button_text_get                                  _gx_text_button_text_get
+#endif
+#define gx_text_button_text_get_ext                              _gx_text_button_text_get_ext
 #define gx_text_button_text_id_set                               _gx_text_button_text_id_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_text_button_text_set                                  _gx_text_button_text_set
+#endif
+#define gx_text_button_text_set_ext                              _gx_text_button_text_set_ext
 
 #define gx_text_input_cursor_blink_interval_set                  _gx_text_input_cursor_blink_interval_set
 #define gx_text_input_cursor_height_set                          _gx_text_input_cursor_height_set
 #define gx_text_input_cursor_width_set                           _gx_text_input_cursor_width_set
 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_text_scroll_wheel_callback_set(a, b)                  _gx_text_scroll_wheel_callback_set((GX_TEXT_SCROLL_WHEEL *)a, (GX_CONST GX_CHAR *(*)(GX_TEXT_SCROLL_WHEEL *, INT)) b)
+#endif
+#define gx_text_scroll_wheel_callback_set_ext(a, b)              _gx_text_scroll_wheel_callback_set_ext((GX_TEXT_SCROLL_WHEEL *)a, (UINT(*)(GX_TEXT_SCROLL_WHEEL *, INT, GX_STRING *)) b)
 #define gx_text_scroll_wheel_font_set(a, b, c)                   _gx_text_scroll_wheel_font_set((GX_TEXT_SCROLL_WHEEL *) a, b, c)
-#define gx_text_scroll_wheel_text_color_set(a, b, c)             _gx_text_scroll_wheel_text_color_set((GX_TEXT_SCROLL_WHEEL *) a, b, c)
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_text_scroll_wheel_text_color_set(a, b, c)             _gx_text_scroll_wheel_text_color_set((GX_TEXT_SCROLL_WHEEL *) a, b, c, b)
+#else
+#define gx_text_scroll_wheel_text_color_set(a, b, c, d)          _gx_text_scroll_wheel_text_color_set((GX_TEXT_SCROLL_WHEEL *) a, b, c, d)
+#endif
 #define gx_text_scroll_wheel_create                              _gx_text_scroll_wheel_create
 #define gx_text_scroll_wheel_draw                                _gx_text_scroll_wheel_draw
 
-
 #define gx_transition_window_create(a, b, c, d, e, f)            _gx_transition_window_create(a, b, (GX_WIDGET *)c, d, e, f)
 
-#define gx_utility_gradient_create                               _gx_utility_gradient_create
-#define gx_utility_gradient_delete                               _gx_utility_gradient_delete
 #define gx_tree_view_create(a, b, c, d, e, f)                    _gx_tree_view_create((GX_TREE_VIEW *)a, b, (GX_WIDGET *)c, d, e, f)
 #define gx_tree_view_draw                                        _gx_tree_view_draw
 #define gx_tree_view_event_process                               _gx_tree_view_event_process
@@ -2942,11 +3331,22 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_tree_view_selected_get                                _gx_tree_view_selected_get
 #define gx_tree_view_selected_set                                _gx_tree_view_selected_set
 
+#define gx_utility_canvas_to_bmp                                 _gx_utility_canvas_to_bmp
+#define gx_utility_gradient_create                               _gx_utility_gradient_create
+#define gx_utility_gradient_delete                               _gx_utility_gradient_delete
+#define gx_utility_circle_point_get                              _gx_utility_circle_point_get
 #define gx_utility_ltoa                                          _gx_utility_ltoa
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_utility_math_acos                                     _gx_utility_math_acos_5_4_0
+#define gx_utility_math_asin                                     _gx_utility_math_asin_5_4_0
+#define gx_utility_math_cos                                      _gx_utility_math_cos_5_4_0
+#define gx_utility_math_sin                                      _gx_utility_math_sin_5_4_0
+#else
 #define gx_utility_math_acos                                     _gx_utility_math_acos
 #define gx_utility_math_asin                                     _gx_utility_math_asin
 #define gx_utility_math_cos                                      _gx_utility_math_cos
 #define gx_utility_math_sin                                      _gx_utility_math_sin
+#endif
 #define gx_utility_math_sqrt                                     _gx_utility_math_sqrt
 #define gx_utility_pixelmap_resize                               _gx_utility_pixelmap_resize
 #define gx_utility_pixelmap_rotate                               _gx_utility_pixelmap_rotate
@@ -2960,7 +3360,10 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_utility_rectangle_overlap_detect                      _gx_utility_rectangle_overlap_detect
 #define gx_utility_rectangle_point_detect                        _gx_utility_rectangle_point_detect
 #define gx_utility_rectangle_shift                               _gx_utility_rectangle_shift
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_utility_string_to_alphamap                            _gx_utility_string_to_alphamap
+#endif
+#define gx_utility_string_to_alphamap_ext                        _gx_utility_string_to_alphamap_ext
 
 #define gx_vertical_list_children_position                       _gx_vertical_list_children_position
 #define gx_vertical_list_create(a, b, c, d, e, f, g, h)          _gx_vertical_list_create(a, b, (GX_WIDGET *)c, d, e, f, g, h)
@@ -2997,8 +3400,13 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_widget_event_process(a, b)                            _gx_widget_event_process((GX_WIDGET *)a, b)
 #define gx_widget_event_process_set(a, b)                        _gx_widget_event_process_set((GX_WIDGET *)a, (UINT (*)(GX_WIDGET *, GX_EVENT *)) b)
 #define gx_widget_event_to_parent(a, b)                          _gx_widget_event_to_parent((GX_WIDGET *)a, b)
-#define gx_widget_fill_color_set(a, b, c)                        _gx_widget_fill_color_set((GX_WIDGET *)a, b, c)
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_widget_fill_color_set(a, b, c)                        _gx_widget_fill_color_set((GX_WIDGET *)a, b, c, b)
+#else
+#define gx_widget_fill_color_set(a, b, c, d)                     _gx_widget_fill_color_set((GX_WIDGET *)a, b, c, d)
+#endif
 #define gx_widget_find(a, b, c, d)                               _gx_widget_find((GX_WIDGET *)a, b, c, (GX_WIDGET **)d)
+#define gx_widget_first_child_get(a, b)                          _gx_widget_first_child_get((GX_WIDGET *) a, (GX_WIDGET **) b)
 #define gx_widget_focus_next(a)                                  _gx_widget_focus_next((GX_WIDGET *)a)
 #define gx_widget_focus_previous(a)                              _gx_widget_focus_previous((GX_WIDGET *)a)
 #define gx_widget_font_get(a, b, c)                              _gx_widget_font_get((GX_WIDGET *)a, b, c)
@@ -3006,7 +3414,11 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_widget_front_move(a, b)                               _gx_widget_front_move((GX_WIDGET *)a, b)
 #define gx_widget_height_get(a, b)                               _gx_widget_height_get((GX_WIDGET *)a, b)
 #define gx_widget_hide(a)                                        _gx_widget_hide((GX_WIDGET *)a)
+#define gx_widget_last_child_get(a, b)                           _gx_widget_last_child_get((GX_WIDGET *) a, (GX_WIDGET **) b)
+#define gx_widget_next_sibling_get(a, b)                         _gx_widget_next_sibling_get((GX_WIDGET *) a, (GX_WIDGET **) b)
+#define gx_widget_parent_get(a, b)                               _gx_widget_parent_get((GX_WIDGET *) a, (GX_WIDGET **) b)
 #define gx_widget_pixelmap_get(a, b, c)                          _gx_widget_pixelmap_get((GX_WIDGET *)a, b, c)
+#define gx_widget_previous_sibling_get(a, b)                     _gx_widget_previous_sibling_get((GX_WIDGET *) a, (GX_WIDGET **) b)
 #define gx_widget_resize(a, b)                                   _gx_widget_resize((GX_WIDGET *)a, b)
 #define gx_widget_shift(a, b, c, d)                              _gx_widget_shift((GX_WIDGET *)a, b, c, d)
 #define gx_widget_show(a)                                        _gx_widget_show((GX_WIDGET *)a)
@@ -3014,13 +3426,22 @@ typedef struct GX_FIXED_POINT_STRUCT
 #define gx_widget_status_get(a, b)                               _gx_widget_status_get((GX_WIDGET *)a, b)
 #define gx_widget_status_remove(a, b)                            _gx_widget_status_remove((GX_WIDGET *)a, b)
 #define gx_widget_status_test(a, b, c)                           _gx_widget_status_test((GX_WIDGET *)a, b, c)
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_widget_string_get(a, b, c)                            _gx_widget_string_get((GX_WIDGET *)a, b, c)
+#endif
+#define gx_widget_string_get_ext(a, b, c)                        _gx_widget_string_get_ext((GX_WIDGET *)a, b, c)
 #define gx_widget_style_add(a, b)                                _gx_widget_style_add((GX_WIDGET *)a, b)
 #define gx_widget_style_get(a, b)                                _gx_widget_style_get((GX_WIDGET *)a, b)
 #define gx_widget_style_remove(a, b)                             _gx_widget_style_remove((GX_WIDGET *)a, b)
 #define gx_widget_style_set(a, b)                                _gx_widget_style_set((GX_WIDGET *)a, b)
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_widget_text_blend(a, b, c, d, e, f, g)                _gx_widget_text_blend((GX_WIDGET *)a, b, c, d, e, f, g)
 #define gx_widget_text_draw(a, b, c, d, e, f)                    _gx_widget_text_draw((GX_WIDGET *)a, b, c, d, e, f)
+#endif
+#define gx_widget_text_blend_ext(a, b, c, d, e, f, g)            _gx_widget_text_blend_ext((GX_WIDGET *)a, b, c, d, e, f, g)
+#define gx_widget_text_draw_ext(a, b, c, d, e, f)                _gx_widget_text_draw_ext((GX_WIDGET *)a, b, c, d, e, f)
 #define gx_widget_text_id_draw(a, b, c, d, e, f)                 _gx_widget_text_id_draw((GX_WIDGET *)a, b, c, d, e, f)
+#define gx_widget_top_visible_child_find(a, b)                   _gx_widget_top_visible_child_find((GX_WIDGET *) a, (GX_WIDGET **) b)
 #define gx_widget_type_find(a, b, c)                             _gx_widget_type_find((GX_WIDGET *)a, b, (GX_WIDGET **)c)
 #define gx_widget_width_get(a, b)                                _gx_widget_width_get((GX_WIDGET *)a, b)
 
@@ -3055,10 +3476,16 @@ UINT _gx_animation_canvas_define(GX_ANIMATION *animation, GX_CANVAS *canvas);
 UINT _gx_animation_create(GX_ANIMATION *animation);
 UINT _gx_animation_drag_disable(GX_ANIMATION *animation, GX_WIDGET *widget);
 UINT _gx_animation_drag_enable(GX_ANIMATION *animation, GX_WIDGET *widget, GX_ANIMATION_INFO *info);
+UINT _gx_animation_landing_speed_set(GX_ANIMATION *animation, USHORT shift_per_step);
 UINT _gx_animation_start(GX_ANIMATION *animation, GX_ANIMATION_INFO *info);
 UINT _gx_animation_stop(GX_ANIMATION *animation);
 
+UINT _gx_binres_language_count_get(GX_UBYTE *root_address, GX_VALUE *put_count);
+UINT _gx_binres_language_info_load(GX_UBYTE *root_address, GX_LANGUAGE_HEADER *put_info);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_binres_language_table_load(GX_UBYTE *root_address, GX_UBYTE ****returned_language_table);
+#endif
+UINT _gx_binres_language_table_load_ext(GX_UBYTE* root_address, GX_STRING*** returned_language_table);
 UINT _gx_binres_theme_load(GX_UBYTE *root_address, INT theme_id, GX_THEME **returned_theme);
 
 UINT _gx_brush_default(GX_BRUSH *brush);
@@ -3070,7 +3497,7 @@ UINT _gx_button_create(GX_BUTTON *button,
                        GX_WIDGET *parent,
                        ULONG style, USHORT Id,
                        GX_CONST GX_RECTANGLE *size);
-UINT _gx_button_deselect(GX_BUTTON *button);
+UINT _gx_button_deselect(GX_BUTTON *button, GX_BOOL gen_event);
 VOID _gx_button_draw(GX_BUTTON *button);
 UINT _gx_button_event_process(GX_BUTTON *button, GX_EVENT *event_ptr);
 UINT _gx_button_select(GX_BUTTON *button);
@@ -3088,6 +3515,8 @@ UINT _gx_canvas_ellipse_draw(INT xcenter, INT ycenter, INT a, INT b);
 UINT _gx_canvas_hardware_layer_bind(GX_CANVAS *canvas, INT layer);
 UINT _gx_canvas_hide(GX_CANVAS *canvas);
 UINT _gx_canvas_line_draw(GX_VALUE x_start, GX_VALUE y_start, GX_VALUE x_end, GX_VALUE y_end);
+UINT _gx_canvas_memory_define(GX_CANVAS *canvas, GX_COLOR *memory, ULONG memsize);
+
 #if defined (GX_MOUSE_SUPPORT)
 UINT _gx_canvas_mouse_define(GX_CANVAS *canvas, GX_MOUSE_CURSOR_INFO *info);
 UINT _gx_canvas_mouse_hide(GX_CANVAS *canvas);
@@ -3104,10 +3533,17 @@ UINT _gx_canvas_pixelmap_rotate(GX_VALUE x_position, GX_VALUE y_position, GX_PIX
 UINT _gx_canvas_pixelmap_tile(GX_RECTANGLE *fill, GX_PIXELMAP *pixelmap);
 UINT _gx_canvas_polygon_draw(GX_POINT *point_array, INT number_of_points);
 UINT _gx_canvas_rectangle_draw(GX_RECTANGLE *rectangle);
+#if defined (GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_canvas_rotated_text_draw(GX_CONST GX_CHAR *text, GX_VALUE xcenter, GX_VALUE ycenter, INT angle);
+#endif
+UINT _gx_canvas_rotated_text_draw_ext(GX_CONST GX_STRING* text, GX_VALUE xcenter, GX_VALUE ycenter, INT angle);
 UINT _gx_canvas_shift(GX_CANVAS *canvas, GX_VALUE x, GX_VALUE y);
 UINT _gx_canvas_show(GX_CANVAS *canvas);
+
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_canvas_text_draw(GX_VALUE x_start, GX_VALUE y_start, GX_CONST GX_CHAR *string, INT length);
+#endif
+UINT _gx_canvas_text_draw_ext(GX_VALUE x_start, GX_VALUE y_start, GX_CONST GX_STRING *string);
 
 UINT _gx_checkbox_create(GX_CHECKBOX *checkbox,
                          GX_CONST GX_CHAR *name,
@@ -3152,12 +3588,34 @@ UINT _gx_context_pixelmap_set(GX_RESOURCE_ID pixelmap_id);
 UINT _gx_context_raw_brush_define(GX_COLOR line_color, GX_COLOR fill_color, UINT style);
 UINT _gx_context_raw_fill_color_set(GX_COLOR line_color);
 UINT _gx_context_raw_line_color_set(GX_COLOR line_color);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gx_context_string_get(GX_RESOURCE_ID string_id, GX_CONST GX_CHAR **return_string);
+#endif
+UINT _gx_context_string_get_ext(GX_RESOURCE_ID string_id, GX_STRING *return_string);
 
+UINT _gx_display_active_language_set(GX_DISPLAY *display, GX_UBYTE language);
+UINT _gx_display_color_set(GX_DISPLAY *display, GX_RESOURCE_ID resource_id, GX_COLOR new_color);
 UINT _gx_display_color_table_set(GX_DISPLAY *display, GX_COLOR *color_table, INT number_of_colors);
 UINT _gx_display_create(GX_DISPLAY *display, GX_CONST GX_CHAR *name, UINT (*display_driver_setup)(GX_DISPLAY *), GX_VALUE xres, GX_VALUE yres);
 UINT _gx_display_delete(GX_DISPLAY *display, VOID (*display_driver_cleanup)(GX_DISPLAY *));
 UINT _gx_display_font_table_set(GX_DISPLAY *display, GX_FONT **font_table, UINT number_of_fonts);
+
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gx_display_language_table_get(GX_DISPLAY *display, GX_CHAR ****table, GX_UBYTE *language_count, UINT *string_count);
+UINT _gx_display_language_table_set(GX_DISPLAY *display, GX_CHAR ***table, GX_UBYTE num_languages, UINT number_of_strings);
+#endif
+UINT _gx_display_language_table_get_ext(GX_DISPLAY* display, GX_STRING ***table, GX_UBYTE *language_count, UINT* string_count);
+UINT _gx_display_language_table_set_ext(GX_DISPLAY* display, GX_CONST GX_STRING **table, GX_UBYTE num_languages, UINT number_of_strings);
+
 UINT _gx_display_pixelmap_table_set(GX_DISPLAY *display, GX_PIXELMAP **pixelmap_table, UINT number_of_pixelmaps);
+
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gx_display_string_get(GX_DISPLAY *display, GX_RESOURCE_ID string_id, GX_CONST GX_CHAR **return_string);
+UINT _gx_display_string_table_get(GX_DISPLAY *display, GX_UBYTE language, GX_CHAR ***table, UINT *size);
+#endif
+UINT _gx_display_string_get_ext(GX_DISPLAY* display, GX_RESOURCE_ID string_id, GX_STRING *return_string);
+UINT _gx_display_string_table_get_ext(GX_DISPLAY* display, GX_UBYTE language, GX_STRING **table, UINT *size);
+
 UINT _gx_display_theme_install(GX_DISPLAY *display, GX_CONST GX_THEME *theme_ptr);
 
 UINT _gx_drop_list_close(GX_DROP_LIST *drop_list);
@@ -3247,19 +3705,50 @@ VOID _gx_multi_line_text_button_draw(GX_MULTI_LINE_TEXT_BUTTON *button);
 UINT _gx_multi_line_text_button_event_process(GX_MULTI_LINE_TEXT_BUTTON *button, GX_EVENT *event_ptr);
 VOID _gx_multi_line_text_button_text_draw(GX_MULTI_LINE_TEXT_BUTTON *button);
 UINT _gx_multi_line_text_button_text_id_set(GX_MULTI_LINE_TEXT_BUTTON *button, GX_RESOURCE_ID string_id);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_multi_line_text_button_text_set(GX_MULTI_LINE_TEXT_BUTTON *button, GX_CONST GX_CHAR *text);
+#endif
+UINT _gx_multi_line_text_button_text_set_ext(GX_MULTI_LINE_TEXT_BUTTON *button, GX_CONST GX_STRING text);
 
+UINT _gx_multi_line_text_input_backspace(GX_MULTI_LINE_TEXT_INPUT *text_input);
 UINT _gx_multi_line_text_input_buffer_clear(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr);
 UINT _gx_multi_line_text_input_buffer_get(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr, GX_CHAR **buffer_address,
                                           UINT *content_size, UINT *buffer_size);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gx_multi_line_text_input_char_insert(GX_MULTI_LINE_TEXT_INPUT *text_input, GX_UBYTE *str, UINT str_size);
+#endif
+UINT _gx_multi_line_text_input_char_insert_ext(GX_MULTI_LINE_TEXT_INPUT *text_input, GX_CONST GX_STRING *str);
 UINT _gx_multi_line_text_input_create(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr,
                                       GX_CONST GX_CHAR *name_ptr, GX_WIDGET *parent,
                                       GX_CHAR *input_buffer, UINT buffer_size,
                                       ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size);
+UINT _gx_multi_line_text_input_cursor_pos_get(GX_MULTI_LINE_TEXT_INPUT *input, GX_POINT *cursor_pos);
+UINT _gx_multi_line_text_input_delete(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gx_multi_line_text_input_down_arrow(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gx_multi_line_text_input_end(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gx_multi_line_text_input_event_process(GX_MULTI_LINE_TEXT_INPUT *input, GX_EVENT *event_ptr);
 UINT _gx_multi_line_text_input_style_add(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr, ULONG cursor_type);
 UINT _gx_multi_line_text_input_style_remove(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr, ULONG cursor_type);
 UINT _gx_multi_line_text_input_style_set(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr, ULONG cursor_type);
-UINT _gx_multi_line_text_input_text_set(GX_MULTI_LINE_TEXT_INPUT *text_input, GX_CHAR *text);
+UINT _gx_multi_line_text_input_fill_color_set(GX_MULTI_LINE_TEXT_INPUT *view,
+                                              GX_RESOURCE_ID normal_id,
+                                              GX_RESOURCE_ID selected_id,
+                                              GX_RESOURCE_ID disabled_id,
+                                              GX_RESOURCE_ID readonly_id);
+UINT _gx_multi_line_text_input_home(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gx_multi_line_text_input_left_arrow(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gx_multi_line_text_input_right_arrow(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gx_multi_line_text_input_text_color_set(GX_MULTI_LINE_TEXT_INPUT *view,
+                                              GX_RESOURCE_ID normal_id,
+                                              GX_RESOURCE_ID selected_id,
+                                              GX_RESOURCE_ID disabled_id,
+                                              GX_RESOURCE_ID readonly_id);
+UINT _gx_multi_line_text_input_text_select(GX_MULTI_LINE_TEXT_INPUT *input, UINT start_index, UINT end_index);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gx_multi_line_text_input_text_set(GX_MULTI_LINE_TEXT_INPUT *text_input, GX_CONST GX_CHAR *text);
+#endif
+UINT _gx_multi_line_text_input_text_set_ext(GX_MULTI_LINE_TEXT_INPUT *text_input, GX_CONST GX_STRING *text);
+UINT _gx_multi_line_text_input_up_arrow(GX_MULTI_LINE_TEXT_INPUT *text_input);
 
 UINT _gx_multi_line_text_view_create(GX_MULTI_LINE_TEXT_VIEW *text_view_ptr,
                                      GX_CONST GX_CHAR *name_ptr, GX_WIDGET *parent,
@@ -3270,17 +3759,20 @@ UINT _gx_multi_line_text_view_event_process(GX_MULTI_LINE_TEXT_VIEW *view, GX_EV
 UINT _gx_multi_line_text_view_font_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_RESOURCE_ID font_id);
 UINT _gx_multi_line_text_view_line_space_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_BYTE line_space);
 UINT _gx_multi_line_text_view_scroll_info_get(GX_MULTI_LINE_TEXT_VIEW *view, ULONG style, GX_SCROLL_INFO *return_scroll_info);
-UINT _gx_multi_line_text_view_text_color_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_RESOURCE_ID normal_id, GX_RESOURCE_ID selected_id);
+UINT _gx_multi_line_text_view_text_color_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_RESOURCE_ID normal_id, GX_RESOURCE_ID selected_id, GX_RESOURCE_ID disabled_id);
 UINT _gx_multi_line_text_view_text_id_set(GX_MULTI_LINE_TEXT_VIEW *text_view_ptr, GX_RESOURCE_ID text_id);
-UINT _gx_multi_line_text_view_text_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_CHAR *text);
-UINT _gx_multi_line_text_view_whitespace_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_BYTE whitespace);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gx_multi_line_text_view_text_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_CONST GX_CHAR *text);
+#endif
+UINT _gx_multi_line_text_view_text_set_ext(GX_MULTI_LINE_TEXT_VIEW *view, GX_CONST GX_STRING *text);
+UINT _gx_multi_line_text_view_whitespace_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_UBYTE whitespace);
 
 UINT _gx_numeric_pixelmap_prompt_create(GX_NUMERIC_PIXELMAP_PROMPT *prompt,
                                         GX_CONST GX_CHAR *name, GX_WIDGET *parent,
                                         GX_RESOURCE_ID text_id, GX_RESOURCE_ID fill_id,
                                         ULONG style, USHORT pixelmap_prompt_id,
                                         GX_CONST GX_RECTANGLE *size);
-UINT _gx_numeric_pixelmap_prompt_format_function_set(GX_NUMERIC_PIXELMAP_PROMPT *prompt, VOID(*format_func)(GX_NUMERIC_PIXELMAP_PROMPT *, INT));
+UINT _gx_numeric_pixelmap_prompt_format_function_set(GX_NUMERIC_PIXELMAP_PROMPT *prompt, VOID (*format_func)(GX_NUMERIC_PIXELMAP_PROMPT *, INT));
 UINT _gx_numeric_pixelmap_prompt_value_set(GX_NUMERIC_PIXELMAP_PROMPT *prompt, INT value);
 
 UINT _gx_numeric_prompt_create(GX_NUMERIC_PROMPT *prompt, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
@@ -3325,6 +3817,7 @@ VOID _gx_pixelmap_slider_draw(GX_PIXELMAP_SLIDER *slider);
 UINT _gx_pixelmap_slider_event_process(GX_PIXELMAP_SLIDER *slider, GX_EVENT *event_ptr);
 UINT _gx_pixelmap_slider_pixelmap_set(GX_PIXELMAP_SLIDER *slider, GX_PIXELMAP_SLIDER_INFO *info);
 
+VOID _gx_progress_bar_background_draw(GX_PROGRESS_BAR *progress_bar);
 UINT _gx_progress_bar_create(GX_PROGRESS_BAR *progress_bar, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
                              GX_PROGRESS_BAR_INFO *progress_bar_info, ULONG style,
                              USHORT progress_bar_id, GX_CONST GX_RECTANGLE *size);
@@ -3335,7 +3828,7 @@ UINT _gx_progress_bar_info_set(GX_PROGRESS_BAR *progress_bar, GX_PROGRESS_BAR_IN
 UINT _gx_progress_bar_pixelmap_set(GX_PROGRESS_BAR *progress_bar, GX_RESOURCE_ID pixelmap);
 UINT _gx_progress_bar_range_set(GX_PROGRESS_BAR *progress_bar, INT min_value, INT max_value);
 UINT _gx_progress_bar_text_color_set(GX_PROGRESS_BAR *progress_bar, GX_RESOURCE_ID normal_text_color_id,
-                                     GX_RESOURCE_ID selected_text_color_id);
+                                     GX_RESOURCE_ID selected_text_color_id, GX_RESOURCE_ID disabled_text_color_id);
 UINT _gx_progress_bar_value_set(GX_PROGRESS_BAR *progress_bar, INT new_value);
 
 UINT _gx_prompt_create(GX_PROMPT *prompt, GX_CONST GX_CHAR *name,
@@ -3343,11 +3836,21 @@ UINT _gx_prompt_create(GX_PROMPT *prompt, GX_CONST GX_CHAR *name,
                        USHORT prompt_id, GX_CONST GX_RECTANGLE *size);
 VOID _gx_prompt_draw(GX_PROMPT *prompt);
 UINT _gx_prompt_font_set(GX_PROMPT *prompt, GX_RESOURCE_ID fontid);
-UINT _gx_prompt_text_color_set(GX_PROMPT *prompt, GX_RESOURCE_ID normal_text_color_id, GX_RESOURCE_ID selected_text_color_id);
+UINT _gx_prompt_text_color_set(GX_PROMPT *prompt,
+                               GX_RESOURCE_ID normal_text_color_id,
+                               GX_RESOURCE_ID selected_text_color_id,
+                               GX_RESOURCE_ID disabled_text_color_id);
 VOID _gx_prompt_text_draw(GX_PROMPT *prompt);
+
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_prompt_text_get(GX_PROMPT *prompt, GX_CONST GX_CHAR **return_text);
+#endif
+UINT _gx_prompt_text_get_ext(GX_PROMPT *prompt, GX_STRING *return_text);
 UINT _gx_prompt_text_id_set(GX_PROMPT *prompt, GX_RESOURCE_ID string_id);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_prompt_text_set(GX_PROMPT *prompt, GX_CONST GX_CHAR *text);
+#endif
+UINT _gx_prompt_text_set_ext(GX_PROMPT *prompt, GX_CONST GX_STRING *text);
 
 UINT _gx_radial_progress_bar_anchor_set(GX_RADIAL_PROGRESS_BAR *progress_bar, GX_VALUE angle);
 VOID _gx_radial_progress_bar_background_draw(GX_RADIAL_PROGRESS_BAR *progress_bar);
@@ -3363,9 +3866,23 @@ UINT _gx_radial_progress_bar_font_set(GX_RADIAL_PROGRESS_BAR *progress_bar, GX_R
 UINT _gx_radial_progress_bar_info_set(GX_RADIAL_PROGRESS_BAR *bar, GX_RADIAL_PROGRESS_BAR_INFO *info);
 UINT _gx_radial_progress_bar_text_color_set(GX_RADIAL_PROGRESS_BAR *progress_bar,
                                             GX_RESOURCE_ID normal_text_color_id,
-                                            GX_RESOURCE_ID selected_text_color_id);
+                                            GX_RESOURCE_ID selected_text_color_id,
+                                            GX_RESOURCE_ID disabled_text_color_id);
 VOID _gx_radial_progress_bar_text_draw(GX_RADIAL_PROGRESS_BAR *bar);
 UINT _gx_radial_progress_bar_value_set(GX_RADIAL_PROGRESS_BAR *progress_bar, GX_VALUE new_value);
+
+UINT _gx_radial_slider_anchor_angles_set(GX_RADIAL_SLIDER *slider, GX_VALUE *anchor_angles, USHORT anchor_count);
+UINT _gx_radial_slider_animation_set(GX_RADIAL_SLIDER *slider, USHORT steps, USHORT delay, USHORT animation_style,
+                                     VOID(*animation_update_callback)(GX_RADIAL_SLIDER *slider));
+UINT _gx_radial_slider_animation_start(GX_RADIAL_SLIDER *slider, GX_VALUE new_value);
+UINT _gx_radial_slider_create(GX_RADIAL_SLIDER *slider, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
+                              GX_RADIAL_SLIDER_INFO *info, ULONG style, USHORT slider_id, GX_CONST GX_RECTANGLE *size);
+VOID _gx_radial_slider_draw(GX_RADIAL_SLIDER *slider);
+UINT _gx_radial_slider_event_process(GX_RADIAL_SLIDER *slider, GX_EVENT *event_ptr);
+UINT _gx_radial_slider_info_get(GX_RADIAL_SLIDER *slider, GX_RADIAL_SLIDER_INFO **info);
+UINT _gx_radial_slider_info_set(GX_RADIAL_SLIDER *slider,  GX_RADIAL_SLIDER_INFO *info);
+UINT _gx_radial_slider_pixelmap_set(GX_RADIAL_SLIDER *slider, GX_RESOURCE_ID background_pixelmap, GX_RESOURCE_ID needle_pixelmap);
+UINT _gx_radial_slider_angle_set(GX_RADIAL_SLIDER *slider, GX_VALUE new_angle);
 
 UINT _gx_radio_button_create(GX_RADIO_BUTTON *button,
                              GX_CONST GX_CHAR *name, GX_WIDGET *parent, GX_RESOURCE_ID text_id,
@@ -3387,6 +3904,7 @@ VOID _gx_scrollbar_draw(GX_SCROLLBAR *scrollbar);
 UINT _gx_scrollbar_event_process(GX_SCROLLBAR *scrollbar, GX_EVENT *event_ptr);
 UINT _gx_scrollbar_limit_check(GX_SCROLLBAR *scrollbar);
 UINT _gx_scrollbar_reset(GX_SCROLLBAR *scrollbar, GX_SCROLL_INFO *info);
+UINT _gx_scrollbar_value_set(GX_SCROLLBAR *scrollbar, INT value);
 
 UINT _gx_scroll_wheel_create(GX_SCROLL_WHEEL *wheel, GX_CONST GX_CHAR *name, GX_WIDGET *parent, INT total_rows,
                              ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size);
@@ -3410,8 +3928,14 @@ UINT _gx_single_line_text_input_create(GX_SINGLE_LINE_TEXT_INPUT *text_input_ptr
                                        UINT buffer_size, UINT style, USHORT text_input_id,
                                        GX_CONST GX_RECTANGLE *size);
 VOID _gx_single_line_text_input_draw(GX_SINGLE_LINE_TEXT_INPUT *text_input);
+UINT _gx_single_line_text_input_draw_position_get(GX_SINGLE_LINE_TEXT_INPUT *input, GX_VALUE *xpos, GX_VALUE *ypos);
 UINT _gx_single_line_text_input_end(GX_SINGLE_LINE_TEXT_INPUT *text_input);
 UINT _gx_single_line_text_input_event_process(GX_SINGLE_LINE_TEXT_INPUT *text_input, GX_EVENT *event_ptr);
+UINT _gx_single_line_text_input_fill_color_set(GX_SINGLE_LINE_TEXT_INPUT *input,
+                                               GX_RESOURCE_ID normal_fill_color_id,
+                                               GX_RESOURCE_ID selected_fill_color_id,
+                                               GX_RESOURCE_ID disabled_fill_color_id,
+                                               GX_RESOURCE_ID readonly_fill_color_id);
 UINT _gx_single_line_text_input_home(GX_SINGLE_LINE_TEXT_INPUT *text_input);
 UINT _gx_single_line_text_input_left_arrow(GX_SINGLE_LINE_TEXT_INPUT *text_input);
 UINT _gx_single_line_text_input_position_get(GX_SINGLE_LINE_TEXT_INPUT *text_input, INT pixel_position);
@@ -3419,6 +3943,16 @@ UINT _gx_single_line_text_input_right_arrow(GX_SINGLE_LINE_TEXT_INPUT *text_inpu
 UINT _gx_single_line_text_input_style_add(GX_SINGLE_LINE_TEXT_INPUT *text_input_ptr, ULONG style);
 UINT _gx_single_line_text_input_style_remove(GX_SINGLE_LINE_TEXT_INPUT *text_input_ptr, ULONG style);
 UINT _gx_single_line_text_input_style_set(GX_SINGLE_LINE_TEXT_INPUT *text_input_ptr, ULONG style);
+UINT _gx_single_line_text_input_text_color_set(GX_SINGLE_LINE_TEXT_INPUT *input,
+                                               GX_RESOURCE_ID normal_text_color_id,
+                                               GX_RESOURCE_ID selected_text_color_id,
+                                               GX_RESOURCE_ID disabled_text_color_id,
+                                               GX_RESOURCE_ID readonly_text_color_id);
+UINT _gx_single_line_text_input_text_select(GX_SINGLE_LINE_TEXT_INPUT *input, UINT start_index, UINT end_index);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gx_single_line_text_input_text_set(GX_SINGLE_LINE_TEXT_INPUT *input, GX_CONST GX_CHAR *text);
+#endif
+UINT _gx_single_line_text_input_text_set_ext(GX_SINGLE_LINE_TEXT_INPUT *input, GX_CONST GX_STRING *text);
 
 UINT _gx_slider_create(GX_SLIDER *slider, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
                        INT tick_count, GX_SLIDER_INFO *slider_info, ULONG style, USHORT slider_id,
@@ -3441,21 +3975,41 @@ UINT _gx_sprite_frame_list_set(GX_SPRITE *sprite, GX_SPRITE_FRAME *frame_list, U
 UINT _gx_sprite_start(GX_SPRITE *sprite, USHORT start_frame);
 UINT _gx_sprite_stop(GX_SPRITE *sprite);
 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_string_scroll_wheel_create(GX_STRING_SCROLL_WHEEL *wheel, GX_CONST GX_CHAR *name, GX_WIDGET *parent, INT total_rows, 
                                     GX_CONST GX_CHAR **string_list,
                                     ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size);
+#endif
+UINT _gx_string_scroll_wheel_create_ext(GX_STRING_SCROLL_WHEEL* wheel, GX_CONST GX_CHAR* name, GX_WIDGET* parent, INT total_rows,
+                                        GX_CONST GX_STRING* string_list,
+                                        ULONG style, USHORT Id, GX_CONST GX_RECTANGLE* size);
 UINT _gx_string_scroll_wheel_string_id_list_set(GX_STRING_SCROLL_WHEEL *wheel,
                                                 GX_CONST GX_RESOURCE_ID *string_id_list,
                                                 INT id_count);
+
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_string_scroll_wheel_string_list_set(GX_STRING_SCROLL_WHEEL *wheel,
                                              GX_CONST GX_CHAR **string_list,
                                              INT string_count);
+#endif
+UINT _gx_string_scroll_wheel_string_list_set_ext(GX_STRING_SCROLL_WHEEL *wheel,
+                                             GX_CONST GX_STRING *string_list,
+                                             INT string_count);
 
-UINT _gx_system_active_language_set(UINT language);
+UINT _gx_system_active_language_set(GX_UBYTE language);
 
 #if (GX_ANIMATION_POOL_SIZE > 0)
 UINT _gx_system_animation_get(GX_ANIMATION **free_return);
 UINT _gx_system_animation_free(GX_ANIMATION *free_return);
+#endif
+
+#if defined(GX_DYNAMIC_BIDI_TEXT_SUPPORT)
+UINT _gx_system_bidi_text_enable(VOID);
+UINT _gx_system_bidi_text_disable(VOID);
+#endif
+
+#if defined(GX_THAI_GLYPH_SHAPING_SUPPORT)
+UINT _gx_system_text_render_style_set(GX_UBYTE style);
 #endif
 
 UINT _gx_system_canvas_refresh(VOID);
@@ -3466,19 +4020,35 @@ UINT _gx_system_event_fold(GX_EVENT *in_event);
 UINT _gx_system_event_send(GX_EVENT *in_event);
 UINT _gx_system_focus_claim(GX_WIDGET *me);
 UINT _gx_system_initialize(VOID);
-UINT _gx_system_language_table_get(GX_CHAR ****language_table, UINT *languages_count, UINT *string_count);
-UINT _gx_system_language_table_set(GX_CHAR ***language_table, UINT number_of_languages, UINT number_of_strings);
+
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gx_system_language_table_get(GX_CHAR ****language_table, GX_UBYTE *languages_count, UINT *string_count);
+UINT _gx_system_language_table_set(GX_CHAR ***language_table, GX_UBYTE number_of_languages, UINT number_of_strings);
+#endif
+
 UINT _gx_system_memory_allocator_set(VOID *(*allocate)(ULONG size), VOID (*release)(VOID *));
 UINT _gx_system_pen_configure(GX_PEN_CONFIGURATION *pen_configuration);
+UINT _gx_system_screen_stack_create(GX_WIDGET **memory, INT size);
+UINT _gx_system_screen_stack_pop(VOID);
+UINT _gx_system_screen_stack_push(GX_WIDGET *screen);
+UINT _gx_system_screen_stack_get(GX_WIDGET **popped_parent, GX_WIDGET **popped_screen);
+UINT _gx_system_screen_stack_reset(VOID);
 UINT _gx_system_scroll_appearance_get(ULONG style, GX_SCROLLBAR_APPEARANCE *appearance);
 UINT _gx_system_scroll_appearance_set(ULONG style, GX_SCROLLBAR_APPEARANCE *appearance);
 UINT _gx_system_start(VOID);
+
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_system_string_get(GX_RESOURCE_ID string_id, GX_CONST GX_CHAR **return_string);
-UINT _gx_system_string_table_get(INT language, GX_CHAR ***get_table, UINT *get_size);
+UINT _gx_system_string_table_get(GX_UBYTE language, GX_CHAR ***get_table, UINT *get_size);
 UINT _gx_system_string_width_get(GX_CONST GX_FONT *font, GX_CONST GX_CHAR *string, INT string_length, GX_VALUE *return_width);
+#endif
+UINT _gx_system_string_width_get_ext(GX_CONST GX_FONT *font, GX_CONST GX_STRING *string, GX_VALUE *return_width);
 UINT _gx_system_timer_start(GX_WIDGET *owner, UINT timer_id, UINT initial_ticks, UINT reschedule_ticks);
 UINT _gx_system_timer_stop(GX_WIDGET *owner, UINT timer_id);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_system_version_string_get(GX_CHAR **return_string);
+#endif
+UINT _gx_system_version_string_get_ext(GX_STRING *return_string);
 UINT _gx_system_widget_find(USHORT widget_id, INT search_level, GX_WIDGET **return_search_result);
 
 UINT _gx_text_button_create(GX_TEXT_BUTTON *button, GX_CONST GX_CHAR *name,
@@ -3486,25 +4056,32 @@ UINT _gx_text_button_create(GX_TEXT_BUTTON *button, GX_CONST GX_CHAR *name,
                             GX_CONST GX_RECTANGLE *size);
 VOID _gx_text_button_draw(GX_TEXT_BUTTON *button);
 UINT _gx_text_button_font_set(GX_TEXT_BUTTON *button, GX_RESOURCE_ID font_id);
-UINT _gx_text_button_text_color_set(GX_TEXT_BUTTON *text_button, GX_RESOURCE_ID normal_text_color_id, GX_RESOURCE_ID selected_text_color_id);
+UINT _gx_text_button_text_color_set(GX_TEXT_BUTTON *text_button,
+                                    GX_RESOURCE_ID normal_text_color_id,
+                                    GX_RESOURCE_ID selected_text_color_id,
+                                    GX_RESOURCE_ID disabled_text_color_id);
 VOID _gx_text_button_text_draw(GX_TEXT_BUTTON *button);
 UINT _gx_text_button_text_get(GX_TEXT_BUTTON *button, GX_CONST GX_CHAR **return_text);
 UINT _gx_text_button_text_id_set(GX_TEXT_BUTTON *button, GX_RESOURCE_ID string_id);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_text_button_text_set(GX_TEXT_BUTTON *button, GX_CONST GX_CHAR *text);
+#endif
+UINT _gx_text_button_text_set_ext(GX_TEXT_BUTTON *button, GX_CONST GX_STRING *text);
 
 UINT _gx_text_input_cursor_blink_interval_set(GX_TEXT_INPUT_CURSOR *cursor_input, GX_UBYTE blink_interval);
 UINT _gx_text_input_cursor_height_set(GX_TEXT_INPUT_CURSOR *cursor_input, GX_UBYTE height);
 UINT _gx_text_input_cursor_width_set(GX_TEXT_INPUT_CURSOR *cursor_input, GX_UBYTE width);
 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_text_scroll_wheel_callback_set(GX_TEXT_SCROLL_WHEEL *wheel, GX_CONST GX_CHAR *(*callback)(GX_TEXT_SCROLL_WHEEL *, INT)); 
+#endif
+UINT _gx_text_scroll_wheel_callback_set_ext(GX_TEXT_SCROLL_WHEEL* wheel, UINT (*callback)(GX_TEXT_SCROLL_WHEEL*, INT, GX_STRING *));
 UINT _gx_text_scroll_wheel_create(GX_TEXT_SCROLL_WHEEL *wheel, GX_CONST GX_CHAR *name, GX_WIDGET *parent, INT total_rows, 
                                   ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size);
 VOID _gx_text_scroll_wheel_draw(GX_TEXT_SCROLL_WHEEL *wheel);
 UINT _gx_text_scroll_wheel_font_set(GX_TEXT_SCROLL_WHEEL *wheel, GX_RESOURCE_ID normal_font, GX_RESOURCE_ID selected_font);
-UINT _gx_text_scroll_wheel_text_color_set(GX_TEXT_SCROLL_WHEEL *wheel, GX_RESOURCE_ID normal_text_color, GX_RESOURCE_ID selected_text_color);
-
-UINT    _gx_utility_gradient_create(GX_GRADIENT *gradient, GX_VALUE width, GX_VALUE height, UCHAR type, GX_UBYTE start_alpha, GX_UBYTE end_alpha);
-UINT    _gx_utility_gradient_delete(GX_GRADIENT *gradient);
+UINT _gx_text_scroll_wheel_text_color_set(GX_TEXT_SCROLL_WHEEL *wheel, GX_RESOURCE_ID normal_text_color,
+                                          GX_RESOURCE_ID selected_text_color, GX_RESOURCE_ID disabled_text_color);
 
 UINT _gx_tree_view_create(GX_TREE_VIEW *tree, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
                           ULONG style, USHORT tree_view_id, GX_CONST GX_RECTANGLE *size);
@@ -3517,25 +4094,41 @@ UINT _gx_tree_view_root_pixelmap_set(GX_TREE_VIEW *tree, GX_RESOURCE_ID expand_m
 UINT _gx_tree_view_selected_get(GX_TREE_VIEW *tree, GX_WIDGET **selected);
 UINT _gx_tree_view_selected_set(GX_TREE_VIEW *tree, GX_WIDGET *selected);
 
-VOID    _gx_utility_ltoa(LONG value, GX_CHAR *return_buffer, UINT return_buffer_size);
-INT     _gx_utility_math_acos(INT x);
-INT     _gx_utility_math_asin(INT x);
-INT     _gx_utility_math_cos(INT angle);
-INT     _gx_utility_math_sin(INT angle);
+UINT    _gx_utility_canvas_to_bmp(GX_CANVAS *canvas, GX_RECTANGLE *rect, UINT(*write_data)(GX_UBYTE *byte_data, UINT data_count));
+UINT    _gx_utility_gradient_create(GX_GRADIENT *gradient, GX_VALUE width, GX_VALUE height, UCHAR type, GX_UBYTE start_alpha, GX_UBYTE end_alpha);
+UINT    _gx_utility_gradient_delete(GX_GRADIENT *gradient);
+
+UINT    _gx_utility_circle_point_get(INT xcenter, INT ycenter, UINT r, INT angle, GX_POINT *point);
+UINT    _gx_utility_ltoa(LONG value, GX_CHAR *return_buffer, UINT return_buffer_size);
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+INT     _gx_utility_math_acos_5_4_0(INT x);
+INT     _gx_utility_math_asin_5_4_0(INT x);
+INT     _gx_utility_math_cos_5_4_0(INT angle);
+INT     _gx_utility_math_sin_5_4_0(INT angle);
+#else
+INT     _gx_utility_math_acos(GX_FIXED_VAL x);
+INT     _gx_utility_math_asin(GX_FIXED_VAL x);
+GX_FIXED_VAL _gx_utility_math_cos(GX_FIXED_VAL angle);
+GX_FIXED_VAL _gx_utility_math_sin(GX_FIXED_VAL angle);
+#endif
 UINT    _gx_utility_math_sqrt(UINT n);
 UINT    _gx_utility_pixelmap_resize(GX_PIXELMAP *src, GX_PIXELMAP *destination, INT width, INT height);
 UINT    _gx_utility_pixelmap_rotate(GX_PIXELMAP *src, INT angle, GX_PIXELMAP *destination, INT *rot_cx, INT *rot_cy);
 UINT    _gx_utility_pixelmap_simple_rotate(GX_PIXELMAP *src, INT angle, GX_PIXELMAP *destination, INT *rot_cx, INT *rot_cy);
-VOID    _gx_utility_rectangle_center(GX_RECTANGLE *rectangle, GX_RECTANGLE *within);
-VOID    _gx_utility_rectangle_center_find(GX_RECTANGLE *rectangle, GX_POINT *return_center);
-VOID    _gx_utility_rectangle_combine(GX_RECTANGLE *first_rectangle, GX_RECTANGLE *second_rectangle);
+UINT    _gx_utility_rectangle_center(GX_RECTANGLE *rectangle, GX_RECTANGLE *within);
+UINT    _gx_utility_rectangle_center_find(GX_RECTANGLE *rectangle, GX_POINT *return_center);
+UINT    _gx_utility_rectangle_combine(GX_RECTANGLE *first_rectangle, GX_RECTANGLE *second_rectangle);
 GX_BOOL _gx_utility_rectangle_compare(GX_RECTANGLE *first_rectangle, GX_RECTANGLE *second_rectangle);
-VOID    _gx_utility_rectangle_define(GX_RECTANGLE *rectangle, GX_VALUE left, GX_VALUE top, GX_VALUE right, GX_VALUE bottom);
+UINT    _gx_utility_rectangle_define(GX_RECTANGLE *rectangle, GX_VALUE left, GX_VALUE top, GX_VALUE right, GX_VALUE bottom);
 GX_BOOL _gx_utility_rectangle_overlap_detect(GX_RECTANGLE *first_rectangle, GX_RECTANGLE *second_rectangle, GX_RECTANGLE *return_overlap_area);
 GX_BOOL _gx_utility_rectangle_point_detect(GX_RECTANGLE *rectangle, GX_POINT point);
-VOID    _gx_utility_rectangle_resize(GX_RECTANGLE *rectangle, GX_VALUE adjust);
-VOID    _gx_utility_rectangle_shift(GX_RECTANGLE *rectangle, GX_VALUE x_shift, GX_VALUE y_shift);
+UINT    _gx_utility_rectangle_resize(GX_RECTANGLE *rectangle, GX_VALUE adjust);
+UINT    _gx_utility_rectangle_shift(GX_RECTANGLE *rectangle, GX_VALUE x_shift, GX_VALUE y_shift);
+
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT    _gx_utility_string_to_alphamap(GX_CONST GX_CHAR *text, GX_CONST GX_FONT *font, GX_PIXELMAP *textmap);
+#endif
+UINT    _gx_utility_string_to_alphamap_ext(GX_CONST GX_STRING *text, GX_CONST GX_FONT *font, GX_PIXELMAP *textmap);
 
 UINT _gx_vertical_list_children_position(GX_VERTICAL_LIST *vertical_list);
 UINT _gx_vertical_list_create(GX_VERTICAL_LIST *vertical_list, GX_CONST GX_CHAR *name,  GX_WIDGET *parent,
@@ -3559,7 +4152,7 @@ UINT _gx_widget_back_attach(GX_WIDGET *parent, GX_WIDGET *widget);
 UINT _gx_widget_back_move(GX_WIDGET *widget, GX_BOOL *widget_moved);
 VOID _gx_widget_background_draw(GX_WIDGET *widget);
 UINT _gx_widget_block_move(GX_WIDGET *widget, GX_RECTANGLE *block, INT x_shift, INT y_shift);
-VOID _gx_widget_border_draw(GX_WIDGET *widget, GX_COLOR border_color, GX_COLOR upper_color, GX_COLOR lower_color, GX_BOOL fill);
+VOID _gx_widget_border_draw(GX_WIDGET *widget, GX_RESOURCE_ID border_color, GX_RESOURCE_ID upper_color, GX_COLOR lower_color, GX_BOOL fill);
 UINT _gx_widget_border_style_set(GX_WIDGET *widget, ULONG Style);
 UINT _gx_widget_border_width_get(GX_WIDGET *widget, GX_VALUE *return_width);
 UINT _gx_widget_canvas_get(GX_WIDGET *widget, GX_CANVAS **return_canvas);
@@ -3581,8 +4174,9 @@ UINT _gx_widget_event_generate(GX_WIDGET *widget, USHORT event_type, LONG value)
 UINT _gx_widget_event_process(GX_WIDGET *widget, GX_EVENT *event_ptr);
 UINT _gx_widget_event_process_set(GX_WIDGET *widget, UINT (*event_processing_function)(GX_WIDGET *, GX_EVENT *));
 UINT _gx_widget_event_to_parent(GX_WIDGET *widget, GX_EVENT *event_ptr);
-UINT _gx_widget_fill_color_set(GX_WIDGET *widget, GX_RESOURCE_ID normal_color, GX_RESOURCE_ID selected_color);
+UINT _gx_widget_fill_color_set(GX_WIDGET *widget, GX_RESOURCE_ID normal_color, GX_RESOURCE_ID selected_color, GX_RESOURCE_ID disabled_color);
 UINT _gx_widget_find(GX_WIDGET *parent, USHORT widget_id, INT search_depth, GX_WIDGET **return_widget);
+UINT _gx_widget_first_child_get(GX_WIDGET *parent, GX_WIDGET **child_return);
 UINT _gx_widget_font_get(GX_WIDGET *widget, GX_RESOURCE_ID font_id, GX_FONT **return_font);
 UINT _gx_widget_free(GX_WIDGET *widget);
 UINT _gx_widget_focus_next(GX_WIDGET *widget);
@@ -3590,7 +4184,11 @@ UINT _gx_widget_focus_previous(GX_WIDGET *widget);
 UINT _gx_widget_front_move(GX_WIDGET *widget, GX_BOOL *widget_moved);
 UINT _gx_widget_height_get(GX_WIDGET *widget, GX_VALUE *return_height);
 UINT _gx_widget_hide(GX_WIDGET *widget);
+UINT _gx_widget_last_child_get(GX_WIDGET *parent, GX_WIDGET **child_return);
+UINT _gx_widget_next_sibling_get(GX_WIDGET *current, GX_WIDGET **sibling_return);
+UINT _gx_widget_parent_get(GX_WIDGET *current, GX_WIDGET **parent_return);
 UINT _gx_widget_pixelmap_get(GX_WIDGET *widget, GX_RESOURCE_ID font_id, GX_PIXELMAP **return_pixelmap);
+UINT _gx_widget_previous_sibling_get(GX_WIDGET *current, GX_WIDGET **sibling_return);
 UINT _gx_widget_resize(GX_WIDGET *widget, GX_RECTANGLE *newsize);
 UINT _gx_widget_shift(GX_WIDGET *widget, GX_VALUE x_shift, GX_VALUE y_shift, GX_BOOL mark_dirty);
 UINT _gx_widget_show(GX_WIDGET *widget);
@@ -3598,17 +4196,30 @@ UINT _gx_widget_status_add(GX_WIDGET *widget, ULONG status);
 UINT _gx_widget_status_get(GX_WIDGET *widget, ULONG *return_status);
 UINT _gx_widget_status_remove(GX_WIDGET *widget, ULONG status);
 UINT _gx_widget_status_test(GX_WIDGET *widget, ULONG status, GX_BOOL *return_test);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gx_widget_string_get(GX_WIDGET *widget, GX_RESOURCE_ID string_id, GX_CONST GX_CHAR **return_string);
+#endif
+UINT _gx_widget_string_get_ext(GX_WIDGET *widget, GX_RESOURCE_ID string_id, GX_STRING *return_string);
 UINT _gx_widget_style_add(GX_WIDGET *widget, ULONG style);
 UINT _gx_widget_style_get(GX_WIDGET *widget, ULONG *return_style);
 UINT _gx_widget_style_remove(GX_WIDGET *widget, ULONG style);
 UINT _gx_widget_style_set(GX_WIDGET *widget, ULONG style);
+
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gx_widget_text_blend(GX_WIDGET *widget, UINT tColor, UINT font_id, GX_CONST GX_CHAR *string,
                            INT x_offset, INT y_offset, UCHAR alpha);
+
 VOID _gx_widget_text_draw(GX_WIDGET *widget, UINT tColor, UINT font_id, GX_CONST GX_CHAR *string,
+                          INT x_offset, INT y_offset);
+#endif
+UINT _gx_widget_text_blend_ext(GX_WIDGET *widget, UINT tColor, UINT font_id, GX_CONST GX_STRING *string,
+                           INT x_offset, INT y_offset, UCHAR alpha);
+VOID _gx_widget_text_draw_ext(GX_WIDGET *widget, UINT tColor, UINT font_id, GX_CONST GX_STRING *string,
                           INT x_offset, INT y_offset);
 VOID _gx_widget_text_id_draw(GX_WIDGET *widget, UINT tColor,
                              UINT font_id, UINT text_id,
                              INT x_offset, INT y_offset);
+UINT _gx_widget_top_visible_child_find(GX_WIDGET *parent, GX_WIDGET **child_return);
 UINT _gx_widget_type_find(GX_WIDGET *parent, USHORT widget_type, GX_WIDGET **return_widget);
 UINT _gx_widget_width_get(GX_WIDGET *widget, GX_VALUE *return_width);
 
@@ -3648,10 +4259,16 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_animation_create                                      _gxe_animation_create
 #define gx_animation_drag_disable                                _gxe_animation_drag_disable
 #define gx_animation_drag_enable                                 _gxe_animation_drag_enable
+#define gx_animation_landing_speed_set                           _gxe_animation_landing_speed_set
 #define gx_animation_start                                       _gxe_animation_start
 #define gx_animation_stop                                        _gxe_animation_stop
 
+#define gx_binres_language_count_get                             _gxe_binres_language_count_get
+#define gx_binres_language_info_load                             _gxe_binres_language_info_load
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_binres_language_table_load                            _gxe_binres_language_table_load
+#endif
+#define gx_binres_language_table_load_ext                        _gxe_binres_language_table_load_ext
 #define gx_binres_theme_load                                     _gxe_binres_theme_load
 
 #define gx_brush_default                                         _gxe_brush_default
@@ -3676,23 +4293,33 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_canvas_hardware_layer_bind                            _gxe_canvas_hardware_layer_bind
 #define gx_canvas_hide                                           _gxe_canvas_hide
 #define gx_canvas_line_draw                                      _gxe_canvas_line_draw
+#define gx_canvas_memory_define                                  _gxe_canvas_memory_define
+
+#if defined (GX_MOUSE_SUPPORT)
 #define gx_canvas_mouse_define                                   _gxe_canvas_mouse_define
 #define gx_canvas_mouse_hide                                     _gxe_canvas_mouse_hide
 #define gx_canvas_mouse_show                                     _gxe_canvas_mouse_show
+#endif
 #define gx_canvas_offset_set                                     _gxe_canvas_offset_set
 #define gx_canvas_pie_draw                                       _gxe_canvas_pie_draw
 #define gx_canvas_pixel_draw                                     _gxe_canvas_pixel_draw
 #define gx_canvas_pixelmap_blend                                 _gxe_canvas_pixelmap_blend
 #define gx_canvas_pixelmap_draw                                  _gxe_canvas_pixelmap_draw
-#define gx_canvas_pixlemap_get                                   _gxe_canvas_pixelmap_get
+#define gx_canvas_pixelmap_get                                   _gxe_canvas_pixelmap_get
 #define gx_canvas_pixelmap_rotate                                _gxe_canvas_pixelmap_rotate
 #define gx_canvas_pixelmap_tile                                  _gxe_canvas_pixelmap_tile
 #define gx_canvas_polygon_draw                                   _gxe_canvas_polygon_draw
 #define gx_canvas_rectangle_draw                                 _gxe_canvas_rectangle_draw
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_canvas_rotated_text_draw                              _gxe_canvas_rotated_text_draw
+#endif
+#define gx_canvas_rotated_text_draw_ext                          _gxe_canvas_rotated_text_draw_ext
 #define gx_canvas_shift                                          _gxe_canvas_shift
 #define gx_canvas_show                                           _gxe_canvas_show
+#if defined (GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_canvas_text_draw                                      _gxe_canvas_text_draw
+#endif
+#define gx_canvas_text_draw_ext                                  _gxe_canvas_text_draw_ext
 
 #define gx_checkbox_create(a, b, c, d, e, f, g)                  _gxe_checkbox_create(a, b, (GX_WIDGET *)c, d, e, f, g, sizeof(GX_CHECKBOX))
 #define gx_checkbox_draw                                         _gx_checkbox_draw
@@ -3726,16 +4353,34 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_context_raw_fill_color_set                            _gxe_context_raw_fill_color_set
 #define gx_context_raw_line_color_set                            _gxe_context_raw_line_color_set
 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_context_string_get                                    _gxe_context_string_get
+#endif
+#define gx_context_string_get_ext                                _gxe_context_string_get_ext
+
+#define gx_display_active_language_set                           _gxe_display_active_language_set
 #define gx_display_color_set                                     _gxe_display_color_set
 #define gx_display_color_table_set                               _gxe_display_color_table_set
 #define gx_display_create(a, b, c, d, e)                         _gxe_display_create(a, b, c, d, e, sizeof(GX_DISPLAY))
 #define gx_display_delete                                        _gxe_display_delete
 #define gx_display_font_table_set                                _gxe_display_font_table_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_display_language_table_get                            _gxe_display_language_table_get
+#define gx_display_language_table_set                            _gxe_display_language_table_set
+#endif
+#define gx_display_language_table_get_ext                        _gxe_display_language_table_get_ext
+#define gx_display_language_table_set_ext                        _gxe_display_language_table_set_ext
 #define gx_display_pixelmap_table_set                            _gxe_display_pixelmap_table_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_display_string_get                                    _gxe_display_string_get
+#define gx_display_string_table_get                              _gxe_display_string_table_get
+#endif
+#define gx_display_string_get_ext                                _gxe_display_string_get_ext
+#define gx_display_string_table_get_ext                          _gxe_display_string_table_get_ext
 #define gx_display_theme_install                                 _gxe_display_theme_install
 
 #define gx_drop_list_close                                       _gxe_drop_list_close
-#define gx_drop_list_create(a, b, c, d, e, f, g, h, i)           _gxe_drop_list_create((GX_DROP_LIST *)a, b, (GX_WIDGET *)c, d, e, f, g, h, i)
+#define gx_drop_list_create(a, b, c, d, e, f, g, h, i)           _gxe_drop_list_create((GX_DROP_LIST *)a, b, (GX_WIDGET *)c, d, e, f, g, h, i, sizeof(GX_DROP_LIST))
 #define gx_drop_list_event_process                               _gxe_drop_list_event_process
 #define gx_drop_list_open                                        _gxe_drop_list_open
 #define gx_drop_list_pixelmap_set                                _gxe_drop_list_pixelmap_set
@@ -3784,15 +4429,38 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_multi_line_text_button_event_process                  _gxe_multi_line_text_button_event_process
 #define gx_multi_line_text_button_text_draw                      _gx_multi_line_text_button_text_draw
 #define gx_multi_line_text_button_text_id_set                    _gxe_multi_line_text_button_text_id_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_multi_line_text_button_text_set                       _gxe_multi_line_text_button_text_set
+#endif
+#define gx_multi_line_text_button_text_set_ext                   _gxe_multi_line_text_button_text_set_ext
 
+#define gx_multi_line_text_input_backspace                       _gxe_multi_line_text_input_backspace
 #define gx_multi_line_text_input_buffer_clear                    _gxe_multi_line_text_input_buffer_clear
 #define gx_multi_line_text_input_buffer_get                      _gxe_multi_line_text_input_buffer_get
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_multi_line_text_input_char_insert                     _gxe_multi_line_text_input_char_insert
+#endif
+#define gx_multi_line_text_input_char_insert_ext                 _gxe_multi_line_text_input_char_insert_ext
 #define gx_multi_line_text_input_create(a, b, c, d, e, f, g, h)  _gxe_multi_line_text_input_create(a, b, (GX_WIDGET *)c, d, e, f, g, h, sizeof(GX_MULTI_LINE_TEXT_INPUT))
+#define gx_multi_line_text_input_cursor_pos_get                  _gxe_multi_line_text_input_cursor_pos_get
+#define gx_multi_line_text_input_delete                          _gxe_multi_line_text_input_delete
+#define gx_multi_line_text_input_down_arrow                      _gxe_multi_line_text_input_down_arrow
+#define gx_multi_line_text_input_end                             _gxe_multi_line_text_input_end
+#define gx_multi_line_text_input_event_process                   _gxe_multi_line_text_input_event_process
+#define gx_multi_line_text_input_fill_color_set                  _gxe_multi_line_text_input_fill_color_set
+#define gx_multi_line_text_input_home                            _gxe_multi_line_text_input_home
+#define gx_multi_line_text_input_left_arrow                      _gxe_multi_line_text_input_left_arrow
+#define gx_multi_line_text_input_right_arrow                     _gxe_multi_line_text_input_right_arrow
 #define gx_multi_line_text_input_style_add                       _gxe_multi_line_text_input_style_add
 #define gx_multi_line_text_input_style_remove                    _gxe_multi_line_text_input_style_remove
 #define gx_multi_line_text_input_style_set                       _gxe_multi_line_text_input_style_set
-#define gx_multi_line_text_input_text_set                        _gx_multi_line_text_input_text_set
+#define gx_multi_line_text_input_text_color_set                  _gxe_multi_line_text_input_text_color_set
+#define gx_multi_line_text_input_text_select                     _gxe_multi_line_text_input_text_select
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_multi_line_text_input_text_set                        _gxe_multi_line_text_input_text_set
+#endif
+#define gx_multi_line_text_input_text_set_ext                    _gxe_multi_line_text_input_text_set_ext
+#define gx_multi_line_text_input_up_arrow                        _gxe_multi_line_text_input_up_arrow
 
 #define gx_multi_line_text_view_create(a, b, c, d, e, f, g)      _gxe_multi_line_text_view_create(a, b, (GX_WIDGET *)c, d, e, f, g, sizeof(GX_MULTI_LINE_TEXT_VIEW))
 #define gx_multi_line_text_view_draw                             _gx_multi_line_text_view_draw
@@ -3800,9 +4468,16 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_multi_line_text_view_font_set                         _gxe_multi_line_text_view_font_set
 #define gx_multi_line_text_view_line_space_set                   _gxe_multi_line_text_view_line_space_set
 #define gx_multi_line_text_view_scroll_info_get                  _gxe_multi_line_text_view_scroll_info_get
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_multi_line_text_view_text_color_set(a, b, c)          _gxe_multi_line_text_view_text_color_set((GX_MULTI_LINE_TEXT_VIEW *)a, b, c, b)
+#else
 #define gx_multi_line_text_view_text_color_set                   _gxe_multi_line_text_view_text_color_set
+#endif
 #define gx_multi_line_text_view_text_id_set                      _gxe_multi_line_text_view_text_id_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_multi_line_text_view_text_set                         _gxe_multi_line_text_view_text_set
+#endif
+#define gx_multi_line_text_view_text_set_ext                     _gxe_multi_line_text_view_text_set_ext
 #define gx_multi_line_text_view_whitespace_set                   _gxe_multi_line_text_view_whitespace_set
 
 #define gx_numeric_pixelmap_prompt_create(a, b, c, d, e, f, g, h) _gxe_numeric_pixelmap_prompt_create(a, b, (GX_WIDGET *)c, d, e, f, g, h, sizeof(GX_NUMERIC_PIXELMAP_PROMPT))
@@ -3830,6 +4505,7 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_pixelmap_slider_event_process                         _gxe_pixelmap_slider_event_process
 #define gx_pixelmap_slider_pixelmap_set                          _gxe_pixelmap_slider_pixelmap_set
 
+#define gx_progress_bar_background_draw                          _gx_progress_bar_background_draw
 #define gx_progress_bar_create(a, b, c, d, e, f, g)              _gxe_progress_bar_create(a, b, (GX_WIDGET *)c, d, e, f, g, sizeof(GX_PROGRESS_BAR))
 #define gx_progress_bar_draw                                     _gx_progress_bar_draw
 #define gx_progress_bar_event_process                            _gxe_progress_bar_event_process
@@ -3837,18 +4513,32 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_progress_bar_info_set(a, b)                           _gxe_progress_bar_info_set((GX_PROGRESS_BAR *)a, b);
 #define gx_progress_bar_pixelmap_set                             _gxe_progress_bar_pixelmap_set
 #define gx_progress_bar_range_set                                _gxe_progress_bar_range_set
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_progress_bar_text_color_set(a, b, c)                  _gxe_progress_bar_text_color_set((GX_PROGRESS_BAR *)a, b, c, b)
+#else
 #define gx_progress_bar_text_color_set                           _gxe_progress_bar_text_color_set
+#endif
 #define gx_progress_bar_text_draw                                _gx_progress_bar_text_draw
 #define gx_progress_bar_value_set                                _gxe_progress_bar_value_set
 
 #define gx_prompt_create(a, b, c, d, e, f, g)                    _gxe_prompt_create(a, b, (GX_WIDGET *)c, d, e, f, g, sizeof(GX_PROMPT))
 #define gx_prompt_draw                                           _gx_prompt_draw
 #define gx_prompt_font_set                                       _gxe_prompt_font_set
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_prompt_text_color_set(a, b, c)                        _gxe_prompt_text_color_set((GX_PROMPT *)a, b, c, b)
+#else
 #define gx_prompt_text_color_set                                 _gxe_prompt_text_color_set
+#endif
 #define gx_prompt_text_draw                                      _gx_prompt_text_draw
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_prompt_text_get                                       _gxe_prompt_text_get
+#endif
+#define gx_prompt_text_get_ext                                   _gxe_prompt_text_get_ext
 #define gx_prompt_text_id_set                                    _gxe_prompt_text_id_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_prompt_text_set                                       _gxe_prompt_text_set
+#endif
+#define gx_prompt_text_set_ext                                   _gxe_prompt_text_set_ext
 
 #define gx_radial_progress_bar_anchor_set                        _gxe_radial_progress_bar_anchor_set
 #define gx_radial_progress_bar_background_draw                   _gx_radial_progress_bar_background_draw
@@ -3857,9 +4547,24 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_radial_progress_bar_event_process                     _gxe_radial_progress_bar_event_process
 #define gx_radial_progress_bar_font_set                          _gxe_radial_progress_bar_font_set
 #define gx_radial_progress_bar_info_set                          _gxe_radial_progress_bar_info_set
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_radial_progress_bar_text_color_set(a, b, c)           _gxe_radial_progress_bar_text_color_set((GX_RADIAL_PROGRESS_BAR *)a, b, c, b)
+#else
 #define gx_radial_progress_bar_text_color_set                    _gxe_radial_progress_bar_text_color_set
+#endif
 #define gx_radial_progress_bar_text_draw                         _gx_radial_progress_bar_text_draw
 #define gx_radial_progress_bar_value_set                         _gxe_radial_progress_bar_value_set
+
+#define gx_radial_slider_anchor_angles_set                       _gxe_radial_slider_anchor_angles_set
+#define gx_radial_slider_animation_set                           _gxe_radial_slider_animation_set
+#define gx_radial_slider_animation_start                         _gxe_radial_slider_animation_start
+#define gx_radial_slider_create(a, b, c, d, e, f, g)             _gxe_radial_slider_create((GX_RADIAL_SLIDER *)a, b, c, d, e, f, g, sizeof(GX_RADIAL_SLIDER))
+#define gx_radial_slider_draw                                    _gx_radial_slider_draw
+#define gx_radial_slider_event_process                           _gxe_radial_slider_event_process
+#define gx_radial_slider_info_get                                _gxe_radial_slider_info_get
+#define gx_radial_slider_info_set                                _gxe_radial_slider_info_set
+#define gx_radial_slider_pixelmap_set                            _gxe_radial_slider_pixelmap_set
+#define gx_radial_slider_angle_set                               _gxe_radial_slider_angle_set
 
 #define gx_radio_button_create(a, b, c, d, e, f, g)              _gxe_radio_button_create(a, b, (GX_WIDGET *)c, d, e, f, g, sizeof(GX_RADIO_BUTTON))
 #define gx_radio_button_draw                                     _gx_radio_button_draw
@@ -3878,8 +4583,9 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_scrollbar_event_process                               _gxe_scrollbar_event_process
 #define gx_scrollbar_limit_check                                 _gxe_scrollbar_limit_check
 #define gx_scrollbar_reset                                       _gxe_scrollbar_reset
+#define gx_scrollbar_value_set                                   _gxe_scrollbar_value_set
 
-#define gx_scroll_wheel_create                                   _gxe_scroll_wheel_create
+#define gx_scroll_wheel_create(a, b, c, d, e, f, g)              _gxe_scroll_wheel_create(a, b, c, d, e, f, g, sizeof(GX_SCROLL_WHEEL))
 #define gx_scroll_wheel_event_process                            _gxe_scroll_wheel_event_process
 #define gx_scroll_wheel_gradient_alpha_set(a, b, c)              _gxe_scroll_wheel_gradient_alpha_set((GX_SCROLL_WHEEL *) a, b, c)
 #define gx_scroll_wheel_row_height_set(a, b)                     _gxe_scroll_wheel_row_height_set((GX_SCROLL_WHEEL *) a, b)
@@ -3896,8 +4602,10 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_single_line_text_input_character_insert(a, b, c)      _gxe_single_line_text_input_character_insert(a, b, c)
 #define gx_single_line_text_input_create(a, b, c, d, e, f, g, h) _gxe_single_line_text_input_create(a, b, (GX_WIDGET *)c, d, e, f, g, h, sizeof(GX_SINGLE_LINE_TEXT_INPUT))
 #define gx_single_line_text_input_draw(a)                        _gx_single_line_text_input_draw(a)
+#define gx_single_line_text_input_draw_position_get(a, b, c)     _gxe_single_line_text_input_draw_position_get(a, b, c)
 #define gx_single_line_text_input_end(a)                         _gxe_single_line_text_input_end((GX_SINGLE_LINE_TEXT_INPUT *)a)
 #define gx_single_line_text_input_event_process(a, b)            _gxe_single_line_text_input_event_process((GX_SINGLE_LINE_TEXT_INPUT *)a, b)
+#define gx_single_line_text_input_fill_color_set(a, b, c, d, e)  _gxe_single_line_text_input_fill_color_set((GX_SINGLE_LINE_TEXT_INPUT *)a, b, c, d, e)
 #define gx_single_line_text_input_home(a)                        _gxe_single_line_text_input_home((GX_SINGLE_LINE_TEXT_INPUT *)a)
 #define gx_single_line_text_input_left_arrow(a)                  _gxe_single_line_text_input_left_arrow((GX_SINGLE_LINE_TEXT_INPUT *)a)
 #define gx_single_line_text_input_position_get(a, b)             _gxe_single_line_text_input_position_get(a, b)
@@ -3905,6 +4613,12 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_single_line_text_input_style_add(a, b)                _gxe_single_line_text_input_style_add((GX_SINGLE_LINE_TEXT_INPUT *)a, b)
 #define gx_single_line_text_input_style_remove(a, b)             _gxe_single_line_text_input_style_remove((GX_SINGLE_LINE_TEXT_INPUT *)a, b)
 #define gx_single_line_text_input_style_set(a, b)                _gxe_single_line_text_input_style_set((GX_SINGLE_LINE_TEXT_INPUT *)a, b)
+#define gx_single_line_text_input_text_color_set(a, b, c, d, e)  _gxe_single_line_text_input_text_color_set((GX_SINGLE_LINE_TEXT_INPUT *)a, b, c, d, e)
+#define gx_single_line_text_input_text_select                    _gxe_single_line_text_input_text_select
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_single_line_text_input_text_set                       _gxe_single_line_text_input_text_set
+#endif
+#define gx_single_line_text_input_text_set_ext                   _gxe_single_line_text_input_text_set_ext
 
 #define gx_slider_create(a, b, c, d, e, f, g, h)                 _gxe_slider_create(a, b, (GX_WIDGET *)c, d, e, f, g, h, sizeof(GX_SLIDER))
 #define gx_slider_draw                                           _gx_slider_draw
@@ -3917,21 +4631,34 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_slider_value_calculate                                _gxe_slider_value_calculate
 #define gx_slider_value_set                                      _gxe_slider_value_set
 
-#define gx_sprite_create(a, b, c, d, e, f, g, h)                 _gxe_sprite_create(a, b, (GX_WIDGET *)c, d, e, f, g, h)
+#define gx_sprite_create(a, b, c, d, e, f, g, h)                 _gxe_sprite_create(a, b, (GX_WIDGET *)c, d, e, f, g, h, sizeof(GX_SPRITE))
 #define gx_sprite_current_frame_set                              _gxe_sprite_current_frame_set
 #define gx_sprite_frame_list_set                                 _gxe_sprite_frame_list_set
 #define gx_sprite_start(a, b)                                    _gxe_sprite_start(a, b)
 #define gx_sprite_stop(a)                                        _gxe_sprite_stop(a)
 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_string_scroll_wheel_create(a, b, c, d, e, f, g, h)    _gxe_string_scroll_wheel_create(a, b, c, d, e, f, g, h, sizeof(GX_STRING_SCROLL_WHEEL))
 #define gx_string_scroll_wheel_string_list_set                   _gxe_string_scroll_wheel_string_list_set
+#endif
+#define gx_string_scroll_wheel_create_ext(a, b, c, d, e, f, g, h) _gxe_string_scroll_wheel_create_ext(a, b, c, d, e, f, g, h, sizeof(GX_STRING_SCROLL_WHEEL))
 #define gx_string_scroll_wheel_string_id_list_set                _gxe_string_scroll_wheel_string_id_list_set
+#define gx_string_scroll_wheel_string_list_set_ext               _gxe_string_scroll_wheel_string_list_set_ext
 
 #define gx_system_active_language_set                            _gxe_system_active_language_set
 
 #if (GX_ANIMATION_POOL_SIZE > 0)
 #define gx_system_animation_get                                  _gxe_system_animation_get
 #define gx_system_animation_free                                 _gxe_system_animation_free
+#endif
+
+#if defined(GX_DYNAMIC_BIDI_TEXT_SUPPORT)
+#define gx_system_bidi_text_enable                               _gx_system_bidi_text_enable
+#define gx_system_bidi_text_disable                              _gx_system_bidi_text_disable
+#endif
+
+#if defined(GX_THAI_GLYPH_SHAPING_SUPPORT)
+#define gx_system_text_render_style_set                          _gx_system_text_render_style_set
 #endif
 
 #define gx_system_canvas_refresh                                 _gxe_system_canvas_refresh
@@ -3942,37 +4669,67 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_system_event_send                                     _gxe_system_event_send
 #define gx_system_focus_claim(a)                                 _gxe_system_focus_claim((GX_WIDGET *)a)
 #define gx_system_initialize                                     _gxe_system_initialize
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_system_language_table_get                             _gxe_system_language_table_get
 #define gx_system_language_table_set                             _gxe_system_language_table_set
+#endif
 #define gx_system_memory_allocator_set                           _gxe_system_memory_allocator_set
 #define gx_system_pen_configure                                  _gxe_system_pen_configure
+#define gx_system_screen_stack_create(a, b)                      _gxe_system_screen_stack_create(a, b, sizeof(GX_SCREEN_STACK_CONTROL))
+#define gx_system_screen_stack_get                               _gxe_system_screen_stack_get
+#define gx_system_screen_stack_pop                               _gxe_system_screen_stack_pop
+#define gx_system_screen_stack_push                              _gxe_system_screen_stack_push
+#define gx_system_screen_stack_reset                             _gx_system_screen_stack_reset
 #define gx_system_scroll_appearance_get                          _gxe_system_scroll_appearance_get
 #define gx_system_scroll_appearance_set                          _gxe_system_scroll_appearance_set
 #define gx_system_start                                          _gxe_system_start
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_system_string_get                                     _gxe_system_string_get
 #define gx_system_string_table_get                               _gxe_system_string_table_get
 #define gx_system_string_width_get                               _gxe_system_string_width_get
+#endif
+#define gx_system_string_width_get_ext                           _gxe_system_string_width_get_ext
 #define gx_system_timer_start(a, b, c, d)                        _gxe_system_timer_start((GX_WIDGET *)a, b, c, d)
 #define gx_system_timer_stop(a, b)                               _gxe_system_timer_stop((GX_WIDGET *)a, b)
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_system_version_string_get                             _gxe_system_version_string_get
+#endif
+#define gx_system_version_string_get_ext                         _gxe_system_version_string_get_ext
 #define gx_system_widget_find                                    _gxe_system_widget_find
 
 #define gx_text_button_create(a, b, c, d, e, f, g)               _gxe_text_button_create(a, b, (GX_WIDGET *)c, d, e, f, g, sizeof(GX_TEXT_BUTTON))
 #define gx_text_button_draw                                      _gx_text_button_draw
 #define gx_text_button_font_set                                  _gxe_text_button_font_set
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_text_button_text_color_set(a, b, c)                   _gxe_text_button_text_color_set((GX_TEXT_BUTTON *)a, b, c, b)
+#else
 #define gx_text_button_text_color_set                            _gxe_text_button_text_color_set
+#endif
 #define gx_text_button_text_draw                                 _gx_text_button_text_draw
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_text_button_text_get                                  _gxe_text_button_text_get
+#endif
+#define gx_text_button_text_get_ext                              _gxe_text_button_text_get_ext
 #define gx_text_button_text_id_set                               _gxe_text_button_text_id_set
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_text_button_text_set                                  _gxe_text_button_text_set
+#endif
+#define gx_text_button_text_set_ext                              _gxe_text_button_text_set_ext
 
 #define gx_text_input_cursor_blink_interval_set(a, b)            _gxe_text_input_cursor_blink_interval_set((GX_TEXT_INPUT_CURSOR *)a, b)
 #define gx_text_input_cursor_height_set(a, b)                    _gxe_text_input_cursor_height_set((GX_TEXT_INPUT_CURSOR *)a, b)
 #define gx_text_input_cursor_width_set(a, b)                     _gxe_text_input_cursor_width_set((GX_TEXT_INPUT_CURSOR *)a, b)
 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_text_scroll_wheel_callback_set(a, b)                  _gxe_text_scroll_wheel_callback_set((GX_TEXT_SCROLL_WHEEL *)a, (GX_CONST GX_CHAR *(*)(GX_TEXT_SCROLL_WHEEL *, INT)) b)
+#endif
+#define gx_text_scroll_wheel_callback_set_ext(a, b)              _gxe_text_scroll_wheel_callback_set_ext((GX_TEXT_SCROLL_WHEEL *)a, (UINT(*)(GX_TEXT_SCROLL_WHEEL *, INT, GX_STRING *)) b)
 #define gx_text_scroll_wheel_font_set(a, b, c)                   _gxe_text_scroll_wheel_font_set((GX_TEXT_SCROLL_WHEEL *) a, b, c)
-#define gx_text_scroll_wheel_text_color_set(a, b, c)             _gxe_text_scroll_wheel_text_color_set((GX_TEXT_SCROLL_WHEEL *) a, b, c)
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_text_scroll_wheel_text_color_set(a, b, c)             _gxe_text_scroll_wheel_text_color_set((GX_TEXT_SCROLL_WHEEL *) a, b, c, b)
+#else
+#define gx_text_scroll_wheel_text_color_set(a, b, c, d)          _gxe_text_scroll_wheel_text_color_set((GX_TEXT_SCROLL_WHEEL *) a, b, c, d)
+#endif
 #define gx_text_scroll_wheel_create(a, b, c, d, e, f, g)         _gxe_text_scroll_wheel_create(a, b, c, d, e, f, g, sizeof(GX_TEXT_SCROLL_WHEEL))
 #define gx_text_scroll_wheel_draw                                _gx_text_scroll_wheel_draw
 
@@ -3988,11 +4745,20 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_tree_view_selected_get                                _gxe_tree_view_selected_get
 #define gx_tree_view_selected_set                                _gxe_tree_view_selected_set
 
+#define gx_utility_canvas_to_bmp                                 _gxe_utility_canvas_to_bmp
+#define gx_utility_circle_point_get                              _gxe_utility_circle_point_get
 #define gx_utility_ltoa                                          _gxe_utility_ltoa
-#define gx_utility_math_acos                                     _gxe_utility_math_acos
-#define gx_utility_math_asin                                     _gxe_utility_math_asin
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_utility_math_acos                                     _gx_utility_math_acos_5_4_0
+#define gx_utility_math_asin                                     _gx_utility_math_asin_5_4_0
+#define gx_utility_math_cos                                      _gx_utility_math_cos_5_4_0
+#define gx_utility_math_sin                                      _gx_utility_math_sin_5_4_0
+#else
+#define gx_utility_math_acos                                     _gx_utility_math_acos
+#define gx_utility_math_asin                                     _gx_utility_math_asin
 #define gx_utility_math_cos                                      _gx_utility_math_cos
 #define gx_utility_math_sin                                      _gx_utility_math_sin
+#endif
 #define gx_utility_math_sqrt                                     _gx_utility_math_sqrt
 #define gx_utility_pixelmap_resize                               _gxe_utility_pixelmap_resize
 #define gx_utility_pixelmap_rotate                               _gxe_utility_pixelmap_rotate
@@ -4007,7 +4773,10 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_utility_rectangle_resize                              _gxe_utility_rectangle_resize
 #define gx_utility_rectangle_shift                               _gxe_utility_rectangle_shift
 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_utility_string_to_alphamap                            _gxe_utility_string_to_alphamap
+#endif
+#define gx_utility_string_to_alphamap_ext                        _gxe_utility_string_to_alphamap_ext
 
 #define gx_vertical_list_children_position                       _gxe_vertical_list_children_position
 #define gx_vertical_list_create(a, b, c, d, e, f, g, h)          _gxe_vertical_list_create(a, b, (GX_WIDGET *)c, d, e, f, g, h, sizeof(GX_VERTICAL_LIST))
@@ -4034,18 +4803,23 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_widget_children_draw(a)                               _gx_widget_children_draw((GX_WIDGET *)a)
 #define gx_widget_color_get(a, b, c)                             _gxe_widget_color_get((GX_WIDGET *)a, b, c)
 #define gx_widget_client_get(a, b, c)                            _gxe_widget_client_get((GX_WIDGET *)a, b, c)
-#define gx_widget_create(a, b, c, d, e, f)                       _gxe_widget_create((GX_WIDGET *)a, b, (GX_WIDGET *)c, d, e, f)
+#define gx_widget_create(a, b, c, d, e, f)                       _gxe_widget_create((GX_WIDGET *)a, b, (GX_WIDGET *)c, d, e, f, sizeof(GX_WIDGET))
 #define gx_widget_created_test(a, b)                             _gxe_widget_created_test((GX_WIDGET *)a, b)
 #define gx_widget_delete(a)                                      _gxe_widget_delete((GX_WIDGET *)a)
 #define gx_widget_detach(a)                                      _gxe_widget_detach((GX_WIDGET *)a)
 #define gx_widget_draw(a)                                        _gx_widget_draw((GX_WIDGET *)a)
-#define gx_widget_draw_set(a, b)                                 _gx_widget_draw_set((GX_WIDGET *)a, (void (*)(GX_WIDGET *))b)
+#define gx_widget_draw_set(a, b)                                 _gxe_widget_draw_set((GX_WIDGET *)a, (void (*)(GX_WIDGET *))b)
 #define gx_widget_event_generate(a, b, c)                        _gxe_widget_event_generate((GX_WIDGET *)a, b, c)
 #define gx_widget_event_process(a, b)                            _gxe_widget_event_process((GX_WIDGET *)a, b)
 #define gx_widget_event_process_set(a, b)                        _gxe_widget_event_process_set((GX_WIDGET *)a, (UINT (*)(GX_WIDGET *, GX_EVENT *)) b)
 #define gx_widget_event_to_parent(a, b)                          _gxe_widget_event_to_parent((GX_WIDGET *)a, b)
-#define gx_widget_fill_color_set(a, b, c)                        _gxe_widget_fill_color_set((GX_WIDGET *)a, b, c)
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+#define gx_widget_fill_color_set(a, b, c)                        _gxe_widget_fill_color_set((GX_WIDGET *)a, b, c, b)
+#else
+#define gx_widget_fill_color_set(a, b, c, d)                     _gxe_widget_fill_color_set((GX_WIDGET *)a, b, c, d)
+#endif
 #define gx_widget_find(a, b, c, d)                               _gxe_widget_find((GX_WIDGET *)a, b, c, (GX_WIDGET **)d)
+#define gx_widget_first_child_get(a, b)                          _gxe_widget_first_child_get((GX_WIDGET *) a, (GX_WIDGET **) b)
 #define gx_widget_focus_next(a)                                  _gxe_widget_focus_next((GX_WIDGET *)a)
 #define gx_widget_focus_previous(a)                              _gxe_widget_focus_previous((GX_WIDGET *)a)
 #define gx_widget_font_get(a, b, c)                              _gxe_widget_font_get((GX_WIDGET *)a, b, c)
@@ -4053,7 +4827,11 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_widget_front_move(a, b)                               _gxe_widget_front_move((GX_WIDGET *)a, b)
 #define gx_widget_height_get(a, b)                               _gxe_widget_height_get((GX_WIDGET *)a, b)
 #define gx_widget_hide(a)                                        _gxe_widget_hide((GX_WIDGET *)a)
+#define gx_widget_last_child_get(a, b)                           _gxe_widget_last_child_get((GX_WIDGET *) a, (GX_WIDGET **) b)
+#define gx_widget_next_sibling_get(a, b)                         _gxe_widget_next_sibling_get((GX_WIDGET *) a, (GX_WIDGET **) b)
+#define gx_widget_parent_get(a, b)                               _gxe_widget_parent_get((GX_WIDGET *) a, (GX_WIDGET **) b)
 #define gx_widget_pixelmap_get(a, b, c)                          _gxe_widget_pixelmap_get((GX_WIDGET *)a, b, c)
+#define gx_widget_previous_sibling_get(a, b)                     _gxe_widget_previous_sibling_get((GX_WIDGET *) a, (GX_WIDGET **) b)
 #define gx_widget_resize(a, b)                                   _gxe_widget_resize((GX_WIDGET *)a, b)
 #define gx_widget_shift(a, b, c, d)                              _gxe_widget_shift((GX_WIDGET *)a, b, c, d)
 #define gx_widget_show(a)                                        _gxe_widget_show((GX_WIDGET *)a)
@@ -4061,13 +4839,22 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_widget_status_get(a, b)                               _gxe_widget_status_get((GX_WIDGET *)a, b)
 #define gx_widget_status_remove(a, b)                            _gxe_widget_status_remove((GX_WIDGET *)a, b)
 #define gx_widget_status_test(a, b, c)                           _gxe_widget_status_test((GX_WIDGET *)a, b, c)
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+#define gx_widget_string_get(a, b, c)                            _gxe_widget_string_get((GX_WIDGET *)a, b, c)
+#endif
+#define gx_widget_string_get_ext(a, b, c)                        _gxe_widget_string_get_ext((GX_WIDGET *)a, b, c)
 #define gx_widget_style_add(a, b)                                _gxe_widget_style_add((GX_WIDGET *)a, b)
 #define gx_widget_style_get(a, b)                                _gxe_widget_style_get((GX_WIDGET *)a, b)
 #define gx_widget_style_remove(a, b)                             _gxe_widget_style_remove((GX_WIDGET *)a, b)
 #define gx_widget_style_set(a, b)                                _gxe_widget_style_set((GX_WIDGET *)a, b)
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 #define gx_widget_text_blend(a, b, c, d, e, f, g)                _gxe_widget_text_blend((GX_WIDGET *)a, b, c, d, e, f, g)
 #define gx_widget_text_draw(a, b, c, d, e, f)                    _gx_widget_text_draw((GX_WIDGET *)a, b, c, d, e, f)
+#endif
+#define gx_widget_text_blend_ext(a, b, c, d, e, f, g)            _gxe_widget_text_blend_ext((GX_WIDGET *)a, b, c, d, e, f, g)
+#define gx_widget_text_draw_ext(a, b, c, d, e, f)                _gx_widget_text_draw_ext((GX_WIDGET *)a, b, c, d, e, f)
 #define gx_widget_text_id_draw(a, b, c, d, e, f)                 _gx_widget_text_id_draw((GX_WIDGET *)a, b, c, d, e, f)
+#define gx_widget_top_visible_child_find(a, b)                   _gxe_widget_top_visible_child_find((GX_WIDGET *) a, (GX_WIDGET **) b)
 #define gx_widget_type_find(a, b, c)                             _gxe_widget_type_find((GX_WIDGET *)a, b, (GX_WIDGET **)c)
 #define gx_widget_width_get(a, b)                                _gxe_widget_width_get((GX_WIDGET *)a, b)
 
@@ -4080,7 +4867,7 @@ UINT _gx_window_wallpaper_set(GX_WINDOW *window, GX_RESOURCE_ID wallpaper_id, GX
 #define gx_window_draw                                           _gx_window_draw
 #define gx_window_event_process                                  _gxe_window_event_process
 #define gx_window_execute                                        _gxe_window_execute
-#define gx_window_root_create                                    _gxe_window_root_create
+#define gx_window_root_create(a, b, c, d, e, f)                  _gxe_window_root_create(a, b, c, d, e, f, sizeof(GX_WINDOW_ROOT))
 #define gx_window_root_delete                                    _gxe_window_root_delete
 #define gx_window_root_event_process                             _gxe_window_root_event_process
 #define gx_window_root_find                                      _gxe_window_root_find
@@ -4098,13 +4885,18 @@ UINT _gxe_accordion_menu_position(GX_ACCORDION_MENU *accordion);
 
 UINT _gxe_animation_canvas_define(GX_ANIMATION *animation, GX_CANVAS *canvas);
 UINT _gxe_animation_create(GX_ANIMATION *animation);
-UINT _gxe_animation_delete(GX_ANIMATION *animation);
 UINT _gxe_animation_drag_disable(GX_ANIMATION *animation, GX_WIDGET *widget);
 UINT _gxe_animation_drag_enable(GX_ANIMATION *animation, GX_WIDGET *widget, GX_ANIMATION_INFO *info);
+UINT _gxe_animation_landing_speed_set(GX_ANIMATION *animation, USHORT shift_per_step);
 UINT _gxe_animation_start(GX_ANIMATION *animation, GX_ANIMATION_INFO *info);
 UINT _gxe_animation_stop(GX_ANIMATION *animation);
 
+UINT _gxe_binres_language_count_get(GX_UBYTE *root_address, GX_VALUE *put_count);
+UINT _gxe_binres_language_info_load(GX_UBYTE *root_address, GX_LANGUAGE_HEADER *put_info);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_binres_language_table_load(GX_UBYTE *root_address, GX_UBYTE ****returned_language_table);
+#endif
+UINT _gxe_binres_language_table_load_ext(GX_UBYTE* root_address, GX_STRING*** returned_language_table);
 UINT _gxe_binres_theme_load(GX_UBYTE *root_address, INT theme_id, GX_THEME **returned_theme);
 
 UINT _gxe_brush_default(GX_BRUSH *brush);
@@ -4117,7 +4909,7 @@ UINT _gxe_button_create(GX_BUTTON *button,
                         ULONG style, USHORT Id,
                         GX_CONST GX_RECTANGLE *size,
                         UINT button_control_block_size);
-UINT _gxe_button_deselect(GX_BUTTON *button);
+UINT _gxe_button_deselect(GX_BUTTON *button, GX_BOOL gen_event);
 VOID _gx_button_draw(GX_BUTTON *button);
 UINT _gxe_button_event_process(GX_BUTTON *button, GX_EVENT *event_ptr);
 UINT _gxe_button_select(GX_BUTTON *button);
@@ -4136,6 +4928,8 @@ UINT _gxe_canvas_ellipse_draw(INT xcenter, INT ycenter, INT a, INT b);
 UINT _gxe_canvas_hardware_layer_bind(GX_CANVAS *canvas, INT layer);
 UINT _gxe_canvas_hide(GX_CANVAS *canvas);
 UINT _gxe_canvas_line_draw(GX_VALUE x_start, GX_VALUE y_start, GX_VALUE x_end, GX_VALUE y_end);
+UINT _gxe_canvas_memory_define(GX_CANVAS *canvas, GX_COLOR *memory, ULONG memsize);
+
 #if defined (GX_MOUSE_SUPPORT)
 UINT _gxe_canvas_mouse_define(GX_CANVAS *canvas, GX_MOUSE_CURSOR_INFO *info);
 UINT _gxe_canvas_mouse_hide(GX_CANVAS *canvas);
@@ -4152,10 +4946,17 @@ UINT _gxe_canvas_pixelmap_rotate(GX_VALUE x_position, GX_VALUE y_position, GX_PI
 UINT _gxe_canvas_pixelmap_tile(GX_RECTANGLE *fill, GX_PIXELMAP *pixelmap);
 UINT _gxe_canvas_polygon_draw(GX_POINT *point_array, INT number_of_points);
 UINT _gxe_canvas_rectangle_draw(GX_RECTANGLE *rectangle);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_canvas_rotated_text_draw(GX_CONST GX_CHAR *text, GX_VALUE xcenter, GX_VALUE ycenter, INT angle);
+#endif
+UINT _gxe_canvas_rotated_text_draw_ext(GX_CONST GX_STRING* text, GX_VALUE xcenter, GX_VALUE ycenter, INT angle);
 UINT _gxe_canvas_shift(GX_CANVAS *canvas, GX_VALUE x, GX_VALUE y);
 UINT _gxe_canvas_show(GX_CANVAS *canvas);
+
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_canvas_text_draw(GX_VALUE x_start, GX_VALUE y_start, GX_CONST GX_CHAR *string, INT length);
+#endif
+UINT _gxe_canvas_text_draw_ext(GX_VALUE x_start, GX_VALUE y_start, GX_CONST GX_STRING *string);
 
 UINT _gxe_checkbox_create(GX_CHECKBOX *checkbox, GX_CONST GX_CHAR *name,
                           GX_WIDGET *parent, GX_RESOURCE_ID text_id,
@@ -4199,21 +5000,38 @@ UINT _gxe_context_pixelmap_set(GX_RESOURCE_ID pixelmap_id);
 UINT _gxe_context_raw_brush_define(GX_COLOR line_color, GX_COLOR fill_color, UINT style);
 UINT _gxe_context_raw_fill_color_set(GX_COLOR line_color);
 UINT _gxe_context_raw_line_color_set(GX_COLOR line_color);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gxe_context_string_get(GX_RESOURCE_ID string_id, GX_CONST GX_CHAR **return_string);
+#endif
+UINT _gxe_context_string_get_ext(GX_RESOURCE_ID string_id, GX_STRING *return_string);
 
+UINT _gxe_display_active_language_set(GX_DISPLAY *display, GX_UBYTE language);
 UINT _gxe_display_color_set(GX_DISPLAY *display, GX_RESOURCE_ID resource_id, GX_COLOR new_color);
 UINT _gxe_display_color_table_set(GX_DISPLAY *display, GX_COLOR *color_table, INT number_of_colors);
 UINT _gxe_display_create(GX_DISPLAY *display, GX_CONST GX_CHAR *name, UINT (*display_driver_setup)(GX_DISPLAY *),
                          GX_VALUE width, GX_VALUE height, UINT display_control_block_size);
 UINT _gxe_display_delete(GX_DISPLAY *display, VOID (*display_driver_cleanup)(GX_DISPLAY *));
 UINT _gxe_display_font_table_set(GX_DISPLAY *display, GX_FONT **font_table, UINT number_of_fonts);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gxe_display_language_table_get(GX_DISPLAY *display, GX_CHAR ****table, GX_UBYTE *language_count, UINT *string_count);
+UINT _gxe_display_language_table_set(GX_DISPLAY *display, GX_CHAR ***table,  GX_UBYTE num_languages, UINT number_of_strings);
+#endif
+UINT _gxe_display_language_table_get_ext(GX_DISPLAY *display, GX_STRING ***table, GX_UBYTE *language_count, UINT *string_count);
+UINT _gxe_display_language_table_set_ext(GX_DISPLAY *display, GX_CONST GX_STRING **table,  GX_UBYTE num_languages, UINT number_of_strings);
 UINT _gxe_display_pixelmap_table_set(GX_DISPLAY *display, GX_PIXELMAP **pixelmap_table, UINT number_of_pixelmaps);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gxe_display_string_get(GX_DISPLAY *display, GX_RESOURCE_ID string_id, GX_CONST GX_CHAR **return_string);
+UINT _gxe_display_string_table_get(GX_DISPLAY* display, GX_UBYTE language, GX_CHAR*** table, UINT* size);
+#endif
+UINT _gxe_display_string_get_ext(GX_DISPLAY* display, GX_RESOURCE_ID string_id, GX_STRING *return_string);
+UINT _gxe_display_string_table_get_ext(GX_DISPLAY *display, GX_UBYTE language, GX_STRING **table, UINT *size);
 UINT _gxe_display_theme_install(GX_DISPLAY *display, GX_CONST GX_THEME *theme_ptr);
 
 UINT _gxe_drop_list_close(GX_DROP_LIST *drop_list);
 UINT _gxe_drop_list_create(GX_DROP_LIST *drop_list, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
                            INT total_rows, INT open_height,
                            VOID (*callback)(GX_VERTICAL_LIST *, GX_WIDGET *, INT),
-                           ULONG style, USHORT drop_list_id, GX_CONST GX_RECTANGLE *size);
+                           ULONG style, USHORT drop_list_id, GX_CONST GX_RECTANGLE *size, UINT drop_list_control_block_size);
 UINT _gxe_drop_list_event_process(GX_DROP_LIST *list, GX_EVENT *event_ptr);
 UINT _gxe_drop_list_open(GX_DROP_LIST *list);
 UINT _gxe_drop_list_pixelmap_set(GX_DROP_LIST *drop_list, GX_RESOURCE_ID pixelmap_id);
@@ -4285,19 +5103,50 @@ VOID _gx_multi_line_text_button_draw(GX_MULTI_LINE_TEXT_BUTTON *button);
 UINT _gxe_multi_line_text_button_event_process(GX_MULTI_LINE_TEXT_BUTTON *button, GX_EVENT *event_ptr);
 VOID _gx_multi_line_text_button_text_draw(GX_MULTI_LINE_TEXT_BUTTON *button);
 UINT _gxe_multi_line_text_button_text_id_set(GX_MULTI_LINE_TEXT_BUTTON *button, GX_RESOURCE_ID string_id);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_multi_line_text_button_text_set(GX_MULTI_LINE_TEXT_BUTTON *button, GX_CONST GX_CHAR *text);
+#endif
+UINT _gxe_multi_line_text_button_text_set_ext(GX_MULTI_LINE_TEXT_BUTTON* button, GX_CONST GX_STRING* text);
 
+UINT _gxe_multi_line_text_input_backspace(GX_MULTI_LINE_TEXT_INPUT *text_input);
 UINT _gxe_multi_line_text_input_buffer_clear(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr);
 UINT _gxe_multi_line_text_input_buffer_get(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr, GX_CHAR **buffer_address,
                                            UINT *content_size, UINT *buffer_size);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gxe_multi_line_text_input_char_insert(GX_MULTI_LINE_TEXT_INPUT *text_input, GX_UBYTE *str, UINT str_size);
+#endif
+UINT _gxe_multi_line_text_input_char_insert_ext(GX_MULTI_LINE_TEXT_INPUT* text_input, GX_CONST GX_STRING* str);
 UINT _gxe_multi_line_text_input_create(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr, GX_CONST GX_CHAR *name_ptr,
                                        GX_WIDGET *parent, GX_CHAR *input_buffer, UINT buffer_size,
                                        ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size,
                                        UINT text_input_control_block_size);
+UINT _gxe_multi_line_text_input_cursor_pos_get(GX_MULTI_LINE_TEXT_INPUT *input, GX_POINT *cursor_pos);
+UINT _gxe_multi_line_text_input_delete(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gxe_multi_line_text_input_down_arrow(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gxe_multi_line_text_input_end(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gxe_multi_line_text_input_event_process(GX_MULTI_LINE_TEXT_INPUT *input, GX_EVENT *event_ptr);
 UINT _gxe_multi_line_text_input_style_add(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr, ULONG cursor_type);
 UINT _gxe_multi_line_text_input_style_remove(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr, ULONG cursor_type);
 UINT _gxe_multi_line_text_input_style_set(GX_MULTI_LINE_TEXT_INPUT *text_input_ptr, ULONG cursor_type);
-UINT _gx_multi_line_text_input_text_set(GX_MULTI_LINE_TEXT_INPUT *text_input, GX_CHAR *text);
+UINT _gxe_multi_line_text_input_fill_color_set(GX_MULTI_LINE_TEXT_INPUT *view,
+                                               GX_RESOURCE_ID normal_color_id,
+                                               GX_RESOURCE_ID selected_color_id,
+                                               GX_RESOURCE_ID disabled_color_id,
+                                               GX_RESOURCE_ID readonly_color_id);
+UINT _gxe_multi_line_text_input_home(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gxe_multi_line_text_input_left_arrow(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gxe_multi_line_text_input_right_arrow(GX_MULTI_LINE_TEXT_INPUT *text_input);
+UINT _gxe_multi_line_text_input_text_color_set(GX_MULTI_LINE_TEXT_INPUT *view,
+                                               GX_RESOURCE_ID normal_color_id,
+                                               GX_RESOURCE_ID selected_color_id,
+                                               GX_RESOURCE_ID disabled_color_id,
+                                               GX_RESOURCE_ID readonly_color_id);
+UINT _gxe_multi_line_text_input_text_select(GX_MULTI_LINE_TEXT_INPUT *input, UINT start_index, UINT end_index);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gxe_multi_line_text_input_text_set(GX_MULTI_LINE_TEXT_INPUT *text_input, GX_CONST GX_CHAR *text);
+#endif
+UINT _gxe_multi_line_text_input_text_set_ext(GX_MULTI_LINE_TEXT_INPUT* text_input, GX_CONST GX_STRING *text);
+UINT _gxe_multi_line_text_input_up_arrow(GX_MULTI_LINE_TEXT_INPUT *text_input);
 
 UINT _gxe_multi_line_text_view_create(GX_MULTI_LINE_TEXT_VIEW *text_view_ptr, GX_CONST GX_CHAR *name_ptr,
                                       GX_WIDGET *parent, GX_RESOURCE_ID text_id,
@@ -4308,10 +5157,16 @@ UINT _gxe_multi_line_text_view_event_process(GX_MULTI_LINE_TEXT_VIEW *view, GX_E
 UINT _gxe_multi_line_text_view_font_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_RESOURCE_ID font_id);
 UINT _gxe_multi_line_text_view_line_space_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_BYTE line_space);
 UINT _gxe_multi_line_text_view_scroll_info_get(GX_MULTI_LINE_TEXT_VIEW *view, ULONG style, GX_SCROLL_INFO *return_scroll_info);
-UINT _gxe_multi_line_text_view_text_color_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_RESOURCE_ID normal_id, GX_RESOURCE_ID selected_id);
+UINT _gxe_multi_line_text_view_text_color_set(GX_MULTI_LINE_TEXT_VIEW *view,
+                                              GX_RESOURCE_ID normal_color_id,
+                                              GX_RESOURCE_ID selected_color_id,
+                                              GX_RESOURCE_ID disabled_color_id);
 UINT _gxe_multi_line_text_view_text_id_set(GX_MULTI_LINE_TEXT_VIEW *text_view_ptr, GX_RESOURCE_ID text_id);
-UINT _gxe_multi_line_text_view_text_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_CHAR *text);
-UINT _gxe_multi_line_text_view_whitespace_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_BYTE whitespace);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gxe_multi_line_text_view_text_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_CONST GX_CHAR *text);
+#endif
+UINT _gxe_multi_line_text_view_text_set_ext(GX_MULTI_LINE_TEXT_VIEW *view, GX_CONST GX_STRING *text);
+UINT _gxe_multi_line_text_view_whitespace_set(GX_MULTI_LINE_TEXT_VIEW *view, GX_UBYTE whitespace);
 
 UINT _gxe_numeric_pixelmap_prompt_create(GX_NUMERIC_PIXELMAP_PROMPT *prompt,
                                          GX_CONST GX_CHAR *name, GX_WIDGET *parent,
@@ -4319,7 +5174,7 @@ UINT _gxe_numeric_pixelmap_prompt_create(GX_NUMERIC_PIXELMAP_PROMPT *prompt,
                                          ULONG style, USHORT pixelmap_prompt_id,
                                          GX_CONST GX_RECTANGLE *size,
                                          UINT control_block_size);
-UINT _gxe_numeric_pixelmap_prompt_format_function_set(GX_NUMERIC_PIXELMAP_PROMPT *prompt, VOID(*format_func)(GX_NUMERIC_PIXELMAP_PROMPT *, INT));
+UINT _gxe_numeric_pixelmap_prompt_format_function_set(GX_NUMERIC_PIXELMAP_PROMPT *prompt, VOID (*format_func)(GX_NUMERIC_PIXELMAP_PROMPT *, INT));
 UINT _gxe_numeric_pixelmap_prompt_value_set(GX_NUMERIC_PIXELMAP_PROMPT *prompt, INT value);
 
 UINT _gxe_numeric_prompt_create(GX_NUMERIC_PROMPT *prompt, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
@@ -4365,6 +5220,7 @@ VOID _gx_pixelmap_slider_draw(GX_PIXELMAP_SLIDER *slider);
 UINT _gxe_pixelmap_slider_event_process(GX_PIXELMAP_SLIDER *slider, GX_EVENT *event_prt);
 UINT _gxe_pixelmap_slider_pixelmap_set(GX_PIXELMAP_SLIDER *slider, GX_PIXELMAP_SLIDER_INFO *info);
 
+VOID _gx_progress_bar_background_draw(GX_PROGRESS_BAR *progress_bar);
 UINT _gxe_progress_bar_create(GX_PROGRESS_BAR *progress_bar, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
                               GX_PROGRESS_BAR_INFO *progress_bar_info, ULONG style,
                               USHORT progress_bar_id, GX_CONST GX_RECTANGLE *size,
@@ -4376,7 +5232,7 @@ UINT _gxe_progress_bar_info_set(GX_PROGRESS_BAR *progress_bar, GX_PROGRESS_BAR_I
 UINT _gxe_progress_bar_pixelmap_set(GX_PROGRESS_BAR *progress_bar, GX_RESOURCE_ID pixelmap);
 UINT _gxe_progress_bar_range_set(GX_PROGRESS_BAR *progress_bar, INT min_value, INT max_value);
 UINT _gxe_progress_bar_text_color_set(GX_PROGRESS_BAR *progress_bar, GX_RESOURCE_ID normal_text_color_id,
-                                      GX_RESOURCE_ID selected_text_color_id);
+                                      GX_RESOURCE_ID selected_text_color_id, GX_RESOURCE_ID disabled_text_color_id);
 VOID _gx_progress_bar_text_draw(GX_PROGRESS_BAR *progress_bar);
 UINT _gxe_progress_bar_value_set(GX_PROGRESS_BAR *progress_bar, INT new_value);
 
@@ -4385,11 +5241,20 @@ UINT _gxe_prompt_create(GX_PROMPT *prompt, GX_CONST GX_CHAR *name, GX_WIDGET *pa
                         GX_CONST GX_RECTANGLE *size, UINT prompt_control_block_size);
 VOID _gx_prompt_draw(GX_PROMPT *prompt);
 UINT _gxe_prompt_font_set(GX_PROMPT *prompt, GX_RESOURCE_ID fontid);
-UINT _gxe_prompt_text_color_set(GX_PROMPT *prompt, GX_RESOURCE_ID normal_text_color_id, GX_RESOURCE_ID selected_text_color_id);
+UINT _gxe_prompt_text_color_set(GX_PROMPT *prompt, 
+                                GX_RESOURCE_ID normal_text_color_id,
+                                GX_RESOURCE_ID selected_text_color_id,
+                                GX_RESOURCE_ID disabled_text_color_id);
 VOID _gx_prompt_text_draw(GX_PROMPT *prompt);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_prompt_text_get(GX_PROMPT *prompt, GX_CONST GX_CHAR **return_text);
+#endif
+UINT _gxe_prompt_text_get_ext(GX_PROMPT* prompt, GX_STRING* return_text);
 UINT _gxe_prompt_text_id_set(GX_PROMPT *prompt, GX_RESOURCE_ID string_id);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_prompt_text_set(GX_PROMPT *prompt, GX_CONST GX_CHAR *text);
+#endif
+UINT _gxe_prompt_text_set_ext(GX_PROMPT *prompt, GX_CONST GX_STRING *text);
 
 UINT _gxe_radial_progress_bar_anchor_set(GX_RADIAL_PROGRESS_BAR *progress_bar, GX_VALUE angle);
 VOID _gx_radial_progress_bar_background_draw(GX_RADIAL_PROGRESS_BAR *progress_bar);
@@ -4406,9 +5271,23 @@ UINT _gxe_radial_progress_bar_font_set(GX_RADIAL_PROGRESS_BAR *progress_bar, GX_
 UINT _gxe_radial_progress_bar_info_set(GX_RADIAL_PROGRESS_BAR *bar, GX_RADIAL_PROGRESS_BAR_INFO *info);
 UINT _gxe_radial_progress_bar_text_color_set(GX_RADIAL_PROGRESS_BAR *progress_bar,
                                              GX_RESOURCE_ID normal_text_color_id,
-                                             GX_RESOURCE_ID selected_text_color_id);
+                                             GX_RESOURCE_ID selected_text_color_id,
+                                             GX_RESOURCE_ID disabled_text_color_id);
 VOID _gx_radial_progress_bar_text_draw(GX_RADIAL_PROGRESS_BAR *bar);
 UINT _gxe_radial_progress_bar_value_set(GX_RADIAL_PROGRESS_BAR *progress_bar, GX_VALUE new_value);
+
+UINT _gxe_radial_slider_anchor_angles_set(GX_RADIAL_SLIDER *slider, GX_VALUE *anchor_angles, USHORT anchor_count);
+UINT _gxe_radial_slider_animation_set(GX_RADIAL_SLIDER *slider, USHORT steps, USHORT delay, USHORT animation_style,
+                                     VOID(*animation_update_callback)(GX_RADIAL_SLIDER *slider));
+UINT _gxe_radial_slider_animation_start(GX_RADIAL_SLIDER *slider, GX_VALUE new_value);
+UINT _gxe_radial_slider_create(GX_RADIAL_SLIDER *slider, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
+                               GX_RADIAL_SLIDER_INFO *info, ULONG style, USHORT slider_id, GX_CONST GX_RECTANGLE *size, UINT control_block_size);
+VOID _gx_radial_slider_draw(GX_RADIAL_SLIDER *slider);
+UINT _gxe_radial_slider_event_process(GX_RADIAL_SLIDER *slider, GX_EVENT *event_ptr);
+UINT _gxe_radial_slider_info_get(GX_RADIAL_SLIDER *slider, GX_RADIAL_SLIDER_INFO **info);
+UINT _gxe_radial_slider_info_set(GX_RADIAL_SLIDER *slider,  GX_RADIAL_SLIDER_INFO *info);
+UINT _gxe_radial_slider_pixelmap_set(GX_RADIAL_SLIDER *slider, GX_RESOURCE_ID background_pixelmap, GX_RESOURCE_ID needle_pixelmap);
+UINT _gxe_radial_slider_angle_set(GX_RADIAL_SLIDER *slider, GX_VALUE new_angle);
 
 UINT _gxe_radio_button_create(GX_RADIO_BUTTON *button, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
                               GX_RESOURCE_ID text_id, ULONG style, USHORT radio_button_id,
@@ -4430,6 +5309,7 @@ VOID _gx_scrollbar_draw(GX_SCROLLBAR *scrollbar);
 UINT _gxe_scrollbar_event_process(GX_SCROLLBAR *scrollbar, GX_EVENT *event_ptr);
 UINT _gxe_scrollbar_limit_check(GX_SCROLLBAR *scrollbar);
 UINT _gxe_scrollbar_reset(GX_SCROLLBAR *scrollbar, GX_SCROLL_INFO *info);
+UINT _gxe_scrollbar_value_set(GX_SCROLLBAR *scrollbar, INT value);
 
 UINT _gxe_scroll_wheel_create(GX_SCROLL_WHEEL *wheel, GX_CONST GX_CHAR *name, GX_WIDGET *parent, INT total_rows,
                               ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size, UINT control_block_size);
@@ -4454,6 +5334,7 @@ UINT _gxe_single_line_text_input_create(GX_SINGLE_LINE_TEXT_INPUT *text_input_pt
                                         GX_CONST GX_RECTANGLE *size,
                                         UINT text_input_control_block_size);
 VOID _gx_single_line_text_input_draw(GX_SINGLE_LINE_TEXT_INPUT *text_input);
+UINT _gxe_single_line_text_input_draw_position_get(GX_SINGLE_LINE_TEXT_INPUT *input, GX_VALUE *xpos, GX_VALUE *ypos);
 UINT _gxe_single_line_text_input_end(GX_SINGLE_LINE_TEXT_INPUT *text_input);
 UINT _gxe_single_line_text_input_event_process(GX_SINGLE_LINE_TEXT_INPUT *text_input, GX_EVENT *event_ptr);
 UINT _gxe_single_line_text_input_home(GX_SINGLE_LINE_TEXT_INPUT *text_input);
@@ -4463,6 +5344,21 @@ UINT _gxe_single_line_text_input_right_arrow(GX_SINGLE_LINE_TEXT_INPUT *text_inp
 UINT _gxe_single_line_text_input_style_add(GX_SINGLE_LINE_TEXT_INPUT *text_input_ptr, ULONG style);
 UINT _gxe_single_line_text_input_style_remove(GX_SINGLE_LINE_TEXT_INPUT *text_input_ptr, ULONG style);
 UINT _gxe_single_line_text_input_style_set(GX_SINGLE_LINE_TEXT_INPUT *text_input_ptr, ULONG style);
+UINT _gxe_single_line_text_input_fill_color_set(GX_SINGLE_LINE_TEXT_INPUT *input,
+                                                GX_RESOURCE_ID normal_color_id,
+                                                GX_RESOURCE_ID selected_color_id,
+                                                GX_RESOURCE_ID disabled_color_id,
+                                                GX_RESOURCE_ID readonly_color_id);
+UINT _gxe_single_line_text_input_text_color_set(GX_SINGLE_LINE_TEXT_INPUT *input,
+                                                GX_RESOURCE_ID normal_color_id,
+                                                GX_RESOURCE_ID selected_color_id,
+                                                GX_RESOURCE_ID disabled_color_id,
+                                                GX_RESOURCE_ID readonly_color_id);
+UINT _gxe_single_line_text_input_text_select(GX_SINGLE_LINE_TEXT_INPUT *input, UINT start_index, UINT end_index);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gxe_single_line_text_input_text_set(GX_SINGLE_LINE_TEXT_INPUT *input, GX_CONST GX_CHAR *text);
+#endif
+UINT _gxe_single_line_text_input_text_set_ext(GX_SINGLE_LINE_TEXT_INPUT *input, GX_CONST GX_STRING *text);
 
 UINT _gxe_slider_create(GX_SLIDER *slider, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
                         INT tick_count, GX_SLIDER_INFO *slider_info, ULONG style, USHORT slider_id,
@@ -4479,26 +5375,45 @@ UINT _gxe_slider_value_set(GX_SLIDER *slider, GX_SLIDER_INFO *info, INT new_valu
 
 UINT _gxe_sprite_create(GX_SPRITE *sprite, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
                         GX_SPRITE_FRAME *frame_list, USHORT framecount,
-                        ULONG style, USHORT sprite_id, GX_CONST GX_RECTANGLE *size);
+                        ULONG style, USHORT sprite_id, GX_CONST GX_RECTANGLE *size, UINT sprite_control_block_size);
 UINT _gxe_sprite_current_frame_set(GX_SPRITE *sprite, USHORT frame);
 UINT _gxe_sprite_frame_list_set(GX_SPRITE *sprite, GX_SPRITE_FRAME *frame_list, USHORT frame_count);
 UINT _gxe_sprite_start(GX_SPRITE *sprite, USHORT start_frame);
 UINT _gxe_sprite_stop(GX_SPRITE *sprite);
 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_string_scroll_wheel_create(GX_STRING_SCROLL_WHEEL *wheel, GX_CONST GX_CHAR *name, GX_WIDGET *parent, INT value_count, 
                                    GX_CONST GX_CHAR **string_list,
                                    ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size,
                                    UINT control_block_size);
+#endif
+UINT _gxe_string_scroll_wheel_create_ext(GX_STRING_SCROLL_WHEEL *wheel, GX_CONST GX_CHAR *name, GX_WIDGET *parent, INT total_rows,
+                                         GX_CONST GX_STRING *string_list,
+                                         ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size,
+                                         UINT control_block_size);
 UINT _gxe_string_scroll_wheel_string_id_list_set(GX_STRING_SCROLL_WHEEL *wheel,
                                                  GX_CONST GX_RESOURCE_ID *string_id_list,
                                                  INT id_count);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_string_scroll_wheel_string_list_set(GX_STRING_SCROLL_WHEEL *wheel,
                                               GX_CONST GX_CHAR **string_list,
                                               INT string_count);
+#endif
+UINT _gxe_string_scroll_wheel_string_list_set_ext(GX_STRING_SCROLL_WHEEL* wheel,
+                                                  GX_CONST GX_STRING* string_list,
+                                                  INT string_count);
 
-UINT _gxe_system_active_language_set(UINT language);
+UINT _gxe_system_active_language_set(GX_UBYTE language);
 UINT _gxe_system_animation_get(GX_ANIMATION **animation);
 UINT _gxe_system_animation_free(GX_ANIMATION *animation);
+#if defined(GX_DYNAMIC_BIDI_TEXT_SUPPORT)
+UINT _gx_system_bidi_text_enable(VOID);
+UINT _gx_system_bidi_text_disable(VOID);
+#endif
+
+#if defined(GX_THAI_GLYPH_SHAPING_SUPPORT)
+UINT _gx_system_text_render_style_set(GX_UBYTE style);
+#endif
 UINT _gxe_system_canvas_refresh(VOID);
 UINT _gxe_system_dirty_mark(GX_WIDGET *widget);
 UINT _gxe_system_dirty_partial_add(GX_WIDGET *widget, GX_RECTANGLE *dirty_area);
@@ -4507,18 +5422,33 @@ UINT _gxe_system_event_fold(GX_EVENT *event_ptr);
 UINT _gxe_system_event_send(GX_EVENT *event_ptr);
 UINT _gxe_system_focus_claim(GX_WIDGET *widget);
 UINT _gxe_system_initialize(VOID);
-UINT _gxe_system_language_table_set(GX_CHAR ***language_table, UINT number_of_languages, UINT number_of_strings);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gxe_system_language_table_get(GX_CHAR ****language_table, GX_UBYTE *language_count, UINT *string_count);
+UINT _gxe_system_language_table_set(GX_CHAR ***language_table, GX_UBYTE number_of_languages, UINT number_of_strings);
+#endif
 UINT _gxe_system_memory_allocator_set(VOID *(*allocate)(ULONG size), VOID (*release)(VOID *));
 UINT _gxe_system_pen_configure(GX_PEN_CONFIGURATION *pen_configuration);
+UINT _gxe_system_screen_stack_create(GX_WIDGET **memory, INT size, UINT control_block_size);
+UINT _gxe_system_screen_stack_get(GX_WIDGET **popped_parent, GX_WIDGET **popped_screen);
+UINT _gxe_system_screen_stack_pop(VOID);
+UINT _gxe_system_screen_stack_push(GX_WIDGET *screen);
+UINT _gx_system_screen_stack_get(GX_WIDGET **popped_parent, GX_WIDGET **popped_screen);
+UINT _gx_system_screen_stack_reset(VOID);
 UINT _gxe_system_scroll_appearance_get(ULONG style, GX_SCROLLBAR_APPEARANCE *return_appearance);
 UINT _gxe_system_scroll_appearance_set(ULONG style, GX_SCROLLBAR_APPEARANCE *appearance);
 UINT _gxe_system_start(VOID);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_system_string_get(GX_RESOURCE_ID string_id, GX_CONST GX_CHAR **return_string);
-UINT _gxe_system_string_table_get(INT language, GX_CHAR ***get_table, UINT *get_size);
+UINT _gxe_system_string_table_get(GX_UBYTE language, GX_CHAR ***get_table, UINT *get_size);
 UINT _gxe_system_string_width_get(GX_CONST GX_FONT *font, GX_CONST GX_CHAR *string, INT string_length, GX_VALUE *return_width);
+#endif
+UINT _gxe_system_string_width_get_ext(GX_CONST GX_FONT* font, GX_CONST GX_STRING* string, GX_VALUE* return_width);
 UINT _gxe_system_timer_start(GX_WIDGET *owner, UINT timer_id, UINT initial_ticks, UINT reschedule_ticks);
 UINT _gxe_system_timer_stop(GX_WIDGET *owner, UINT timer_id);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_system_version_string_get(GX_CHAR **return_string);
+#endif
+UINT _gxe_system_version_string_get_ext(GX_STRING* return_string);
 UINT _gxe_system_widget_find(USHORT widget_id, INT search_level, GX_WIDGET **return_search_result);
 
 UINT _gxe_text_button_create(GX_TEXT_BUTTON *button, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
@@ -4526,19 +5456,32 @@ UINT _gxe_text_button_create(GX_TEXT_BUTTON *button, GX_CONST GX_CHAR *name, GX_
                              GX_CONST GX_RECTANGLE *size, UINT text_button_control_block_size);
 VOID _gx_text_button_draw(GX_TEXT_BUTTON *button);
 UINT _gxe_text_button_font_set(GX_TEXT_BUTTON *button, GX_RESOURCE_ID font_id);
-UINT _gxe_text_button_text_color_set(GX_TEXT_BUTTON *_text_button, GX_RESOURCE_ID normal_text_color_id, GX_RESOURCE_ID selected_text_color_id);
+UINT _gxe_text_button_text_color_set(GX_TEXT_BUTTON *_text_button,
+                                     GX_RESOURCE_ID normal_text_color_id,
+                                     GX_RESOURCE_ID selected_text_color_id,
+                                     GX_RESOURCE_ID disabled_text_color_id);
 VOID _gx_text_button_text_draw(GX_TEXT_BUTTON *button);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_text_button_text_get(GX_TEXT_BUTTON *button, GX_CONST GX_CHAR **return_text);
+#endif
+UINT _gxe_text_button_text_get_ext(GX_TEXT_BUTTON* button, GX_STRING* return_text);
 UINT _gxe_text_button_text_id_set(GX_TEXT_BUTTON *button, GX_RESOURCE_ID string_id);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_text_button_text_set(GX_TEXT_BUTTON *button, GX_CONST GX_CHAR *text);
+#endif
+UINT _gxe_text_button_text_set_ext(GX_TEXT_BUTTON *button, GX_CONST GX_STRING *text);
 
 UINT _gxe_text_input_cursor_blink_interval_set(GX_TEXT_INPUT_CURSOR *cursor_input, GX_UBYTE blink_interval);
 UINT _gxe_text_input_cursor_height_set(GX_TEXT_INPUT_CURSOR *cursor_input, GX_UBYTE height);
 UINT _gxe_text_input_cursor_width_set(GX_TEXT_INPUT_CURSOR *cursor_input, GX_UBYTE width);
 
-UINT _gxe_text_scroll_wheel_callback_set(GX_TEXT_SCROLL_WHEEL *wheel, GX_CONST GX_CHAR *(*callback)(GX_TEXT_SCROLL_WHEEL *, INT)); 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gxe_text_scroll_wheel_callback_set(GX_TEXT_SCROLL_WHEEL *wheel, GX_CONST GX_CHAR *(*callback)(GX_TEXT_SCROLL_WHEEL *, INT));
+#endif
+UINT _gxe_text_scroll_wheel_callback_set_ext(GX_TEXT_SCROLL_WHEEL* wheel, UINT (*callback)(GX_TEXT_SCROLL_WHEEL*, INT, GX_STRING *));
 UINT _gxe_text_scroll_wheel_font_set(GX_TEXT_SCROLL_WHEEL *wheel, GX_RESOURCE_ID normal_font, GX_RESOURCE_ID selected_font);
-UINT _gxe_text_scroll_wheel_text_color_set(GX_TEXT_SCROLL_WHEEL *wheel, GX_RESOURCE_ID normal_text_color, GX_RESOURCE_ID selected_text_color);
+UINT _gxe_text_scroll_wheel_text_color_set(GX_TEXT_SCROLL_WHEEL *wheel, GX_RESOURCE_ID normal_text_color,
+                                           GX_RESOURCE_ID selected_text_color, GX_RESOURCE_ID disabled_text_color);
 UINT _gxe_text_scroll_wheel_create(GX_TEXT_SCROLL_WHEEL *wheel, GX_CONST GX_CHAR *name, GX_WIDGET *parent, INT value_count, 
                                    ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size,
                                    UINT control_block_size);
@@ -4555,29 +5498,41 @@ UINT _gxe_tree_view_root_pixelmap_set(GX_TREE_VIEW *tree, GX_RESOURCE_ID expand_
 UINT _gxe_tree_view_selected_get(GX_TREE_VIEW *tree, GX_WIDGET **selected);
 UINT _gxe_tree_view_selected_set(GX_TREE_VIEW *tree, GX_WIDGET *selected);
 
-UINT    _gxe_utility_gradient_create(GX_GRADIENT *gradient, GX_VALUE width, GX_VALUE height, UCHAR type, GX_UBYTE start_alpha, GX_UBYTE end_alpha);
+UINT    _gxe_utility_gradient_create(GX_GRADIENT *gradient, GX_VALUE width, GX_VALUE height, UCHAR type, UCHAR alpha_start, UCHAR alpha_end);
 UINT    _gxe_utility_gradient_delete(GX_GRADIENT *gradient);
-VOID    _gxe_utility_ltoa(LONG value, GX_CHAR *return_buffer, UINT return_buffer_size);
-INT     _gxe_utility_math_acos(INT x);
-INT     _gxe_utility_math_asin(INT x);
-INT     _gx_utility_math_cos(INT angle);
-INT     _gx_utility_math_sin(INT angle);
+UINT    _gxe_utility_canvas_to_bmp(GX_CANVAS *canvas, GX_RECTANGLE *rect, UINT(*write_data)(GX_UBYTE *byte_data, UINT data_count));
+UINT    _gxe_utility_circle_point_get(INT xcenter, INT ycenter, UINT r, INT angle, GX_POINT *point);
+UINT    _gxe_utility_ltoa(LONG value, GX_CHAR *return_buffer, UINT return_buffer_size);
+#if defined(GUIX_5_4_0_COMPATIBILITY)
+INT     _gx_utility_math_acos_5_4_0(INT x);
+INT     _gx_utility_math_asin_5_4_0(INT x);
+INT     _gx_utility_math_cos_5_4_0(INT angle);
+INT     _gx_utility_math_sin_5_4_0(INT angle);
+#else
+INT     _gx_utility_math_acos(GX_FIXED_VAL x);
+INT     _gx_utility_math_asin(GX_FIXED_VAL x);
+GX_FIXED_VAL _gx_utility_math_cos(GX_FIXED_VAL angle);
+GX_FIXED_VAL _gx_utility_math_sin(GX_FIXED_VAL angle);
+#endif
 UINT    _gx_utility_math_sqrt(UINT n);
 
 UINT    _gxe_utility_pixelmap_resize(GX_PIXELMAP *src, GX_PIXELMAP *destination, INT width, INT height);
 UINT    _gxe_utility_pixelmap_rotate(GX_PIXELMAP *src, INT angle, GX_PIXELMAP *destination, INT *rot_cx, INT *rot_cy);
 UINT    _gxe_utility_pixelmap_simple_rotate(GX_PIXELMAP *src, INT angle, GX_PIXELMAP *destination, INT *rot_cx, INT *rot_cy);
 
-VOID    _gxe_utility_rectangle_center(GX_RECTANGLE *rectangle, GX_RECTANGLE *within);
-VOID    _gxe_utility_rectangle_center_find(GX_RECTANGLE *rectangle, GX_POINT *return_center);
-VOID    _gxe_utility_rectangle_combine(GX_RECTANGLE *first_rectangle, GX_RECTANGLE *second_rectangle);
+UINT    _gxe_utility_rectangle_center(GX_RECTANGLE *rectangle, GX_RECTANGLE *within);
+UINT    _gxe_utility_rectangle_center_find(GX_RECTANGLE *rectangle, GX_POINT *return_center);
+UINT    _gxe_utility_rectangle_combine(GX_RECTANGLE *first_rectangle, GX_RECTANGLE *second_rectangle);
 GX_BOOL _gxe_utility_rectangle_compare(GX_RECTANGLE *first_rectangle, GX_RECTANGLE *second_rectangle);
-VOID    _gxe_utility_rectangle_define(GX_RECTANGLE *rectangle, GX_VALUE left, GX_VALUE top, GX_VALUE right, GX_VALUE bottom);
+UINT    _gxe_utility_rectangle_define(GX_RECTANGLE *rectangle, GX_VALUE left, GX_VALUE top, GX_VALUE right, GX_VALUE bottom);
 GX_BOOL _gxe_utility_rectangle_overlap_detect(GX_RECTANGLE *first_rectangle, GX_RECTANGLE *second_rectangle, GX_RECTANGLE *return_overlap_area);
 GX_BOOL _gxe_utility_rectangle_point_detect(GX_RECTANGLE *rectangle, GX_POINT point);
-VOID    _gxe_utility_rectangle_resize(GX_RECTANGLE *rectangle, GX_VALUE adjust);
-VOID    _gxe_utility_rectangle_shift(GX_RECTANGLE *rectangle, GX_VALUE x_shift, GX_VALUE y_shift);
+UINT    _gxe_utility_rectangle_resize(GX_RECTANGLE *rectangle, GX_VALUE adjust);
+UINT    _gxe_utility_rectangle_shift(GX_RECTANGLE *rectangle, GX_VALUE x_shift, GX_VALUE y_shift);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT    _gxe_utility_string_to_alphamap(GX_CONST GX_CHAR *text, GX_CONST GX_FONT *font, GX_PIXELMAP *textmap);
+#endif
+UINT    _gxe_utility_string_to_alphamap_ext(GX_CONST GX_STRING *text, GX_CONST GX_FONT *font, GX_PIXELMAP *textmap);
 
 UINT    _gxe_vertical_list_children_position(GX_VERTICAL_LIST *vertical_list);
 UINT    _gxe_vertical_list_create(GX_VERTICAL_LIST *vertical_list, GX_CONST GX_CHAR *name, GX_WIDGET *parent,
@@ -4602,7 +5557,7 @@ UINT _gxe_widget_back_attach(GX_WIDGET *parent, GX_WIDGET *widget);
 UINT _gxe_widget_back_move(GX_WIDGET *widget, GX_BOOL *widget_moved);
 VOID _gx_widget_background_draw(GX_WIDGET *a);
 UINT _gxe_widget_block_move(GX_WIDGET *widget, GX_RECTANGLE *block, INT x_shift, INT y_shift);
-VOID _gx_widget_border_draw(GX_WIDGET *widget, GX_COLOR border_color, GX_COLOR upper_color, GX_COLOR lower_color, GX_BOOL fill);
+VOID _gx_widget_border_draw(GX_WIDGET* widget, GX_RESOURCE_ID border_color, GX_RESOURCE_ID upper_color, GX_RESOURCE_ID lower_color, GX_BOOL fill);
 UINT _gxe_widget_border_style_set(GX_WIDGET *widget, ULONG Style);
 UINT _gxe_widget_border_width_get(GX_WIDGET *widget, GX_VALUE *return_width);
 UINT _gxe_widget_canvas_get(GX_WIDGET *widget, GX_CANVAS **return_canvas);
@@ -4614,18 +5569,20 @@ UINT _gxe_widget_create(GX_WIDGET *widget,
                         GX_CONST GX_CHAR *name,
                         GX_WIDGET *parent,
                         ULONG style, USHORT Id,
-                        GX_CONST GX_RECTANGLE *size);
+                        GX_CONST GX_RECTANGLE *size,
+                        UINT widget_block_size);
 UINT _gxe_widget_created_test(GX_WIDGET *widget, GX_BOOL *return_test);
 UINT _gxe_widget_delete(GX_WIDGET *widget);
 UINT _gxe_widget_detach(GX_WIDGET *widget);
 VOID _gx_widget_draw(GX_WIDGET *widget);
-UINT _gx_widget_draw_set(GX_WIDGET *widget, VOID (*draw_func)(GX_WIDGET *));
+UINT _gxe_widget_draw_set(GX_WIDGET *widget, VOID (*draw_func)(GX_WIDGET *));
 UINT _gxe_widget_event_generate(GX_WIDGET *widget, USHORT event_type, LONG value);
 UINT _gxe_widget_event_process(GX_WIDGET *widget, GX_EVENT *event_ptr);
 UINT _gxe_widget_event_process_set(GX_WIDGET *widget, UINT (*event_processing_function)(GX_WIDGET *, GX_EVENT *));
 UINT _gxe_widget_event_to_parent(GX_WIDGET *widget, GX_EVENT *event_ptr);
-UINT _gxe_widget_fill_color_set(GX_WIDGET *widget, GX_RESOURCE_ID normal_color, GX_RESOURCE_ID selected_color);
+UINT _gxe_widget_fill_color_set(GX_WIDGET *widget, GX_RESOURCE_ID normal_color, GX_RESOURCE_ID selected_color, GX_RESOURCE_ID disabled_color);
 UINT _gxe_widget_find(GX_WIDGET *parent, USHORT widget_id, INT search_depth, GX_WIDGET **return_widget);
+UINT _gxe_widget_first_child_get(GX_WIDGET *parent, GX_WIDGET **child_return);
 UINT _gxe_widget_focus_next(GX_WIDGET *widget);
 UINT _gxe_widget_focus_previous(GX_WIDGET *widget);
 UINT _gxe_widget_font_get(GX_WIDGET *widget, GX_RESOURCE_ID font_id, GX_FONT **return_font);
@@ -4633,7 +5590,11 @@ UINT _gxe_widget_free(GX_WIDGET *widget);
 UINT _gxe_widget_front_move(GX_WIDGET *widget, GX_BOOL *widget_moved);
 UINT _gxe_widget_height_get(GX_WIDGET *widget, GX_VALUE *return_height);
 UINT _gxe_widget_hide(GX_WIDGET *widget);
+UINT _gxe_widget_last_child_get(GX_WIDGET *parent, GX_WIDGET **child_return);
+UINT _gxe_widget_next_sibling_get(GX_WIDGET *current, GX_WIDGET **sibling_return);
+UINT _gxe_widget_parent_get(GX_WIDGET *current, GX_WIDGET **parent_return);
 UINT _gxe_widget_pixelmap_get(GX_WIDGET *widget, GX_RESOURCE_ID pixelmap_id, GX_PIXELMAP **return_pixelmap);
+UINT _gxe_widget_previous_sibling_get(GX_WIDGET *current, GX_WIDGET **sibling_return);
 UINT _gxe_widget_resize(GX_WIDGET *widget, GX_RECTANGLE *newsize);
 UINT _gxe_widget_shift(GX_WIDGET *widget, GX_VALUE x_shift, GX_VALUE y_shift, GX_BOOL mark_dirty);
 UINT _gxe_widget_show(GX_WIDGET *widget);
@@ -4641,22 +5602,32 @@ UINT _gxe_widget_status_add(GX_WIDGET *widget, ULONG status);
 UINT _gxe_widget_status_get(GX_WIDGET *widget, ULONG *return_status);
 UINT _gxe_widget_status_remove(GX_WIDGET *widget, ULONG status);
 UINT _gxe_widget_status_test(GX_WIDGET *widget, ULONG status, GX_BOOL *return_test);
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
+UINT _gxe_widget_string_get(GX_WIDGET *widget, GX_RESOURCE_ID string_id, GX_CONST GX_CHAR **return_string);
+#endif
+UINT _gxe_widget_string_get_ext(GX_WIDGET* widget, GX_RESOURCE_ID string_id, GX_STRING* return_string);
 UINT _gxe_widget_style_add(GX_WIDGET *widget, ULONG style);
 UINT _gxe_widget_style_get(GX_WIDGET *widget, ULONG *return_style);
 UINT _gxe_widget_style_remove(GX_WIDGET *widget, ULONG style);
 UINT _gxe_widget_style_set(GX_WIDGET *widget, ULONG style);
 
+#if defined(GX_ENABLE_DEPRECATED_STRING_API)
 UINT _gxe_widget_text_blend(GX_WIDGET *widget, UINT tColor, UINT font_id, GX_CONST GX_CHAR *string,
                            INT x_offset, INT y_offset, UCHAR alpha);
+VOID _gx_widget_text_draw(GX_WIDGET* widget, UINT tColor, UINT font_id, GX_CONST GX_CHAR* string,
+                          INT x_offset, INT y_offset);
+#endif
+UINT _gxe_widget_text_blend_ext(GX_WIDGET *widget,  UINT tColor, UINT font_id, GX_CONST GX_STRING *string,
+                                INT x_offset, INT y_offset, UCHAR alpha);
 
-
-VOID _gx_widget_text_draw(GX_WIDGET *widget, UINT tColor, UINT font_id, GX_CONST GX_CHAR *string,
-                           INT x_offset, INT y_offset);
+VOID _gx_widget_text_draw_ext(GX_WIDGET* widget, UINT tColor, UINT font_id, GX_CONST GX_STRING* string,
+                              INT x_offset, INT y_offset);
 
 VOID _gx_widget_text_id_draw(GX_WIDGET *widget, UINT tColor,
                               UINT font_id, UINT text_id,
                               INT x_offset, INT y_offset);
 
+UINT _gxe_widget_top_visible_child_find(GX_WIDGET *parent, GX_WIDGET **child_return);
 UINT _gxe_widget_type_find(GX_WIDGET *parent, USHORT widget_type, GX_WIDGET **return_widget);
 UINT _gxe_widget_width_get(GX_WIDGET *widget, GX_VALUE *return_width);
 
@@ -4671,7 +5642,7 @@ VOID _gx_window_draw(GX_WINDOW *window);
 UINT _gxe_window_event_process(GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT _gxe_window_execute(GX_WINDOW *window, ULONG *return_ptr);
 UINT _gxe_window_root_create(GX_WINDOW_ROOT *root_window, GX_CONST GX_CHAR *name, GX_CANVAS *canvas,
-                             ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size);
+                             ULONG style, USHORT Id, GX_CONST GX_RECTANGLE *size, UINT root_window_control_block_size);
 UINT _gxe_window_root_delete(GX_WINDOW_ROOT *root_window);
 UINT _gxe_window_root_event_process(GX_WINDOW_ROOT *root, GX_EVENT *event_ptr);
 UINT _gxe_window_root_find(GX_WIDGET *widget, GX_WINDOW_ROOT **return_root_window);

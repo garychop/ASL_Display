@@ -58,7 +58,7 @@ Macro definitions
 
 /* Version of this module's code and API. */
 #define BSP_CODE_VERSION_MAJOR      (1U)
-#define BSP_CODE_VERSION_MINOR      (15U)
+#define BSP_CODE_VERSION_MINOR      (16U)
 #define BSP_API_VERSION_MAJOR       (1U)
 #define BSP_API_VERSION_MINOR       (0U)
 

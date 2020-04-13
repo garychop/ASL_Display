@@ -412,7 +412,12 @@ __STATIC_INLINE void    HW_RIIC_ClearTxEnd      (R_IIC0_Type * p_riic_reg)
  **********************************************************************************************************************/
 __STATIC_INLINE void    HW_RIIC_ClearIrqs       (R_IIC0_Type * p_riic_reg)
 {
+    volatile uint8_t dummy;
+
+    /* Perform a dummy read before clear */
+    dummy  = p_riic_reg->ICSR2;
     p_riic_reg->ICSR2 = 0x00;
+    SSP_PARAMETER_NOT_USED(dummy);
 }
 
 /*******************************************************************************************************************//**
