@@ -264,7 +264,6 @@ Synergy Configuration
   Module "External IRQ Driver on r_icu"
     Parameter Checking: Enabled
     
-  Module "Touch Panel Driver on touch_panel_sx8654"
   Module "I2C Master Driver on r_riic"
     Parameter Checking: Enabled
     
@@ -285,6 +284,7 @@ Synergy Configuration
     Software Start: Disabled
     Linker section to keep DTC vector table: .ssp_dtc_vector_table
     
+  Module "Touch Panel Driver on touch_panel_sx8651"
   HAL
     Instance "g_ioport I/O Port Driver on r_ioport"
       Name [Fixed]: g_ioport
@@ -603,8 +603,8 @@ Synergy Configuration
           Callback: NULL
           Pin Interrupt Priority: Priority 3
           
-      Instance "Touch Panel Driver on touch_panel_sx8654"
-        Name: g_sf_touch_panel_i2c_chip_sx8654
+      Instance "Touch Panel Driver on touch_panel_sx8651"
+        Name: g_sf_touch_panel_i2c_chip_sx8651
         
     Instance "g_timer0 Timer Driver on r_gpt"
       Name: g_timer0

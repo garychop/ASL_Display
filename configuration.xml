@@ -204,13 +204,17 @@
       <description>Express Logic ThreadX: Provides=[ThreadX]</description>
       <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="touch panel" subgroup="touch_panel_i2c_sx8654" variant="" vendor="Renesas" version="1.7.5">
-      <description>TOUCH_PANEL_I2C_SX8654 Drivers</description>
-      <originalPack>Renesas.Synergy_touch_panel_i2c_sx8654.1.7.5.pack</originalPack>
-    </component>
     <component apiversion="" class="BSP" condition="" group="Board" subgroup="custom" variant="" vendor="Renesas" version="1.7.5">
       <description>CUSTOM Board Support Files</description>
       <originalPack>Renesas.Synergy_board_custom.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="touch panel" subgroup="touch_panel_i2c_sx8651" variant="" vendor="Renesas" version="1.7.5">
+      <description>TOUCH_PANEL_I2C_SX8651 Drivers</description>
+      <originalPack>Renesas.Synergy_touch_panel_i2c_sx8651.1.7.5.pack</originalPack>
+    </component>
+    <component apiversion="" class="HAL Drivers" condition="" group="touch panel" subgroup="touch_panel_i2c_sx8654" variant="" vendor="Renesas" version="1.7.5">
+      <description>TOUCH_PANEL_I2C_SX8654 Drivers</description>
+      <originalPack>Renesas.Synergy_touch_panel_i2c_sx8654.1.7.5.pack</originalPack>
     </component>
   </synergyComponentSelection>
   <synergyIcuConfiguration/>
@@ -481,9 +485,6 @@
       <property id="module.driver.external_irq.interrupt_enable" value="module.driver.external_irq.interrupt_enable.true"/>
       <property id="module.driver.external_irq.p_callback" value="NULL"/>
       <property id="module.driver.external_irq.irq_ipl" value="board.icu.common.irq.priority3"/>
-    </module>
-    <module id="module.external.ex_touch_panel_i2c_sx8654_on_ex_touch_panel_i2c_sx8654.2144099469">
-      <property id="module.external.ex_touch_panel.name" value="module.external.ex_touch_panel.name.sx8654"/>
     </module>
     <module id="module.driver.i2c_on_riic.1155197345">
       <property id="module.driver.i2c.name" value="g_i2c0"/>
@@ -783,6 +784,15 @@
       <property id="module.driver.transfer.p_callback" value="NULL"/>
       <property id="module.driver.transfer.irq_ipl" value="board.icu.common.irq.disabled"/>
     </module>
+    <module id="module.external.ex_touch_panel_i2c_sx8651_on_ex_touch_panel_i2c_sx8651.1256270456">
+      <property id="module.external.ex_touch_panel.name" value="module.external.ex_touch_panel.name.sx8651"/>
+    </module>
+    <module id="module.external.ex_touch_panel_i2c_sx8651_on_ex_touch_panel_i2c_sx8651.2116719765">
+      <property id="module.external.ex_touch_panel.name" value="module.external.ex_touch_panel.name.sx8651"/>
+    </module>
+    <module id="module.external.ex_touch_panel_i2c_sx8651_on_ex_touch_panel_i2c_sx8651.656879909">
+      <property id="module.external.ex_touch_panel.name" value="module.external.ex_touch_panel.name.sx8651"/>
+    </module>
     <context id="_hal.0">
       <stack module="module.driver.ioport_on_ioport.0"/>
       <stack module="module.driver.elc_on_elc.0"/>
@@ -818,7 +828,7 @@
         <stack module="module.framework.sf_external_irq_on_sf_external_irq.1721698755" requires="module.framework.sf_touch_panel_on_sf_touch_panel_i2c.requires.sf_external_irq">
           <stack module="module.driver.external_irq_on_icu.2088648251" requires="module.framework.sf_external_irq_on_sf_external_irq.requires.external_irq"/>
         </stack>
-        <stack module="module.external.ex_touch_panel_i2c_sx8654_on_ex_touch_panel_i2c_sx8654.2144099469" requires="module.framework.sf_touch_panel_on_sf_touch_panel_i2c.requires.ex_touch_panel"/>
+        <stack module="module.external.ex_touch_panel_i2c_sx8651_on_ex_touch_panel_i2c_sx8651.656879909" requires="module.framework.sf_touch_panel_on_sf_touch_panel_i2c.requires.ex_touch_panel"/>
       </stack>
       <stack module="module.driver.timer_on_gpt.126514823"/>
       <stack module="module.driver.watchdog_on_wdt.1254711086"/>

@@ -120,7 +120,7 @@ struct PadInfoStruct
 // Global Variables.
 //-------------------------------------------------------------------------
 
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ASL165: 1.6.1";
+GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ASL165: 1.7.0";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -145,6 +145,8 @@ bool g_WaitingForVeerResponse = false;
 uint8_t g_MinimumDriveValue = 20;       // Percentage, Minimum Drive value
 char g_MinimuDriveString[8] = "20%";
 char g_TimeoutValueString[8] = "OFF";
+UINT g_TimerActive = false;             // I'm using to prevent re-arming the timer used to enter Pad Calibration Feature.
+
 
 //-------------------------------------------------------------------------
 // Forward declarations.
@@ -169,10 +171,7 @@ UINT DisplayMainScreenActiveFeatures ();
 void AdjustActiveFeature (FEATURE_ID_ENUM newMode);
 void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures);
 void ShowPadTypes (void);
-void ShowActiveFeatures (void);
-void ShowUserSettingsItems (void);
 void ShowMinimumValue ();
-
 void ProcessCommunicationMsgs ();
 
 //-------------------------------------------------------------------------
@@ -698,6 +697,12 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     switch (event_ptr->gx_event_type)
     {
+        case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+            g_GoBackScreen = window;        // Set the going back window.
+            g_ChangeScreen_WIP = TRUE;
+            break;
+
         case GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED):
             if (g_StartupDelayCounter < 0)      // If we've been here before but are recovering from a Heart Beat timeout, don't wait, just goto the Main User Screen.
             {
@@ -1505,6 +1510,7 @@ UINT VeerSlider_event_function(GX_PIXELMAP_SLIDER *widget, GX_EVENT *event_ptr)
         break;
     case GX_EVENT_PEN_DOWN:
     case GX_EVENT_PEN_DRAG:
+    case GX_EVENT_PEN_MOVE:
         sliderAsFound = (int16_t) widget->gx_slider_info.gx_slider_info_current_val;
         totalSteps = (int16_t)(widget->gx_slider_info.gx_slider_info_max_val - widget->gx_slider_info.gx_slider_info_min_val);
         increment = 5;      // This means that each slider step is worth 5 DAC counts.
@@ -1652,68 +1658,45 @@ void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures)
 }
 
 //*************************************************************************************
-void ShowUserSettingsItems (void)
-{
-    char tmpChar[8];
-
-    if (g_ClicksActive)
-    {
-        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_ActiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_InactiveIcon);
-    }
-    else
-    {
-        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_InactiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_Clicks_ActiveIcon);
-    }
-
-    // Power Up in Idle
-    if (g_PowerUpInIdle)    // If powering up in idle state is enable
-    {
-        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_InactiveIcon);
-    }
-    else
-    {
-        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_InactiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_PowerUp_ActiveIcon);
-    }
-    // RNet Enabled setting
-    if (g_MainScreenFeatureInfo[RNET_ID].m_Enabled)
-    {
-        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_RNet_ActiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_RNet_InactiveIcon);
-    }
-    else
-    {
-        gx_widget_show ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_RNet_InactiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &UserSettingsScreen.UserSettingsScreen_RNet_ActiveIcon);
-    }
-
-    // Populate the Timeout button with the current setting or "OFF".
-    if (g_TimeoutValue == 0)
-        strcpy (g_TimeoutValueString, "OFF");
-    else
-    {
-        // sprintf (g_TimeoutValueString, "%1.1g", (float) (g_TimeoutValue / 10.0f));
-        // Floating point doesn't work for some odd reason.
-        // I'm doing a hack to display the value in a X.X format.
-        sprintf (g_TimeoutValueString, "%d.", g_TimeoutValue / 10);
-        sprintf (tmpChar, "%d", g_TimeoutValue % 10);
-        strcat (g_TimeoutValueString, tmpChar);
-    }
-    gx_text_button_text_set (&UserSettingsScreen.UserSettingsScreen_Timeout_Button, g_TimeoutValueString);
-}
-
-//*************************************************************************************
 
 UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     uint8_t myActiveFeatures;
+    char tmpChar[8];
 
     switch (event_ptr->gx_event_type)
     {
     case GX_EVENT_SHOW:
+        if (g_ClicksActive)
+        {
+            gx_button_select ((GX_BUTTON*) &UserSettingsScreen.UserSettingsScreen_ClicksToggleBtn);
+        }
+
+        // Power Up in Idle
+        if (g_PowerUpInIdle)    // If powering up in idle state is enable
+        {
+            gx_button_select ((GX_BUTTON*) &UserSettingsScreen.UserSettingsScreen_PowerUpToggleBtn);
+        }
+
+        // RNet Enabled setting
+        if (g_MainScreenFeatureInfo[RNET_ID].m_Enabled)
+        {
+            gx_button_select ((GX_BUTTON*) &UserSettingsScreen.UserSettingsScreen_RNET_ToggleBtn);
+        }
+
+        // Populate the Timeout button with the current setting or "OFF".
+        if (g_TimeoutValue == 0)
+            strcpy (g_TimeoutValueString, "OFF");
+        else
+        {
+            // sprintf (g_TimeoutValueString, "%1.1g", (float) (g_TimeoutValue / 10.0f));
+            // Floating point doesn't work for some odd reason.
+            // I'm doing a hack to display the value in a X.X format.
+            sprintf (g_TimeoutValueString, "%d.", g_TimeoutValue / 10);
+            sprintf (tmpChar, "%d", g_TimeoutValue % 10);
+            strcat (g_TimeoutValueString, tmpChar);
+        }
+        gx_text_button_text_set (&UserSettingsScreen.UserSettingsScreen_Timeout_Button, g_TimeoutValueString);
         break;
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
@@ -1723,22 +1706,31 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         SendFeatureGetCommand();                // Send command to get the current users settings.
         break;
 
-        // Click (Audio) Feature handling
-    case GX_SIGNAL(CLICKS_INACTIVE_ICON, GX_EVENT_CLICKED):
-    case GX_SIGNAL(CLICKS_ACTIVE_ICON, GX_EVENT_CLICKED):
-        g_ClicksActive = (g_ClicksActive == TRUE ? FALSE : TRUE);
+    //----------------------------------------------------------
+    // CLICK toggle button processing
+    case GX_SIGNAL(CLICKS_TOGGLE_BTN, GX_EVENT_TOGGLE_ON):
+        g_ClicksActive = TRUE;
+        break;
+    case GX_SIGNAL(CLICKS_TOGGLE_BTN, GX_EVENT_TOGGLE_OFF):
+        g_ClicksActive = FALSE;
         break;
 
-        // Power Up in Idle button push handling
-    case GX_SIGNAL(POWER_UP_INACTIVE_ICON, GX_EVENT_CLICKED):
-    case GX_SIGNAL(POWER_UP_ACTIVE_ICON, GX_EVENT_CLICKED):
-        g_PowerUpInIdle = (g_PowerUpInIdle == TRUE ? FALSE : TRUE);
+    //----------------------------------------------------------
+    // Power Up in IDLE toggle button
+    case GX_SIGNAL(POWER_UP_TOGGLE_BTN, GX_EVENT_TOGGLE_ON):
+        g_PowerUpInIdle = TRUE;
+        break;
+    case GX_SIGNAL(POWER_UP_TOGGLE_BTN, GX_EVENT_TOGGLE_OFF):
+        g_PowerUpInIdle = FALSE;
         break;
 
-    // Process the RNet setting button pushes.
-    case GX_SIGNAL(RNET_INACTIVE_ICON, GX_EVENT_CLICKED):
-    case GX_SIGNAL(RNET_ACTIVE_ICON, GX_EVENT_CLICKED):
-        g_MainScreenFeatureInfo[RNET_ID].m_Enabled = (g_MainScreenFeatureInfo[RNET_ID].m_Enabled == TRUE ? FALSE : TRUE);
+    //----------------------------------------------------------
+    // RNet Enable toggle button
+    case GX_SIGNAL(RNET_TOGGLE_BTN, GX_EVENT_TOGGLE_ON):
+        g_MainScreenFeatureInfo[RNET_ID].m_Enabled = TRUE;
+        break;
+    case GX_SIGNAL(RNET_TOGGLE_BTN, GX_EVENT_TOGGLE_OFF):
+        g_MainScreenFeatureInfo[RNET_ID].m_Enabled = FALSE;
         break;
 
     case GX_SIGNAL(TIMEOUT_BTN_ID, GX_EVENT_CLICKED):
@@ -1761,91 +1753,23 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 g_TimeoutValue = 0;
                 break;
         } // end switch
+        if (g_TimeoutValue == 0)
+            strcpy (g_TimeoutValueString, "OFF");
+        else
+        {
+            sprintf (g_TimeoutValueString, "%d.", g_TimeoutValue / 10);
+            sprintf (tmpChar, "%d", g_TimeoutValue % 10);
+            strcat (g_TimeoutValueString, tmpChar);
+        }
+        gx_text_button_text_set (&UserSettingsScreen.UserSettingsScreen_Timeout_Button, g_TimeoutValueString);
         break;
 
     } // end switch
-
-    ShowUserSettingsItems();
 
     gx_window_event_process(window, event_ptr);
 
     return GX_SUCCESS;
 }
-
-//*************************************************************************************
-// Function Name: ShowActiveFeatures
-//
-// Description: This displays the Active/Inactive status of the features.
-//
-//*************************************************************************************
-
-void ShowActiveFeatures (void)
-{
-    // Show RNet or NEXT FUNCITON and NEXT PROFILE depending on RNet setting.
-    // Adjust the displayed information based upon the RNet setting.
-    // .. If RNet is enabled, the NEXT FUNCTION feature becomes RNet TOGGLE
-    // .. and NEXT PROFILE feature become RNet MENU.
-    if (g_MainScreenFeatureInfo[RNET_ID].m_Enabled)
-    {
-        // Display as "RNet TOGGLE"
-        gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextFunctionPrompt, GX_STRING_ID_RNET_TOGGLE);
-        // Display as "RNET USER MENU"
-        gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextProfilePrompt, GX_STRING_ID_RNET_MENU);
-    }
-    else
-    {
-        // Display as NEXT FUNCTION
-        gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextFunctionPrompt, GX_STRING_ID_NEXT_FUNCTION);
-        // Display as NEXT PROFILE
-        gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextProfilePrompt, GX_STRING_ID_NEXT_PROFILE);
-    }
-
-    // Power status
-    if (g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled)
-    {
-        gx_widget_show ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_Power_ActiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_Power_InactiveIcon);
-    }
-    else
-    {
-        gx_widget_show ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_Power_InactiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_Power_ActiveIcon);
-    }
-    // Bluetooth
-    if (g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled)
-    {
-        gx_widget_show ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_Bluetooth_ActiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_Bluetooth_InactiveIcon);
-    }
-    else
-    {
-        gx_widget_show ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_Bluetooth_InactiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_Bluetooth_ActiveIcon);
-    }
-    // Next Function
-    if (g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled)
-    {
-        gx_widget_show ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_NextFunction_ActiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_NextFunction_InactiveIcon);
-    }
-    else
-    {
-        gx_widget_show ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_NextFunction_InactiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_NextFunction_ActiveIcon);
-    }
-    // Next Profile
-    if (g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled)
-    {
-        gx_widget_show ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_NextProfile_ActiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_NextProfile_InactiveIcon);
-    }
-    else
-    {
-        gx_widget_show ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_NextProfile_InactiveIcon);
-        gx_widget_hide ((GX_WIDGET*) &FeatureSettingsScreen.FeatureSettingsScreen_NextProfile_ActiveIcon);
-    }
-}
-
 
 //*************************************************************************************
 // Function Name: FeatureSettingsScreen_event_process
@@ -1854,12 +1778,6 @@ void ShowActiveFeatures (void)
 //
 //*************************************************************************************
 
-void FeatureSettingsScreen_draw_function (GX_WINDOW *window)
-{
-    ShowActiveFeatures ();
-    gx_window_draw(window);
-}
-
 UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     uint8_t myActiveFeatures;
@@ -1867,6 +1785,49 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
     switch (event_ptr->gx_event_type)
     {
         case GX_EVENT_SHOW:
+            // Show RNet or NEXT FUNCITON and NEXT PROFILE depending on RNet setting.
+            // Adjust the displayed information based upon the RNet setting.
+            // .. If RNet is enabled, the NEXT FUNCTION feature becomes RNet TOGGLE
+            // .. and NEXT PROFILE feature become RNet MENU.
+            if (g_MainScreenFeatureInfo[RNET_ID].m_Enabled)
+            {
+                // Display as "RNet TOGGLE"
+                gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextFunctionPrompt, GX_STRING_ID_RNET_TOGGLE);
+                // Display as "RNET USER MENU"
+                gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextProfilePrompt, GX_STRING_ID_RNET_MENU);
+            }
+            else
+            {
+                // Display as NEXT FUNCTION
+                gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextFunctionPrompt, GX_STRING_ID_NEXT_FUNCTION);
+                // Display as NEXT PROFILE
+                gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_NextProfilePrompt, GX_STRING_ID_NEXT_PROFILE);
+            }
+
+            // Power status
+            if (g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled)
+            {
+                gx_button_select ((GX_BUTTON*) &FeatureSettingsScreen.FeatureSettingsScreen_PowerToggleBtn);
+            }
+
+            // Bluetooth
+            if (g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled)
+            {
+                gx_button_select ((GX_BUTTON*) &FeatureSettingsScreen.FeatureSettingsScreen_BluetoothToggleBtn);
+            }
+
+            // Next Function
+            if (g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled)
+            {
+                gx_button_select ((GX_BUTTON*) &FeatureSettingsScreen.FeatureSettingsScreen_NextFunctionToggleBtn);
+            }
+
+            // Next Profile
+            if (g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled)
+            {
+                gx_button_select ((GX_BUTTON*) &FeatureSettingsScreen.FeatureSettingsScreen_NextProfileToggleBtn);
+            }
+
             g_SettingsChanged = FALSE;
             break;
 
@@ -1877,37 +1838,50 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
             SendFeatureGetCommand();                // Send command to get the current users settings.
             break;
 
-            // Power Feature handling
-    //    case GX_SIGNAL(POWER_BTN_ID, GX_EVENT_CLICKED):
-        case GX_SIGNAL(POWER_INACTIVE_ICON, GX_EVENT_CLICKED):
-        case GX_SIGNAL(POWER_ACTIVE_ICON, GX_EVENT_CLICKED):
-            g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = (g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled == TRUE ? FALSE : TRUE);
+        //----------------------------------------------------------------------
+        // Power Button
+        case GX_SIGNAL(POWER_TOGGLE_BTN, GX_EVENT_TOGGLE_ON):
+            g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = TRUE;
+            g_SettingsChanged = TRUE;
+            break;
+        case GX_SIGNAL(POWER_TOGGLE_BTN, GX_EVENT_TOGGLE_OFF):
+            g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = FALSE;
             g_SettingsChanged = TRUE;
             break;
 
-            // Bluetooth Feature handling
-        case GX_SIGNAL(BLUETOOTH_INACTIVE_ICON, GX_EVENT_CLICKED):
-        case GX_SIGNAL(BLUETOOTH_ACTIVE_ICON, GX_EVENT_CLICKED):
-            g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = (g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled == TRUE ? FALSE : TRUE);
+        //----------------------------------------------------------------------
+        // Bluetooth button
+        case GX_SIGNAL(BLUETOOTH_TOGGLE_BTN, GX_EVENT_TOGGLE_ON):
+            g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = TRUE;
+            g_SettingsChanged = TRUE;
+            break;
+        case GX_SIGNAL(BLUETOOTH_TOGGLE_BTN, GX_EVENT_TOGGLE_OFF):
+            g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = FALSE;
             g_SettingsChanged = TRUE;
             break;
 
-            // Next Function Feature handling
-        case GX_SIGNAL(NEXT_FUNCTION_INACTIVE_ICON, GX_EVENT_CLICKED):
-        case GX_SIGNAL(NEXT_FUNCTION_ACTIVE_ICON, GX_EVENT_CLICKED):
-            g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = (g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled == TRUE ? FALSE : TRUE);
+        //----------------------------------------------------------------------
+        // Next Function button
+        case GX_SIGNAL(NEXT_FUNCTION_TOGGLE_BTN, GX_EVENT_TOGGLE_ON):
+            g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = TRUE;
+            g_SettingsChanged = TRUE;
+            break;
+        case GX_SIGNAL(NEXT_FUNCTION_TOGGLE_BTN, GX_EVENT_TOGGLE_OFF):
+            g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = FALSE;
             g_SettingsChanged = TRUE;
             break;
 
-            // Next Profile Feature handling
-        case GX_SIGNAL(NEXT_PROFILE_INACTIVE_ICON, GX_EVENT_CLICKED):
-        case GX_SIGNAL(NEXT_PROFILE_ACTIVE_ICON, GX_EVENT_CLICKED):
-            g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = (g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled == TRUE ? FALSE : TRUE);
+        //----------------------------------------------------------------------
+        // Next Profile Button
+        case GX_SIGNAL(NEXT_PROFILE_TOGGLE_BTN, GX_EVENT_TOGGLE_ON):
+            g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = TRUE;
+            g_SettingsChanged = TRUE;
+            break;
+        case GX_SIGNAL(NEXT_PROFILE_TOGGLE_BTN, GX_EVENT_TOGGLE_OFF):
+            g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = FALSE;
             g_SettingsChanged = TRUE;
             break;
     } // end switch
-
-    ShowActiveFeatures ();
 
     gx_window_event_process(window, event_ptr);
 
@@ -1978,6 +1952,7 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             SendGetPadAssignmentMsg (LEFT_PAD);
             SendGetPadAssignmentMsg (RIGHT_PAD);
             SendGetPadAssignmentMsg (CENTER_PAD);
+            g_TimerActive = false;
             break;
         case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
@@ -1988,6 +1963,7 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
                 SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
                 SendGetPadAssignmentMsg (RIGHT_PAD);
+                g_TimerActive = false;
             }
             break;
         case GX_SIGNAL(RIGHT_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
@@ -1996,6 +1972,7 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 g_PadSettings[RIGHT_PAD].m_PadType = DIGITAL_PADTYPE;
                 SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
                 SendGetPadAssignmentMsg (RIGHT_PAD);
+                g_TimerActive = false;
             }
             break;
         case GX_SIGNAL(LEFT_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
@@ -2004,6 +1981,7 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
                 SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
                 SendGetPadAssignmentMsg (LEFT_PAD);
+                g_TimerActive = false;
             }
             break;
         case GX_SIGNAL(LEFT_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
@@ -2012,6 +1990,7 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 g_PadSettings[LEFT_PAD].m_PadType = DIGITAL_PADTYPE;
                 SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
                 SendGetPadAssignmentMsg (LEFT_PAD);
+                g_TimerActive = false;
             }
             break;
         case GX_SIGNAL(CENTER_PAD_DIGITAL_BTN_ID, GX_EVENT_CLICKED):
@@ -2020,6 +1999,7 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
                 SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
                 SendGetPadAssignmentMsg (CENTER_PAD);
+                g_TimerActive = false;
             }
             break;
         case GX_SIGNAL(CENTER_PAD_PROPORTIONAL_BTN_ID, GX_EVENT_CLICKED):
@@ -2028,6 +2008,7 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 g_PadSettings[CENTER_PAD].m_PadType = DIGITAL_PADTYPE;
                 SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
                 SendGetPadAssignmentMsg (CENTER_PAD);
+                g_TimerActive = false;
             }
             break;
 
@@ -2037,29 +2018,37 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 gx_system_timer_stop(window, CALIBRATION_TIMER_ID);
                 screen_toggle((GX_WINDOW *)&PadCalibrationScreen, window);
                 g_ChangeScreen_WIP = TRUE;
+                g_TimerActive = false;
             }
             break;
         case GX_EVENT_PEN_DOWN: // We are going to determine if the Up or Down arrow buttons have been held for a
                                 // ... long time (2 seconds) and goto calibration if so.
 
-            if (event_ptr->gx_event_target->gx_widget_id == CENTER_PAD_PROPORTIONAL_BTN_ID)
+            if (g_TimerActive == false)
             {
-                g_CalibrationPadNumber = CENTER_PAD;
-                gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
-            }
-            else if (event_ptr->gx_event_target->gx_widget_id == LEFT_PAD_PROPORTIONAL_BTN_ID)
-            {
-                g_CalibrationPadNumber = LEFT_PAD;
-                gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
-            }
-            else if (event_ptr->gx_event_target->gx_widget_id == RIGHT_PAD_PROPORTIONAL_BTN_ID)
-            {
-                g_CalibrationPadNumber = RIGHT_PAD;
-                gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
+                if (event_ptr->gx_event_target->gx_widget_id == CENTER_PAD_PROPORTIONAL_BTN_ID)
+                {
+                    g_CalibrationPadNumber = CENTER_PAD;
+                    gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
+                    g_TimerActive = true;
+                }
+                else if (event_ptr->gx_event_target->gx_widget_id == LEFT_PAD_PROPORTIONAL_BTN_ID)
+                {
+                    g_CalibrationPadNumber = LEFT_PAD;
+                    gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
+                    g_TimerActive = true;
+                }
+                else if (event_ptr->gx_event_target->gx_widget_id == RIGHT_PAD_PROPORTIONAL_BTN_ID)
+                {
+                    g_CalibrationPadNumber = RIGHT_PAD;
+                    gx_system_timer_start(window, CALIBRATION_TIMER_ID, 100, 0);
+                    g_TimerActive = true;
+                }
             }
             break;
         case GX_EVENT_PEN_UP:
-                gx_system_timer_stop(window, CALIBRATION_TIMER_ID);
+            gx_system_timer_stop(window, CALIBRATION_TIMER_ID);
+            g_TimerActive = false;
             break;
 
     } // end swtich
@@ -2388,6 +2377,9 @@ void g_lcd_spi_callback(spi_callback_args_t * p_args)
 }
 
 //-------------------------------------------------------------------------
+sf_touch_panel_event_t g_Events[128] = {SF_TOUCH_PANEL_EVENT_INVALID, SF_TOUCH_PANEL_EVENT_INVALID, SF_TOUCH_PANEL_EVENT_INVALID, SF_TOUCH_PANEL_EVENT_INVALID,
+                                      SF_TOUCH_PANEL_EVENT_INVALID, SF_TOUCH_PANEL_EVENT_INVALID, SF_TOUCH_PANEL_EVENT_INVALID, SF_TOUCH_PANEL_EVENT_INVALID};
+int g_EventCounter = 0;
 
 /*********************************************************************************************************************
  * @brief  Sends a touch event to GUIX internal thread to call the GUIX event handler function
@@ -2400,6 +2392,11 @@ static void guix_test_send_touch_message(sf_touch_panel_payload_t * p_payload)
     GX_EVENT gxe;
     GX_VALUE x_num;
 
+    g_Events[g_EventCounter] = p_payload->event_type;
+    ++g_EventCounter;
+    g_EventCounter &= 0xff;
+    if (g_EventCounter > 0xff)
+        while (1) ;
 
     switch (p_payload->event_type)
     {
@@ -2411,7 +2408,7 @@ static void guix_test_send_touch_message(sf_touch_panel_payload_t * p_payload)
         break;
     case SF_TOUCH_PANEL_EVENT_HOLD:
     case SF_TOUCH_PANEL_EVENT_MOVE:
-        gxe.gx_event_type = GX_EVENT_PEN_DRAG;
+        gxe.gx_event_type = GX_EVENT_PEN_MOVE;
         break;
     case SF_TOUCH_PANEL_EVENT_INVALID:
         send_event = false;
@@ -2431,7 +2428,8 @@ static void guix_test_send_touch_message(sf_touch_panel_payload_t * p_payload)
         gxe.gx_event_payload.gx_event_pointdata.gx_point_y = (GX_VALUE)(p_payload->x);
 
         x_num = (GX_VALUE)(240 - p_payload->x);
-#ifdef USE
+//#define USE_X_NUM_ADJUSTEMENT
+#ifdef USE_X_NUM_ADJUSTEMENT
         if(x_num < 140) {
            if(x_num < 5) x_num = 0;
            else if(x_num < 10) x_num = (GX_VALUE)(x_num - 5);

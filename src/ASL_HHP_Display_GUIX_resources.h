@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 16. 3.2020   Time (hh:mm): 14:03                        */
+/*  Date (dd.mm.yyyy):  9. 6.2020   Time (hh:mm): 15:57                        */
 /*******************************************************************************/
 
 
@@ -131,11 +131,13 @@
 #define GX_PIXELMAP_ID_SWITCH_ACTIVE 42
 #define GX_PIXELMAP_ID_SWITCH_BG 43
 #define GX_PIXELMAP_ID_SWITCH_DISACTIVE 44
-#define GX_PIXELMAP_ID_UPARROW 45
-#define GX_PIXELMAP_ID_UPWHITEARROW 46
-#define GX_PIXELMAP_ID_WARNINGICON 47
-#define GX_PIXELMAP_ID_YELLOWQUESTION 48
-#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 49
+#define GX_PIXELMAP_ID_TOGGLE_GRAY 45
+#define GX_PIXELMAP_ID_TOGGLE_GREEN 46
+#define GX_PIXELMAP_ID_UPARROW 47
+#define GX_PIXELMAP_ID_UPWHITEARROW 48
+#define GX_PIXELMAP_ID_WARNINGICON 49
+#define GX_PIXELMAP_ID_YELLOWQUESTION 50
+#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 51
 
 /* String Ids                                                                  */
 
@@ -213,6 +215,8 @@
 #define GX_STRING_ID_BLANK 72
 #define GX_STRING_ID_RNET_ENABLE 73
 #define GX_STRING_ID_RNET_TOGGLE 74
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 75
+#define GX_STRING_ID_STRING_2 75
+#define GX_STRING_ID_STRING_12 76
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 77
 
 #endif                                       /* sentry                         */

@@ -380,6 +380,7 @@ static const timer_cfg_t g_timer0_cfg =
 /* Instance structure to use this module. */
 const timer_instance_t g_timer0 =
 { .p_ctrl = &g_timer0_ctrl, .p_cfg = &g_timer0_cfg, .p_api = &g_timer_on_gpt };
+extern const sf_touch_panel_i2c_chip_t g_sf_touch_panel_i2c_chip_sx8651;
 #if (3) != BSP_IRQ_DISABLED
 #if !defined(SSP_SUPPRESS_ISR_g_external_irq0) && !defined(SSP_SUPPRESS_ISR_ICU9)
 SSP_VECTOR_DEFINE( icu_irq_isr, ICU, IRQ9);
@@ -525,7 +526,7 @@ g_sf_touch_panel_i2c0_err_callback_WEAK_ATTRIBUTE;
 sf_touch_panel_i2c_instance_ctrl_t g_sf_touch_panel_i2c0_ctrl;
 const sf_touch_panel_i2c_cfg_t g_sf_touch_panel_i2c0_cfg_extend =
 { .p_lower_lvl_i2c = &g_i2c0, .p_lower_lvl_irq = &g_sf_external_irq0, .pin = IOPORT_PORT_04_PIN_05, .p_chip =
-          &g_sf_touch_panel_i2c_chip_sx8654, };
+          &g_sf_touch_panel_i2c_chip_sx8651, };
 const sf_touch_panel_cfg_t g_sf_touch_panel_i2c0_cfg =
 { .hsize_pixels = 240, .vsize_pixels = 320, .priority = 3, .update_hz = 10, .p_message = &g_sf_message0, .p_extend =
           &g_sf_touch_panel_i2c0_cfg_extend,
