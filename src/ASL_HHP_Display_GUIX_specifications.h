@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  9. 6.2020   Time (hh:mm): 15:57                        */
+/*  Date (dd.mm.yyyy): 20. 7.2020   Time (hh:mm): 10:12                        */
 /*******************************************************************************/
 
 
@@ -33,106 +33,108 @@ extern   "C" {
 #define NEXT_PROFILE_TOGGLE_BTN 9
 #define PERFORMANCE_SELECTION_SCREEN_ID 10
 #define GOTO_VEER_ADJUST_BTN_ID 11
-#define MINIMUM_DRIVE_BTN_ID 12
-#define GOTO_DIAGNOSTICS_BTN_ID 13
-#define GOTO_RESET_SCREEN_BTN_ID 14
-#define HEAD_ARRAY_VERSION_PROMPT_ID 15
-#define DISPLAY_VERSION_PROMPT_ID 16
-#define DRIVE_PERCENTAGE_BTN_ID 17
-#define PROMPT_1_ID 18
-#define PROMPT_2_ID 19
-#define FEATURE_BTN_ID 20
-#define USER_SETTINGS_BTN_ID 21
-#define PERFORMANCE_BTN_ID 22
-#define RESET_SCREEN_ID 23
-#define CONTINUE_BTN_ID 24
-#define PROMPT1_ID 25
-#define PROMPT2_ID 26
-#define PROMPT3_ID 27
-#define PROMPT4_ID 28
-#define PROMPT_ID 29
-#define UP_ARROW_BTN_ID 30
-#define DOWN_ARROW_BTN_ID 31
-#define PAD_ACTIVE_BTN_ID 32
-#define LONG_PRESS_BUTTON_ID 33
-#define VEER_ADJUST_SCREEN_ID 34
-#define VEER_SLIDER_ID 35
-#define SLIDE_VALUE_BUTTON 36
-#define OON_SCREEN_ID 37
-#define OON_OK_BTN_ID 38
-#define CENTER_PAD_DIGITAL_BTN_ID 39
-#define INSTRUCT_PROMPT_ID 40
-#define LEFT_PAD_DIGITAL_BTN_ID 41
-#define RIGHT_PAD_DIGITAL_BTN_ID 42
-#define CENTER_PAD_PROP_BTN_ID 43
-#define LEFT_PAD_PROP_BTN_ID 44
-#define RIGHT_PAD_PROP_BTN_ID 45
-#define CENTER_PAD_OFF_BTN_ID 46
-#define LEFT_PAD_OFF_BTN_ID 47
-#define RIGHT_PAD_OFF_BTN_ID 48
-#define LEFT_PAD_RAW_VALUE_PROMPT 49
-#define RIGHT_PAD_RAW_VALUE_PROMPT 50
-#define CENTER_PAD_RAW_VALUE_PROMPT 51
-#define LEFT_PAD_ADJUSTED_PROMPT 52
-#define RIGHT_PAD_ADJUSTED_PROMPT 53
-#define CENTER_PAD_ADJUSTED_PROMPT 54
-#define READY_SCREEN_ID 55
-#define POWER_LARGE_ORANGE_PROMPT_ID 56
-#define PRESS_SWITCH_PROMPT_ID 57
-#define STARTUP_SPLASH_SCREEN_ID 58
-#define STATUS_PROMPT_ID 59
-#define HB_OK_ID 60
-#define HB_TIMEOUT_ID 61
-#define POWER_OFF_ID 62
-#define POWER_ON_ID 63
-#define HB_OON_ID 64
-#define CENTER_PAD_ON_BTN_ID 65
-#define MINIMUM_INSTRUCT_PROMPT_ID 66
-#define LEFT_PAD_ON_BTN_ID 67
-#define RIGHT_PAD_ON_BTN_ID 68
-#define MAXIMUM_INSTRUCT_PROMPT_ID 69
-#define VALUE_PROMPT_ID 70
-#define PAD_VALUE_PROMPT_ID 71
-#define CENTER_PAD_PROPORTIONAL_BTN_ID 72
-#define LEFT_PAD_PROPORTIONAL_BTN_ID 73
-#define RIGHT_PAD_PROPORTIONAL_BTN_ID 74
-#define SETTING_PROMPT01_ID 75
-#define CLICKS_PROMPT_ID 76
-#define POWERUP_IDLE_PROMPT_ID 77
-#define TIMEOUT_BTN_ID 78
-#define RNET_ACTIVE_PROMPT_ID 79
-#define CLICKS_TOGGLE_BTN 80
-#define POWER_UP_TOGGLE_BTN 81
-#define RNET_TOGGLE_BTN 82
-#define PAD_TYPE_BTN_ID 83
-#define PAD_DIRECTIONS_BTN_ID 84
-#define CENTER_PAD_FORWARD_ARROW_BTN_ID 85
-#define LEFT_PAD_LEFT_ARROW_BTN_ID 86
-#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 87
-#define LEFT_PAD_RIGHT_ARROW_BTN_ID 88
-#define LEFT_PAD_FORWARD_ARROW_BTN_ID 89
-#define RIGHT_PAD_LEFT_ARROW_BTN_ID 90
-#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 91
-#define CENTER_PAD_LEFT_ARROW_BTN_ID 92
-#define CENTER_PAD_RIGHT_ARROW_BTN_ID 93
-#define CENTER_PAD_QUESTION_BTN_ID 94
-#define LEFT_PAD_QUESTION_BTN_ID 95
-#define RIGHT_PAD_QUESTION_BTN_ID 96
-#define PAD_SETTINGS_BTN_ID 97
-#define SETTINGS_BTN_ID 98
-#define MORE_BTN_ID 99
-#define MAIN_USER_SCREEN_ID 100
-#define FIRST_ICON 101
-#define FIRST_PROMPT 102
-#define FOURTH_ICON 103
-#define FOURTH_PROMPT 104
-#define SECOND_ICON 105
-#define SECOND_PROMPT 106
-#define THIRD_ICON 107
-#define THIRD_PROMPT 108
-#define BOTH_ARROW_BTN_ID 109
-#define Fifth_ICON 110
-#define FIFTH_PROMPT 111
+#define GOTO_DIAGNOSTICS_BTN_ID 12
+#define GOTO_RESET_SCREEN_BTN_ID 13
+#define HEAD_ARRAY_VERSION_PROMPT_ID 14
+#define DISPLAY_VERSION_PROMPT_ID 15
+#define RIGHT_PAD_PERCENTAGE_BTN_ID 16
+#define PROMPT_FOR_EACH_PAD 17
+#define PROMPT_SET_MINIMUM_SPEED 18
+#define CENTER_PAD_PERCENTAGE_BTN_ID 19
+#define LEFT_PAD_PERCENTAGE_BTN_ID 20
+#define FEATURE_BTN_ID 21
+#define USER_SETTINGS_BTN_ID 22
+#define PERFORMANCE_BTN_ID 23
+#define RESET_SCREEN_ID 24
+#define CONTINUE_BTN_ID 25
+#define PROMPT1_ID 26
+#define PROMPT2_ID 27
+#define PROMPT3_ID 28
+#define PROMPT4_ID 29
+#define PROMPT_ID 30
+#define UP_ARROW_BTN_ID 31
+#define DOWN_ARROW_BTN_ID 32
+#define PAD_ACTIVE_BTN_ID 33
+#define LONG_PRESS_BUTTON_ID 34
+#define VEER_ADJUST_SCREEN_ID 35
+#define VEER_SLIDER_ID 36
+#define SLIDE_VALUE_BUTTON 37
+#define OON_SCREEN_ID 38
+#define OON_OK_BTN_ID 39
+#define CENTER_PAD_DIGITAL_BTN_ID 40
+#define INSTRUCT_PROMPT_ID 41
+#define LEFT_PAD_DIGITAL_BTN_ID 42
+#define RIGHT_PAD_DIGITAL_BTN_ID 43
+#define CENTER_PAD_PROP_BTN_ID 44
+#define LEFT_PAD_PROP_BTN_ID 45
+#define RIGHT_PAD_PROP_BTN_ID 46
+#define CENTER_PAD_OFF_BTN_ID 47
+#define LEFT_PAD_OFF_BTN_ID 48
+#define RIGHT_PAD_OFF_BTN_ID 49
+#define LEFT_PAD_RAW_VALUE_PROMPT 50
+#define RIGHT_PAD_RAW_VALUE_PROMPT 51
+#define CENTER_PAD_RAW_VALUE_PROMPT 52
+#define LEFT_PAD_ADJUSTED_PROMPT 53
+#define RIGHT_PAD_ADJUSTED_PROMPT 54
+#define CENTER_PAD_ADJUSTED_PROMPT 55
+#define READY_SCREEN_ID 56
+#define POWER_LARGE_ORANGE_PROMPT_ID 57
+#define PRESS_SWITCH_PROMPT_ID 58
+#define STARTUP_SPLASH_SCREEN_ID 59
+#define STATUS_PROMPT_ID 60
+#define HB_OK_ID 61
+#define HB_TIMEOUT_ID 62
+#define POWER_OFF_ID 63
+#define POWER_ON_ID 64
+#define HB_OON_ID 65
+#define CENTER_PAD_ON_BTN_ID 66
+#define MINIMUM_INSTRUCT_PROMPT_ID 67
+#define LEFT_PAD_ON_BTN_ID 68
+#define RIGHT_PAD_ON_BTN_ID 69
+#define MAXIMUM_INSTRUCT_PROMPT_ID 70
+#define VALUE_PROMPT_ID 71
+#define PAD_VALUE_PROMPT_ID 72
+#define CENTER_PAD_PROPORTIONAL_BTN_ID 73
+#define LEFT_PAD_PROPORTIONAL_BTN_ID 74
+#define RIGHT_PAD_PROPORTIONAL_BTN_ID 75
+#define SETTING_PROMPT01_ID 76
+#define CLICKS_PROMPT_ID 77
+#define POWERUP_IDLE_PROMPT_ID 78
+#define TIMEOUT_BTN_ID 79
+#define RNET_ACTIVE_PROMPT_ID 80
+#define CLICKS_TOGGLE_BTN 81
+#define POWER_UP_TOGGLE_BTN 82
+#define RNET_TOGGLE_BTN 83
+#define PAD_TYPE_BTN_ID 84
+#define PAD_DIRECTIONS_BTN_ID 85
+#define MINIMUM_DRIVE_BTN_ID 86
+#define CENTER_PAD_FORWARD_ARROW_BTN_ID 87
+#define LEFT_PAD_LEFT_ARROW_BTN_ID 88
+#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 89
+#define LEFT_PAD_RIGHT_ARROW_BTN_ID 90
+#define LEFT_PAD_FORWARD_ARROW_BTN_ID 91
+#define RIGHT_PAD_LEFT_ARROW_BTN_ID 92
+#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 93
+#define CENTER_PAD_LEFT_ARROW_BTN_ID 94
+#define CENTER_PAD_RIGHT_ARROW_BTN_ID 95
+#define CENTER_PAD_QUESTION_BTN_ID 96
+#define LEFT_PAD_QUESTION_BTN_ID 97
+#define RIGHT_PAD_QUESTION_BTN_ID 98
+#define PAD_SETTINGS_BTN_ID 99
+#define SETTINGS_BTN_ID 100
+#define MORE_BTN_ID 101
+#define MAIN_USER_SCREEN_ID 102
+#define FIRST_ICON 103
+#define FIRST_PROMPT 104
+#define FOURTH_ICON 105
+#define FOURTH_PROMPT 106
+#define SECOND_ICON 107
+#define SECOND_PROMPT 108
+#define THIRD_ICON 109
+#define THIRD_PROMPT 110
+#define BOTH_ARROW_BTN_ID 111
+#define Fifth_ICON 112
+#define FIFTH_PROMPT 113
 
 
 /* Define animation ids                                                        */
@@ -289,7 +291,6 @@ typedef struct PERFORMANCESELECTIONSCREEN_CONTROL_BLOCK_STRUCT
 {
     GX_WINDOW_MEMBERS_DECLARE
     GX_TEXT_BUTTON PerformanceSelectionScreen_GotoVeerAdjust_Button;
-    GX_TEXT_BUTTON PerformanceSelectionScreen_MinimumDrive_lButton;
     GX_TEXT_BUTTON PerformanceSelectionScreen_OK_Button;
 } PERFORMANCESELECTIONSCREEN_CONTROL_BLOCK;
 
@@ -306,10 +307,12 @@ typedef struct MORESELECTIONSCREEN_CONTROL_BLOCK_STRUCT
 typedef struct MINIMUMDRIVESCREEN_CONTROL_BLOCK_STRUCT
 {
     GX_WINDOW_MEMBERS_DECLARE
-    GX_TEXT_BUTTON MinimumDriveScreen_DriverPencentage_Button;
-    GX_PROMPT MinimumDriveScreen_Prompt_1;
+    GX_TEXT_BUTTON MinimumDriveScreen_RightPadPercentage_Button;
     GX_TEXT_BUTTON MinimumDriveScreen_OK_Button;
-    GX_PROMPT MinimumDriveScreen_Prompt_2;
+    GX_PROMPT MinimumDriveScreen_Prompt_ForEachPad;
+    GX_PROMPT MinimumDriveScreen_Prompt_SetMinimumSpeed;
+    GX_TEXT_BUTTON MinimumDriveScreen_CenterPadPercentage_Button;
+    GX_TEXT_BUTTON MinimumDriveScreen_LeftPadPercentage_Button;
 } MINIMUMDRIVESCREEN_CONTROL_BLOCK;
 
 typedef struct USERSELECTIONSCREEN_CONTROL_BLOCK_STRUCT
@@ -454,6 +457,7 @@ typedef struct PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK_STRUCT
     GX_TEXT_BUTTON PadOptionsSettingsScreen_PadType_Button;
     GX_TEXT_BUTTON PadOptionsSettingsScreen_PadDirections_Button;
     GX_TEXT_BUTTON PadOptionsSettingsScreen_OK_Button;
+    GX_TEXT_BUTTON PadOptionsSettingsScreen_MinimumDrive_lButton;
 } PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK;
 
 typedef struct SETPADDIRECTIONSCREEN_CONTROL_BLOCK_STRUCT
@@ -596,7 +600,7 @@ UINT FeatureSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr)
 UINT PerformanceSelectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT MoreSelectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT MinimumDriveScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
-VOID MinimumDriveScreen_draw_function(GX_WINDOW *widget);
+VOID MinimumDriveScreen_DrawFunction(GX_WINDOW *widget);
 UINT UserSelectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT ResetScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT ResetFinishScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);

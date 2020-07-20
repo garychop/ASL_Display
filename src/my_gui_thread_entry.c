@@ -31,6 +31,9 @@ enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PAD_ACTIVE
 #define GRAPH_CENTER_PT_XPOS 139    // From Left of screen
 #define GRAPH_CENTER_PT_YPOS 130    // From Top of screen
 
+#define MAXIMUM_DRIVE_SPEED_OLD_FIRMWARE (30)
+#define MAXIMUM_DRIVE_SPEED_NEW_FIRMWARE (40)
+
 //-------------------------------------------------------------------------
 // Local variables
 //-------------------------------------------------------------------------
@@ -97,6 +100,8 @@ struct PadInfoStruct
 {
     enum PAD_TYPE m_PadType;
     enum PAD_DIRECTION m_PadDirection;
+    uint8_t m_MinimumDriveValue;
+    char m_MinimuDriveString[8];
     int16_t m_PadMinimumCalibrationValue;
     int16_t m_PadMaximumCalibrationValue;
     uint16_t m_Minimum_ADC_Threshold;
@@ -120,7 +125,7 @@ struct PadInfoStruct
 // Global Variables.
 //-------------------------------------------------------------------------
 
-GX_CHAR ASL110_DISPLAY_VERSION_STRING[] = "ASL165: 1.7.0";
+GX_CHAR ASL165_DispalyVersionString[32] = "ASL165: 1.8.0 [A]";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -142,11 +147,12 @@ int16_t g_NeutralDAC_Constant = 2048;
 int16_t g_NeutralDAC_Setting = 2048;
 int16_t g_NeutralDAC_Range = 400;
 bool g_WaitingForVeerResponse = false;
-uint8_t g_MinimumDriveValue = 20;       // Percentage, Minimum Drive value
 char g_MinimuDriveString[8] = "20%";
 char g_TimeoutValueString[8] = "OFF";
 UINT g_TimerActive = false;             // I'm using to prevent re-arming the timer used to enter Pad Calibration Feature.
 
+extern const sf_touch_panel_i2c_cfg_t g_sf_touch_panel_i2c0_cfg_extend;
+extern const sf_touch_panel_i2c_chip_t g_sf_touch_panel_i2c_chip_sx8651;
 
 //-------------------------------------------------------------------------
 // Forward declarations.
@@ -166,12 +172,13 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
+void ConvertMinimumValue (uint8_t minSpeed, char *valueString);
+void IncrementMinimumSpeed (uint8_t *minSpeed);
 
 UINT DisplayMainScreenActiveFeatures ();
 void AdjustActiveFeature (FEATURE_ID_ENUM newMode);
 void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures);
 void ShowPadTypes (void);
-void ShowMinimumValue ();
 void ProcessCommunicationMsgs ();
 
 //-------------------------------------------------------------------------
@@ -218,6 +225,15 @@ void my_gui_thread_entry(void)
 
     // Setup the ILI9341V LCD Driver and Touchscreen.
     ILI9341V_Init();
+
+    if (g_sf_touch_panel_i2c0_cfg_extend.p_chip == &g_sf_touch_panel_i2c_chip_sx8651)
+    {
+        strcpy (ASL165_DispalyVersionString, "ASL165: 1.8.0 [B]");
+    }
+    else
+    {
+        strcpy (ASL165_DispalyVersionString, "ASL165: 1.8.0 [A]");
+    }
 
     /* Initializes GUIX. */
     status = gx_system_initialize();
@@ -289,6 +305,7 @@ void my_gui_thread_entry(void)
     // Populate the default Pad settings.
     g_PadSettings[LEFT_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+    g_PadSettings[LEFT_PAD].m_MinimumDriveValue = 20;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Off_Button;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_RightArrow_Button;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_LeftArrow_Button;
@@ -312,6 +329,7 @@ void my_gui_thread_entry(void)
 
     g_PadSettings[RIGHT_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+    g_PadSettings[RIGHT_PAD].m_MinimumDriveValue = 20;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Off_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_RightArrow_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_LeftArrow_Button;
@@ -335,6 +353,7 @@ void my_gui_thread_entry(void)
 
     g_PadSettings[CENTER_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+    g_PadSettings[CENTER_PAD].m_MinimumDriveValue = 20;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Off_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_RightArrow_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_LeftArrow_Button;
@@ -641,7 +660,9 @@ void ProcessCommunicationMsgs ()
             break;
 
         case HHP_HA_DRIVE_OFFSET_GET:
-            g_MinimumDriveValue = HeadArrayMsg.DriveOffset_Get_Response.m_DriveOffset;
+            g_PadSettings[CENTER_PAD].m_MinimumDriveValue = HeadArrayMsg.DriveOffset_Get_Response.m_CenterPad_DriveOffset;
+            g_PadSettings[LEFT_PAD].m_MinimumDriveValue = HeadArrayMsg.DriveOffset_Get_Response.m_LeftPad_DriveOffset;
+            g_PadSettings[RIGHT_PAD].m_MinimumDriveValue = HeadArrayMsg.DriveOffset_Get_Response.m_RightPad_DriveOffset;
             // Redraw the current window.
             gxe.gx_event_type = GX_EVENT_REDRAW;
             gxe.gx_event_sender = GX_ID_NONE;
@@ -1251,17 +1272,21 @@ UINT PadOptionsSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_
 
     switch (event_ptr->gx_event_type)
     {
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
-        break;
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+            break;
 
-    case GX_SIGNAL(PAD_TYPE_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&SetPadTypeScreen, window);
-        break;
+        case GX_SIGNAL(PAD_TYPE_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&SetPadTypeScreen, window);
+            break;
 
-    case GX_SIGNAL(PAD_DIRECTIONS_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&SetPadDirectionScreen, window);
-        break;
+        case GX_SIGNAL(PAD_DIRECTIONS_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&SetPadDirectionScreen, window);
+            break;
+
+        case GX_SIGNAL(MINIMUM_DRIVE_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&MinimumDriveScreen, window);
+            break;
     }
 
     gx_window_event_process(window, event_ptr);
@@ -1280,22 +1305,66 @@ UINT PerformanceSelectionScreen_event_process (GX_WINDOW *window, GX_EVENT *even
 {
     switch (event_ptr->gx_event_type)
     {
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
-        break;
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
+            break;
 
-    case GX_SIGNAL(GOTO_VEER_ADJUST_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&VeerAdjustScreen, window);
-        break;
-
-    case GX_SIGNAL(MINIMUM_DRIVE_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&MinimumDriveScreen, window);
-        break;
+        case GX_SIGNAL(GOTO_VEER_ADJUST_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&VeerAdjustScreen, window);
+            break;
     }
 
     gx_window_event_process(window, event_ptr);
 
     return GX_SUCCESS;
+}
+
+
+//*************************************************************************************
+// Function Name: MinimumDriveScreen_event_process
+//
+// Description: This dispatches the Pad Option Settings Screen messages
+//
+//*************************************************************************************
+
+void ConvertMinimumValue (uint8_t minSpeed, char *valueString)
+{
+    if (minSpeed == 0)
+    {
+        strcpy (valueString, "OFF");
+    }
+    else
+    {
+        sprintf (valueString, "%d%%", minSpeed);
+    }
+}
+
+//*************************************************************************************
+// This increments from 0 (off) to MAXIMUM_DRIVE SPEED starting at 15 and incrementing
+// .. by 5.
+//*************************************************************************************
+
+void IncrementMinimumSpeed (uint8_t *minSpeed)
+{
+    // If the Head Array has newer firmware then the upper range is 40.
+    if (g_HA_EEPROM_Version >= 5)
+    {
+        if (*minSpeed == 0)
+            *minSpeed = 15;
+        else if (*minSpeed >= MAXIMUM_DRIVE_SPEED_NEW_FIRMWARE)
+            *minSpeed = 0;
+        else
+            *minSpeed += 5;
+    }
+    else    // It must be older Head Array firmware. The upper range is 30.
+    {
+        if (*minSpeed == 0)
+            *minSpeed = 15;
+        else if (*minSpeed >= MAXIMUM_DRIVE_SPEED_OLD_FIRMWARE)
+            *minSpeed = 0;
+        else
+            *minSpeed += 5;
+    }
 }
 
 //*************************************************************************************
@@ -1304,52 +1373,81 @@ UINT PerformanceSelectionScreen_event_process (GX_WINDOW *window, GX_EVENT *even
 // Description: This dispatches the Pad Option Settings Screen messages
 //
 //*************************************************************************************
-void ShowMinimumValue ()
+VOID MinimumDriveScreen_DrawFunction (GX_WINDOW *window)
 {
-    if (g_MinimumDriveValue == 0)
+    if (g_HA_EEPROM_Version >= 5)       // Firmware version 5 uses 3 drive offset values.
     {
-        strcpy (g_MinimuDriveString, "OFF");
+        // Display the values in the 3 buttons
+        ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+        gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+        ConvertMinimumValue (g_PadSettings[LEFT_PAD].m_MinimumDriveValue, g_PadSettings[LEFT_PAD].m_MinimuDriveString);
+        gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_LeftPadPercentage_Button, g_PadSettings[LEFT_PAD].m_MinimuDriveString);
+        ConvertMinimumValue (g_PadSettings[RIGHT_PAD].m_MinimumDriveValue, g_PadSettings[RIGHT_PAD].m_MinimuDriveString);
+        gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_RightPadPercentage_Button, g_PadSettings[RIGHT_PAD].m_MinimuDriveString);
     }
-    else
+    else    // Old school, Only one value is shown since the ASL110 firmware supports only one Minimum Drive value.
     {
-        sprintf (g_MinimuDriveString, "%d%%", g_MinimumDriveValue);
-        gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_DriverPencentage_Button, g_MinimuDriveString);
+        gx_widget_hide (&MinimumDriveScreen.MinimumDriveScreen_RightPadPercentage_Button);  // Hide the right pad button
+        gx_widget_hide (&MinimumDriveScreen.MinimumDriveScreen_LeftPadPercentage_Button);   // Hide the Left pad button
+        gx_widget_hide (&MinimumDriveScreen.MinimumDriveScreen_Prompt_ForEachPad);          // Hide the "FOR EACH PAD" prompt
+        // Move the "SET MINIMUM DRIVE SPEED" prompt down for better appearance.
+        MinimumDriveScreen.MinimumDriveScreen_Prompt_SetMinimumSpeed.gx_widget_size.gx_rectangle_top = 12;
+        MinimumDriveScreen.MinimumDriveScreen_Prompt_SetMinimumSpeed.gx_widget_size.gx_rectangle_bottom = 44;   // Height + top: 32 + 12
+        // Move the Center Pad button to the middle, upper part of the screen.
+        MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_left = 116;
+        MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_right = 116 + 80; // left + width
+        MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_top = 55;
+        MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_bottom = 55 + 64; // top + height
+        // Show the value in the button.
+        ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+        gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
     }
-}
 
-//*************************************************************************************
-VOID MinimumDriveScreen_draw_function (GX_WINDOW *window)
-{
-    ShowMinimumValue();         // Show the minimum value in the button.
     gx_window_draw(window);
 }
 
-//*************************************************************************************
 UINT MinimumDriveScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
+    bool needNewValue = false;
+
     switch (event_ptr->gx_event_type)
     {
-    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&PerformanceSelectionScreen, window);
-        break;
+//        case GX_EVENT_SHOW:   // The SHOW doesn't allow the screen to updated with the returned Head Array value.... DRAW does... see above.
+//            break;
 
-    case GX_SIGNAL (DRIVE_PERCENTAGE_BTN_ID, GX_EVENT_CLICKED):
-        if (g_MinimumDriveValue >= 30)
-        {
-            g_MinimumDriveValue = 0;
-        }
-        else if (g_MinimumDriveValue == 0)
-        {
-            g_MinimumDriveValue = 15;       // 5, 10 and even 15 may exceed the neutral window of the control system.
-        }
-        else
-        {
-            g_MinimumDriveValue = (uint8_t) (g_MinimumDriveValue + 5);
-        }
-        //ShowMinimumValue();
-        SendDriveOffsetSet (g_MinimumDriveValue);
-        SendDriveOffsetGet();
-        break;
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
+            break;
+
+        case GX_SIGNAL (CENTER_PAD_PERCENTAGE_BTN_ID, GX_EVENT_CLICKED):
+            IncrementMinimumSpeed (&g_PadSettings[CENTER_PAD].m_MinimumDriveValue);
+            ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+            gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+            needNewValue = true;
+            break;
+
+        case GX_SIGNAL (LEFT_PAD_PERCENTAGE_BTN_ID, GX_EVENT_CLICKED):
+            IncrementMinimumSpeed (&g_PadSettings[CENTER_PAD].m_MinimumDriveValue);
+            ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+            gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_LeftPadPercentage_Button, g_PadSettings[LEFT_PAD].m_MinimuDriveString);
+            needNewValue = true;
+            break;
+
+        case GX_SIGNAL (RIGHT_PAD_PERCENTAGE_BTN_ID, GX_EVENT_CLICKED):
+            IncrementMinimumSpeed (&g_PadSettings[CENTER_PAD].m_MinimumDriveValue);
+            ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+            gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_RightPadPercentage_Button, g_PadSettings[RIGHT_PAD].m_MinimuDriveString);
+            needNewValue = true;
+            break;
+
+    }   // end switch
+
+    // If the values changed, let's send the new value and request them (again) from the Head Array. This will set the
+    // value if the Head Array validated the new value.
+    if (needNewValue)
+    {
+        SendDriveOffsetSet (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[LEFT_PAD].m_MinimumDriveValue, g_PadSettings[RIGHT_PAD].m_MinimumDriveValue);
+        SendDriveOffsetGet ();
     }
 
     gx_window_event_process(window, event_ptr);
@@ -2277,7 +2375,7 @@ UINT MoreSelectionScreen_event_process(GX_WINDOW *window, GX_EVENT *event_ptr)
     switch (event_ptr->gx_event_type)
     {
     case GX_EVENT_SHOW:
-        gx_prompt_text_set ((GX_PROMPT*)&MoreSelectionScreen.MoreSelectionScreen_VersionPrompt, ASL110_DISPLAY_VERSION_STRING);
+        gx_prompt_text_set ((GX_PROMPT*)&MoreSelectionScreen.MoreSelectionScreen_VersionPrompt, ASL165_DispalyVersionString);
         gx_prompt_text_set ((GX_PROMPT*)&MoreSelectionScreen.MoreSelectionScreen_HeadArray_VersionPrompt, g_HeadArrayVersionString);
         break;
 

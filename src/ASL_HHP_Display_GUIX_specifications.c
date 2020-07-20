@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  9. 6.2020   Time (hh:mm): 15:57                        */
+/*  Date (dd.mm.yyyy): 20. 7.2020   Time (hh:mm): 10:12                        */
 /*******************************************************************************/
 
 
@@ -555,13 +555,6 @@ GX_TEXT_BUTTON_PROPERTIES PerformanceSelectionScreen_GotoVeerAdjust_Button_prope
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
-GX_TEXT_BUTTON_PROPERTIES PerformanceSelectionScreen_MinimumDrive_lButton_properties =
-{
-    GX_STRING_ID_STRING_30,                  /* string id                      */
-    GX_FONT_ID_BUTTON,                       /* font id                        */
-    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
-    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
-};
 GX_TEXT_BUTTON_PROPERTIES PerformanceSelectionScreen_OK_Button_properties =
 {
     GX_STRING_ID_STRING_24,                  /* string id                      */
@@ -593,29 +586,6 @@ GX_CONST GX_STUDIO_WIDGET PerformanceSelectionScreen_OK_Button_define =
     (void *) &PerformanceSelectionScreen_OK_Button_properties /* extended properties */
 };
 
-GX_CONST GX_STUDIO_WIDGET PerformanceSelectionScreen_MinimumDrive_lButton_define =
-{
-    "MinimumDrive_lButton",
-    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
-    MINIMUM_DRIVE_BTN_ID,                    /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
-    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
-    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
-    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
-    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
-    gx_studio_text_button_create,            /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {16, 89, 205, 152},                      /* widget size                    */
-    &PerformanceSelectionScreen_OK_Button_define, /* next widget definition    */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(PERFORMANCESELECTIONSCREEN_CONTROL_BLOCK, PerformanceSelectionScreen_MinimumDrive_lButton), /* control block */
-    (void *) &PerformanceSelectionScreen_MinimumDrive_lButton_properties /* extended properties */
-};
-
 GX_CONST GX_STUDIO_WIDGET PerformanceSelectionScreen_GotoVeerAdjust_Button_define =
 {
     "GotoVeerAdjust_Button",
@@ -633,7 +603,7 @@ GX_CONST GX_STUDIO_WIDGET PerformanceSelectionScreen_GotoVeerAdjust_Button_defin
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {16, 14, 205, 77},                       /* widget size                    */
-    &PerformanceSelectionScreen_MinimumDrive_lButton_define, /* next widget definition */
+    &PerformanceSelectionScreen_OK_Button_define, /* next widget definition    */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(PERFORMANCESELECTIONSCREEN_CONTROL_BLOCK, PerformanceSelectionScreen_GotoVeerAdjust_Button), /* control block */
     (void *) &PerformanceSelectionScreen_GotoVeerAdjust_Button_properties /* extended properties */
@@ -842,17 +812,10 @@ GX_WINDOW_PROPERTIES MinimumDriveScreen_properties =
 {
     GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
 };
-GX_TEXT_BUTTON_PROPERTIES MinimumDriveScreen_DriverPencentage_Button_properties =
+GX_TEXT_BUTTON_PROPERTIES MinimumDriveScreen_RightPadPercentage_Button_properties =
 {
     GX_STRING_ID_STRING_52,                  /* string id                      */
     GX_FONT_ID_LARGESIZE,                    /* font id                        */
-    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
-    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
-};
-GX_PROMPT_PROPERTIES MinimumDriveScreen_Prompt_1_properties =
-{
-    GX_STRING_ID_STRING_89,                  /* string id                      */
-    GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
@@ -863,23 +826,90 @@ GX_TEXT_BUTTON_PROPERTIES MinimumDriveScreen_OK_Button_properties =
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
-GX_PROMPT_PROPERTIES MinimumDriveScreen_Prompt_2_properties =
+GX_PROMPT_PROPERTIES MinimumDriveScreen_Prompt_ForEachPad_properties =
 {
-    GX_STRING_ID_STRING_83_1,                /* string id                      */
+    GX_STRING_ID_STRING_36,                  /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
-
-GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_Prompt_2_define =
+GX_PROMPT_PROPERTIES MinimumDriveScreen_Prompt_SetMinimumSpeed_properties =
 {
-    "Prompt_2",
-    GX_TYPE_PROMPT,                          /* widget type                    */
-    PROMPT_2_ID,                             /* widget id                      */
+    GX_STRING_ID_STRING_14,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_TEXT_BUTTON_PROPERTIES MinimumDriveScreen_CenterPadPercentage_Button_properties =
+{
+    GX_STRING_ID_STRING_52,                  /* string id                      */
+    GX_FONT_ID_LARGESIZE,                    /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_TEXT_BUTTON_PROPERTIES MinimumDriveScreen_LeftPadPercentage_Button_properties =
+{
+    GX_STRING_ID_STRING_52,                  /* string id                      */
+    GX_FONT_ID_LARGESIZE,                    /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_LeftPadPercentage_Button_define =
+{
+    "LeftPadPercentage_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    LEFT_PAD_PERCENTAGE_BTN_ID,              /* widget id                      */
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    GX_STYLE_BORDER_RAISED|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT,                        /* normal color id                */
+    GX_COLOR_ID_TEXT,                        /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {28, 55, 107, 118},                      /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MINIMUMDRIVESCREEN_CONTROL_BLOCK, MinimumDriveScreen_LeftPadPercentage_Button), /* control block */
+    (void *) &MinimumDriveScreen_LeftPadPercentage_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_CenterPadPercentage_Button_define =
+{
+    "CenterPadPercentage_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    CENTER_PAD_PERCENTAGE_BTN_ID,            /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT,                        /* normal color id                */
+    GX_COLOR_ID_TEXT,                        /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {116, 150, 195, 213},                    /* widget size                    */
+    &MinimumDriveScreen_LeftPadPercentage_Button_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MINIMUMDRIVESCREEN_CONTROL_BLOCK, MinimumDriveScreen_CenterPadPercentage_Button), /* control block */
+    (void *) &MinimumDriveScreen_CenterPadPercentage_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_Prompt_SetMinimumSpeed_define =
+{
+    "Prompt_SetMinimumSpeed",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    PROMPT_SET_MINIMUM_SPEED,                /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_CENTER,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_PROMPT),                       /* control block size             */
     GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
@@ -887,11 +917,34 @@ GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_Prompt_2_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {14, 58, 215, 85},                       /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    {33, 2, 286, 33},                        /* widget size                    */
+    &MinimumDriveScreen_CenterPadPercentage_Button_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
-    offsetof(MINIMUMDRIVESCREEN_CONTROL_BLOCK, MinimumDriveScreen_Prompt_2), /* control block */
-    (void *) &MinimumDriveScreen_Prompt_2_properties /* extended properties    */
+    offsetof(MINIMUMDRIVESCREEN_CONTROL_BLOCK, MinimumDriveScreen_Prompt_SetMinimumSpeed), /* control block */
+    (void *) &MinimumDriveScreen_Prompt_SetMinimumSpeed_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_Prompt_ForEachPad_define =
+{
+    "Prompt_ForEachPad",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    PROMPT_FOR_EACH_PAD,                     /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {33, 26, 286, 53},                       /* widget size                    */
+    &MinimumDriveScreen_Prompt_SetMinimumSpeed_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MINIMUMDRIVESCREEN_CONTROL_BLOCK, MinimumDriveScreen_Prompt_ForEachPad), /* control block */
+    (void *) &MinimumDriveScreen_Prompt_ForEachPad_properties /* extended properties */
 };
 
 GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_OK_Button_define =
@@ -911,40 +964,17 @@ GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_OK_Button_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {230, 165, 309, 228},                    /* widget size                    */
-    &MinimumDriveScreen_Prompt_2_define,     /* next widget definition         */
+    &MinimumDriveScreen_Prompt_ForEachPad_define, /* next widget definition    */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MINIMUMDRIVESCREEN_CONTROL_BLOCK, MinimumDriveScreen_OK_Button), /* control block */
     (void *) &MinimumDriveScreen_OK_Button_properties /* extended properties   */
 };
 
-GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_Prompt_1_define =
+GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_RightPadPercentage_Button_define =
 {
-    "Prompt_1",
-    GX_TYPE_PROMPT,                          /* widget type                    */
-    PROMPT_1_ID,                             /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
-    0,                                       /* status flags                   */
-    sizeof(GX_PROMPT),                       /* control block size             */
-    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
-    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
-    gx_studio_prompt_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {14, 32, 215, 59},                       /* widget size                    */
-    &MinimumDriveScreen_OK_Button_define,    /* next widget definition         */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(MINIMUMDRIVESCREEN_CONTROL_BLOCK, MinimumDriveScreen_Prompt_1), /* control block */
-    (void *) &MinimumDriveScreen_Prompt_1_properties /* extended properties    */
-};
-
-GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_DriverPencentage_Button_define =
-{
-    "DriverPencentage_Button",
+    "RightPadPercentage_Button",
     GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
-    DRIVE_PERCENTAGE_BTN_ID,                 /* widget id                      */
+    RIGHT_PAD_PERCENTAGE_BTN_ID,             /* widget id                      */
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
@@ -956,11 +986,11 @@ GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_DriverPencentage_Button_define =
     gx_studio_text_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {230, 28, 309, 91},                      /* widget size                    */
-    &MinimumDriveScreen_Prompt_1_define,     /* next widget definition         */
+    {205, 55, 284, 118},                     /* widget size                    */
+    &MinimumDriveScreen_OK_Button_define,    /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
-    offsetof(MINIMUMDRIVESCREEN_CONTROL_BLOCK, MinimumDriveScreen_DriverPencentage_Button), /* control block */
-    (void *) &MinimumDriveScreen_DriverPencentage_Button_properties /* extended properties */
+    offsetof(MINIMUMDRIVESCREEN_CONTROL_BLOCK, MinimumDriveScreen_RightPadPercentage_Button), /* control block */
+    (void *) &MinimumDriveScreen_RightPadPercentage_Button_properties /* extended properties */
 };
 
 GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_define =
@@ -977,11 +1007,11 @@ GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_define =
     GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
     GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
     gx_studio_window_create,                 /* create function                */
-    (VOID (*)(GX_WIDGET *)) MinimumDriveScreen_draw_function, /* drawing function override */
+    (VOID (*)(GX_WIDGET *)) MinimumDriveScreen_DrawFunction, /* drawing function override */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) MinimumDriveScreen_event_process, /* event function override */
     {0, 0, 319, 255},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
-    &MinimumDriveScreen_DriverPencentage_Button_define, /* child widget        */
+    &MinimumDriveScreen_RightPadPercentage_Button_define, /* child widget      */
     0,                                       /* control block                  */
     (void *) &MinimumDriveScreen_properties  /* extended properties            */
 };
@@ -3580,6 +3610,36 @@ GX_TEXT_BUTTON_PROPERTIES PadOptionsSettingsScreen_OK_Button_properties =
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
+GX_TEXT_BUTTON_PROPERTIES PadOptionsSettingsScreen_MinimumDrive_lButton_properties =
+{
+    GX_STRING_ID_STRING_30,                  /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET PadOptionsSettingsScreen_MinimumDrive_lButton_define =
+{
+    "MinimumDrive_lButton",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    MINIMUM_DRIVE_BTN_ID,                    /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {16, 164, 205, 227},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK, PadOptionsSettingsScreen_MinimumDrive_lButton), /* control block */
+    (void *) &PadOptionsSettingsScreen_MinimumDrive_lButton_properties /* extended properties */
+};
 
 GX_CONST GX_STUDIO_WIDGET PadOptionsSettingsScreen_OK_Button_define =
 {
@@ -3598,7 +3658,7 @@ GX_CONST GX_STUDIO_WIDGET PadOptionsSettingsScreen_OK_Button_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {230, 165, 309, 228},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &PadOptionsSettingsScreen_MinimumDrive_lButton_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK, PadOptionsSettingsScreen_OK_Button), /* control block */
     (void *) &PadOptionsSettingsScreen_OK_Button_properties /* extended properties */

@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  9. 6.2020   Time (hh:mm): 15:57                        */
+/*  Date (dd.mm.yyyy): 20. 7.2020   Time (hh:mm): 10:12                        */
 /*******************************************************************************/
 
 
@@ -34773,10 +34773,13 @@ GX_CONST GX_UBYTE main_display_RNET_ENABLE_English[12] = "RNet ENABLE";
 GX_CONST GX_UBYTE main_display_RNET_TOGGLE_English[11] = "TOGGLE F/R";
 GX_CONST GX_UBYTE main_display_STRING_2_English[30] = "Use buttons to adjust MAXIMUM";
 GX_CONST GX_UBYTE main_display_STRING_12_English[30] = "Use buttons to adjust MINIMUM";
+GX_CONST GX_UBYTE main_display_STRING_36_English[13] = "FOR EACH PAD";
+GX_CONST GX_UBYTE main_display_STRING_31_English[27] = "SELECT MINIMUM DRIVE SPEED";
+GX_CONST GX_UBYTE main_display_STRING_14_English[24] = "SET MINIMUM DRIVE SPEED";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[77] =
+GX_CONST GX_UBYTE *main_display_English_string_table[80] =
 {
     GX_NULL,
     main_display_STRING_15_English,
@@ -34854,7 +34857,10 @@ GX_CONST GX_UBYTE *main_display_English_string_table[77] =
     main_display_RNET_ENABLE_English,
     main_display_RNET_TOGGLE_English,
     main_display_STRING_2_English,
-    main_display_STRING_12_English
+    main_display_STRING_12_English,
+    main_display_STRING_36_English,
+    main_display_STRING_31_English,
+    main_display_STRING_14_English
 
 };
 

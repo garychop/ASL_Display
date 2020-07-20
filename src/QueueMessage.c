@@ -28,6 +28,12 @@
 #include "tx_api.h"
 
 //****************************************************************************
+// External References
+//****************************************************************************
+
+extern uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
+
+//****************************************************************************
 // Functions
 //****************************************************************************
 
@@ -468,12 +474,14 @@ void SendDriveOffsetGet (void)
 // Description: Function called by COMM task to send Drive Offset value to GUI via Queue
 //****************************************************************************
 
-void SendDriveOffsetSet (uint8_t driveOffset)
+void SendDriveOffsetSet (uint8_t CenterPad_driveOffset, uint8_t LeftPad_driveOffset, uint8_t RightPad_driveOffset)
 {
     GUI_MSG_STRUCT q_Msg;
 
     q_Msg.m_MsgType = HHP_HA_DRIVE_OFFSET_SET;
-    q_Msg.SendDriveOffset.m_DriveOffset = driveOffset;
+    q_Msg.SendDriveOffset.m_CenterPad_DriveOffset = CenterPad_driveOffset;
+    q_Msg.SendDriveOffset.m_LeftPad_DriveOffset = LeftPad_driveOffset;
+    q_Msg.SendDriveOffset.m_RightPad_DriveOffset = RightPad_driveOffset;
 
     tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
@@ -483,12 +491,14 @@ void SendDriveOffsetSet (uint8_t driveOffset)
 // Description: Function called by COMM task to send Drive Offset value to GUI via Queue
 //****************************************************************************
 
-void SendDriveOffsetGetResponse (uint8_t value)
+void SendDriveOffsetGetResponse (uint8_t CenterPad, uint8_t LeftPad, uint8_t RightPad)
 {
     HHP_HA_MSG_STRUCT HHP_Msg;
 
     HHP_Msg.m_MsgType = HHP_HA_DRIVE_OFFSET_GET;
-    HHP_Msg.DriveOffset_Get_Response.m_DriveOffset = value;
+    HHP_Msg.DriveOffset_Get_Response.m_CenterPad_DriveOffset = CenterPad;
+    HHP_Msg.DriveOffset_Get_Response.m_LeftPad_DriveOffset = LeftPad;
+    HHP_Msg.DriveOffset_Get_Response.m_RightPad_DriveOffset = RightPad;
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }

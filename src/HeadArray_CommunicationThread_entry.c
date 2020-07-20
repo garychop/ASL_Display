@@ -18,9 +18,7 @@
 
 #include "my_gui_thread.h"
 #include <my_gui_thread_entry.h>
-
 #include "HeadArray_CommunicationThread.h"
-
 #include "QueueDefinition.h"
 
 //#define FORCE_OK_FOR_GUI_DEBUGGING      // comment this out to run "non-debug" code.
@@ -69,7 +67,11 @@ uint8_t g_GetAllPadData = false;
 uint8_t g_GetDataActive = 0;
 PHYSICAL_PAD_ENUM g_ActivePadID = INVALID_PAD;
 
-// void (*g_MyState)(void);
+//****************************************************************************
+// External References
+//****************************************************************************
+
+extern uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
 PAD_DIRECTION_ENUM myPadDirection[] = {LEFT_DIRECTION, RIGHT_DIRECTION, FORWARD_DIRECTION};
@@ -903,14 +905,32 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             if (msgStatus == MSG_OK)
             {
                 msgStatus = Read_I2C_Package(HB_Response);
-                SendDriveOffsetGetResponse (HB_Response[1]);
+                if (HB_Response[0] == 3)        // If we are processing an older firmware version, then only one value is returned.
+                {                               // .. we will use it for all 3 pads. We're using the msg length to determine the contents.
+                    SendDriveOffsetGetResponse (HB_Response[1], HB_Response[1], HB_Response[1]);
+                }
+                else    // If newer ASL110 firmware, then all 3 pad drive offsets are returned.
+                {
+                    SendDriveOffsetGetResponse (HB_Response[1], HB_Response[2], HB_Response[3]);
+                }
             }
             break;
 
         case HHP_HA_DRIVE_OFFSET_SET:
-            HA_Msg[0] = 0x04;     // msg length
             HA_Msg[1] = HHP_HA_DRIVE_OFFSET_SET;
-            HA_Msg[2] = GUI_Msg.SendDriveOffset.m_DriveOffset;
+            if (g_HA_EEPROM_Version <= 4)   // Older ASL110 firmware?
+            {
+                HA_Msg[0] = 0x04;     // msg length
+                HA_Msg[2] = GUI_Msg.SendDriveOffset.m_CenterPad_DriveOffset;
+            }
+            else
+            {
+                HA_Msg[0] = 0x06;     // msg length
+                HA_Msg[2] = GUI_Msg.SendDriveOffset.m_CenterPad_DriveOffset;
+                HA_Msg[3] = GUI_Msg.SendDriveOffset.m_LeftPad_DriveOffset;
+                HA_Msg[4] = GUI_Msg.SendDriveOffset.m_RightPad_DriveOffset;
+
+            }
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);

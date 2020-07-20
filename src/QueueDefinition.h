@@ -94,7 +94,9 @@ typedef struct GUI_MSG_S
         } SendNeutralDAC_Setting;
         struct
         {   // Used with HHP_HA_DRIVE_OFFSET_SET to send Drive Offset Head Array
-            uint8_t m_DriveOffset;
+            uint8_t m_CenterPad_DriveOffset;
+            uint8_t m_LeftPad_DriveOffset;
+            uint8_t m_RightPad_DriveOffset;
         } SendDriveOffset;
         struct
         {
@@ -120,7 +122,7 @@ extern void SendNeutralDAC_Set (int16_t newDAC_Setting);
 extern void SendSaveParameters (void);
 extern void SendResetParameters (void);
 extern void SendDriveOffsetGet (void);
-extern void SendDriveOffsetSet (uint8_t driveOffset);
+extern void SendDriveOffsetSet (uint8_t CenterPad_driveOffset, uint8_t LeftPad_driveOffset, uint8_t RightPad_driveOffset);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -183,7 +185,9 @@ typedef struct HHP_HA_MSG_S
         } NeutralDAC_Get_Response;
         struct
         {   // Used with HHP_HA_DRIVE_OFFSET_SET to return Drive Offset value from Head Array to HHP
-            uint8_t m_DriveOffset;
+            uint8_t m_CenterPad_DriveOffset;
+            uint8_t m_LeftPad_DriveOffset;
+            uint8_t m_RightPad_DriveOffset;
         } DriveOffset_Get_Response;
         struct
         {
@@ -197,7 +201,7 @@ extern void SendPadGetResponse (PHYSICAL_PAD_ENUM physicalPad, PAD_DIRECTION_ENU
 extern void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t buildVersion, uint8_t eeprom);
 extern void SendCalDataResponse (PHYSICAL_PAD_ENUM physicalPad, uint16_t minADC, uint16_t maxADC, uint16_t minThreshold, uint16_t maxThreshold);
 extern void SendFeatureGet (uint8_t featureSet, uint8_t timeout);
-extern void SendDriveOffsetGetResponse (uint8_t);
+extern void SendDriveOffsetGetResponse (uint8_t, uint8_t, uint8_t);
 
 // Helper functions
 extern PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad);
