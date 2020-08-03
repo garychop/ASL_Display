@@ -125,7 +125,7 @@ struct PadInfoStruct
 // Global Variables.
 //-------------------------------------------------------------------------
 
-GX_CHAR ASL165_DispalyVersionString[32] = "ASL165: 1.8.0 [A]";
+GX_CHAR ASL165_DispalyVersionString[32] = "See in code below";
 GX_CHAR g_HeadArrayVersionString[20] = "";
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
@@ -1373,47 +1373,41 @@ void IncrementMinimumSpeed (uint8_t *minSpeed)
 // Description: This dispatches the Pad Option Settings Screen messages
 //
 //*************************************************************************************
-VOID MinimumDriveScreen_DrawFunction (GX_WINDOW *window)
-{
-    if (g_HA_EEPROM_Version >= 5)       // Firmware version 5 uses 3 drive offset values.
-    {
-        // Display the values in the 3 buttons
-        ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
-        gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
-        ConvertMinimumValue (g_PadSettings[LEFT_PAD].m_MinimumDriveValue, g_PadSettings[LEFT_PAD].m_MinimuDriveString);
-        gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_LeftPadPercentage_Button, g_PadSettings[LEFT_PAD].m_MinimuDriveString);
-        ConvertMinimumValue (g_PadSettings[RIGHT_PAD].m_MinimumDriveValue, g_PadSettings[RIGHT_PAD].m_MinimuDriveString);
-        gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_RightPadPercentage_Button, g_PadSettings[RIGHT_PAD].m_MinimuDriveString);
-    }
-    else    // Old school, Only one value is shown since the ASL110 firmware supports only one Minimum Drive value.
-    {
-        gx_widget_hide (&MinimumDriveScreen.MinimumDriveScreen_RightPadPercentage_Button);  // Hide the right pad button
-        gx_widget_hide (&MinimumDriveScreen.MinimumDriveScreen_LeftPadPercentage_Button);   // Hide the Left pad button
-        gx_widget_hide (&MinimumDriveScreen.MinimumDriveScreen_Prompt_ForEachPad);          // Hide the "FOR EACH PAD" prompt
-        // Move the "SET MINIMUM DRIVE SPEED" prompt down for better appearance.
-        MinimumDriveScreen.MinimumDriveScreen_Prompt_SetMinimumSpeed.gx_widget_size.gx_rectangle_top = 12;
-        MinimumDriveScreen.MinimumDriveScreen_Prompt_SetMinimumSpeed.gx_widget_size.gx_rectangle_bottom = 44;   // Height + top: 32 + 12
-        // Move the Center Pad button to the middle, upper part of the screen.
-        MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_left = 116;
-        MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_right = 116 + 80; // left + width
-        MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_top = 55;
-        MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_bottom = 55 + 64; // top + height
-        // Show the value in the button.
-        ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
-        gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
-    }
-
-    gx_window_draw(window);
-}
-
 UINT MinimumDriveScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
     bool needNewValue = false;
 
     switch (event_ptr->gx_event_type)
     {
-//        case GX_EVENT_SHOW:   // The SHOW doesn't allow the screen to updated with the returned Head Array value.... DRAW does... see above.
-//            break;
+        case GX_EVENT_SHOW:   // The SHOW doesn't allow the screen to updated with the returned Head Array value.... DRAW does... see above.
+            if (g_HA_EEPROM_Version >= 5)       // Firmware version 5 uses 3 drive offset values.
+            {
+                // Display the values in the 3 buttons
+                ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+                gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+                ConvertMinimumValue (g_PadSettings[LEFT_PAD].m_MinimumDriveValue, g_PadSettings[LEFT_PAD].m_MinimuDriveString);
+                gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_LeftPadPercentage_Button, g_PadSettings[LEFT_PAD].m_MinimuDriveString);
+                ConvertMinimumValue (g_PadSettings[RIGHT_PAD].m_MinimumDriveValue, g_PadSettings[RIGHT_PAD].m_MinimuDriveString);
+                gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_RightPadPercentage_Button, g_PadSettings[RIGHT_PAD].m_MinimuDriveString);
+            }
+            else    // Old school, Only one value is shown since the ASL110 firmware supports only one Minimum Drive value.
+            {
+                gx_widget_hide (&MinimumDriveScreen.MinimumDriveScreen_RightPadPercentage_Button);  // Hide the right pad button
+                gx_widget_hide (&MinimumDriveScreen.MinimumDriveScreen_LeftPadPercentage_Button);   // Hide the Left pad button
+                gx_widget_hide (&MinimumDriveScreen.MinimumDriveScreen_Prompt_ForEachPad);          // Hide the "FOR EACH PAD" prompt
+                // Move the "SET MINIMUM DRIVE SPEED" prompt down for better appearance.
+                MinimumDriveScreen.MinimumDriveScreen_Prompt_SetMinimumSpeed.gx_widget_size.gx_rectangle_top = 12;
+                MinimumDriveScreen.MinimumDriveScreen_Prompt_SetMinimumSpeed.gx_widget_size.gx_rectangle_bottom = 44;   // Height + top: 32 + 12
+                // Move the Center Pad button to the middle, upper part of the screen.
+                MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_left = 116;
+                MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_right = 116 + 80; // left + width
+                MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_top = 55;
+                MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button.gx_widget_size.gx_rectangle_bottom = 55 + 64; // top + height
+                // Show the value in the button.
+                ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+                gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_CenterPadPercentage_Button, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+            }
+            break;
 
         case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);

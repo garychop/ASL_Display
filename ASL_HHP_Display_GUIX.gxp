@@ -5,7 +5,7 @@
 <project_version>55</project_version>
 <guix_version>50400</guix_version>
 <studio_version>5040209</studio_version>
-<project_name>ASL_HHP_Display_GUIX</project_name>
+<project_name>asl_hhp_display_guix</project_name>
 <source_path>.\src</source_path>
 <header_path>.\src</header_path>
 <resource_path>.\src</resource_path>
@@ -4205,7 +4205,6 @@
 <selected_fill_color>WINDOW_FILL</selected_fill_color>
 <disabled_fill_color>DISABLED_FILL</disabled_fill_color>
 <event_handler>MinimumDriveScreen_event_process</event_handler>
-<draw_func>MinimumDriveScreen_DrawFunction</draw_func>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
 <wallpaper>NEWBACKGROUND_FLATTEN_1</wallpaper>

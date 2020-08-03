@@ -6,14 +6,14 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 20. 7.2020   Time (hh:mm): 10:12                        */
+/*  Date (dd.mm.yyyy):  3. 8.2020   Time (hh:mm): 11:25                        */
 /*******************************************************************************/
 
 
 #define GUIX_STUDIO_GENERATED_FILE
 #include <stddef.h>
-#include "ASL_HHP_Display_GUIX_resources.h"
-#include "ASL_HHP_Display_GUIX_specifications.h"
+#include "asl_hhp_display_guix_resources.h"
+#include "asl_hhp_display_guix_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
 FEATURESETTINGSSCREEN_CONTROL_BLOCK FeatureSettingsScreen;
@@ -1007,7 +1007,7 @@ GX_CONST GX_STUDIO_WIDGET MinimumDriveScreen_define =
     GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
     GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
     gx_studio_window_create,                 /* create function                */
-    (VOID (*)(GX_WIDGET *)) MinimumDriveScreen_DrawFunction, /* drawing function override */
+    GX_NULL,                                 /* drawing function override      */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) MinimumDriveScreen_event_process, /* event function override */
     {0, 0, 319, 255},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
@@ -4766,7 +4766,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_define =
     0,                                       /* control block                  */
     (void *) &MainUserScreen_properties      /* extended properties            */
 };
-GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
+GX_CONST GX_STUDIO_WIDGET_ENTRY asl_hhp_display_guix_widget_table[] =
 {
     { &FeatureSettingsScreen_define, (GX_WIDGET *) &FeatureSettingsScreen },
     { &PerformanceSelectionScreen_define, (GX_WIDGET *) &PerformanceSelectionScreen },
@@ -4883,7 +4883,7 @@ GX_WIDGET *gx_studio_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *
 UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **new_widget)
 {
     UINT status = GX_FAILURE;
-    GX_CONST GX_STUDIO_WIDGET_ENTRY *entry = ASL_HHP_Display_GUIX_widget_table;
+    GX_CONST GX_STUDIO_WIDGET_ENTRY *entry = asl_hhp_display_guix_widget_table;
     GX_WIDGET *widget = GX_NULL;
 
     while(entry->widget_information)
@@ -4910,7 +4910,7 @@ UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **ne
 extern GX_CONST GX_THEME *main_display_theme_table[];
 extern GX_CONST GX_CHAR **main_display_language_table[];
 
-GX_STUDIO_DISPLAY_INFO ASL_HHP_Display_GUIX_display_table[1] =
+GX_STUDIO_DISPLAY_INFO asl_hhp_display_guix_display_table[1] =
 {
     {
     "main_display",
@@ -4936,7 +4936,7 @@ UINT gx_studio_display_configure(USHORT display, UINT (*driver)(GX_DISPLAY *),
     GX_CONST GX_THEME *theme_ptr;
     GX_RECTANGLE size;
 
-    GX_STUDIO_DISPLAY_INFO *display_info = &ASL_HHP_Display_GUIX_display_table[display];
+    GX_STUDIO_DISPLAY_INFO *display_info = &asl_hhp_display_guix_display_table[display];
 
 
 /* create the requested display                                                */

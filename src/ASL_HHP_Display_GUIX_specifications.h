@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 20. 7.2020   Time (hh:mm): 10:12                        */
+/*  Date (dd.mm.yyyy):  3. 8.2020   Time (hh:mm): 11:25                        */
 /*******************************************************************************/
 
 
@@ -600,7 +600,6 @@ UINT FeatureSettingsScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr)
 UINT PerformanceSelectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT MoreSelectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT MinimumDriveScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
-VOID MinimumDriveScreen_DrawFunction(GX_WINDOW *widget);
 UINT UserSelectionScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT ResetScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT ResetFinishScreen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
