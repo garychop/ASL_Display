@@ -1421,15 +1421,15 @@ UINT MinimumDriveScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             break;
 
         case GX_SIGNAL (LEFT_PAD_PERCENTAGE_BTN_ID, GX_EVENT_CLICKED):
-            IncrementMinimumSpeed (&g_PadSettings[CENTER_PAD].m_MinimumDriveValue);
-            ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+            IncrementMinimumSpeed (&g_PadSettings[LEFT_PAD].m_MinimumDriveValue);
+            ConvertMinimumValue (g_PadSettings[LEFT_PAD].m_MinimumDriveValue, g_PadSettings[LEFT_PAD].m_MinimuDriveString);
             gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_LeftPadPercentage_Button, g_PadSettings[LEFT_PAD].m_MinimuDriveString);
             needNewValue = true;
             break;
 
         case GX_SIGNAL (RIGHT_PAD_PERCENTAGE_BTN_ID, GX_EVENT_CLICKED):
-            IncrementMinimumSpeed (&g_PadSettings[CENTER_PAD].m_MinimumDriveValue);
-            ConvertMinimumValue (g_PadSettings[CENTER_PAD].m_MinimumDriveValue, g_PadSettings[CENTER_PAD].m_MinimuDriveString);
+            IncrementMinimumSpeed (&g_PadSettings[RIGHT_PAD].m_MinimumDriveValue);
+            ConvertMinimumValue (g_PadSettings[RIGHT_PAD].m_MinimumDriveValue, g_PadSettings[RIGHT_PAD].m_MinimuDriveString);
             gx_text_button_text_set (&MinimumDriveScreen.MinimumDriveScreen_RightPadPercentage_Button, g_PadSettings[RIGHT_PAD].m_MinimuDriveString);
             needNewValue = true;
             break;
