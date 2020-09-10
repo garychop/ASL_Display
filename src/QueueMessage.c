@@ -23,6 +23,7 @@
 //****************************************************************************
 
 #include "my_gui_thread.h"
+#include "ASL165_System.h"
 #include "QueueDefinition.h"
 #include "HeadArray_CommunicationThread.h"
 #include "tx_api.h"
@@ -31,7 +32,6 @@
 // External References
 //****************************************************************************
 
-extern uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 
 //****************************************************************************
 // Functions

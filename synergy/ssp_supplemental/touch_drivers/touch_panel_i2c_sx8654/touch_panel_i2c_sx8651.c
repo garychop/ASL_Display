@@ -300,6 +300,7 @@ ssp_err_t SX8651_payload_get (sf_touch_panel_ctrl_t * const p_api_ctrl, sf_touch
     // Process the "DOWN" state. We either change to "MOVE" or "HOLD" based upon the current x/y position.
     else if (p_ctrl->last_payload.event_type == SF_TOUCH_PANEL_EVENT_DOWN)
     {
+        tx_thread_sleep(5);     // This is needed to allow the GUI to process the command.
         err = p_irq_api->wait(p_irq_ctrl, 11);                   // This returns if touching is still occurring.
         if (SSP_SUCCESS != err)                                 // Process the error
         {
@@ -339,12 +340,14 @@ ssp_err_t SX8651_payload_get (sf_touch_panel_ctrl_t * const p_api_ctrl, sf_touch
     {
         while (p_ctrl->last_payload.event_type == SF_TOUCH_PANEL_EVENT_HOLD)
         {
+            tx_thread_sleep(3);     // This is needed to allow the GUI to process the command.
             err = p_irq_api->wait(p_irq_ctrl, 11);                   // This returns if touching is still occurring.
             if (SSP_SUCCESS != err)                                 // Process the error
             {
                 p_ctrl->last_payload.event_type = p_payload->event_type = SF_TOUCH_PANEL_EVENT_UP;
                 p_payload->x = p_ctrl->last_payload.x;  /* SX8651 returns coordinates with the max value if PEN UP event happens. */
                 p_payload->y = p_ctrl->last_payload.y;  /* Use the coordinates obtained at last PEN DOWN and do not save the one got this time. */
+                tx_thread_sleep(10);     // This is needed to allow the GUI to process the command.
                 return SSP_SUCCESS;
             }
             // Gets X/Y coordinate data
@@ -359,11 +362,11 @@ ssp_err_t SX8651_payload_get (sf_touch_panel_ctrl_t * const p_api_ctrl, sf_touch
 
             if ((abs (p_ctrl->last_payload.x - p_payload->x) >= TOUCH_THRESHOLD) || (abs(p_ctrl->last_payload.y - p_payload->y) >= TOUCH_THRESHOLD))
             {
-                p_ctrl->last_payload.event_type = p_payload->event_type = SF_TOUCH_PANEL_EVENT_DOWN;
+                //p_ctrl->last_payload.event_type = p_payload->event_type = SF_TOUCH_PANEL_EVENT_DOWN;
+                p_ctrl->last_payload.event_type = p_payload->event_type = SF_TOUCH_PANEL_EVENT_MOVE;
             }
-            tx_thread_sleep(2);     // This is needed to allow the GUI to process the command.
         } // end while "HOLD"
-        tx_thread_sleep(2);     // This is needed to allow the GUI to process the command.
+        //tx_thread_sleep(2);     // This is needed to allow the GUI to process the command.
         p_ctrl->last_payload.x = p_payload->x;
         p_ctrl->last_payload.y = p_payload->y;
         return err;
@@ -376,12 +379,14 @@ ssp_err_t SX8651_payload_get (sf_touch_panel_ctrl_t * const p_api_ctrl, sf_touch
     {
         while (p_ctrl->last_payload.event_type == SF_TOUCH_PANEL_EVENT_MOVE)
         {
+            tx_thread_sleep(3);     // This is needed to allow the GUI to process the command.
             err = p_irq_api->wait(p_irq_ctrl, 11);                   // This returns if touching is still occurring.
             if (SSP_SUCCESS != err)                                 // Process the error
             {
                 p_ctrl->last_payload.event_type = p_payload->event_type = SF_TOUCH_PANEL_EVENT_UP;
                 p_payload->x = p_ctrl->last_payload.x;  /* SX8651 returns coordinates with the max value if PEN UP event happens. */
                 p_payload->y = p_ctrl->last_payload.y;  /* Use the coordinates obtained at last PEN DOWN and do not save the one got this time. */
+                tx_thread_sleep(10);     // This is needed to allow the GUI to process the command.
                 return SSP_SUCCESS;
             }
             // Gets X/Y coordinate data
@@ -396,13 +401,13 @@ ssp_err_t SX8651_payload_get (sf_touch_panel_ctrl_t * const p_api_ctrl, sf_touch
 
             if ((abs (p_ctrl->last_payload.x - p_payload->x) < TOUCH_THRESHOLD) && (abs(p_ctrl->last_payload.y - p_payload->y) < TOUCH_THRESHOLD))
             {
-                p_payload->event_type = SF_TOUCH_PANEL_EVENT_DOWN;      // We eventually move to HOLD, but the GUI seems to want a MOVE before a HOLD.
+                //p_payload->event_type = SF_TOUCH_PANEL_EVENT_DOWN;      // We eventually move to HOLD, but the GUI seems to want a MOVE before a HOLD.
+                p_payload->event_type = SF_TOUCH_PANEL_EVENT_HOLD;      // We eventually move to HOLD, but the GUI seems to want a MOVE before a HOLD.
             }
             else
             {
                 break;      // Send another "MOVE" to the system
             }
-            tx_thread_sleep(2);     // This is needed to allow the GUI to process the command.
         } // end while "MOVE"
         p_ctrl->last_payload.event_type = p_payload->event_type;
         p_ctrl->last_payload.x = p_payload->x;

@@ -20,6 +20,7 @@
 #include <my_gui_thread_entry.h>
 #include "HeadArray_CommunicationThread.h"
 #include "QueueDefinition.h"
+#include "ASL165_System.h"
 
 //#define FORCE_OK_FOR_GUI_DEBUGGING      // comment this out to run "non-debug" code.
 
@@ -366,53 +367,6 @@ static uint8_t Read_I2C_Package(uint8_t *responseMsg)
         return MSG_INVALID_FORMAT;
 
     return MSG_OK;
-}
-
-//******************************************************************************
-//
-//*******************************************************************************/
-
-uint8_t get_PROP_version(void)
-{
-
-   uint8_t s_dat[3] = {3, 0x34, 0x37};
-   uint16_t wait;
-   ioport_level_t pin_state;
-   uint8_t myVersionData[10];
-
-   g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);  //output_high(I2C_CS_PIN);
-
-    wait = 20; // GC 53000;  //520ms
-    do
-    {    // if I2C_RES_PIN == 0, can not send package
-        g_ioport_on_ioport.pinRead(I2C_RES_PIN, &pin_state);
-        if (--wait < 2)
-        {
-            return 1;    // time out error
-        }
-        R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
-    } while(pin_state == IOPORT_LEVEL_LOW);
-
-    if( Send_I2C_Package(s_dat, 3) )
-        return 1;
-
-    // now wait and check response
-    if(Read_I2C_Package(myVersionData) == MSG_OK)
-    {
-        if(myVersionData[0]!=6)
-            return MSG_INVALID_FORMAT;     // length error
-        if(myVersionData[1]!=0x74)
-            return MSG_INVALID_FORMAT;  //cmd error or setup fail (NACK)
-        if( myVersionData[5] != (uint8_t)(myVersionData[0]+myVersionData[1]+myVersionData[2]+myVersionData[3]+myVersionData[4]) )
-            return MSG_INVALID_FORMAT;     // crc error
-        g_HA_MajorVersion = myVersionData[2];
-        g_HA_MinorVersion = myVersionData[3];
-        g_HA_BuildVersion = myVersionData[4];
-
-        return MSG_OK;
-    }
-
-   return MSG_INVALID_FORMAT;      // error
 }
 
 //******************************************************************************
@@ -947,6 +901,229 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
 
     return msgSent;
 }
+
+//*************************************************************************************
+// Function: Process_Communication_Msgs
+//
+//*************************************************************************************
+
+void ProcessCommunicationMsgs ()
+{
+    GX_EVENT gxe;
+    uint32_t qStatus;
+    HHP_HA_MSG_STRUCT HeadArrayMsg;
+    ULONG numMsgs;
+    PHYSICAL_PAD_ENUM myPad;
+
+    // Is there anything to process, i.e. Is there anything from the Head Array Comm Process?
+    tx_queue_info_get (&q_COMM_to_GUI_Queue, NULL, &numMsgs, NULL, NULL, NULL, NULL);
+    if (numMsgs == 0)
+    {
+        return;
+    }
+
+    // Get message or return if error.
+    qStatus = tx_queue_receive (&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
+    if (qStatus != TX_SUCCESS)
+        return;
+
+    switch (HeadArrayMsg.m_MsgType)
+    {
+        case HHP_HA_HEART_BEAT:
+            if (HeadArrayMsg.HeartBeatMsg.m_HB_OK)
+            {
+                if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
+                {
+                    gxe.gx_event_type = GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED);
+                    gxe.gx_event_sender = GX_ID_NONE;
+                    gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                    gxe.gx_event_display_handle = 0;
+                    gx_system_event_send(&gxe);
+                }
+                else if (g_ActiveScreen->gx_widget_id == MAIN_USER_SCREEN_ID)
+                {
+                    if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x01)   // Bit0 = 1 if Head Array in "Ready", Power On mode.
+                    {
+                        if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x20) == 0x20)// Out of Neutral?
+                        {
+                            gxe.gx_event_type = GX_SIGNAL (HB_OON_ID, GX_EVENT_CLICKED);
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
+                        // This triggers redrawing the main screen if the mode changes.
+                        else if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
+                        {
+                            AdjustActiveFeature ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
+                            SaveSystemStatus (HeadArrayMsg.HeartBeatMsg.m_HA_Status, 0);
+                            gxe.gx_event_type = GX_EVENT_REDRAW;
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
+                    }
+                    else if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x00)// Bit 0 = 0; means Head Array in Power Off, Idle Mode, we are recommending to change screens.
+                    {
+                        gxe.gx_event_type = GX_SIGNAL (POWER_OFF_ID, GX_EVENT_CLICKED);
+                        gxe.gx_event_sender = GX_ID_NONE;
+                        gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                        gxe.gx_event_display_handle = 0;
+                        gx_system_event_send(&gxe);
+                    }
+                }
+                else if (g_ActiveScreen->gx_widget_id == READY_SCREEN_ID)
+                {
+                    if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x01)   // Bit0 = 1 if Head Array in "Ready", Power On mode.
+                    {
+                        gxe.gx_event_type = GX_SIGNAL (POWER_ON_ID, GX_EVENT_CLICKED);
+                        gxe.gx_event_sender = GX_ID_NONE;
+                        gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                        gxe.gx_event_display_handle = 0;
+                        gx_system_event_send(&gxe);
+                    }
+                }
+                else if (g_ActiveScreen->gx_widget_id == OON_SCREEN_ID)
+                {
+                    if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x20) == 0x00)   // We are OK to go... Neutral Test passed.
+                    {
+                        gxe.gx_event_type = GX_SIGNAL (OON_OK_BTN_ID, GX_EVENT_CLICKED);
+                        gxe.gx_event_sender = GX_ID_NONE;
+                        gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                        gxe.gx_event_display_handle = 0;
+                        gx_system_event_send(&gxe);
+                    }
+                }
+            }
+            else    // Failed Heart Beat
+            {
+                if (g_ActiveScreen->gx_widget_id == MAIN_USER_SCREEN_ID)
+                {
+                    gxe.gx_event_type = GX_SIGNAL (HB_TIMEOUT_ID, GX_EVENT_CLICKED);
+                    gxe.gx_event_sender = GX_ID_NONE;
+                    gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                    gxe.gx_event_display_handle = 0;
+                    gx_system_event_send(&gxe);
+                }
+            }
+    //            if (HeadArrayMsg.HeartBeatMsg.HB_Count == 25)
+    //            {
+    //                gxe.gx_event_type = GX_EVENT_REDRAW;
+    //                gxe.gx_event_sender = GX_ID_NONE;
+    //                gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+    //                gxe.gx_event_display_handle = 0;
+    //                gx_system_event_send(&gxe);
+    //                g_UseNewPrompt = true;
+    //            }
+
+            break;
+
+        case HHP_HA_PAD_ASSIGMENT_SET:  // Yes, the COMM task is responding with a "set" command.
+            myPad = HeadArrayMsg.PadAssignmentResponseMsg.m_PhysicalPadNumber;
+            if (myPad != INVALID_PAD)
+            {
+                g_PadSettings[myPad].m_PadDirection = HeadArrayMsg.PadAssignmentResponseMsg.m_LogicalDirection;
+                g_PadSettings[myPad].m_PadType = HeadArrayMsg.PadAssignmentResponseMsg.m_PadType;
+            }
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            break;
+
+        case HHP_HA_VERSION_GET:
+            //sprintf (g_HeadArrayVersionString, "ASL110: %d.%d.%d", HeadArrayMsg.Version.m_Major, HeadArrayMsg.Version.m_Minor, HeadArrayMsg.Version.m_Build);
+            g_HA_Version_Major = HeadArrayMsg.Version.m_Major;
+            g_HA_Version_Minor = HeadArrayMsg.Version.m_Minor;
+            g_HA_Version_Build = HeadArrayMsg.Version.m_Build;
+            g_HA_EEPROM_Version = HeadArrayMsg.Version.m_EEPROM_Version;
+
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            break;
+
+        case HHP_HA_PAD_DATA_GET:
+            myPad = HeadArrayMsg.GetDataMsg.m_PadID;        // Get Physical Pad ID
+            if (myPad < INVALID_PAD)
+            {
+                g_PadSettings[myPad].m_Proportional_RawValue = HeadArrayMsg.GetDataMsg.m_RawData;
+                g_PadSettings[myPad].m_Proportional_DriveDemand = HeadArrayMsg.GetDataMsg.m_DriveDemand;
+            }
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            break;
+
+        case HHP_HA_CALIBRATE_RANGE_GET:
+            myPad = HeadArrayMsg.GetDataMsg.m_PadID;        // Get Physical Pad ID
+            if (myPad < INVALID_PAD)
+            {
+                g_PadSettings[myPad].m_Minimum_ADC_Threshold = HeadArrayMsg.CalibrationDataResponse.m_MinADC;
+                g_PadSettings[myPad].m_Maximum_ADC_Threshold = HeadArrayMsg.CalibrationDataResponse.m_MaxADC;
+                g_PadSettings[myPad].m_PadMinimumCalibrationValue = (int16_t) (HeadArrayMsg.CalibrationDataResponse.m_MinThreshold);
+                g_PadSettings[myPad].m_PadMaximumCalibrationValue = (int16_t) (HeadArrayMsg.CalibrationDataResponse.m_MaxThreshold);
+            }
+            break;
+
+        case HHP_HA_FEATURE_GET:
+            g_TimeoutValue = HeadArrayMsg.GetFeatureResponse.m_Timeout;
+            g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x01 ? true : false); // Power On/Off
+            g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x02 ? true : false); // Bluetooth
+            g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x04 ? true : false); // Next Function
+            g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x08 ? true : false); // Next Profile
+            g_ClicksActive = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x10 ? true : false);              // Clicks on/off
+            g_PowerUpInIdle = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x20 ? true : false);              // Clicks on/off
+            //g_MainScreenFeatureInfo[RNET_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x80 ? true : false); // Process RNet
+            g_RNet_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x80 ? true : false); // Process RNet
+            AdjustActiveFeature (g_ActiveFeature);   // This function also store "g_ActiveFeature" if appropriate.
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            break;
+
+        case HHP_HA_NEUTRAL_DAC_GET:
+            g_NeutralDAC_Constant = HeadArrayMsg.NeutralDAC_Get_Response.m_DAC_Constant;
+            g_NeutralDAC_Setting = HeadArrayMsg.NeutralDAC_Get_Response.m_NeutralDAC_Value;
+            g_NeutralDAC_Range= HeadArrayMsg.NeutralDAC_Get_Response.m_Range;
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            g_WaitingForVeerResponse = false;
+            break;
+
+        case HHP_HA_DRIVE_OFFSET_GET:
+            g_PadSettings[CENTER_PAD].m_MinimumDriveValue = HeadArrayMsg.DriveOffset_Get_Response.m_CenterPad_DriveOffset;
+            g_PadSettings[LEFT_PAD].m_MinimumDriveValue = HeadArrayMsg.DriveOffset_Get_Response.m_LeftPad_DriveOffset;
+            g_PadSettings[RIGHT_PAD].m_MinimumDriveValue = HeadArrayMsg.DriveOffset_Get_Response.m_RightPad_DriveOffset;
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            break;
+
+        default:
+            break;
+    } // end switch
+}
+
 
 //******************************************************************************
 // Function: HeadArray_CommunicationThread_entry

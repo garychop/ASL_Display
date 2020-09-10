@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  3. 8.2020   Time (hh:mm): 11:25                        */
+/*  Date (dd.mm.yyyy): 10. 9.2020   Time (hh:mm): 12:00                        */
 /*******************************************************************************/
 
 
@@ -120,24 +120,27 @@
 #define GX_PIXELMAP_ID_PROPCENTERPADACTIVE 31
 #define GX_PIXELMAP_ID_PROPLEFTRIGHTPADACTIVE 32
 #define GX_PIXELMAP_ID_PROPORTIONAL_INDICATOR_ORANGE 33
-#define GX_PIXELMAP_ID_RIGHTWHITEARROW 34
-#define GX_PIXELMAP_ID_RNET_LOGO_30X30 35
-#define GX_PIXELMAP_ID_RNET_LOGO_70X70 36
-#define GX_PIXELMAP_ID_RNET_MENU_30X30 37
-#define GX_PIXELMAP_ID_RNET_SEATING_30X30 38
-#define GX_PIXELMAP_ID_RNET_TOGGLEFR_30X30 39
-#define GX_PIXELMAP_ID_SLIDER_THIN_HORIZONTAL 40
-#define GX_PIXELMAP_ID_SLIDER_THIN_NUB_HORIZONTAL 41
-#define GX_PIXELMAP_ID_SWITCH_ACTIVE 42
-#define GX_PIXELMAP_ID_SWITCH_BG 43
-#define GX_PIXELMAP_ID_SWITCH_DISACTIVE 44
-#define GX_PIXELMAP_ID_TOGGLE_GRAY 45
-#define GX_PIXELMAP_ID_TOGGLE_GREEN 46
-#define GX_PIXELMAP_ID_UPARROW 47
-#define GX_PIXELMAP_ID_UPWHITEARROW 48
-#define GX_PIXELMAP_ID_WARNINGICON 49
-#define GX_PIXELMAP_ID_YELLOWQUESTION 50
-#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 51
+#define GX_PIXELMAP_ID_RADIOBUTTON_OFF 34
+#define GX_PIXELMAP_ID_RADIOBUTTON_ON 35
+#define GX_PIXELMAP_ID_RIGHTWHITEARROW 36
+#define GX_PIXELMAP_ID_RNET_LOGO_30X30 37
+#define GX_PIXELMAP_ID_RNET_LOGO_70X70 38
+#define GX_PIXELMAP_ID_RNET_MENU_30X30 39
+#define GX_PIXELMAP_ID_RNET_SEATING_30X30 40
+#define GX_PIXELMAP_ID_RNET_SLEEP_30X30 41
+#define GX_PIXELMAP_ID_RNET_TOGGLEFR_30X30 42
+#define GX_PIXELMAP_ID_SLIDER_THIN_HORIZONTAL 43
+#define GX_PIXELMAP_ID_SLIDER_THIN_NUB_HORIZONTAL 44
+#define GX_PIXELMAP_ID_SWITCH_ACTIVE 45
+#define GX_PIXELMAP_ID_SWITCH_BG 46
+#define GX_PIXELMAP_ID_SWITCH_DISACTIVE 47
+#define GX_PIXELMAP_ID_TOGGLE_GRAY 48
+#define GX_PIXELMAP_ID_TOGGLE_GREEN 49
+#define GX_PIXELMAP_ID_UPARROW 50
+#define GX_PIXELMAP_ID_UPWHITEARROW 51
+#define GX_PIXELMAP_ID_WARNINGICON 52
+#define GX_PIXELMAP_ID_YELLOWQUESTION 53
+#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 54
 
 /* String Ids                                                                  */
 
@@ -220,6 +223,9 @@
 #define GX_STRING_ID_STRING_36 77
 #define GX_STRING_ID_STRING_31 78
 #define GX_STRING_ID_STRING_14 79
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 80
+#define GX_STRING_ID_RNET_SLEEP 80
+#define GX_STRING_ID_STRING_69_2 81
+#define GX_STRING_ID_STRING_66 82
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 83
 
 #endif                                       /* sentry                         */

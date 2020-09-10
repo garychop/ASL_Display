@@ -67,7 +67,6 @@ void Process_Touches (void);
 UINT show_window(GX_WINDOW * p_new, GX_WIDGET * p_widget, bool detach_old);
 
 //ASL-PROP
-uint8_t get_PROP_version(void);
 
 //-------------------------------------------------------------------------
 #endif /* MY_GUI_THREAD_ENTRY_H_ */
