@@ -52,11 +52,13 @@ uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_
 MAIN_SCREEN_FEATURE g_MainScreenFeatureInfo[NUM_FEATURES];
 PAD_INFO g_PadSettings[3];
 
-int g_SettingsChanged;
 bool g_ClicksActive = false;
 bool g_PowerUpInIdle = false;
 bool g_RNet_Active = true;
+bool g_RNet_Sleep_Feature = false;
+MODE_SWITCH_SCHEMA_ENUM g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
 
+int g_SettingsChanged;
 int8_t g_StartupDelayCounter = 0;
 int g_ChangeScreen_WIP;
 
@@ -366,6 +368,8 @@ void AdjustActiveFeature (FEATURE_ID_ENUM newMode)
 
 void SaveSystemStatus (uint8_t status1, uint8_t status2)
 {
+    // status2 = status2;      // Future Use of Center Pad setting.
+
     g_HeadArrayStatus1 = status1;
 }
 
@@ -375,7 +379,7 @@ void SaveSystemStatus (uint8_t status1, uint8_t status2)
 // Description: This handles the User Settings Screen messages
 //
 //*************************************************************************************
-void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures)
+void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures, uint8_t *ActiveFeatures_Byte2)
 {
     uint8_t myMask;
     uint8_t feature;
@@ -414,6 +418,12 @@ void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures)
     if (g_RNet_Active)
         *myActiveFeatures |= 0x80;
 
+    // Now assemble the second byte of features.
+    *ActiveFeatures_Byte2 = 0x0;
+    if (g_RNet_Sleep_Feature)           // Add RNet Sleep feature setting.
+        *ActiveFeatures_Byte2 |= 0x01;
+    if (g_Mode_Switch_Schema == MODE_SWITCH_REVERSE)    // Add Mode Switch schema setting
+        *ActiveFeatures_Byte2 |= 0x02;
 }
 
 //-------------------------------------------------------------------------

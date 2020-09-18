@@ -51,8 +51,8 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 }
                 else if (g_StartupDelayCounter == 10)    // We need to send a Version Request to the Head Array.
                 {
-                    SendFeatureGetCommand();                // Send command to get the current users settings.
                     SendGetVersionCommand ();
+                    SendFeatureGetCommand();                // Send command to get the current users settings.
                 }
             }
             break;

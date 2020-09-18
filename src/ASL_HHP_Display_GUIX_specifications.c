@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 10. 9.2020   Time (hh:mm): 12:00                        */
+/*  Date (dd.mm.yyyy): 14. 9.2020   Time (hh:mm): 16:23                        */
 /*******************************************************************************/
 
 
@@ -528,7 +528,7 @@ GX_CONST GX_STUDIO_WIDGET FeatureSettingsScreen_OLD_BluetoothToggleBtn_define =
     gx_studio_checkbox_create,               /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {148, 66, 207, 105},                     /* widget size                    */
+    {149, 66, 208, 105},                     /* widget size                    */
     &FeatureSettingsScreen_OLD_NextFunctionToggleBtn_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(FEATURESETTINGSSCREEN_OLD_CONTROL_BLOCK, FeatureSettingsScreen_OLD_BluetoothToggleBtn), /* control block */
@@ -3620,6 +3620,70 @@ GX_CHECKBOX_PROPERTIES UserSettingsScreen_RNET_ToggleBtn_properties =
     GX_PIXELMAP_ID_TOGGLE_GRAY,              /* unchecked disabled pixelmap id */
     GX_PIXELMAP_ID_TOGGLE_GREEN              /* checked disabled pixelmap id   */
 };
+GX_PROMPT_PROPERTIES UserSettingsScreen_ModePortSchema_Prompt_properties =
+{
+    GX_STRING_ID_STRING_49,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_CHECKBOX_PROPERTIES UserSettingsScreen_ModeReverse_ToggleBtn_properties =
+{
+    0,                                       /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT,               /* selected text color            */
+    GX_PIXELMAP_ID_TOGGLE_GRAY,              /* unchecked pixelmap id          */
+    GX_PIXELMAP_ID_TOGGLE_GREEN,             /* checked pixelmap id            */
+    GX_PIXELMAP_ID_TOGGLE_GRAY,              /* unchecked disabled pixelmap id */
+    GX_PIXELMAP_ID_TOGGLE_GREEN              /* checked disabled pixelmap id   */
+};
+
+GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_ModeReverse_ToggleBtn_define =
+{
+    "ModeReverse_ToggleBtn",
+    GX_TYPE_CHECKBOX,                        /* widget type                    */
+    MODE_REVERSE_TOGGLE_BTN,                 /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_BUTTON_TOGGLE|GX_STYLE_TEXT_RIGHT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_CHECKBOX),                     /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_checkbox_create,               /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {148, 170, 207, 209},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_ModeReverse_ToggleBtn), /* control block */
+    (void *) &UserSettingsScreen_ModeReverse_ToggleBtn_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_ModePortSchema_Prompt_define =
+{
+    "ModePortSchema_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    MODE_PORT_SCHEMA_PROMPT_ID,              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_RIGHT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {14, 170, 143, 209},                     /* widget size                    */
+    &UserSettingsScreen_ModeReverse_ToggleBtn_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_ModePortSchema_Prompt), /* control block */
+    (void *) &UserSettingsScreen_ModePortSchema_Prompt_properties /* extended properties */
+};
 
 GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_RNET_ToggleBtn_define =
 {
@@ -3638,7 +3702,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_RNET_ToggleBtn_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {148, 118, 207, 157},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &UserSettingsScreen_ModePortSchema_Prompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_RNET_ToggleBtn), /* control block */
     (void *) &UserSettingsScreen_RNET_ToggleBtn_properties /* extended properties */
@@ -3706,7 +3770,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_RNetActive_Prompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {14, 118, 143, 157},                     /* widget size                    */
+    {13, 118, 142, 157},                     /* widget size                    */
     &UserSettingsScreen_ClicksToggleBtn_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_RNetActive_Prompt), /* control block */
@@ -3821,7 +3885,7 @@ GX_CONST GX_STUDIO_WIDGET UserSettingsScreen_Clicks_Prompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {14, 11, 143, 49},                       /* widget size                    */
+    {14, 14, 143, 52},                       /* widget size                    */
     &UserSettingsScreen_OK_Button_define,    /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(USERSETTINGSSCREEN_CONTROL_BLOCK, UserSettingsScreen_Clicks_Prompt), /* control block */

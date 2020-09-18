@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 10. 9.2020   Time (hh:mm): 12:00                        */
+/*  Date (dd.mm.yyyy): 14. 9.2020   Time (hh:mm): 16:23                        */
 /*******************************************************************************/
 
 
@@ -110,36 +110,38 @@ extern   "C" {
 #define CLICKS_TOGGLE_BTN 86
 #define POWER_UP_TOGGLE_BTN 87
 #define RNET_TOGGLE_BTN 88
-#define PAD_TYPE_BTN_ID 89
-#define PAD_DIRECTIONS_BTN_ID 90
-#define MINIMUM_DRIVE_BTN_ID 91
-#define CENTER_PAD_FORWARD_ARROW_BTN_ID 92
-#define LEFT_PAD_LEFT_ARROW_BTN_ID 93
-#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 94
-#define LEFT_PAD_RIGHT_ARROW_BTN_ID 95
-#define LEFT_PAD_FORWARD_ARROW_BTN_ID 96
-#define RIGHT_PAD_LEFT_ARROW_BTN_ID 97
-#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 98
-#define CENTER_PAD_LEFT_ARROW_BTN_ID 99
-#define CENTER_PAD_RIGHT_ARROW_BTN_ID 100
-#define CENTER_PAD_QUESTION_BTN_ID 101
-#define LEFT_PAD_QUESTION_BTN_ID 102
-#define RIGHT_PAD_QUESTION_BTN_ID 103
-#define PAD_SETTINGS_BTN_ID 104
-#define SETTINGS_BTN_ID 105
-#define MORE_BTN_ID 106
-#define MAIN_USER_SCREEN_ID 107
-#define FIRST_ICON 108
-#define FIRST_PROMPT 109
-#define FOURTH_ICON 110
-#define FOURTH_PROMPT 111
-#define SECOND_ICON 112
-#define SECOND_PROMPT 113
-#define THIRD_ICON 114
-#define THIRD_PROMPT 115
-#define BOTH_ARROW_BTN_ID 116
-#define Fifth_ICON 117
-#define FIFTH_PROMPT 118
+#define MODE_PORT_SCHEMA_PROMPT_ID 89
+#define MODE_REVERSE_TOGGLE_BTN 90
+#define PAD_TYPE_BTN_ID 91
+#define PAD_DIRECTIONS_BTN_ID 92
+#define MINIMUM_DRIVE_BTN_ID 93
+#define CENTER_PAD_FORWARD_ARROW_BTN_ID 94
+#define LEFT_PAD_LEFT_ARROW_BTN_ID 95
+#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 96
+#define LEFT_PAD_RIGHT_ARROW_BTN_ID 97
+#define LEFT_PAD_FORWARD_ARROW_BTN_ID 98
+#define RIGHT_PAD_LEFT_ARROW_BTN_ID 99
+#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 100
+#define CENTER_PAD_LEFT_ARROW_BTN_ID 101
+#define CENTER_PAD_RIGHT_ARROW_BTN_ID 102
+#define CENTER_PAD_QUESTION_BTN_ID 103
+#define LEFT_PAD_QUESTION_BTN_ID 104
+#define RIGHT_PAD_QUESTION_BTN_ID 105
+#define PAD_SETTINGS_BTN_ID 106
+#define SETTINGS_BTN_ID 107
+#define MORE_BTN_ID 108
+#define MAIN_USER_SCREEN_ID 109
+#define FIRST_ICON 110
+#define FIRST_PROMPT 111
+#define FOURTH_ICON 112
+#define FOURTH_PROMPT 113
+#define SECOND_ICON 114
+#define SECOND_PROMPT 115
+#define THIRD_ICON 116
+#define THIRD_PROMPT 117
+#define BOTH_ARROW_BTN_ID 118
+#define Fifth_ICON 119
+#define FIFTH_PROMPT 120
 
 
 /* Define animation ids                                                        */
@@ -473,6 +475,8 @@ typedef struct USERSETTINGSSCREEN_CONTROL_BLOCK_STRUCT
     GX_CHECKBOX UserSettingsScreen_ClicksToggleBtn;
     GX_CHECKBOX UserSettingsScreen_PowerUpToggleBtn;
     GX_CHECKBOX UserSettingsScreen_RNET_ToggleBtn;
+    GX_PROMPT UserSettingsScreen_ModePortSchema_Prompt;
+    GX_CHECKBOX UserSettingsScreen_ModeReverse_ToggleBtn;
 } USERSETTINGSSCREEN_CONTROL_BLOCK;
 
 typedef struct PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK_STRUCT

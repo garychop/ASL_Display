@@ -88,6 +88,7 @@ typedef struct GUI_MSG_S
         {
             uint8_t m_FeatureActiveList;
             uint8_t m_Timeout;
+            uint8_t m_FeatureListByte2;
         } SendFeatureActiveList;
         struct
         {   // Used with HHP_HA_NEUTRAL_DAC_SET
@@ -117,7 +118,7 @@ extern void SendGetDataCommand (SEND_DATA_ENUM start, PHYSICAL_PAD_ENUM pad);   
 extern void SendGetCalDataCommnd (PHYSICAL_PAD_ENUM pad);
 extern void SendCalibrationData (PHYSICAL_PAD_ENUM pad, uint16_t min, uint16_t max);
 extern void SendFeatureGetCommand (void);
-extern void SendFeatureSetting (uint8_t myActiveFeatures, uint8_t g_TimeoutValue);
+extern void SendFeatureSetting (uint8_t myActiveFeatures, uint8_t TimeoutValue, uint8_t Features2);
 extern void SendNeutralDAC_GetCommand (void);
 extern void SendNeutralDAC_Set (int16_t newDAC_Setting);
 extern void SendSaveParameters (void);
@@ -177,6 +178,7 @@ typedef struct HHP_HA_MSG_S
         {
             uint8_t m_FeatureSet;
             uint8_t m_Timeout;
+            uint8_t m_FeatureSet2;  // Added in Rev T of HHP Protocol.
         } GetFeatureResponse;
         struct
         {
@@ -201,7 +203,7 @@ typedef struct HHP_HA_MSG_S
 extern void SendPadGetResponse (PHYSICAL_PAD_ENUM physicalPad, PAD_DIRECTION_ENUM direction, PAD_TYPE_ENUM padType);
 extern void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_t buildVersion, uint8_t eeprom);
 extern void SendCalDataResponse (PHYSICAL_PAD_ENUM physicalPad, uint16_t minADC, uint16_t maxADC, uint16_t minThreshold, uint16_t maxThreshold);
-extern void SendFeatureGet (uint8_t featureSet, uint8_t timeout);
+extern void SendFeatureGet (uint8_t featureSet, uint8_t timeout, uint8_t featureSet2);
 extern void SendDriveOffsetGetResponse (uint8_t, uint8_t, uint8_t);
 
 // Helper functions

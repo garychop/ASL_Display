@@ -115,7 +115,7 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 {
 	//UINT myErr = 0;
 	int feature;
-    uint8_t myActiveFeatures;
+    uint8_t myActiveFeatures, activeFeature2;
 	FEATURESETTINGSSCREEN_CONTROL_BLOCK *FeatureWindowPtr = (FEATURESETTINGSSCREEN_CONTROL_BLOCK*) window;
 
 	//GX_EVENT myEvent;
@@ -134,7 +134,7 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 		case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
 			gx_widget_show ((GX_WIDGET*) &FeatureWindowPtr->FeatureSettingsScreen_FeatureList_vertical_scroll);
 			screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
-			UpdateFeatureSettings();
+			UpdateFeatureSettings();    // Update the "ON"/"OFF" button status of the features.
 			// Delete all widgets so each time this screen gets accessed, we must re-establish the list becuase it might change
 			// due to RNet Enabled/Disabled.
 			for (feature = 0; feature < NUM_FEATURES; ++feature)
@@ -161,8 +161,8 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 			//myEvent.gx_event_type = GX_EVENT_DELETE;
 			//myErr = gx_vertical_list_event_process (&FeatureSettingsScreen.FeatureSettingsScreen_FeatureListBox, &myEvent);
 
-	        CreateEnabledFeatureStatus(&myActiveFeatures);
-			SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
+	        CreateEnabledFeatureStatus(&myActiveFeatures, &activeFeature2);
+			SendFeatureSetting (myActiveFeatures, g_TimeoutValue, activeFeature2);
 	        SendFeatureGetCommand();                // Send command to get the current users settings.
 			break;
 
@@ -208,133 +208,6 @@ void CreateFeatureWidgets (GX_VERTICAL_LIST *list)
  	}
 	list->gx_vertical_list_total_rows = activeFeatureCount;
 }
-
-
-#ifdef USIING_ORIGINAL_FEATURE_SCREEN
-
-UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
-{
-	UINT myErr = -1;
-	int feature;
-	int numActive;
-	FEATURESETTINGSSCREEN_CONTROL_BLOCK *FeatureWindowPtr = (FEATURESETTINGSSCREEN_CONTROL_BLOCK*) window;
-
-	switch (event_ptr->gx_event_type)
-	{
-	case GX_EVENT_SHOW:
-		// Show RNet or NEXT FUNCITON and NEXT PROFILE depending on RNet setting.
-		// Adjust the displayed information based upon the RNet setting.
-		// .. If RNet is enabled, the NEXT FUNCTION feature becomes RNet TOGGLE
-		// .. and NEXT PROFILE feature become RNet MENU.
-		if (g_MainScreenFeatureInfo[RNET_ID].m_Enabled)
-		{
-			// Display as "RNet TOGGLE"
-			myErr = gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_Prompt3, GX_STRING_ID_RNET_TOGGLE);
-			// Display as "RNET USER MENU"
-			myErr = gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_Prompt3, GX_STRING_ID_RNET_MENU);
-		}
-		else
-		{
-			// Display as NEXT FUNCTION
-			myErr = gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_Prompt3, GX_STRING_ID_NEXT_FUNCTION);
-			// Display as NEXT PROFILE
-			myErr = gx_prompt_text_id_set (&FeatureSettingsScreen.FeatureSettingsScreen_Prompt3, GX_STRING_ID_NEXT_PROFILE);
-		}
-
-		// Power status
-		if (g_MainScreenFeatureInfo[0].m_Enabled)
-		{
-			gx_button_select ((GX_BUTTON*) &FeatureSettingsScreen.FeatureSettingsScreen_ToggleBtn1);
-		}
-
-		// Bluetooth
-		if (g_MainScreenFeatureInfo[1].m_Enabled)
-		{
-			gx_button_select ((GX_BUTTON*) &FeatureSettingsScreen.FeatureSettingsScreen_ToggleBtn2);
-		}
-
-		// Next Function
-		if (g_MainScreenFeatureInfo[2].m_Enabled)
-		{
-			gx_button_select ((GX_BUTTON*) &FeatureSettingsScreen.FeatureSettingsScreen_ToggleBtn3);
-		}
-
-		// Next Profile
-		if (g_MainScreenFeatureInfo[3].m_Enabled)
-		{
-			gx_button_select ((GX_BUTTON*) &FeatureSettingsScreen.FeatureSettingsScreen_ToggleBtn4);
-		}
-
-		g_SettingsChanged = FALSE;
-
-		break;
-
-	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
-		if (g_SettingsChanged)
-		{
-			numActive = 0;
-			for (feature = 0; feature < 4; ++feature)
-			{
-				if (g_MainScreenFeatureInfo[feature].m_Enabled)
-				{
-					g_MainScreenFeatureInfo[feature].m_Location = numActive;
-					++numActive;
-				}
-			}
-		}
-		break;
-
-	//----------------------------------------------------------------------
-	// Power Button
-	case GX_SIGNAL(TOGGLE_BTN_1, GX_EVENT_TOGGLE_ON):
-		g_MainScreenFeatureInfo[0].m_Enabled = TRUE;
-		g_SettingsChanged = TRUE;
-		break;
-	case GX_SIGNAL(TOGGLE_BTN_1, GX_EVENT_TOGGLE_OFF):
-		g_MainScreenFeatureInfo[0].m_Enabled = FALSE;
-		g_SettingsChanged = TRUE;
-		break;
-
-	//----------------------------------------------------------------------
-	// Bluetooth button
-	case GX_SIGNAL(TOGGLE_BTN_2, GX_EVENT_TOGGLE_ON):
-		g_MainScreenFeatureInfo[1].m_Enabled = TRUE;
-		g_SettingsChanged = TRUE;
-		break;
-	case GX_SIGNAL(TOGGLE_BTN_2, GX_EVENT_TOGGLE_OFF):
-		g_MainScreenFeatureInfo[1].m_Enabled = FALSE;
-		g_SettingsChanged = TRUE;
-		break;
-
-	//----------------------------------------------------------------------
-	// Next Function button
-	case GX_SIGNAL(TOGGLE_BTN_3, GX_EVENT_TOGGLE_ON):
-		g_MainScreenFeatureInfo[2].m_Enabled = TRUE;
-		g_SettingsChanged = TRUE;
-		break;
-	case GX_SIGNAL(TOGGLE_BTN_3, GX_EVENT_TOGGLE_OFF):
-		g_MainScreenFeatureInfo[2].m_Enabled = FALSE;
-		g_SettingsChanged = TRUE;
-		break;
-
-	//----------------------------------------------------------------------
-	// Next Profile Button
-	case GX_SIGNAL(TOGGLE_BTN_4, GX_EVENT_TOGGLE_ON):
-		g_MainScreenFeatureInfo[3].m_Enabled = TRUE;
-		g_SettingsChanged = TRUE;
-		break;
-	case GX_SIGNAL(TOGGLE_BTN_4, GX_EVENT_TOGGLE_OFF):
-		g_MainScreenFeatureInfo[3].m_Enabled = FALSE;
-		g_SettingsChanged = TRUE;
-		break;
-	}
-
-    myErr = gx_window_event_process(window, event_ptr);
-
-	return 0;
-}
-#endif // USIING_ORIGINAL_FEATURE_SCREEN
 
 
 

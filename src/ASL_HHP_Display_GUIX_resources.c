@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 10. 9.2020   Time (hh:mm): 12:00                        */
+/*  Date (dd.mm.yyyy): 14. 9.2020   Time (hh:mm): 16:23                        */
 /*******************************************************************************/
 
 
@@ -35082,10 +35082,11 @@ GX_CONST GX_UBYTE main_display_STRING_14_English[24] = "SET MINIMUM DRIVE SPEED"
 GX_CONST GX_UBYTE main_display_RNET_SLEEP_English[6] = "SLEEP";
 GX_CONST GX_UBYTE main_display_STRING_69_2_English[10] = "MODE PORT";
 GX_CONST GX_UBYTE main_display_STRING_66_English[10] = "USER PORT";
+GX_CONST GX_UBYTE main_display_STRING_49_English[15] = "MODE (Reverse)";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[83] =
+GX_CONST GX_UBYTE *main_display_English_string_table[84] =
 {
     GX_NULL,
     main_display_STRING_15_English,
@@ -35169,7 +35170,8 @@ GX_CONST GX_UBYTE *main_display_English_string_table[83] =
     main_display_STRING_14_English,
     main_display_RNET_SLEEP_English,
     main_display_STRING_69_2_English,
-    main_display_STRING_66_English
+    main_display_STRING_66_English,
+    main_display_STRING_49_English
 
 };
 

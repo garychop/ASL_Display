@@ -45,9 +45,9 @@ UINT HHP_Start_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         SendGetCalDataCommnd (RIGHT_PAD);
         SendGetCalDataCommnd (CENTER_PAD);
         SendNeutralDAC_GetCommand();            // We'll need the Neutral DAC "calibration" value.
-        SendFeatureGetCommand();                // Send command to get the current users settings.
         SendDriveOffsetGet();                   // Send command to get the Drive Offset.
-        SendGetVersionCommand ();
+        //SendGetVersionCommand ();             // This was sent during startup... No need to get it again.
+        //SendFeatureGetCommand();                // Send command to get the current users settings... Sent during startup... no need to do this again.
         break;
     } // end switch
 

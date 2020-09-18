@@ -500,12 +500,12 @@ uint8_t GetPadData(void)
     tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
 
     // Determine next pad data to get.
-    if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad.
-    {
-        ++g_ActivePadID;
-        if (g_ActivePadID == INVALID_PAD)
-            g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;  // Roll over beethoven.
-    }
+//    if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad.
+//    {
+//        ++g_ActivePadID;
+//        if (g_ActivePadID == INVALID_PAD)
+//            g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;  // Roll over beethoven.
+//    }
 
     return msgStatus;
 }
@@ -734,11 +734,18 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 HB_Response[0] = HHP_HA_FEATURE_GET;
                 HB_Response[1] = g_ActiveFeatureSet;   // All features enabled plus sound
                 HB_Response[2] = g_TimeoutValue;     // 1.5 seconds.
+                HB_Response[3] = g
             }
 #endif
+            // We are going to determine if the returned message contains the 2nd byte of features.
+            // If not, we are going to set a default.
+            //     if (g_HA_EEPROM_Version >= 6)
+            if (HB_Response[0] <= 5)    // No Feature 2 Byte?
+                HB_Response[3] = 0;     // Force NO features
+
             if (msgStatus == MSG_OK)
             {
-                SendFeatureGet (HB_Response[1], HB_Response[2]);
+                SendFeatureGet (HB_Response[1], HB_Response[2], HB_Response[3]);
             }
             break;
 
@@ -747,6 +754,11 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             HA_Msg[1] = HHP_HA_FEATURE_SET;
             HA_Msg[2] = GUI_Msg.SendFeatureActiveList.m_FeatureActiveList;
             HA_Msg[3] = GUI_Msg.SendFeatureActiveList.m_Timeout;
+            if (g_HA_EEPROM_Version >= 6)
+            {
+                HA_Msg[0] = 0x06;     // msg length
+                HA_Msg[4] = GUI_Msg.SendFeatureActiveList.m_FeatureListByte2;
+            }
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
@@ -785,12 +797,6 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = MSG_OK;
             }
 #endif
-//            HB_Response[1] = (uint8_t) (gDEBUG_NeutralDAC_Constant >> 8);
-//            HB_Response[2] = (uint8_t) (gDEBUG_NeutralDAC_Constant & 0xff);
-//            HB_Response[3] = (uint8_t) (gDEBUG_NeutralDAC_Value >> 8);
-//            HB_Response[4] = (uint8_t) (gDEBUG_NeutralDAC_Value & 0xff);
-//            HB_Response[5] = (uint8_t) (gDEBUG_RangeValue >> 8);
-//            HB_Response[6] = (uint8_t) (gDEBUG_RangeValue & 0xff);
 
             if (msgStatus == MSG_OK)
             {
@@ -932,6 +938,7 @@ void ProcessCommunicationMsgs ()
         case HHP_HA_HEART_BEAT:
             if (HeadArrayMsg.HeartBeatMsg.m_HB_OK)
             {
+                SaveSystemStatus (HeadArrayMsg.HeartBeatMsg.m_HA_Status, 0);
                 if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
                 {
                     gxe.gx_event_type = GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED);
@@ -956,7 +963,6 @@ void ProcessCommunicationMsgs ()
                         else if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
                         {
                             AdjustActiveFeature ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
-                            SaveSystemStatus (HeadArrayMsg.HeartBeatMsg.m_HA_Status, 0);
                             gxe.gx_event_type = GX_EVENT_REDRAW;
                             gxe.gx_event_sender = GX_ID_NONE;
                             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
@@ -1085,6 +1091,17 @@ void ProcessCommunicationMsgs ()
             g_PowerUpInIdle = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x20 ? true : false);              // Clicks on/off
             //g_MainScreenFeatureInfo[RNET_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x80 ? true : false); // Process RNet
             g_RNet_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x80 ? true : false); // Process RNet
+            // Process the second feature byte... if available from the Head Array
+            if (g_HA_EEPROM_Version >= 6)
+            {
+                g_RNet_Sleep_Feature = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & 0x01 ? true : false);
+                g_Mode_Switch_Schema = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & 0x02 ? MODE_SWITCH_REVERSE : MODE_SWITCH_PIN5);
+            }
+            else
+            {
+                g_RNet_Sleep_Feature = false;
+                g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
+            }
             AdjustActiveFeature (g_ActiveFeature);   // This function also store "g_ActiveFeature" if appropriate.
             // Redraw the current window.
             gxe.gx_event_type = GX_EVENT_REDRAW;
@@ -1147,6 +1164,7 @@ void HeadArray_CommunicationThread_entry(void)
 
     while (1)
     {
+        msgSent = false;
         // Process requests from the GUI.
         tx_queue_info_get (&g_GUI_to_COMM_queue, NULL, &numMsgs, NULL, NULL, NULL, NULL);
         if (numMsgs)
@@ -1154,18 +1172,27 @@ void HeadArray_CommunicationThread_entry(void)
             tx_queue_receive (&g_GUI_to_COMM_queue, &GUI_Msg, TX_NO_WAIT);
             msgSent = Process_GUI_Messages (GUI_Msg);
         }
-        else // We got messages from the GUI to process.
+        else // We have no messages from the GUI to process.
         {
             if (g_GetDataActive)    // Are we expected to continuously get PAD data from the Head Array?
             {
-                msgSent = GetPadData();
-            }
-            else
-            {
-                msgSent = false;
+                // Determine next pad data to get.
+                if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad.
+                {
+                    if (g_ActivePadID == INVALID_PAD)
+                    {
+                        g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;  // Roll over beethoven.
+                    }
+                    else
+                    {
+                        msgSent = GetPadData();
+                        ++g_ActivePadID;        // choose the next pad.
+                    }
+                }
             }
         }
 
+        // If we got no messages from the GUI and we are NOT doing diagnostics, then do a HeartBeat message.
         if (msgSent == false)
             ExecuteHeartBeat();
 

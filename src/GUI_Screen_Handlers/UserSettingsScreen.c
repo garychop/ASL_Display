@@ -21,28 +21,26 @@ char g_TimeoutValueString[8] = "OFF";
 
 UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
-    uint8_t myActiveFeatures;
+    uint8_t myActiveFeatures, activeFeature2;
     char tmpChar[8];
 
     switch (event_ptr->gx_event_type)
     {
     case GX_EVENT_SHOW:
         if (g_ClicksActive)
-        {
             gx_button_select ((GX_BUTTON*) &UserSettingsScreen.UserSettingsScreen_ClicksToggleBtn);
-        }
 
         // Power Up in Idle
         if (g_PowerUpInIdle)    // If powering up in idle state is enable
-        {
             gx_button_select ((GX_BUTTON*) &UserSettingsScreen.UserSettingsScreen_PowerUpToggleBtn);
-        }
 
         // RNet Enabled setting
         if (g_RNet_Active)
-        {
             gx_button_select ((GX_BUTTON*) &UserSettingsScreen.UserSettingsScreen_RNET_ToggleBtn);
-        }
+
+        // Mode switch schema. Either PIN5 operation or Toggle F/R.
+        if (g_Mode_Switch_Schema == MODE_SWITCH_REVERSE)
+            gx_button_select ((GX_BUTTON*) &UserSettingsScreen.UserSettingsScreen_ModeReverse_ToggleBtn);
 
         // Populate the Timeout button with the current setting or "OFF".
         if (g_TimeoutValue == 0)
@@ -61,8 +59,8 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
-        CreateEnabledFeatureStatus(&myActiveFeatures);
-        SendFeatureSetting (myActiveFeatures, g_TimeoutValue);
+        CreateEnabledFeatureStatus(&myActiveFeatures, &activeFeature2);
+        SendFeatureSetting (myActiveFeatures, g_TimeoutValue, activeFeature2);
         SendFeatureGetCommand();                // Send command to get the current users settings.
         break;
 

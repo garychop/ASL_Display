@@ -360,26 +360,28 @@ void SendFeatureGetCommand (void)
 }
 
 // THis processes the response sending the info from the COMM -> GUI.
-void SendFeatureGet (uint8_t featureSet, uint8_t timeout)
+void SendFeatureGet (uint8_t featureSet, uint8_t timeout, uint8_t featureSet2)
 {
     HHP_HA_MSG_STRUCT HHP_Msg;
 
     HHP_Msg.m_MsgType = HHP_HA_FEATURE_GET;
     HHP_Msg.GetFeatureResponse.m_FeatureSet = featureSet;
     HHP_Msg.GetFeatureResponse.m_Timeout = timeout;
+    HHP_Msg.GetFeatureResponse.m_FeatureSet2 = featureSet2;
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 
 }
 
 // This sends the Feature Active List and the Timeout value to the Head Array via the COMM task.
-void SendFeatureSetting (uint8_t activeFeatures, uint8_t timeoutValue)
+void SendFeatureSetting (uint8_t activeFeatures, uint8_t timeoutValue, uint8_t activeFeatures2)
 {
     GUI_MSG_STRUCT q_Msg;
 
     q_Msg.m_MsgType = HHP_HA_FEATURE_SET;
     q_Msg.SendFeatureActiveList.m_FeatureActiveList = activeFeatures;
     q_Msg.SendFeatureActiveList.m_Timeout = timeoutValue;
+    q_Msg.SendFeatureActiveList.m_FeatureListByte2 = activeFeatures2;
 
     tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
