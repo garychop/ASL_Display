@@ -55,7 +55,6 @@ PAD_INFO g_PadSettings[3];
 bool g_ClicksActive = false;
 bool g_PowerUpInIdle = false;
 bool g_RNet_Active = true;
-bool g_RNet_Sleep_Feature = false;
 MODE_SWITCH_SCHEMA_ENUM g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
 
 int g_SettingsChanged;
@@ -420,7 +419,8 @@ void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures, uint8_t *ActiveFeatur
 
     // Now assemble the second byte of features.
     *ActiveFeatures_Byte2 = 0x0;
-    if (g_RNet_Sleep_Feature)           // Add RNet Sleep feature setting.
+//    if (g_RNet_Sleep_Feature)           // Add RNet Sleep feature setting.
+    if ((g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled) && (g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available))
         *ActiveFeatures_Byte2 |= 0x01;
     if (g_Mode_Switch_Schema == MODE_SWITCH_REVERSE)    // Add Mode Switch schema setting
         *ActiveFeatures_Byte2 |= 0x02;

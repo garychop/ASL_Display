@@ -91,6 +91,15 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         g_RNet_Active = false;
         break;
 
+    //----------------------------------------------------------
+    // MODE (Reverse) toggle button
+    case GX_SIGNAL(MODE_REVERSE_TOGGLE_BTN, GX_EVENT_TOGGLE_ON):
+        g_Mode_Switch_Schema = MODE_SWITCH_REVERSE;
+        break;
+    case GX_SIGNAL(MODE_REVERSE_TOGGLE_BTN, GX_EVENT_TOGGLE_OFF):
+        g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
+        break;
+
     case GX_SIGNAL(TIMEOUT_BTN_ID, GX_EVENT_CLICKED):
         switch (g_TimeoutValue)
         {

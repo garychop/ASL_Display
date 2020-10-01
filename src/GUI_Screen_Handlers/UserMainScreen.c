@@ -11,6 +11,7 @@
 
 #include "ASL165_System.h"
 #include "UserMainScreen.h"
+#include "QueueDefinition.h"
 
 //*************************************************************************************
 // Forward Declarations
@@ -235,7 +236,7 @@ VOID MainUserScreen_draw_function(GX_WINDOW *window)
 UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
 	UINT myErr = GX_SUCCESS;
-	UINT feature;
+	uint8_t feature;
 	int activeCount;
 
 	switch (event_ptr->gx_event_type)
@@ -295,7 +296,7 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 else if (g_MainScreenFeatureInfo[feature].m_Location == 1)
                 {
                     g_MainScreenFeatureInfo[feature].m_Location = 0;
-                    //SendModeChangeCommand (feature);        // Send this to the Head Array
+                    SendModeChangeCommand (feature);        // Send this to the Head Array
                 }
                 else if (g_MainScreenFeatureInfo[feature].m_Location == 2)
                     g_MainScreenFeatureInfo[feature].m_Location = min (1, activeCount-1);
@@ -334,7 +335,7 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 if (g_MainScreenFeatureInfo[feature].m_Location == activeCount)
                 {
                     g_MainScreenFeatureInfo[feature].m_Location = 0;
-                   // SendModeChangeCommand (feature);        // Send this to the Head Array
+                    SendModeChangeCommand (feature);        // Send this to the Head Array
                 }
                 else if (g_MainScreenFeatureInfo[feature].m_Location == 0)
                     g_MainScreenFeatureInfo[feature].m_Location = min (1, activeCount);

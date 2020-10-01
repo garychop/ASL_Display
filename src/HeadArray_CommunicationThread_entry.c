@@ -739,8 +739,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
 #endif
             // We are going to determine if the returned message contains the 2nd byte of features.
             // If not, we are going to set a default.
-            //     if (g_HA_EEPROM_Version >= 6)
-            if (HB_Response[0] <= 5)    // No Feature 2 Byte?
+            if (g_HA_EEPROM_Version < 6)
                 HB_Response[3] = 0;     // Force NO features
 
             if (msgStatus == MSG_OK)
@@ -1094,12 +1093,12 @@ void ProcessCommunicationMsgs ()
             // Process the second feature byte... if available from the Head Array
             if (g_HA_EEPROM_Version >= 6)
             {
-                g_RNet_Sleep_Feature = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & 0x01 ? true : false);
+                g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & 0x01 ? true : false);
                 g_Mode_Switch_Schema = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & 0x02 ? MODE_SWITCH_REVERSE : MODE_SWITCH_PIN5);
             }
             else
             {
-                g_RNet_Sleep_Feature = false;
+                g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = false;
                 g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
             }
             AdjustActiveFeature (g_ActiveFeature);   // This function also store "g_ActiveFeature" if appropriate.

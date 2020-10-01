@@ -103,7 +103,6 @@ extern bool g_PowerUpInIdle;
 extern uint8_t g_TimeoutValue;
 extern bool g_RNet_Active;
 extern MODE_SWITCH_SCHEMA_ENUM g_Mode_Switch_Schema;
-extern bool g_RNet_Sleep_Feature;
 extern FEATURE_ID_ENUM g_ActiveFeature;     // this indicates the active feature.
 extern GX_WIDGET *g_ActiveScreen;
 
