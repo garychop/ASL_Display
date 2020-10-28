@@ -15,6 +15,5 @@ guix_pics/HeadArray_Car002.png
 ASL110_DisplayWiring.JPG
 /.settings/e2studio_project.prefs
 
-
-
-/Release/
+/Release/src/
+/Release/synergy/

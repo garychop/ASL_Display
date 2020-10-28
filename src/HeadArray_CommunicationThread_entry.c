@@ -500,12 +500,12 @@ uint8_t GetPadData(void)
     tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
 
     // Determine next pad data to get.
-//    if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad.
-//    {
-//        ++g_ActivePadID;
-//        if (g_ActivePadID == INVALID_PAD)
-//            g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;  // Roll over beethoven.
-//    }
+    if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad.
+    {
+        ++g_ActivePadID;
+        if (g_ActivePadID == INVALID_PAD)
+            g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;  // Roll over beethoven.
+    }
 
     return msgStatus;
 }
@@ -618,9 +618,9 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             break;
 
         case HHP_HA_PAD_DATA_GET:
-            g_ActivePadID = GUI_Msg.GetDataMsg.m_PadID;          // Start with the Left Pad
+            g_ActivePadID = GUI_Msg.GetDataMsg.m_PadID;     // Start with the Left Pad
             g_GetDataActive = GUI_Msg.GetDataMsg.m_Start;   // non0 = Start getting data, 0 = Stop getting data.
-            if (g_ActivePadID == INVALID_PAD)
+            if (g_ActivePadID == INVALID_PAD)               // If INVALID_PAD, then we are doing diagnostics and we want to get data from all of the pads.
             {
                 g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;
                 g_GetAllPadData = true;
@@ -1176,17 +1176,21 @@ void HeadArray_CommunicationThread_entry(void)
             if (g_GetDataActive)    // Are we expected to continuously get PAD data from the Head Array?
             {
                 // Determine next pad data to get.
-                if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad.
+                if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad, Diagnostics vs Calibration
                 {
-                    if (g_ActivePadID == INVALID_PAD)
+                    if (g_ActivePadID >= INVALID_PAD)
                     {
                         g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;  // Roll over beethoven.
                     }
-                    else
+                    else    // We want to allow the ExecuteHeartBeat() to execute at least onece in a while to get the USER and MODE port switch status.
                     {
                         msgSent = GetPadData();
                         ++g_ActivePadID;        // choose the next pad.
                     }
+                }
+                else
+                {
+                    msgSent = GetPadData();
                 }
             }
         }
