@@ -504,3 +504,24 @@ void SendDriveOffsetGetResponse (uint8_t CenterPad, uint8_t LeftPad, uint8_t Rig
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
+
+//****************************************************************************
+// Function: SendAttendantControl_toHeadArray
+// Description: Function called by GUI Task to send data to the COMM task
+//      The data indicates if the Attendant Screen is active. If so,
+//      data includes speed and direction.
+//****************************************************************************
+
+extern void SendAttendantControl_toHeadArray (uint8_t active, int8_t speed, int8_t direction)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_ATTENDANT_CONTROLS_CMD;
+    q_Msg.SendAttendantControl.m_AttendantActive = active;
+    q_Msg.SendAttendantControl.m_SpeedDemand = speed;
+    q_Msg.SendAttendantControl.m_DirectionDemand = direction;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+

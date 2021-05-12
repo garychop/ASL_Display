@@ -52,6 +52,8 @@ VOID FeatureList_callback(GX_VERTICAL_LIST *list, GX_WIDGET *widget, INT index)
     MAIN_SCREEN_FEATURE *feature = (MAIN_SCREEN_FEATURE *)widget;
     GX_BOOL result;
 
+    childsize.gx_rectangle_bottom = (GX_VALUE)index;      // eliminates unused compiler warning.
+
 	gx_widget_created_test(&feature->m_ItemWidget, &result);
     if (!result)
     {

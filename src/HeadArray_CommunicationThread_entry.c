@@ -58,6 +58,7 @@ uint8_t ExecuteHeartBeat(void);
 uint8_t CalculateChecksum (uint8_t *, uint8_t);
 uint32_t Process_GUI_Messages (GUI_MSG_STRUCT);
 uint8_t GetPadData(void);
+uint8_t SendAttendantData (void);
 
 //******************************************************************************
 // Global Variables
@@ -67,6 +68,10 @@ uint8_t g_HeartBeatCounter = 0;
 uint8_t g_GetAllPadData = false;
 uint8_t g_GetDataActive = 0;
 PHYSICAL_PAD_ENUM g_ActivePadID = INVALID_PAD;
+// The following are used with then Attendant Screen is active.
+uint8_t g_AttendantActive = false;
+int8_t g_AttendantSpeedDemand = 0;
+int8_t g_AttentantDirectionDemand = 0;
 
 //****************************************************************************
 // External References
@@ -511,9 +516,37 @@ uint8_t GetPadData(void)
 }
 
 //******************************************************************************
+// Function: SendAttendantData
+// Description: This function assembles a message to send the Attendant Information
+//       and sends it to the Head Array.
+//******************************************************************************
+
+uint8_t SendAttendantData (void)
+{
+    uint8_t status, cs;
+    uint8_t HA_Msg[16];
+    uint8_t HB_Response[16];
+
+    // Assemble message to send to the Head Array
+    HA_Msg[0] = 0x07;     // msg length
+    HA_Msg[1] = HHP_HA_ATTENDANT_CONTROLS_CMD;
+    HA_Msg[2] = g_AttendantActive;
+    HA_Msg[3] = g_AttendantSpeedDemand;
+    HA_Msg[4] = g_AttentantDirectionDemand;
+    HA_Msg[5] = 0;      // Heartbeat... TODO... change to send incremented value.
+    cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+    HA_Msg[HA_Msg[0]-1] = cs;
+    status = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+    if (status == MSG_OK)
+    {
+        status = Read_I2C_Package(HB_Response);
+    }
+    return status;
+}
+
+//******************************************************************************
 // Function: Process_GUI_Messages
 // Description: This function processes messages sent by the GUI.
-//
 //******************************************************************************
 
 uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
@@ -899,6 +932,19 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             }
             break;
 
+        case HHP_HA_ATTENDANT_CONTROLS_CMD:
+            // This is sent by the GUI when the Attendant changes between inactive and active.
+            // It is also sent when the position of the Speed and Direction changes.
+
+            // We are going to capture this information so we can send it down to the Head Array periodically.
+            g_AttendantActive = GUI_Msg.SendAttendantControl.m_AttendantActive;
+            g_AttendantSpeedDemand = GUI_Msg.SendAttendantControl.m_SpeedDemand;
+            g_AttentantDirectionDemand = GUI_Msg.SendAttendantControl.m_DirectionDemand;
+
+            // Assemble message to send to the Head Array
+            msgStatus = SendAttendantData();
+            break;
+
         default:
             msgSent = false;
             break;
@@ -1173,7 +1219,13 @@ void HeadArray_CommunicationThread_entry(void)
         }
         else // We have no messages from the GUI to process.
         {
-            if (g_GetDataActive)    // Are we expected to continuously get PAD data from the Head Array?
+            if (g_AttendantActive)
+            {
+                // The attendant screen is active and we have not received any new data.
+                // Send the last processed value.
+                msgSent = SendAttendantData();
+            }
+            else if (g_GetDataActive)    // Are we expected to continuously get PAD data from the Head Array?
             {
                 // Determine next pad data to get.
                 if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad, Diagnostics vs Calibration
@@ -1182,7 +1234,7 @@ void HeadArray_CommunicationThread_entry(void)
                     {
                         g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;  // Roll over beethoven.
                     }
-                    else    // We want to allow the ExecuteHeartBeat() to execute at least onece in a while to get the USER and MODE port switch status.
+                    else    // We want to allow the ExecuteHeartBeat() to execute at least once in a while to get the USER and MODE port switch status.
                     {
                         msgSent = GetPadData();
                         ++g_ActivePadID;        // choose the next pad.

@@ -46,7 +46,10 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_SAVE_PARAMETERS_CMD = 0x3e,
     HHP_HA_RESET_PARAMETERS_CMD = 0x3f,
     HHP_HA_DRIVE_OFFSET_GET = 0x40,
-    HHP_HA_DRIVE_OFFSET_SET = 0x41
+    HHP_HA_DRIVE_OFFSET_SET = 0x41,
+    HHP_HA_ATTENDANT_SETTINGS_GET = 0x42,
+    HHP_HA_ATTENDANT_SETTINGS_SET = 0x43,
+    HHP_HA_ATTENDANT_CONTROLS_CMD = 0x44
 } HHP_HA_MESSAGES_ENUM;
 
 // This structure is used to send messages from the GUI to the Head Array Communication Task
@@ -101,6 +104,12 @@ typedef struct GUI_MSG_S
             uint8_t m_RightPad_DriveOffset;
         } SendDriveOffset;
         struct
+        { // used with HHP_HA_ATTENDANT_CONTROLS_CMD from GUI to COMM
+            uint8_t m_AttendantActive;  // 0 = Inactive, 1 = active
+            int8_t m_SpeedDemand;
+            int8_t m_DirectionDemand;
+        } SendAttendantControl;
+        struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
@@ -125,6 +134,7 @@ extern void SendSaveParameters (void);
 extern void SendResetParameters (void);
 extern void SendDriveOffsetGet (void);
 extern void SendDriveOffsetSet (uint8_t CenterPad_driveOffset, uint8_t LeftPad_driveOffset, uint8_t RightPad_driveOffset);
+extern void SendAttendantControl_toHeadArray (uint8_t active, int8_t speed, int8_t direction);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S

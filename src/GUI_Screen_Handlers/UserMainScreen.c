@@ -352,6 +352,10 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         DisplayMainScreenActiveFeatures();
         break;
 
+    case GX_SIGNAL (ATTENDANT_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&AttendantScreen, window);
+        break;
+
     case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
         g_ChangeScreen_WIP = true;

@@ -242,6 +242,7 @@ void my_gui_thread_entry(void)
     /* Create the widgets we have defined with the GUIX data structures and resources. */
     GX_WIDGET * p_first_screen = NULL;
     
+    gx_studio_named_widget_create("AttendantScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("DiagnosticScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);

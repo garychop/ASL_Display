@@ -17,7 +17,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 #include "custom_checkbox.h"
 
-#define ASL165_DispalyVersionString "ASL165: 1.8.2"
+#define ASL165_DispalyVersionString "ASL165: 1.9.0"
 
 
 //#define MAXIMUM_DRIVE_SPEED (40)
