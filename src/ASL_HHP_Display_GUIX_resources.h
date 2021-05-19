@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 11. 5.2021   Time (hh:mm): 17:54                        */
+/*  Date (dd.mm.yyyy): 18. 5.2021   Time (hh:mm): 13:38                        */
 /*******************************************************************************/
 
 
@@ -95,7 +95,7 @@
 #define GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_FLATTEN 6
 #define GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_NOLOGO 7
 #define GX_PIXELMAP_ID_ATTENDANTDRIVING_220X220 8
-#define GX_PIXELMAP_ID_ATTENDANT_80X80 9
+#define GX_PIXELMAP_ID_ATTENDANT_66X66 9
 #define GX_PIXELMAP_ID_BLANK_30X30 10
 #define GX_PIXELMAP_ID_BLUETOOTH_30X30 11
 #define GX_PIXELMAP_ID_BLUETOOTH_70X70 12
@@ -107,7 +107,7 @@
 #define GX_PIXELMAP_ID_FUNCTIONNEXT_30X30 18
 #define GX_PIXELMAP_ID_FUNCTIONNEXT_70X70 19
 #define GX_PIXELMAP_ID_FUSION_LOGO_REDWHITE 20
-#define GX_PIXELMAP_ID_FUSION_LOGO_WBLK_300X104 21
+#define GX_PIXELMAP_ID_GOSIGN_80X80 21
 #define GX_PIXELMAP_ID_HEADARRAY003 22
 #define GX_PIXELMAP_ID_LEFTRIGHTPAD_DIAGNOSTIC_OFF 23
 #define GX_PIXELMAP_ID_LEFTWHITEARROW 24
@@ -134,16 +134,17 @@
 #define GX_PIXELMAP_ID_RNET_TOGGLEFR_30X30 45
 #define GX_PIXELMAP_ID_SLIDER_THIN_HORIZONTAL 46
 #define GX_PIXELMAP_ID_SLIDER_THIN_NUB_HORIZONTAL 47
-#define GX_PIXELMAP_ID_SWITCH_ACTIVE 48
-#define GX_PIXELMAP_ID_SWITCH_BG 49
-#define GX_PIXELMAP_ID_SWITCH_DISACTIVE 50
-#define GX_PIXELMAP_ID_TOGGLE_GRAY 51
-#define GX_PIXELMAP_ID_TOGGLE_GREEN 52
-#define GX_PIXELMAP_ID_UPARROW 53
-#define GX_PIXELMAP_ID_UPWHITEARROW 54
-#define GX_PIXELMAP_ID_WARNINGICON 55
-#define GX_PIXELMAP_ID_YELLOWQUESTION 56
-#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 57
+#define GX_PIXELMAP_ID_STOPSIGN_80X80 48
+#define GX_PIXELMAP_ID_SWITCH_ACTIVE 49
+#define GX_PIXELMAP_ID_SWITCH_BG 50
+#define GX_PIXELMAP_ID_SWITCH_DISACTIVE 51
+#define GX_PIXELMAP_ID_TOGGLE_GRAY 52
+#define GX_PIXELMAP_ID_TOGGLE_GREEN 53
+#define GX_PIXELMAP_ID_UPARROW 54
+#define GX_PIXELMAP_ID_UPWHITEARROW 55
+#define GX_PIXELMAP_ID_WARNINGICON 56
+#define GX_PIXELMAP_ID_YELLOWQUESTION 57
+#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 58
 
 /* String Ids                                                                  */
 
@@ -232,6 +233,11 @@
 #define GX_STRING_ID_STRING_49 83
 #define GX_STRING_ID_STRING_70 84
 #define GX_STRING_ID_STRING_33 85
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 86
+#define GX_STRING_ID_STRING_102 86
+#define GX_STRING_ID_STRING_103 87
+#define GX_STRING_ID_STRING_111 88
+#define GX_STRING_ID_STRING_101 89
+#define GX_STRING_ID_STRING_77_1 90
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 91
 
 #endif                                       /* sentry                         */

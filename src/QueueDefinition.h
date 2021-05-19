@@ -110,6 +110,11 @@ typedef struct GUI_MSG_S
             int8_t m_DirectionDemand;
         } SendAttendantControl;
         struct
+        {   // used with HHP_HA_ATTENDANT_SETTINGS_SET
+            uint8_t m_AttendantSettings;
+            uint8_t m_AttendantTimeout;
+        } SendAttendantSettings;
+        struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
@@ -135,6 +140,8 @@ extern void SendResetParameters (void);
 extern void SendDriveOffsetGet (void);
 extern void SendDriveOffsetSet (uint8_t CenterPad_driveOffset, uint8_t LeftPad_driveOffset, uint8_t RightPad_driveOffset);
 extern void SendAttendantControl_toHeadArray (uint8_t active, int8_t speed, int8_t direction);
+extern void SendAttendantSettingsGet_toHeadArray (void);
+extern void SendAttendantSettingsSet_toHeadArray (uint8_t attendantSettings, uint8_t attendantTimeout);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -203,6 +210,11 @@ typedef struct HHP_HA_MSG_S
             uint8_t m_RightPad_DriveOffset;
         } DriveOffset_Get_Response;
         struct
+        {   // Used with HHP_HA_ATTENDANT_SETTINGS_GET
+            uint8_t m_AttendantSettings;
+            uint8_t m_AttendantTimeout;
+        } AttendantSettings_Get_Response;
+        struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
@@ -215,6 +227,7 @@ extern void SendVersionToGUI (uint8_t majorVersion, uint8_t minorVersion, uint8_
 extern void SendCalDataResponse (PHYSICAL_PAD_ENUM physicalPad, uint16_t minADC, uint16_t maxADC, uint16_t minThreshold, uint16_t maxThreshold);
 extern void SendFeatureGet (uint8_t featureSet, uint8_t timeout, uint8_t featureSet2);
 extern void SendDriveOffsetGetResponse (uint8_t, uint8_t, uint8_t);
+extern void SendAttendantSettingsGet (uint8_t attendantSettings, uint8_t attendantTimeout);
 
 // Helper functions
 extern PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad);

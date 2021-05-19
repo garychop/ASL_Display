@@ -506,6 +506,38 @@ void SendDriveOffsetGetResponse (uint8_t CenterPad, uint8_t LeftPad, uint8_t Rig
 }
 
 //****************************************************************************
+// Function: SendAttendantSettingsGet_toHeadArray
+// Description: Function called by GUI to send Attendant GET Settings
+//      request to Head Array
+//****************************************************************************
+
+void SendAttendantSettingsGet_toHeadArray (void)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_ATTENDANT_SETTINGS_GET;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+
+}
+
+//****************************************************************************
+// Function: SendAttendantSettingsSet_toHeadArray
+// Description: Function called by GUI to send Attendant Settings to Head Array
+//****************************************************************************
+
+void SendAttendantSettingsSet_toHeadArray (uint8_t attendantSettings, uint8_t attendantTimeout)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_ATTENDANT_SETTINGS_SET;
+    q_Msg.SendAttendantSettings.m_AttendantSettings = attendantSettings;
+    q_Msg.SendAttendantSettings.m_AttendantTimeout = attendantTimeout;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+//****************************************************************************
 // Function: SendAttendantControl_toHeadArray
 // Description: Function called by GUI Task to send data to the COMM task
 //      The data indicates if the Attendant Screen is active. If so,

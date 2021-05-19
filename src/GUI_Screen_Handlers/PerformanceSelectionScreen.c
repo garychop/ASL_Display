@@ -29,6 +29,10 @@ UINT PerformanceSelectionScreen_event_process (GX_WINDOW *window, GX_EVENT *even
         case GX_SIGNAL(GOTO_VEER_ADJUST_BTN_ID, GX_EVENT_CLICKED):
             screen_toggle((GX_WINDOW *)&VeerAdjustScreen, window);
             break;
+
+        case GX_SIGNAL(ATTENDANT_SETTING_BTN_ID, GX_EVENT_CLICKED):
+            screen_toggle((GX_WINDOW *)&AttendantSettingsScreen, window);
+            break;
     }
 
     gx_window_event_process(window, event_ptr);

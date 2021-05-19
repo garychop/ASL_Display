@@ -53,6 +53,7 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 {
                     SendGetVersionCommand ();
                     SendFeatureGetCommand();                // Send command to get the current users settings.
+                    SendAttendantSettingsGet_toHeadArray(); // Request Attendant Settings
                 }
             }
             break;

@@ -72,6 +72,10 @@ int16_t g_NeutralDAC_Setting = 2048;
 int16_t g_NeutralDAC_Range = 400;
 bool g_WaitingForVeerResponse = false;
 
+// Added in Version 1.9.x
+uint8_t g_AttendantSettings;    // D0 = 1 = Attendant Active, D1 = 0 = Proportional, D2 = 0 = Override
+uint8_t g_AttendantTimeout;     // 0=127 seconds, 0 = No Timeout
+
 //-------------------------------------------------------------------------
 // Forward declarations.
 //-------------------------------------------------------------------------
@@ -243,6 +247,7 @@ void my_gui_thread_entry(void)
     GX_WIDGET * p_first_screen = NULL;
     
     gx_studio_named_widget_create("AttendantScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("AttendantSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("DiagnosticScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);

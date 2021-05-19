@@ -208,6 +208,15 @@ UINT DisplayMainScreenActiveFeatures ()
         } // end of switch
     } // end of for
 
+    // Show or Hide Attendant Icon
+    if (g_AttendantSettings & 0x01)
+    {
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_Attendant_Button);
+    }
+    else
+    {
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_Attendant_Button);
+    }
     return myErr;
 }
 

@@ -27,7 +27,7 @@
 // Local/Global variables
 //*************************************************************************************
 
-int g_DefaultTrapCounter;
+//int g_DefaultTrapCounter;
 
 //*************************************************************************************
 // Function Name: AttendantScreen_event_process
@@ -37,8 +37,8 @@ int g_DefaultTrapCounter;
 //
 //*************************************************************************************
 
-char gPositionString[16];
-char gDriveDemandString[16];
+//char gPositionString[16];
+//char gDriveDemandString[16];
 
 UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
@@ -53,7 +53,7 @@ UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 	{
 	case GX_EVENT_SHOW:
 		calculateDistance = false;
-		gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, "---");
+//		gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, "---");
 		SendAttendantControl_toHeadArray (true, 0, 0);
 		break;
 
@@ -63,46 +63,36 @@ UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 		break;
 
 	case GX_EVENT_PEN_DOWN:
-		myPoint = event_ptr->gx_event_payload.gx_event_pointdata;
-		sprintf (gPositionString, "%d,%d", myPoint.gx_point_x, myPoint.gx_point_y);
-		gx_prompt_text_set (&AttendantScreen.AttendantScreen_RawPosition_Prompt, gPositionString);
+//		myPoint = event_ptr->gx_event_payload.gx_event_pointdata;
+//		sprintf (gPositionString, "%d,%d", myPoint.gx_point_x, myPoint.gx_point_y);
+//		gx_prompt_text_set (&AttendantScreen.AttendantScreen_RawPosition_Prompt, gPositionString);
 
 		if (event_ptr->gx_event_target->gx_widget_id == ATTENDANT_DRIVER_ID)
 		{
-			//gx_prompt_text_color_set ((GX_PROMPT*)&AttendantScreen.AttendantScreen_RawPosition_Prompt, GX_COLOR_GREEN, GX_COLOR_GREEN, GX_COLOR_GREEN);
 			calculateDistance = true;
 		}
-		//else
-		//{
-		//	gx_prompt_text_color_set ((GX_PROMPT*)&AttendantScreen.AttendantScreen_RawPosition_Prompt, GX_COLOR_YELLOW, GX_COLOR_YELLOW, GX_COLOR_YELLOW);
-		//}
 		break;
 
 	case GX_EVENT_PEN_DRAG:
-		myPoint = event_ptr->gx_event_payload.gx_event_pointdata;
-		sprintf (gPositionString, "%d,%d", myPoint.gx_point_x, myPoint.gx_point_y);
-		gx_prompt_text_set (&AttendantScreen.AttendantScreen_RawPosition_Prompt, gPositionString);
+//		myPoint = event_ptr->gx_event_payload.gx_event_pointdata;
+//		sprintf (gPositionString, "%d,%d", myPoint.gx_point_x, myPoint.gx_point_y);
+//		gx_prompt_text_set (&AttendantScreen.AttendantScreen_RawPosition_Prompt, gPositionString);
 
 		if (event_ptr->gx_event_target->gx_widget_id == ATTENDANT_DRIVER_ID)
 		{
-			//gx_prompt_text_color_set ((GX_PROMPT*)&AttendantScreen.AttendantScreen_RawPosition_Prompt, GX_COLOR_GREEN, GX_COLOR_GREEN, GX_COLOR_GREEN);
 			calculateDistance = true;
 		}
-		//else
-		//{
-		//	gx_prompt_text_color_set ((GX_PROMPT*)&AttendantScreen.AttendantScreen_RawPosition_Prompt, GX_COLOR_YELLOW, GX_COLOR_YELLOW, GX_COLOR_YELLOW);
-		//}
 		break;
 
 	case GX_EVENT_PEN_UP:
         calculateDistance = false;
-        gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, "---");
-        gx_numeric_prompt_value_set (&AttendantScreen.AttendantScreen_Distance_Prompt, 0);
+//        gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, "---");
+//        gx_numeric_prompt_value_set (&AttendantScreen.AttendantScreen_Distance_Prompt, 0);
         SendAttendantControl_toHeadArray (true, 0, 0);
         break;
 
 	default:
-	    ++g_DefaultTrapCounter;
+//	    ++g_DefaultTrapCounter;
 	    break;
 	} // end switch
 
@@ -165,14 +155,14 @@ UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 directionDemand = direction;
             }
 
-			sprintf (gDriveDemandString, "%d,%d", speedDemand, directionDemand);
-			gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, gDriveDemandString);
+//			sprintf (gDriveDemandString, "%d,%d", speedDemand, directionDemand);
+//			gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, gDriveDemandString);
 	        SendAttendantControl_toHeadArray (true, speedDemand, directionDemand);
 		}
 		else	// touch is outside of valid zone
 		{
-			gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, "---");
-			gx_numeric_prompt_value_set (&AttendantScreen.AttendantScreen_Distance_Prompt, 0);
+//			gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, "---");
+//			gx_numeric_prompt_value_set (&AttendantScreen.AttendantScreen_Distance_Prompt, 0);
             SendAttendantControl_toHeadArray (true, speedDemand, directionDemand);
 		}
 	}

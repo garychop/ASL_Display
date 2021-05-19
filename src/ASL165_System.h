@@ -118,6 +118,10 @@ extern bool g_WaitingForVeerResponse;
 extern uint8_t g_HeadArrayStatus1, g_HeadArrayStatus2;
 extern GX_RECTANGLE g_HiddenRectangle;
 
+// Added in Version 1.9.x
+extern uint8_t g_AttendantSettings;    // D0 = 1 = Attendant Active, D1 = 0 = Proportional, D2 = 0 = Override
+extern uint8_t g_AttendantTimeout;     // 0=127 seconds, 0 = No Timeout
+
 //*****************************************************************************
 // EXTERNAL, GLOBALLY available functions
 //*****************************************************************************

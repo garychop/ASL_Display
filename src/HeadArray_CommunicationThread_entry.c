@@ -945,6 +945,51 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             msgStatus = SendAttendantData();
             break;
 
+        case HHP_HA_ATTENDANT_SETTINGS_GET:
+            HA_Msg[1] = HHP_HA_ATTENDANT_SETTINGS_GET;
+            if (g_HA_EEPROM_Version >= 7)   // Older ASL110 firmware?
+            {
+                HA_Msg[0] = 0x03;     // msg length
+                cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+                HA_Msg[HA_Msg[0]-1] = cs;
+                msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+                if (msgStatus == MSG_OK)
+                {
+                    msgStatus = Read_I2C_Package(HB_Response);
+                    if (msgStatus == MSG_OK)
+                    {
+                        g_AttendantSettings = HB_Response[1];
+                        g_AttendantTimeout = HB_Response[2];
+                    }
+                }
+            }
+            else
+            {
+                msgSent = false;
+            }
+            break;
+
+        case HHP_HA_ATTENDANT_SETTINGS_SET:
+            if (g_HA_EEPROM_Version >= 7)   // Older ASL110 firmware?
+            {
+                HA_Msg[0] = 0x05;     // msg length
+                HA_Msg[1] = HHP_HA_ATTENDANT_SETTINGS_SET;
+                HA_Msg[2] = g_AttendantSettings;
+                HA_Msg[3] = g_AttendantTimeout;
+                cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+                HA_Msg[HA_Msg[0]-1] = cs;
+                msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+                if (msgStatus == MSG_OK)
+                {
+                    msgStatus = Read_I2C_Package(HB_Response);
+                }
+            }
+            else
+            {
+                msgSent = false;
+            }
+            break;
+
         default:
             msgSent = false;
             break;
@@ -1180,6 +1225,17 @@ void ProcessCommunicationMsgs ()
             gxe.gx_event_display_handle = 0;
             gx_system_event_send(&gxe);
             break;
+
+//        case HHP_HA_ATTENDANT_SETTINGS_GET:
+//            g_AttendantSettings = HeadArrayMsg.AttendantSettings_Get_Response.m_AttendantSettings;
+//            g_AttendantTimeout = HeadArrayMsg.AttendantSettings_Get_Response.m_AttendantTimeout;
+//            // Don't know if need to redraw this.
+//            gxe.gx_event_type = GX_EVENT_REDRAW;
+//            gxe.gx_event_sender = GX_ID_NONE;
+//            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+//            gxe.gx_event_display_handle = 0;
+//            gx_system_event_send(&gxe);
+//            break;
 
         default:
             break;
