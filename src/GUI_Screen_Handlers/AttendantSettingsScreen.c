@@ -42,7 +42,7 @@ UINT AttendantSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_p
             gx_button_deselect ((GX_BUTTON*) &AttendantSettingsScreen.AttendantSettingsScreen_ActiveToggleBtn, true);
         }
         // D1 = 0 = Proportional
-        if (g_AttendantSettings & 0x02)
+        if ((g_AttendantSettings & 0x02) == 0)
         {
             gx_button_select ((GX_BUTTON*) &AttendantSettingsScreen.AttendantSettingsScreen_ProportionalToggleBtn);
         }
@@ -52,13 +52,13 @@ UINT AttendantSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_p
         }
 
         // Override
-        if (g_AttendantSettings & 0x04)
+        if ((g_AttendantSettings & 0x04) == 0)
         {
-            gx_button_deselect ((GX_BUTTON*) &AttendantSettingsScreen.AttendantSettingsScreen_OverrideToggleBtn, false);
+            gx_button_select ((GX_BUTTON*) &AttendantSettingsScreen.AttendantSettingsScreen_OverrideToggleBtn);
         }
         else
         {
-            gx_button_select ((GX_BUTTON*) &AttendantSettingsScreen.AttendantSettingsScreen_OverrideToggleBtn);
+            gx_button_deselect ((GX_BUTTON*) &AttendantSettingsScreen.AttendantSettingsScreen_OverrideToggleBtn, false);
         }
 
         break;
@@ -73,10 +73,10 @@ UINT AttendantSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_p
 
     // Proportional toggle button processing
     case GX_SIGNAL(PROPORTIONAL_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_ON):
-        g_AttendantSettings |= 2;           // D1 = 1 = Proporiotnal, 0 = Digital
+        g_AttendantSettings &= 0xfd;    // D1 = 1 = Digital
         break;
     case GX_SIGNAL(PROPORTIONAL_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_OFF):
-        g_AttendantSettings &= 0xfd;    // D1 = 0 = Digital
+        g_AttendantSettings |= 2;           // D1 = 0 = Proportional, 1 = Digital
         break;
 
     // Override toggle button processing

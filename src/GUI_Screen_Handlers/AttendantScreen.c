@@ -110,7 +110,7 @@ UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 		if ((myDistance > INNER_CIRCLE_DIAMETER_FLOAT) && (myDistance < 100.0f))
 		{
 			// touch is within valid zone
-			gx_numeric_prompt_value_set (&AttendantScreen.AttendantScreen_Distance_Prompt, (int) myDistance);
+			//gx_numeric_prompt_value_set (&AttendantScreen.AttendantScreen_Distance_Prompt, (int) myDistance);
             // Calculate speed demand
             // First determine if it's in the "dead zone" which is within the inner circle.
             if ((event_ptr->gx_event_payload.gx_event_pointdata.gx_point_x < (120-INNER_CIRCLE_DIAMETER)) || (event_ptr->gx_event_payload.gx_event_pointdata.gx_point_x > (120+INNER_CIRCLE_DIAMETER)))
@@ -122,12 +122,18 @@ UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                     speed *= (100.0f / (100.0f - INNER_CIRCLE_DIAMETER_FLOAT));                     // convert to 0-100
                     if (speed > 75)
                         speed = 100;
+                    // If Digital Option is set, force a full demand
+                    if (g_AttendantSettings & 0x02) // D1 = 1 if Digital
+                        speed = 100;
                 }
                 else                    // Must be reverse
                 {
                     speed += INNER_CIRCLE_DIAMETER; // adjust for inner circle offset
                     speed *= (100.0f / (100.0f - INNER_CIRCLE_DIAMETER_FLOAT));                     // convert to 0-100
                     if (speed < -65)
+                        speed = -100;
+                    // If Digital Option is set, force a full demand
+                    if (g_AttendantSettings & 0x02) // D1 = 1 if Digital
                         speed = -100;
                 }
                 speedDemand = (int) speed;
@@ -144,12 +150,18 @@ UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                     direction *= (100.0f / (100.0f - INNER_CIRCLE_DIAMETER_FLOAT));                     // convert to 0-100
                     if (direction > 40)
                         direction = 100;
+                    // If Digital Option is set, force a full demand
+                    if (g_AttendantSettings & 0x02) // D1 = 1 if Digital
+                        direction = 100;
                 }
                 else                    // Must be left
                 {
                     direction += INNER_CIRCLE_DIAMETER; // adjust for inner circle offset
                     direction *= (100.0f / (100.0f - INNER_CIRCLE_DIAMETER_FLOAT));                     // convert to 0-100
                     if (direction < -40)
+                        direction = -100;
+                    // If Digital Option is set, force a full demand
+                    if (g_AttendantSettings & 0x02) // D1 = 1 if Digital
                         direction = -100;
                 }
                 directionDemand = direction;
