@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 18. 5.2021   Time (hh:mm): 13:38                        */
+/*  Date (dd.mm.yyyy): 28. 5.2021   Time (hh:mm): 11:54                        */
 /*******************************************************************************/
 
 
@@ -397,7 +397,7 @@ GX_CONST GX_STUDIO_WIDGET AttendantSettingsScreen_OverrideToggleBtn_define =
     gx_studio_checkbox_create,               /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {148, 122, 210, 158},                    /* widget size                    */
+    {549, 122, 611, 158},                    /* widget size                    */
     &AttendantSettingsScreen_NextProfileToggleBtn_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(ATTENDANTSETTINGSSCREEN_CONTROL_BLOCK, AttendantSettingsScreen_OverrideToggleBtn), /* control block */
@@ -512,7 +512,7 @@ GX_CONST GX_STUDIO_WIDGET AttendantSettingsScreen_OverridePrompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {8, 122, 147, 161},                      /* widget size                    */
+    {508, 122, 647, 161},                    /* widget size                    */
     &AttendantSettingsScreen_NextProfilePrompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(ATTENDANTSETTINGSSCREEN_CONTROL_BLOCK, AttendantSettingsScreen_OverridePrompt), /* control block */
@@ -632,7 +632,53 @@ GX_PROMPT_PROPERTIES AttendantScreen_SillyName_properties =
 };
 GX_ICON_BUTTON_PROPERTIES AttendantScreen_StopButton_properties =
 {
-    GX_PIXELMAP_ID_STOPSIGN_80X80            /* pixelmap id                    */
+    GX_PIXELMAP_ID_HEADARRAY_88X70           /* pixelmap id                    */
+};
+
+GX_CONST GX_STUDIO_WIDGET AttendantScreen_HA_PowerOn_Button_define =
+{
+    "HA_PowerOn_Button",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    HA_POWERON_BTN_ID,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED,   /* style flags                  */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {340, 0, 419, 23},                       /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ATTENDANTSCREEN_CONTROL_BLOCK, AttendantScreen_HA_PowerOn_Button), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
+};
+
+GX_CONST GX_STUDIO_WIDGET AttendantScreen_HA_PowerOff_Button_define =
+{
+    "HA_PowerOff_Button",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    HA_POWEROFF_BTN_ID,                      /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED,   /* style flags                  */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {340, 0, 419, 23},                       /* widget size                    */
+    &AttendantScreen_HA_PowerOn_Button_define, /* next widget definition       */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ATTENDANTSCREEN_CONTROL_BLOCK, AttendantScreen_HA_PowerOff_Button), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
 };
 
 GX_CONST GX_STUDIO_WIDGET AttendantScreen_StopButton_define =
@@ -651,8 +697,8 @@ GX_CONST GX_STUDIO_WIDGET AttendantScreen_StopButton_define =
     gx_studio_icon_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {232, 9, 311, 88},                       /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    {232, 9, 311, 96},                       /* widget size                    */
+    &AttendantScreen_HA_PowerOff_Button_define, /* next widget definition      */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(ATTENDANTSCREEN_CONTROL_BLOCK, AttendantScreen_StopButton), /* control block */
     (void *) &AttendantScreen_StopButton_properties /* extended properties     */

@@ -69,7 +69,7 @@ uint8_t g_GetAllPadData = false;
 uint8_t g_GetDataActive = 0;
 PHYSICAL_PAD_ENUM g_ActivePadID = INVALID_PAD;
 // The following are used with then Attendant Screen is active.
-uint8_t g_AttendantActive = false;
+uint8_t g_AttendantActive = 0;
 int8_t g_AttendantSpeedDemand = 0;
 int8_t g_AttentantDirectionDemand = 0;
 
@@ -1028,7 +1028,6 @@ void ProcessCommunicationMsgs ()
         case HHP_HA_HEART_BEAT:
             if (HeadArrayMsg.HeartBeatMsg.m_HB_OK)
             {
-                SaveSystemStatus (HeadArrayMsg.HeartBeatMsg.m_HA_Status, 0);
                 if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
                 {
                     gxe.gx_event_type = GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED);
@@ -1091,6 +1090,30 @@ void ProcessCommunicationMsgs ()
                         gx_system_event_send(&gxe);
                     }
                 }
+                else if (g_ActiveScreen->gx_widget_id == ATTENDANT_SCREEN_ID)
+                {
+                    if ((g_HeadArrayStatus1 & 0x01) != (HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01))
+                    {
+                        if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x01)   // Bit0 = 1 if Head Array in "Ready", Power On mode.
+                        {
+                            gxe.gx_event_type = GX_SIGNAL (HA_POWERON_BTN_ID, GX_EVENT_CLICKED);
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
+                        else
+                        {
+                            gxe.gx_event_type = GX_SIGNAL (HA_POWEROFF_BTN_ID, GX_EVENT_CLICKED);
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
+
+                    }
+                }
+                SaveSystemStatus (HeadArrayMsg.HeartBeatMsg.m_HA_Status, 0);
             }
             else    // Failed Heart Beat
             {
@@ -1255,6 +1278,7 @@ void HeadArray_CommunicationThread_entry(void)
     GUI_MSG_STRUCT GUI_Msg;
     uint32_t msgSent;
     ULONG numMsgs;
+    uint8_t msgCounter = 0;
 
 #ifdef FORCE_OK_FOR_GUI_DEBUGGING
     g_HeadArray_Status = 0x00;
@@ -1277,9 +1301,11 @@ void HeadArray_CommunicationThread_entry(void)
         {
             if (g_AttendantActive)
             {
-                // The attendant screen is active and we have not received any new data.
-                // Send the last processed value.
-                msgSent = SendAttendantData();
+                // The attendant screen is active, but we need to send a HB every once in a while.
+                if (++msgCounter < 2)
+                    msgSent = SendAttendantData();
+                else
+                    msgCounter = 0;
             }
             else if (g_GetDataActive)    // Are we expected to continuously get PAD data from the Head Array?
             {

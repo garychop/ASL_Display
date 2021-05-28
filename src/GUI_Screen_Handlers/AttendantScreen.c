@@ -27,7 +27,7 @@
 // Local/Global variables
 //*************************************************************************************
 
-//int g_DefaultTrapCounter;
+uint8_t g_AttendantStatus = 0;  // D0 = 1 = Attendant Active, D1 = 1 if ESTOP active
 
 //*************************************************************************************
 // Function Name: AttendantScreen_event_process
@@ -52,32 +52,49 @@ UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 	switch (event_ptr->gx_event_type)
 	{
 	case GX_EVENT_SHOW:
+	    g_ActiveScreen = (GX_WIDGET*) window;
 		calculateDistance = false;
-//		gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, "---");
-		SendAttendantControl_toHeadArray (true, 0, 0);
+		g_AttendantStatus = 0x01;           // D0 = 1 = Attendant Active
+		SendAttendantControl_toHeadArray (g_AttendantStatus, 0, 0);
 		break;
 
 	case GX_SIGNAL (OK_BTN_ID, GX_EVENT_CLICKED):
-        SendAttendantControl_toHeadArray (false, 0, 0);
+        calculateDistance = false;
+        g_AttendantStatus = 0x0;            // D0 = 0 = Attendant NOT Active
+        gx_icon_button_pixelmap_set (&AttendantScreen.AttendantScreen_StopButton, GX_PIXELMAP_ID_HEADARRAY_88X70);
+        SendAttendantControl_toHeadArray (0, 0, 0);     // Indicate Attendant NOT active and NOT in e-stop.
         screen_toggle((GX_WINDOW *)&MainUserScreen, window);
 		break;
 
-	case GX_EVENT_PEN_DOWN:
-//		myPoint = event_ptr->gx_event_payload.gx_event_pointdata;
-//		sprintf (gPositionString, "%d,%d", myPoint.gx_point_x, myPoint.gx_point_y);
-//		gx_prompt_text_set (&AttendantScreen.AttendantScreen_RawPosition_Prompt, gPositionString);
+	case GX_SIGNAL (HA_POWERON_BTN_ID, GX_EVENT_CLICKED):
+        if (g_AttendantStatus & 2)      // are we in e-stop?
+            gx_icon_button_pixelmap_set (&AttendantScreen.AttendantScreen_StopButton, GX_PIXELMAP_ID_HEADARRAY_DISABLED_88X70);
+        else
+            gx_icon_button_pixelmap_set (&AttendantScreen.AttendantScreen_StopButton, GX_PIXELMAP_ID_HEADARRAY_88X70);
+	    break;
 
-		if (event_ptr->gx_event_target->gx_widget_id == ATTENDANT_DRIVER_ID)
-		{
-			calculateDistance = true;
-		}
+	case GX_SIGNAL (HA_POWEROFF_BTN_ID, GX_EVENT_CLICKED):
+        gx_icon_button_pixelmap_set (&AttendantScreen.AttendantScreen_StopButton, GX_PIXELMAP_ID_HEADARRAY_POWEROFF_88X70);
+	    break;
+
+	case GX_EVENT_PEN_DOWN:
+        calculateDistance = true;
+        if (event_ptr->gx_event_target->gx_widget_id == STOP_BUTTON_ID)
+        {
+            if (g_AttendantStatus & 2)      // are we in e-stop?
+            {
+                g_AttendantStatus &= 0xfd;  // Make D1 = 0 for NOT in e-stop.
+                gx_icon_button_pixelmap_set (&AttendantScreen.AttendantScreen_StopButton, GX_PIXELMAP_ID_HEADARRAY_88X70);
+            }
+            else
+            {
+                g_AttendantStatus |= 0x02;  // Make D1 = 1 for IN e-stop
+                gx_icon_button_pixelmap_set (&AttendantScreen.AttendantScreen_StopButton, GX_PIXELMAP_ID_HEADARRAY_DISABLED_88X70);
+            }
+        }
 		break;
 
 	case GX_EVENT_PEN_DRAG:
-//		myPoint = event_ptr->gx_event_payload.gx_event_pointdata;
-//		sprintf (gPositionString, "%d,%d", myPoint.gx_point_x, myPoint.gx_point_y);
-//		gx_prompt_text_set (&AttendantScreen.AttendantScreen_RawPosition_Prompt, gPositionString);
-
 		if (event_ptr->gx_event_target->gx_widget_id == ATTENDANT_DRIVER_ID)
 		{
 			calculateDistance = true;
@@ -86,13 +103,10 @@ UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
 	case GX_EVENT_PEN_UP:
         calculateDistance = false;
-//        gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, "---");
-//        gx_numeric_prompt_value_set (&AttendantScreen.AttendantScreen_Distance_Prompt, 0);
-        SendAttendantControl_toHeadArray (true, 0, 0);
+        SendAttendantControl_toHeadArray (g_AttendantStatus, 0, 0);
         break;
 
 	default:
-//	    ++g_DefaultTrapCounter;
 	    break;
 	} // end switch
 
@@ -167,22 +181,13 @@ UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 directionDemand = direction;
             }
 
-//			sprintf (gDriveDemandString, "%d,%d", speedDemand, directionDemand);
-//			gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, gDriveDemandString);
-	        SendAttendantControl_toHeadArray (true, speedDemand, directionDemand);
+	        SendAttendantControl_toHeadArray (g_AttendantStatus, speedDemand, directionDemand);
 		}
 		else	// touch is outside of valid zone
 		{
-//			gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, "---");
-//			gx_numeric_prompt_value_set (&AttendantScreen.AttendantScreen_Distance_Prompt, 0);
-            SendAttendantControl_toHeadArray (true, speedDemand, directionDemand);
+            SendAttendantControl_toHeadArray (g_AttendantStatus, speedDemand, directionDemand);
 		}
 	}
-//	else
-//	{
-//        gx_prompt_text_set (&AttendantScreen.AttendantScreen_DriveDemand_Prompt, "---");
-//        gx_numeric_prompt_value_set (&AttendantScreen.AttendantScreen_Distance_Prompt, 0);
-//	}
 
     gx_window_event_process(window, event_ptr);
 
