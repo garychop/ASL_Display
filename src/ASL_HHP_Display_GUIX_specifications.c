@@ -6,16 +6,17 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 28. 5.2021   Time (hh:mm): 11:54                        */
+/*  Date (dd.mm.yyyy):  8.11.2021   Time (hh:mm): 18:06                        */
 /*******************************************************************************/
 
 
 #define GUIX_STUDIO_GENERATED_FILE
 #include <stddef.h>
-#include "ASL_HHP_Display_GUIX_resources.h"
-#include "ASL_HHP_Display_GUIX_specifications.h"
+#include "asl_hhp_display_guix_resources.h"
+#include "asl_hhp_display_guix_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+ERROR_SCREEN_CONTROL_BLOCK Error_Screen;
 ATTENDANTSETTINGSSCREEN_CONTROL_BLOCK AttendantSettingsScreen;
 ATTENDANTSCREEN_CONTROL_BLOCK AttendantScreen;
 FEATURESETTINGSSCREEN_CONTROL_BLOCK FeatureSettingsScreen;
@@ -274,6 +275,228 @@ UINT gx_studio_vertical_scrollbar_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WID
     status = gx_vertical_scrollbar_create(scroll, info->widget_name, parent, appearance, info->style);
     return status;
 }
+GX_WINDOW_PROPERTIES Error_Screen_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY004              /* wallpaper pixelmap id          */
+};
+GX_PROMPT_PROPERTIES Error_Screen_CyclePower_Prompt_properties =
+{
+    GX_STRING_ID_STRING_35,                  /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_ICON_PROPERTIES Error_Screen_icon_properties =
+{
+    GX_PIXELMAP_ID_WARNINGICON,              /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_PROMPT_PROPERTIES Error_Screen_Faulty_Pad_Prompt_properties =
+{
+    GX_STRING_ID_STRING_40,                  /* string id                      */
+    GX_FONT_ID_LARGESIZE,                    /* font id                        */
+    GX_COLOR_ID_YELLOW,                      /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_ICON_PROPERTIES Error_Screen_LeftPadError_Icon_properties =
+{
+    GX_PIXELMAP_ID_LEFTRIGHTPADERROR,        /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES Error_Screen_RightPadError_Icon_properties =
+{
+    GX_PIXELMAP_ID_LEFTRIGHTPADERROR,        /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES Error_Screen_CenterPadError_Icon_properties =
+{
+    GX_PIXELMAP_ID_CENTERPADERROR,           /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+
+GX_CONST GX_STUDIO_WIDGET Error_Screen_CenterPadError_Icon_define =
+{
+    "CenterPadError_Icon",
+    GX_TYPE_ICON,                            /* widget type                    */
+    CENTER_PAD_ERROR_ICON,                   /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {489, 146, 633, 187},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ERROR_SCREEN_CONTROL_BLOCK, Error_Screen_CenterPadError_Icon), /* control block */
+    (void *) &Error_Screen_CenterPadError_Icon_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET Error_Screen_RightPadError_Icon_define =
+{
+    "RightPadError_Icon",
+    GX_TYPE_ICON,                            /* widget type                    */
+    RIGHT_PAD_ERROR_ICON_ID,                 /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {404, 36, 465, 133},                     /* widget size                    */
+    &Error_Screen_CenterPadError_Icon_define, /* next widget definition        */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ERROR_SCREEN_CONTROL_BLOCK, Error_Screen_RightPadError_Icon), /* control block */
+    (void *) &Error_Screen_RightPadError_Icon_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET Error_Screen_LeftPadError_Icon_define =
+{
+    "LeftPadError_Icon",
+    GX_TYPE_ICON,                            /* widget type                    */
+    LEFT_PAD_ERROR_ICON_ID,                  /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {355, 36, 416, 133},                     /* widget size                    */
+    &Error_Screen_RightPadError_Icon_define, /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ERROR_SCREEN_CONTROL_BLOCK, Error_Screen_LeftPadError_Icon), /* control block */
+    (void *) &Error_Screen_LeftPadError_Icon_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET Error_Screen_Faulty_Pad_Prompt_define =
+{
+    "Faulty_Pad_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    FAULTY_PAD_PROMPT_ID,                    /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {72, 6, 253, 38},                        /* widget size                    */
+    &Error_Screen_LeftPadError_Icon_define,  /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ERROR_SCREEN_CONTROL_BLOCK, Error_Screen_Faulty_Pad_Prompt), /* control block */
+    (void *) &Error_Screen_Faulty_Pad_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET Error_Screen_icon_define =
+{
+    "icon",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {126, 59, 195, 120},                     /* widget size                    */
+    &Error_Screen_Faulty_Pad_Prompt_define,  /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ERROR_SCREEN_CONTROL_BLOCK, Error_Screen_icon), /* control block  */
+    (void *) &Error_Screen_icon_properties   /* extended properties            */
+};
+
+GX_CONST GX_STUDIO_WIDGET Error_Screen_ERROR_Button_define =
+{
+    "ERROR_Button",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    PAD_ERROR_ID,                            /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {340, 5, 419, 28},                       /* widget size                    */
+    &Error_Screen_icon_define,               /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ERROR_SCREEN_CONTROL_BLOCK, Error_Screen_ERROR_Button), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
+};
+
+GX_CONST GX_STUDIO_WIDGET Error_Screen_CyclePower_Prompt_define =
+{
+    "CyclePower_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    CYCLE_POWER_PROMPT_ID,                   /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {51, 199, 269, 231},                     /* widget size                    */
+    &Error_Screen_ERROR_Button_define,       /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ERROR_SCREEN_CONTROL_BLOCK, Error_Screen_CyclePower_Prompt), /* control block */
+    (void *) &Error_Screen_CyclePower_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET Error_Screen_define =
+{
+    "Error_Screen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    ERROR_SCREEN_ID,                         /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(ERROR_SCREEN_CONTROL_BLOCK),      /* control block size             */
+    GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    (VOID (*)(GX_WIDGET *)) Error_Screen_draw_function, /* drawing function override */
+    GX_NULL,                                 /* event function override        */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &Error_Screen_CyclePower_Prompt_define,  /* child widget                   */
+    0,                                       /* control block                  */
+    (void *) &Error_Screen_properties        /* extended properties            */
+};
 GX_WINDOW_PROPERTIES AttendantSettingsScreen_properties =
 {
     GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
@@ -5787,8 +6010,9 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_define =
     0,                                       /* control block                  */
     (void *) &MainUserScreen_properties      /* extended properties            */
 };
-GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
+GX_CONST GX_STUDIO_WIDGET_ENTRY asl_hhp_display_guix_widget_table[] =
 {
+    { &Error_Screen_define, (GX_WIDGET *) &Error_Screen },
     { &AttendantSettingsScreen_define, (GX_WIDGET *) &AttendantSettingsScreen },
     { &AttendantScreen_define, (GX_WIDGET *) &AttendantScreen },
     { &FeatureSettingsScreen_define, (GX_WIDGET *) &FeatureSettingsScreen },
@@ -5907,7 +6131,7 @@ GX_WIDGET *gx_studio_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *
 UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **new_widget)
 {
     UINT status = GX_FAILURE;
-    GX_CONST GX_STUDIO_WIDGET_ENTRY *entry = ASL_HHP_Display_GUIX_widget_table;
+    GX_CONST GX_STUDIO_WIDGET_ENTRY *entry = asl_hhp_display_guix_widget_table;
     GX_WIDGET *widget = GX_NULL;
 
     while(entry->widget_information)
@@ -5934,7 +6158,7 @@ UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **ne
 extern GX_CONST GX_THEME *main_display_theme_table[];
 extern GX_CONST GX_CHAR **main_display_language_table[];
 
-GX_STUDIO_DISPLAY_INFO ASL_HHP_Display_GUIX_display_table[1] =
+GX_STUDIO_DISPLAY_INFO asl_hhp_display_guix_display_table[1] =
 {
     {
     "main_display",
@@ -5960,7 +6184,7 @@ UINT gx_studio_display_configure(USHORT display, UINT (*driver)(GX_DISPLAY *),
     GX_CONST GX_THEME *theme_ptr;
     GX_RECTANGLE size;
 
-    GX_STUDIO_DISPLAY_INFO *display_info = &ASL_HHP_Display_GUIX_display_table[display];
+    GX_STUDIO_DISPLAY_INFO *display_info = &asl_hhp_display_guix_display_table[display];
 
 
 /* create the requested display                                                */

@@ -17,7 +17,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 #include "custom_checkbox.h"
 
-#define ASL165_DispalyVersionString "ASL165: 1.10.0"
+#define ASL165_DispalyVersionString "ASL165: 1.11.0"
 
 
 //#define MAXIMUM_DRIVE_SPEED (40)
@@ -50,6 +50,7 @@ typedef enum ENUM_MODE_SWITCH_SCHEMA {MODE_SWITCH_PIN5, MODE_SWITCH_REVERSE} MOD
 typedef enum PHYSICAL_PAD {LEFT_PAD, RIGHT_PAD, CENTER_PAD, INVALID_PAD} PHYSICAL_PAD_ENUM;
 typedef enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, INVALID_DIRECTION} PAD_DIRECTION_ENUM;
 typedef enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE, INVALID_PAD_TYPE} PAD_TYPE_ENUM;
+typedef enum PAD_STATUS {PAD_STATUS_OK = 0, PAD_STATUS_ERROR = 1} PAD_STATUS_ENUM;
 
 typedef struct MAIN_SCREEN_FEATURE_STRUCT
 {
@@ -70,6 +71,7 @@ typedef struct PadInfoStruct
 {
     enum PAD_TYPE m_PadType;
     enum PAD_DIRECTION m_PadDirection;
+    enum PAD_STATUS m_PadStatus;
     uint8_t m_MinimumDriveValue;
     char m_MinimuDriveString[8];
     int16_t m_PadMinimumCalibrationValue;

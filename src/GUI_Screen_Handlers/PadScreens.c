@@ -518,6 +518,7 @@ UINT SetPadTypeScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 //      This function draws the Guage.
 //
 //*************************************************************************************
+char myValStr[16];
 
 VOID CalibrationScreen_draw (GX_WINDOW *window)
 {
@@ -543,8 +544,6 @@ VOID CalibrationScreen_draw (GX_WINDOW *window)
 
     gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 55, -5, 185);   // This draws the outside pad a little bigger to show the minimum better.
     //gx_canvas_pie_draw (GRAPH_CENTER_PT_XPOS, GRAPH_CENTER_PT_YPOS, 55, 0, 180);
-
-    padValue = g_PadSettings[g_CalibrationPadNumber].m_Proportional_RawValue;    // Get the Pad value.
 
     // Draw the Pad pie
     if (g_PadSettings[g_CalibrationPadNumber].m_Proportional_RawValue > 0)             // Anything less than 175-180 is too small of a pie to see; if it's 180 it draws a full circle.

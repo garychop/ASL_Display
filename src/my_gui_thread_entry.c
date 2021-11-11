@@ -114,7 +114,7 @@ void my_gui_thread_entry(void)
 	g_ioport.p_api->pinWrite(beep_out, IOPORT_LEVEL_LOW);
 
 //    gx_system_focus_claim(p_first_screen);
-    R_BSP_SoftwareDelay(250, BSP_DELAY_UNITS_MILLISECONDS);
+	R_BSP_SoftwareDelay(250, BSP_DELAY_UNITS_MILLISECONDS);
 
     /** Open the SPI driver to initialize the LCD **/
     err = g_rspi_lcdc.p_api->open(g_rspi_lcdc.p_ctrl, g_rspi_lcdc.p_cfg);
@@ -137,7 +137,7 @@ void my_gui_thread_entry(void)
         g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
     }
 
-        g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
+    g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
 
 
     // Setup the ILI9341V LCD Driver and Touchscreen.
@@ -174,6 +174,7 @@ void my_gui_thread_entry(void)
     // Populate the default Pad settings.
     g_PadSettings[LEFT_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+    g_PadSettings[LEFT_PAD].m_PadStatus = PAD_STATUS_OK;
     g_PadSettings[LEFT_PAD].m_MinimumDriveValue = 20;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Off_Button;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_RightArrow_Button;
@@ -198,6 +199,7 @@ void my_gui_thread_entry(void)
 
     g_PadSettings[RIGHT_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+    g_PadSettings[RIGHT_PAD].m_PadStatus = PAD_STATUS_OK;
     g_PadSettings[RIGHT_PAD].m_MinimumDriveValue = 20;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Off_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_RightArrow_Button;
@@ -222,6 +224,7 @@ void my_gui_thread_entry(void)
 
     g_PadSettings[CENTER_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
+    g_PadSettings[CENTER_PAD].m_PadStatus = PAD_STATUS_OK;
     g_PadSettings[CENTER_PAD].m_MinimumDriveValue = 20;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Off_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_RightArrow_Button;
@@ -249,6 +252,7 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("AttendantScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("AttendantSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("DiagnosticScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("Error_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("MainUserScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.

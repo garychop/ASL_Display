@@ -1028,6 +1028,11 @@ void ProcessCommunicationMsgs ()
         case HHP_HA_HEART_BEAT:
             if (HeadArrayMsg.HeartBeatMsg.m_HB_OK)
             {
+                // Store the Pad Status
+                g_PadSettings[LEFT_PAD].m_PadStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x04) ? PAD_STATUS_OK : PAD_STATUS_ERROR;
+                g_PadSettings[RIGHT_PAD].m_PadStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x08) ? PAD_STATUS_OK : PAD_STATUS_ERROR;
+                g_PadSettings[CENTER_PAD].m_PadStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x10) ? PAD_STATUS_OK : PAD_STATUS_ERROR;
+
                 if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
                 {
                     gxe.gx_event_type = GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED);
@@ -1043,6 +1048,14 @@ void ProcessCommunicationMsgs ()
                         if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x20) == 0x20)// Out of Neutral?
                         {
                             gxe.gx_event_type = GX_SIGNAL (HB_OON_ID, GX_EVENT_CLICKED);
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
+                        else if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x1c) != 0x1c)
+                        {   // Check if any pad is in error which is 0x04, 0x08 or 0x10, OK when "1"
+                            gxe.gx_event_type = GX_SIGNAL (PAD_ERROR_ID, GX_EVENT_CLICKED);
                             gxe.gx_event_sender = GX_ID_NONE;
                             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
                             gxe.gx_event_display_handle = 0;

@@ -381,6 +381,11 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_SIGNAL (HB_OON_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&OON_Screen, window);
         break;
+
+    case GX_SIGNAL (PAD_ERROR_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&Error_Screen, window);
+        break;
+
 	} // end switch
 
     myErr = gx_window_event_process(window, event_ptr);
