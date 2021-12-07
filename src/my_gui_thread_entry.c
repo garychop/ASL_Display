@@ -108,13 +108,78 @@ void my_gui_thread_entry(void)
 		//debug pins
     g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_HIGH);
     g_ioport.p_api->pinWrite(TEST_PIN, IOPORT_LEVEL_LOW);
-    
-//    g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);
+
+//    g_ioport_on_ioport.pinWrite(I2C_CS_PIN, IOPORT_LEVEL_HIGH);   // Head Array Communication Line. This is not needed.
+
   	g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
 	g_ioport.p_api->pinWrite(beep_out, IOPORT_LEVEL_LOW);
 
-//    gx_system_focus_claim(p_first_screen);
-	R_BSP_SoftwareDelay(250, BSP_DELAY_UNITS_MILLISECONDS);
+    status = gx_system_initialize();
+    if(TX_SUCCESS != status)
+    {
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
+    }
+
+    err = g_sf_el_gx0.p_api->open (g_sf_el_gx0.p_ctrl, g_sf_el_gx0.p_cfg);
+    if(SSP_SUCCESS != err)
+    {
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
+    }
+
+    gx_studio_display_configure ( MAIN_DISPLAY,
+                                  g_sf_el_gx0.p_api->setup,
+                                  LANGUAGE_ENGLISH,
+                                  MAIN_DISPLAY_THEME_1,
+                                  &p_window_root );
+
+    err = g_sf_el_gx0.p_api->canvasInit(g_sf_el_gx0.p_ctrl, p_window_root);
+    if(SSP_SUCCESS != err)
+    {
+        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
+    }
+
+    Initialize_MainScreenInfo();
+
+    /* Create the widgets we have defined with the GUIX data structures and resources. */
+    GX_WIDGET * p_first_screen = NULL;
+
+    gx_studio_named_widget_create("AttendantScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("AttendantSettingsScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("DiagnosticScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("Error_Screen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("MainUserScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
+    gx_studio_named_widget_create("MinimumDriveScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("MoreSelectionScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("PerformanceSelectionScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("OON_Screen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("PadCalibrationScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("PadOptionsSettingsScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ReadyScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
+    gx_studio_named_widget_create("ResetScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ResetFinishScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("SetPadDirectionScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("SetPadTypeScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("UserSettingsScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("UserSelectionScreen", GX_NULL, GX_NULL);
+    //gx_studio_named_widget_create("SettingsScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("VeerAdjustScreen", GX_NULL, GX_NULL);
+
+    gx_studio_named_widget_create("StartupSplashScreen", (GX_WIDGET *)p_window_root, &p_first_screen);    // Create and show first startup screen.
+
+    /* Attach the first screen to the root so we can see it when the root is shown */
+    gx_widget_attach(p_window_root, p_first_screen);
+
+    /* Shows the root window to make it and patients screen visible. */
+    gx_widget_show(p_window_root);
+
+    g_ActiveScreen = (GX_WIDGET*)&StartupSplashScreen;     // Save we can determine who's got control of the screen.
+
+    /* Lets GUIX run. */
+    gx_system_start();
+
+    gx_system_focus_claim(p_first_screen);
 
     /** Open the SPI driver to initialize the LCD **/
     err = g_rspi_lcdc.p_api->open(g_rspi_lcdc.p_ctrl, g_rspi_lcdc.p_cfg);
@@ -139,37 +204,8 @@ void my_gui_thread_entry(void)
 
     g_ioport.p_api->pinWrite(eprm_sel, IOPORT_LEVEL_HIGH);
 
-
     // Setup the ILI9341V LCD Driver and Touchscreen.
     ILI9341V_Init();
-
-    /* Initializes GUIX. */
-    status = gx_system_initialize();
-    if(TX_SUCCESS != status)
-    {
-        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
-    }
-
-    /* Initializes GUIX drivers. */
-    err = g_sf_el_gx0.p_api->open (g_sf_el_gx0.p_ctrl, g_sf_el_gx0.p_cfg);
-    if(SSP_SUCCESS != err)
-    {
-        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
-    }
-
-    gx_studio_display_configure ( MAIN_DISPLAY,
-                                  g_sf_el_gx0.p_api->setup,
-                                  LANGUAGE_ENGLISH,
-                                  MAIN_DISPLAY_THEME_1,
-                                  &p_window_root );
-
-    err = g_sf_el_gx0.p_api->canvasInit(g_sf_el_gx0.p_ctrl, p_window_root);
-    if(SSP_SUCCESS != err)
-    {
-        g_ioport.p_api->pinWrite(GRNLED_PORT, IOPORT_LEVEL_LOW);
-    }
-
-    Initialize_MainScreenInfo();
 
     // Populate the default Pad settings.
     g_PadSettings[LEFT_PAD].m_PadDirection = INVALID_DIRECTION;
@@ -246,46 +282,7 @@ void my_gui_thread_entry(void)
     strcpy (g_PadSettings[CENTER_PAD].m_RawValueString, "");
     strcpy (g_PadSettings[CENTER_PAD].m_DriveDemandString, "");
 
-    /* Create the widgets we have defined with the GUIX data structures and resources. */
-    GX_WIDGET * p_first_screen = NULL;
-    
-    gx_studio_named_widget_create("AttendantScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("AttendantSettingsScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("DiagnosticScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("Error_Screen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("MainUserScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
-    gx_studio_named_widget_create("MinimumDriveScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("MoreSelectionScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("PerformanceSelectionScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("OON_Screen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("PadCalibrationScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("PadOptionsSettingsScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("ReadyScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
-    gx_studio_named_widget_create("ResetScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("ResetFinishScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("SetPadDirectionScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("SetPadTypeScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("UserSettingsScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("UserSelectionScreen", GX_NULL, GX_NULL);
-    //gx_studio_named_widget_create("SettingsScreen", GX_NULL, GX_NULL);
-    gx_studio_named_widget_create("VeerAdjustScreen", GX_NULL, GX_NULL);
-
-    gx_studio_named_widget_create("StartupSplashScreen", (GX_WIDGET *)p_window_root, &p_first_screen);    // Create and show first startup screen.
-
-    /* Attach the first screen to the root so we can see it when the root is shown */
-    gx_widget_attach(p_window_root, p_first_screen);
-
-    /* Shows the root window to make it and patients screen visible. */
-    gx_widget_show(p_window_root);
-
-    g_ActiveScreen = (GX_WIDGET*)&StartupSplashScreen;     // Save we can determine who's got control of the screen.
-
-    /* Lets GUIX run. */
-    gx_system_start();
-
-	g_ioport.p_api->pinWrite(BACKLIGHT_CONTROL_PIN, IOPORT_LEVEL_HIGH);      // Turn off the backlight
+    g_ioport.p_api->pinWrite (BACKLIGHT_CONTROL_PIN, IOPORT_LEVEL_HIGH);      // Turn off the backlight
 
 	err = g_timer0.p_api->open(g_timer0.p_ctrl, g_timer0.p_cfg);
 	if (err != SSP_SUCCESS)
