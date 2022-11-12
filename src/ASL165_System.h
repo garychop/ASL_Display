@@ -17,7 +17,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 #include "custom_checkbox.h"
 
-#define ASL165_DispalyVersionString "ASL165: 1.11.1"
+#define ASL165_DispalyVersionString "ASL165: 1.14.0"
 
 
 //#define MAXIMUM_DRIVE_SPEED (40)
@@ -51,6 +51,14 @@ typedef enum PHYSICAL_PAD {LEFT_PAD, RIGHT_PAD, CENTER_PAD, INVALID_PAD} PHYSICA
 typedef enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, INVALID_DIRECTION} PAD_DIRECTION_ENUM;
 typedef enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE, INVALID_PAD_TYPE} PAD_TYPE_ENUM;
 typedef enum PAD_STATUS {PAD_STATUS_OK = 0, PAD_STATUS_ERROR = 1} PAD_STATUS_ENUM;
+// The positions in the following enum relate the 2 status bits for each pad where:
+// ... D0 = Digital Sensor Active and D1 = Pressure Sensor is active therefore
+// ... 00b = No active sensors,
+// ... 01b = Digital Sensor active only,
+// ... 10b = Pressure Sensor active.
+// ... 11b = Digital and Pressure sensor active.
+typedef enum PAD_STATUS_COLORS_ENUM {PAD_OFF, PAD_GREEN, PAD_WHITE, PAD_ORANGE} PAD_STATUS_COLORS;
+
 
 typedef struct MAIN_SCREEN_FEATURE_STRUCT
 {
@@ -72,6 +80,7 @@ typedef struct PadInfoStruct
     enum PAD_TYPE m_PadType;
     enum PAD_DIRECTION m_PadDirection;
     enum PAD_STATUS m_PadStatus;
+    uint8_t m_PadSensorStatus;
     uint8_t m_MinimumDriveValue;
     char m_MinimuDriveString[8];
     int16_t m_PadMinimumCalibrationValue;

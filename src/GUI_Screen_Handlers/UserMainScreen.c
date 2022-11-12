@@ -13,10 +13,12 @@
 #include "UserMainScreen.h"
 #include "QueueDefinition.h"
 
+
 //*************************************************************************************
 // Forward Declarations
 //*************************************************************************************
 
+void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad);
 UINT DisplayMainScreenActiveFeatures ();
 
 //*************************************************************************************
@@ -87,6 +89,84 @@ VOID Initialize_MainScreenInfo()
 		g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Location = 0;
 	}
 
+}
+
+//*************************************************************************************
+// Displays the Pad Status based upon the passed parameters
+//*************************************************************************************
+void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad)
+{
+    switch (center_pad)
+    {
+    case PAD_OFF:
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
+        break;
+    case PAD_GREEN:
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
+        break;
+    case PAD_ORANGE:
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
+        break;
+    case PAD_WHITE:
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
+        break;
+    }
+
+    switch (left_pad)
+    {
+    case PAD_OFF:
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
+        break;
+    case PAD_GREEN:
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
+        break;
+    case PAD_ORANGE:
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
+        break;
+    case PAD_WHITE:
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
+        break;
+    }
+
+    switch (right_pad)
+    {
+    case PAD_OFF:
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
+        break;
+    case PAD_GREEN:
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
+        break;
+    case PAD_ORANGE:
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
+        break;
+    case PAD_WHITE:
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
+        break;
+    }
 }
 
 //*************************************************************************************
@@ -217,6 +297,10 @@ UINT DisplayMainScreenActiveFeatures ()
     {
         gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_Attendant_Button);
     }
+
+    // Display the Pad Status based upon info from the ASL110 Heartbeat message
+    DisplayPadStatus (g_PadSettings[CENTER_PAD].m_PadSensorStatus, g_PadSettings[RIGHT_PAD].m_PadSensorStatus, g_PadSettings[LEFT_PAD].m_PadSensorStatus);
+
     return myErr;
 }
 

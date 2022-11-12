@@ -72,6 +72,7 @@ PHYSICAL_PAD_ENUM g_ActivePadID = INVALID_PAD;
 uint8_t g_AttendantActive = 0;
 int8_t g_AttendantSpeedDemand = 0;
 int8_t g_AttentantDirectionDemand = 0;
+uint8_t g_PadSensorStatus = 0x00;         // Used to determine if the Pad Status has changed.
 
 //****************************************************************************
 // External References
@@ -415,6 +416,7 @@ uint8_t ExecuteHeartBeat(void)
     HeadArrayMsg.HeartBeatMsg.m_HB_Count = HB_Response[1];
     HeadArrayMsg.HeartBeatMsg.m_ActiveMode = TranslateFeature_CharToEnum ((char) HB_Response[2]);// Translate the Active Feature from COMM protocol (1-based) to GUI Array position (0-based).
     HeadArrayMsg.HeartBeatMsg.m_HA_Status = HB_Response[3];
+    HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus = HB_Response[4];   // Transfer the Sensor Status's.
 
     HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;
     if (msgStatus == MSG_OK)
@@ -1010,6 +1012,7 @@ void ProcessCommunicationMsgs ()
     HHP_HA_MSG_STRUCT HeadArrayMsg;
     ULONG numMsgs;
     PHYSICAL_PAD_ENUM myPad;
+//    uint8_t temp8;
 
     // Is there anything to process, i.e. Is there anything from the Head Array Comm Process?
     tx_queue_info_get (&q_COMM_to_GUI_Queue, NULL, &numMsgs, NULL, NULL, NULL, NULL);
@@ -1032,6 +1035,18 @@ void ProcessCommunicationMsgs ()
                 g_PadSettings[LEFT_PAD].m_PadStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x04) ? PAD_STATUS_OK : PAD_STATUS_ERROR;
                 g_PadSettings[RIGHT_PAD].m_PadStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x08) ? PAD_STATUS_OK : PAD_STATUS_ERROR;
                 g_PadSettings[CENTER_PAD].m_PadStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x10) ? PAD_STATUS_OK : PAD_STATUS_ERROR;
+
+                // Store the Pad Sensor Status (D0, D1 = Center Pad; D2 and D3 = Right Pad; D4 and D5 = Left Pad
+                g_PadSettings[CENTER_PAD].m_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus & 0x03;     // Only store D0 and D1
+                g_PadSettings[RIGHT_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 2) & 0x03; // store only d2 and d3
+                g_PadSettings[LEFT_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 4) & 0x03; // store only d4 and d5
+//                temp8 = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 2;
+//                temp8 &= 0x03;
+//                g_PadSettings[RIGHT_PAD].m_PadSensorStatus = temp8;     // Store only D3 and D4
+//                g_PadSettings[CENTER_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 4) & 0x03;     // Only store D0 and D1
+//                temp8 = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 4;
+//                temp8 &= 0x03;
+//                g_PadSettings[RIGHT_PAD].m_PadSensorStatus = temp8;     // Store only D5 and D6.
 
                 if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
                 {
@@ -1065,6 +1080,16 @@ void ProcessCommunicationMsgs ()
                         else if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
                         {
                             AdjustActiveFeature ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
+                            gxe.gx_event_type = GX_EVENT_REDRAW;
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
+                        // Determine the Pad Status (Digital Proximity Sensor or the Pressure Sensor has changed status.
+                        else if (g_PadSensorStatus != HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus)
+                        {
+                            g_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus;
                             gxe.gx_event_type = GX_EVENT_REDRAW;
                             gxe.gx_event_sender = GX_ID_NONE;
                             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */

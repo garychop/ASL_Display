@@ -6,14 +6,14 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  8.11.2021   Time (hh:mm): 18:06                        */
+/*  Date (dd.mm.yyyy): 11.11.2022   Time (hh:mm): 10:51                        */
 /*******************************************************************************/
 
 
 #define GUIX_STUDIO_GENERATED_FILE
 #include <stddef.h>
-#include "asl_hhp_display_guix_resources.h"
-#include "asl_hhp_display_guix_specifications.h"
+#include "ASL_HHP_Display_GUIX_resources.h"
+#include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
 ERROR_SCREEN_CONTROL_BLOCK Error_Screen;
@@ -2907,7 +2907,7 @@ GX_CONST GX_STUDIO_WIDGET OON_Screen_define =
 };
 GX_WINDOW_PROPERTIES DiagnosticScreen_properties =
 {
-    GX_PIXELMAP_ID_HEADARRAY003              /* wallpaper pixelmap id          */
+    0                                        /* wallpaper pixelmap id          */
 };
 GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadDigital_Button_properties =
 {
@@ -3843,7 +3843,7 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_define =
 };
 GX_WINDOW_PROPERTIES PadCalibrationScreen_properties =
 {
-    GX_PIXELMAP_ID_HEADARRAY003              /* wallpaper pixelmap id          */
+    0                                        /* wallpaper pixelmap id          */
 };
 GX_PIXELMAP_BUTTON_PROPERTIES PadCalibrationScreen_CenterPadON_Button_properties =
 {
@@ -5688,6 +5688,286 @@ GX_ICON_BUTTON_PROPERTIES MainUserScreen_Attendant_Button_properties =
 {
     GX_PIXELMAP_ID_ATTENDANT_66X66           /* pixelmap id                    */
 };
+GX_ICON_PROPERTIES MainUserScreen_HA_Status_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY_STATUS_MAINSCREEN, /* normal pixelmap id          */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_HAStatus_LeftPad_Green_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY_STATUS_SIDEPAD_GREEN, /* normal pixelmap id       */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_HAStatus_RightPad_Green_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY_STATUS_SIDEPAD_GREEN, /* normal pixelmap id       */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_HAStatus_CenterPad_Green_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY_STATUS_CENTERPAD_GREEN, /* normal pixelmap id     */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_HAStatus_CenterPad_Orange_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY_STATUS_CENTERPAD_ORANGE, /* normal pixelmap id    */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_HAStatus_CenterPad_White_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY_STATUS_CENTERPAD_WHITE, /* normal pixelmap id     */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_HAStatus_LeftPad_Orange_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY_STATUS_SIDEPAD_ORANGE, /* normal pixelmap id      */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_HAStatus_LeftPad_White_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY_STATUS_SIDEPAD_WHITE, /* normal pixelmap id       */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_HAStatus_RightPad_Orange_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY_STATUS_SIDEPAD_ORANGE, /* normal pixelmap id      */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_HAStatus_RightPad_White_properties =
+{
+    GX_PIXELMAP_ID_HEADARRAY_STATUS_SIDEPAD_WHITE, /* normal pixelmap id       */
+    0                                        /* selected pixelmap id           */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_RightPad_White_define =
+{
+    "HAStatus_RightPad_White",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {286, 204, 290, 215},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HAStatus_RightPad_White), /* control block */
+    (void *) &MainUserScreen_HAStatus_RightPad_White_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_RightPad_Orange_define =
+{
+    "HAStatus_RightPad_Orange",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {286, 204, 290, 215},                    /* widget size                    */
+    &MainUserScreen_HAStatus_RightPad_White_define, /* next widget definition  */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HAStatus_RightPad_Orange), /* control block */
+    (void *) &MainUserScreen_HAStatus_RightPad_Orange_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_LeftPad_White_define =
+{
+    "HAStatus_LeftPad_White",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {266, 204, 270, 215},                    /* widget size                    */
+    &MainUserScreen_HAStatus_RightPad_Orange_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HAStatus_LeftPad_White), /* control block */
+    (void *) &MainUserScreen_HAStatus_LeftPad_White_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_LeftPad_Orange_define =
+{
+    "HAStatus_LeftPad_Orange",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {266, 204, 270, 215},                    /* widget size                    */
+    &MainUserScreen_HAStatus_LeftPad_White_define, /* next widget definition   */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HAStatus_LeftPad_Orange), /* control block */
+    (void *) &MainUserScreen_HAStatus_LeftPad_Orange_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_CenterPad_White_define =
+{
+    "HAStatus_CenterPad_White",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {269, 22, 287, 25},                      /* widget size                    */
+    &MainUserScreen_HAStatus_LeftPad_Orange_define, /* next widget definition  */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HAStatus_CenterPad_White), /* control block */
+    (void *) &MainUserScreen_HAStatus_CenterPad_White_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_CenterPad_Orange_define =
+{
+    "HAStatus_CenterPad_Orange",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {269, 221, 287, 224},                    /* widget size                    */
+    &MainUserScreen_HAStatus_CenterPad_White_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HAStatus_CenterPad_Orange), /* control block */
+    (void *) &MainUserScreen_HAStatus_CenterPad_Orange_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_CenterPad_Green_define =
+{
+    "HAStatus_CenterPad_Green",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {269, 221, 286, 224},                    /* widget size                    */
+    &MainUserScreen_HAStatus_CenterPad_Orange_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HAStatus_CenterPad_Green), /* control block */
+    (void *) &MainUserScreen_HAStatus_CenterPad_Green_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_RightPad_Green_define =
+{
+    "HAStatus_RightPad_Green",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {286, 204, 290, 215},                    /* widget size                    */
+    &MainUserScreen_HAStatus_CenterPad_Green_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HAStatus_RightPad_Green), /* control block */
+    (void *) &MainUserScreen_HAStatus_RightPad_Green_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_LeftPad_Green_define =
+{
+    "HAStatus_LeftPad_Green",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {266, 204, 270, 215},                    /* widget size                    */
+    &MainUserScreen_HAStatus_RightPad_Green_define, /* next widget definition  */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HAStatus_LeftPad_Green), /* control block */
+    (void *) &MainUserScreen_HAStatus_LeftPad_Green_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_HA_Status_define =
+{
+    "HA_Status",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {262, 202, 294, 226},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    &MainUserScreen_HAStatus_LeftPad_Green_define, /* child widget definition  */
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HA_Status), /* control block */
+    (void *) &MainUserScreen_HA_Status_properties /* extended properties       */
+};
 
 GX_CONST GX_STUDIO_WIDGET MainUserScreen_Attendant_Button_define =
 {
@@ -5705,8 +5985,8 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_Attendant_Button_define =
     gx_studio_icon_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {234, 150, 313, 229},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    {236, 122, 315, 201},                    /* widget size                    */
+    &MainUserScreen_HA_Status_define,        /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_Attendant_Button), /* control block */
     (void *) &MainUserScreen_Attendant_Button_properties /* extended properties */
@@ -6010,7 +6290,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_define =
     0,                                       /* control block                  */
     (void *) &MainUserScreen_properties      /* extended properties            */
 };
-GX_CONST GX_STUDIO_WIDGET_ENTRY asl_hhp_display_guix_widget_table[] =
+GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
     { &Error_Screen_define, (GX_WIDGET *) &Error_Screen },
     { &AttendantSettingsScreen_define, (GX_WIDGET *) &AttendantSettingsScreen },
@@ -6131,7 +6411,7 @@ GX_WIDGET *gx_studio_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *
 UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **new_widget)
 {
     UINT status = GX_FAILURE;
-    GX_CONST GX_STUDIO_WIDGET_ENTRY *entry = asl_hhp_display_guix_widget_table;
+    GX_CONST GX_STUDIO_WIDGET_ENTRY *entry = ASL_HHP_Display_GUIX_widget_table;
     GX_WIDGET *widget = GX_NULL;
 
     while(entry->widget_information)
@@ -6158,7 +6438,7 @@ UINT gx_studio_named_widget_create(char *name, GX_WIDGET *parent, GX_WIDGET **ne
 extern GX_CONST GX_THEME *main_display_theme_table[];
 extern GX_CONST GX_CHAR **main_display_language_table[];
 
-GX_STUDIO_DISPLAY_INFO asl_hhp_display_guix_display_table[1] =
+GX_STUDIO_DISPLAY_INFO ASL_HHP_Display_GUIX_display_table[1] =
 {
     {
     "main_display",
@@ -6184,7 +6464,7 @@ UINT gx_studio_display_configure(USHORT display, UINT (*driver)(GX_DISPLAY *),
     GX_CONST GX_THEME *theme_ptr;
     GX_RECTANGLE size;
 
-    GX_STUDIO_DISPLAY_INFO *display_info = &asl_hhp_display_guix_display_table[display];
+    GX_STUDIO_DISPLAY_INFO *display_info = &ASL_HHP_Display_GUIX_display_table[display];
 
 
 /* create the requested display                                                */

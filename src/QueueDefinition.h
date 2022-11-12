@@ -159,6 +159,12 @@ typedef struct HHP_HA_MSG_S
                                     // bit2, right pad, 0 = Disconnected, 1 = connected.
                                     // bit3, center pad, 0 = Disconnected, 1 = connected.
                                     // bit4, Out of neutral, 0 = OK, 1 = Out of Neutral
+            uint8_t m_HA_SensorStatus;  // Bit0 = Center Pad Proximity Sensor Active
+                                        // Bit1 = Center Pad Pressure Sensor Active
+                                        // Bit2 = Right Pad Proximity Sensor Active
+                                        // Bit3 = Right Pad Pressure Sensor Active
+                                        // Bit4 = Left Pad Proximity Sensor Active
+                                        // Bit5 = Left Pad Pressure Sensor Active
         } HeartBeatMsg;
         struct          // Supports the HHP_HA_PAD_ASSIGMENT_GET_RESPONSE message from the Head Array
         {

@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy):  8.11.2021   Time (hh:mm): 18:06                        */
+/*  Date (dd.mm.yyyy): 11.11.2022   Time (hh:mm): 10:51                        */
 /*******************************************************************************/
 
 
@@ -609,6 +609,16 @@ typedef struct MAINUSERSCREEN_CONTROL_BLOCK_STRUCT
     GX_PROMPT MainUserScreen_FifthPrompt;
     GX_PIXELMAP_BUTTON MainUserScreen_Fusion_Button;
     GX_ICON_BUTTON MainUserScreen_Attendant_Button;
+    GX_ICON MainUserScreen_HA_Status;
+    GX_ICON MainUserScreen_HAStatus_LeftPad_Green;
+    GX_ICON MainUserScreen_HAStatus_RightPad_Green;
+    GX_ICON MainUserScreen_HAStatus_CenterPad_Green;
+    GX_ICON MainUserScreen_HAStatus_CenterPad_Orange;
+    GX_ICON MainUserScreen_HAStatus_CenterPad_White;
+    GX_ICON MainUserScreen_HAStatus_LeftPad_Orange;
+    GX_ICON MainUserScreen_HAStatus_LeftPad_White;
+    GX_ICON MainUserScreen_HAStatus_RightPad_Orange;
+    GX_ICON MainUserScreen_HAStatus_RightPad_White;
 } MAINUSERSCREEN_CONTROL_BLOCK;
 
 

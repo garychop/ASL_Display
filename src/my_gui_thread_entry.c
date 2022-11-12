@@ -211,6 +211,7 @@ void my_gui_thread_entry(void)
     g_PadSettings[LEFT_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[LEFT_PAD].m_PadStatus = PAD_STATUS_OK;
+    g_PadSettings[LEFT_PAD].m_PadSensorStatus = PAD_OFF;
     g_PadSettings[LEFT_PAD].m_MinimumDriveValue = 20;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Off_Button;
     g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_RightArrow_Button;
@@ -236,6 +237,7 @@ void my_gui_thread_entry(void)
     g_PadSettings[RIGHT_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[RIGHT_PAD].m_PadStatus = PAD_STATUS_OK;
+    g_PadSettings[RIGHT_PAD].m_PadSensorStatus = PAD_OFF;
     g_PadSettings[RIGHT_PAD].m_MinimumDriveValue = 20;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Off_Button;
     g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_RightArrow_Button;
@@ -261,6 +263,7 @@ void my_gui_thread_entry(void)
     g_PadSettings[CENTER_PAD].m_PadDirection = INVALID_DIRECTION;
     g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[CENTER_PAD].m_PadStatus = PAD_STATUS_OK;
+    g_PadSettings[CENTER_PAD].m_PadSensorStatus = PAD_OFF;
     g_PadSettings[CENTER_PAD].m_MinimumDriveValue = 20;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Off_Button;
     g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_RightArrow_Button;
