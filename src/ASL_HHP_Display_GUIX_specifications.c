@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 11.11.2022   Time (hh:mm): 10:51                        */
+/*  Date (dd.mm.yyyy): 12.11.2022   Time (hh:mm): 14:18                        */
 /*******************************************************************************/
 
 
@@ -5625,7 +5625,7 @@ GX_WINDOW_PROPERTIES MainUserScreen_properties =
 };
 GX_ICON_BUTTON_PROPERTIES MainUserScreen_FirstIcon_properties =
 {
-    0                                        /* pixelmap id                    */
+    GX_PIXELMAP_ID_BLUETOOTH_70X70           /* pixelmap id                    */
 };
 GX_PROMPT_PROPERTIES MainUserScreen_FirstPrompt_properties =
 {
@@ -5636,7 +5636,7 @@ GX_PROMPT_PROPERTIES MainUserScreen_FirstPrompt_properties =
 };
 GX_ICON_BUTTON_PROPERTIES MainUserScreen_FourthIcon_properties =
 {
-    0                                        /* pixelmap id                    */
+    GX_PIXELMAP_ID_BLUETOOTH_30X30           /* pixelmap id                    */
 };
 GX_PROMPT_PROPERTIES MainUserScreen_FourthPrompt_properties =
 {
@@ -5647,7 +5647,7 @@ GX_PROMPT_PROPERTIES MainUserScreen_FourthPrompt_properties =
 };
 GX_ICON_BUTTON_PROPERTIES MainUserScreen_SecondIcon_properties =
 {
-    0                                        /* pixelmap id                    */
+    GX_PIXELMAP_ID_BLUETOOTH_30X30           /* pixelmap id                    */
 };
 GX_PROMPT_PROPERTIES MainUserScreen_SecondPrompt_properties =
 {
@@ -5658,7 +5658,7 @@ GX_PROMPT_PROPERTIES MainUserScreen_SecondPrompt_properties =
 };
 GX_ICON_BUTTON_PROPERTIES MainUserScreen_ThirdIcon_properties =
 {
-    0                                        /* pixelmap id                    */
+    GX_PIXELMAP_ID_BLUETOOTH_30X30           /* pixelmap id                    */
 };
 GX_PROMPT_PROPERTIES MainUserScreen_ThirdPrompt_properties =
 {
@@ -5669,7 +5669,7 @@ GX_PROMPT_PROPERTIES MainUserScreen_ThirdPrompt_properties =
 };
 GX_ICON_BUTTON_PROPERTIES MainUserScreen_FifthIcon_properties =
 {
-    0                                        /* pixelmap id                    */
+    GX_PIXELMAP_ID_BLUETOOTH_30X30           /* pixelmap id                    */
 };
 GX_PROMPT_PROPERTIES MainUserScreen_FifthPrompt_properties =
 {
@@ -6023,7 +6023,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_FifthPrompt_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_LEFT,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_PROMPT),                       /* control block size             */
     GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
@@ -6046,7 +6046,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_FifthIcon_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_ICON_BUTTON),                  /* control block size             */
     GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
@@ -6069,7 +6069,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_BothArrowButtonID_VirtualButton_define 
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT,   /* style flags                */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_BUTTON),                       /* control block size             */
     GX_COLOR_ID_BLACK,                       /* normal color id                */
@@ -6092,7 +6092,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_ThirdPrompt_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_LEFT,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_PROMPT),                       /* control block size             */
     GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
@@ -6115,7 +6115,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_ThirdIcon_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_ICON_BUTTON),                  /* control block size             */
     GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
@@ -6138,7 +6138,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_SecondPrompt_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_LEFT,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_PROMPT),                       /* control block size             */
     GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
@@ -6161,7 +6161,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_SecondIcon_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_ICON_BUTTON),                  /* control block size             */
     GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
@@ -6184,7 +6184,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_FourthPrompt_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_LEFT,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_PROMPT),                       /* control block size             */
     GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
@@ -6207,7 +6207,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_FourthIcon_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_ICON_BUTTON),                  /* control block size             */
     GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
@@ -6230,7 +6230,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_FirstPrompt_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_LEFT,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_PROMPT),                       /* control block size             */
     GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
@@ -6253,7 +6253,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_FirstIcon_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
     0,                                       /* status flags                   */
     sizeof(GX_ICON_BUTTON),                  /* control block size             */
     GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */

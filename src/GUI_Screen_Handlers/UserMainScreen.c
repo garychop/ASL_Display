@@ -83,6 +83,16 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_RNET_SLEEP_30X30;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_LargeIcon = GX_PIXELMAP_ID_RNET_LOGO_70X70;
 
+    // This is the feature to display the Pad Digital and Proportional Sensors on the Main User Screen.
+    // PAD_SENSOR_DISPLAY_FEATURE_ID
+    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled = true;
+    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Available = true;
+    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Location = -1;
+    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_LargeDescriptionID = GX_STRING_ID_DISPLAY_PADS;
+    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_SmallDescriptionID = GX_STRING_ID_DISPLAY_PADS;
+    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_RADIO_OFF;  // Not used, but populated
+    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_LargeIcon = GX_PIXELMAP_ID_RADIO_ON;   // Not used, but populated.
+
     if (g_RNet_Active == false)
 	{
 		g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available = false;
@@ -96,6 +106,7 @@ VOID Initialize_MainScreenInfo()
 //*************************************************************************************
 void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad)
 {
+#if 0
     switch (center_pad)
     {
     case PAD_OFF:
@@ -167,6 +178,7 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
         break;
     }
+#endif
 }
 
 //*************************************************************************************
@@ -214,37 +226,41 @@ UINT DisplayMainScreenActiveFeatures ()
 		g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_SmallIcon = GX_PIXELMAP_ID_PROFILENEXT_30X30;
 		g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_LargeIcon = GX_PIXELMAP_ID_PROFILENEXT_70X70;
 	}
+
     // Count the number of active items so we can populate appropriately.
     // Hide the Non-Active features.
     enabledCount = 0;
-
+//------------------------------------------------------------------------------------------------------------------
     // Locate the first feature to display
     for (feature = 0; feature < NUM_FEATURES; ++feature)
     {
+        if (feature == PAD_SENSOR_DISPLAY_FEATURE_ID)
+            continue;   // Don't process this feature.
+
 		if (g_MainScreenFeatureInfo[feature].m_Enabled && g_MainScreenFeatureInfo[feature].m_Available)
         {
             ++enabledCount;
             switch (g_MainScreenFeatureInfo[feature].m_Location)
             {
             case 0: // Show the first line
-                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, g_MainScreenFeatureInfo[feature].m_LargeDescriptionID);
-                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FirstIcon, g_MainScreenFeatureInfo[feature].m_LargeIcon);
+//                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, g_MainScreenFeatureInfo[feature].m_LargeDescriptionID);
+//                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FirstIcon, g_MainScreenFeatureInfo[feature].m_LargeIcon);
                 break;
             case 1: // Show second line item
-                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_SecondPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
-                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_SecondIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
+//                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_SecondPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
+//                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_SecondIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
             case 2: // Show third line item
-                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_ThirdPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
-                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_ThirdIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
+//                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_ThirdPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
+//                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_ThirdIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
             case 3: // Show fourth line item
-                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
-                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
+//                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
+//                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
             case 4: // Show fifth line item
-                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
-                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
+//                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
+//                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
             default:
                 break;
@@ -267,26 +283,31 @@ UINT DisplayMainScreenActiveFeatures ()
         switch (enabledCount)
         {
         case 0: // Show the first line
-            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, GX_STRING_ID_BLANK);
-            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FirstIcon, GX_PIXELMAP_ID_BLANK_30X30);
+//            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, GX_STRING_ID_BLANK);
+//            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FirstIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
         case 1: // Show second line item
-            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_SecondPrompt, GX_STRING_ID_BLANK);
-            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_SecondIcon, GX_PIXELMAP_ID_BLANK_30X30);
+//            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_SecondPrompt, GX_STRING_ID_BLANK);
+//            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_SecondIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
         case 2: // Process third line item, move to the 2nd line
-            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_ThirdPrompt, GX_STRING_ID_BLANK);
-            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_ThirdIcon, GX_PIXELMAP_ID_BLANK_30X30);
+//            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_ThirdPrompt, GX_STRING_ID_BLANK);
+//            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_ThirdIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
         case 3: // Process fourth line item, move to the 3rd line.
-            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, GX_STRING_ID_BLANK);
-            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, GX_PIXELMAP_ID_BLANK_30X30);
+//            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, GX_STRING_ID_BLANK);
+//            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
         case 4: // Show fifth line item
-            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, GX_STRING_ID_BLANK);
-            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, GX_PIXELMAP_ID_BLANK_30X30);
+//            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, GX_STRING_ID_BLANK);
+//            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, GX_PIXELMAP_ID_BLANK_30X30);
+            break;
+        default:
+            break;
         } // end of switch
     } // end of for
+
+//------------------------------------------------------------------------------------------------------------------
 
     // Show or Hide Attendant Icon
     if (g_AttendantSettings & 0x01)
@@ -298,8 +319,18 @@ UINT DisplayMainScreenActiveFeatures ()
         gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_Attendant_Button);
     }
 
-    // Display the Pad Status based upon info from the ASL110 Heartbeat message
-    DisplayPadStatus (g_PadSettings[CENTER_PAD].m_PadSensorStatus, g_PadSettings[RIGHT_PAD].m_PadSensorStatus, g_PadSettings[LEFT_PAD].m_PadSensorStatus);
+    if (g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled == true) // FEATURE_ENABLED)
+    {
+        // Show the wire-representation of the Head Array.
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HA_Status);
+
+        // Display the Pad Status based upon info from the ASL110 Heartbeat message
+        DisplayPadStatus (g_PadSettings[CENTER_PAD].m_PadSensorStatus, g_PadSettings[RIGHT_PAD].m_PadSensorStatus, g_PadSettings[LEFT_PAD].m_PadSensorStatus);
+    }
+    else
+    {
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HA_Status);
+    }
 
     return myErr;
 }
@@ -311,8 +342,12 @@ UINT DisplayMainScreenActiveFeatures ()
 //
 //*************************************************************************************
 
+int16_t myCounter = 0;
+
 VOID MainUserScreen_draw_function(GX_WINDOW *window)
 {
+    ++myCounter;
+
     g_ActiveScreen = (GX_WIDGET*) window;
 
     DisplayMainScreenActiveFeatures();  // Redraw the items.
@@ -354,7 +389,8 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 //		gx_system_timer_stop(window, ARROW_PUSHED_TIMER_ID);
 //		break;
 //
-	case GX_EVENT_SHOW:
+
+    case GX_EVENT_SHOW:
 		DisplayMainScreenActiveFeatures();
 		break;
 
@@ -376,12 +412,20 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         activeCount = 0;
         for (feature = 0; feature < NUM_FEATURES; ++feature)
         {
+            // Don't process the PAD SENSOR setting
+            if (feature == PAD_SENSOR_DISPLAY_FEATURE_ID)
+                continue;
+
             if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
                 ++activeCount;
         }
         // Move Top Feature to Bottom and move Bottom upward.
         for (feature = 0; feature < NUM_FEATURES; ++feature)
         {
+            // Don't process the PAD SENSOR setting
+            if (feature == PAD_SENSOR_DISPLAY_FEATURE_ID)
+                continue;
+
             if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
             {
                 if (g_MainScreenFeatureInfo[feature].m_Location == 0)
@@ -415,6 +459,10 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         activeCount = 0;
         for (feature = 0; feature < NUM_FEATURES; ++feature)
         {
+            // Don't process the PAD SENSOR setting
+            if (feature == PAD_SENSOR_DISPLAY_FEATURE_ID)
+                continue;
+
             if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
                 ++activeCount;
         }
@@ -423,6 +471,10 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         // Move the features downward, limiting the movement by the number of Active Features.
         for (feature = 0; feature < NUM_FEATURES; ++feature)
         {
+            // Don't process the PAD SENSOR setting
+            if (feature == PAD_SENSOR_DISPLAY_FEATURE_ID)
+                continue;
+
             if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
             {
                 if (g_MainScreenFeatureInfo[feature].m_Location == activeCount)

@@ -1040,13 +1040,6 @@ void ProcessCommunicationMsgs ()
                 g_PadSettings[CENTER_PAD].m_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus & 0x03;     // Only store D0 and D1
                 g_PadSettings[RIGHT_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 2) & 0x03; // store only d2 and d3
                 g_PadSettings[LEFT_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 4) & 0x03; // store only d4 and d5
-//                temp8 = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 2;
-//                temp8 &= 0x03;
-//                g_PadSettings[RIGHT_PAD].m_PadSensorStatus = temp8;     // Store only D3 and D4
-//                g_PadSettings[CENTER_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 4) & 0x03;     // Only store D0 and D1
-//                temp8 = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 4;
-//                temp8 &= 0x03;
-//                g_PadSettings[RIGHT_PAD].m_PadSensorStatus = temp8;     // Store only D5 and D6.
 
                 if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
                 {
@@ -1087,15 +1080,15 @@ void ProcessCommunicationMsgs ()
                             gx_system_event_send(&gxe);
                         }
                         // Determine the Pad Status (Digital Proximity Sensor or the Pressure Sensor has changed status.
-                        else if (g_PadSensorStatus != HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus)
-                        {
-                            g_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus;
-                            gxe.gx_event_type = GX_EVENT_REDRAW;
-                            gxe.gx_event_sender = GX_ID_NONE;
-                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
-                            gxe.gx_event_display_handle = 0;
-                            gx_system_event_send(&gxe);
-                        }
+//                        else if (g_PadSensorStatus != HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus)
+//                        {
+//                            g_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus;
+//                            gxe.gx_event_type = GX_EVENT_REDRAW;
+//                            gxe.gx_event_sender = GX_ID_NONE;
+//                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+//                            gxe.gx_event_display_handle = 0;
+//                            gx_system_event_send(&gxe);
+//                        }
                     }
                     else if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x00)// Bit 0 = 0; means Head Array in Power Off, Idle Mode, we are recommending to change screens.
                     {
@@ -1234,25 +1227,37 @@ void ProcessCommunicationMsgs ()
 
         case HHP_HA_FEATURE_GET:
             g_TimeoutValue = HeadArrayMsg.GetFeatureResponse.m_Timeout;
-            g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x01 ? true : false); // Power On/Off
-            g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x02 ? true : false); // Bluetooth
-            g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x04 ? true : false); // Next Function
-            g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x08 ? true : false); // Next Profile
-            g_ClicksActive = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x10 ? true : false);              // Clicks on/off
-            g_PowerUpInIdle = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x20 ? true : false);              // Clicks on/off
-            //g_MainScreenFeatureInfo[RNET_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x80 ? true : false); // Process RNet
-            g_RNet_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & 0x80 ? true : false); // Process RNet
+            g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_POWER_ON_OFF_BIT_MASK ? true : false); // Power On/Off
+            g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_OUT_CTRL_TO_BT_MODULE_BIT_MASK ? true : false); // Bluetooth
+            g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_NEXT_FUNCTION_BIT_MASK ? true : false); // Next Function
+            g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_NEXT_PROFILE_BIT_MASK ? true : false); // Next Profile
+            g_ClicksActive = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_SOUND_ENABLED_BIT_MASK ? true : false);              // Clicks on/off
+            g_PowerUpInIdle = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_POWER_UP_IN_IDLE_BIT_MASK ? true : false);          // Power up in idle
+            g_RNet_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_RNET_SEATING_MASK ? true : false); // Process RNet
+
             // Process the second feature byte... if available from the Head Array
             if (g_HA_EEPROM_Version >= 6)
             {
-                g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & 0x01 ? true : false);
-                g_Mode_Switch_Schema = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & 0x02 ? MODE_SWITCH_REVERSE : MODE_SWITCH_PIN5);
+                g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_RNET_SLEEP_BIT_MASK ? true : false);
+                g_Mode_Switch_Schema = ((HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_MODE_REVERSE_BIT_MASK) ? MODE_SWITCH_REVERSE : MODE_SWITCH_PIN5);
             }
             else
             {
                 g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = false;
                 g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
             }
+
+            // EEPROM Version 7
+            //      - Added PAD SENSOR status to protocol
+            if (g_HA_EEPROM_Version >= 7)
+            {
+                g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled = ((HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_SHOW_PADS_BIT_MASK) ? true : false); // FEATURE_ENABLED : FEATURE_DISABLED);
+            }
+            else
+            {
+                g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled = false; // FEATURE_DISABLED;
+            }
+
             AdjustActiveFeature (g_ActiveFeature);   // This function also store "g_ActiveFeature" if appropriate.
             // Redraw the current window.
             gxe.gx_event_type = GX_EVENT_REDRAW;

@@ -419,21 +419,23 @@ void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures, uint8_t *ActiveFeatur
 
     // Add clicks in D4 of byte.
     if (g_ClicksActive)
-        *myActiveFeatures |= 0x10;
+        *myActiveFeatures |= FUNC_FEATURE_SOUND_ENABLED_BIT_MASK;
     // Add power up in D5 of byte;
     if (g_PowerUpInIdle)
-        *myActiveFeatures |= 0x20;
+        *myActiveFeatures |= FUNC_FEATURE_POWER_UP_IN_IDLE_BIT_MASK;
     // Add RNet Enable in D6 of byte.
     if (g_RNet_Active)
-        *myActiveFeatures |= 0x80;
+        *myActiveFeatures |= FUNC_FEATURE_RNET_SEATING_MASK;
 
     // Now assemble the second byte of features.
     *ActiveFeatures_Byte2 = 0x0;
 //    if (g_RNet_Sleep_Feature)           // Add RNet Sleep feature setting.
     if ((g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled) && (g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available))
-        *ActiveFeatures_Byte2 |= 0x01;
+        *ActiveFeatures_Byte2 |= FUNC_FEATURE2_RNET_SLEEP_BIT_MASK;
     if (g_Mode_Switch_Schema == MODE_SWITCH_REVERSE)    // Add Mode Switch schema setting
-        *ActiveFeatures_Byte2 |= 0x02;
+        *ActiveFeatures_Byte2 |= FUNC_FEATURE2_MODE_REVERSE_BIT_MASK;
+    if ((g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled) && (g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Available))
+        *ActiveFeatures_Byte2 |= FUNC_FEATURE2_SHOW_PADS_BIT_MASK;
 }
 
 //-------------------------------------------------------------------------

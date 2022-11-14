@@ -3621,7 +3621,7 @@
 <English>TRUE</English>
 <string_table>
 <sort_column>0</sort_column>
-<num_strings>95</num_strings>
+<num_strings>96</num_strings>
 <num_languages>1</num_languages>
 <string_record>
 <id>STRING_15</id>
@@ -4092,6 +4092,11 @@
 <id>STRING_40</id>
 <font>0</font>
 <val>FAULT</val>
+</string_record>
+<string_record>
+<id>DISPLAY_PADS</id>
+<font>0</font>
+<val>SHOW PADS</val>
 </string_record>
 </string_table>
 <widget_folder>
@@ -8224,7 +8229,7 @@
 <right>89</right>
 <bottom>79</bottom>
 </size>
-<style>269025280</style>
+<style>1342767104</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>BTN_LOWER</normal_fill_color>
@@ -8233,6 +8238,7 @@
 <id_name>FIRST_ICON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
+<pixelmap_id>BLUETOOTH_70X70</pixelmap_id>
 </widget>
 <widget>
 <type>prompt</type>
@@ -8243,7 +8249,7 @@
 <right>301</right>
 <bottom>63</bottom>
 </size>
-<style>268439552</style>
+<style>1342181376</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>WIDGET_FILL</normal_fill_color>
@@ -8267,7 +8273,7 @@
 <right>64</right>
 <bottom>189</bottom>
 </size>
-<style>269025280</style>
+<style>1342767104</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>BTN_LOWER</normal_fill_color>
@@ -8276,6 +8282,7 @@
 <id_name>FOURTH_ICON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
+<pixelmap_id>BLUETOOTH_30X30</pixelmap_id>
 </widget>
 <widget>
 <type>prompt</type>
@@ -8286,7 +8293,7 @@
 <right>235</right>
 <bottom>189</bottom>
 </size>
-<style>268439552</style>
+<style>1342181376</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>WIDGET_FILL</normal_fill_color>
@@ -8310,7 +8317,7 @@
 <right>64</right>
 <bottom>117</bottom>
 </size>
-<style>269025280</style>
+<style>1342767104</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>BTN_LOWER</normal_fill_color>
@@ -8319,6 +8326,7 @@
 <id_name>SECOND_ICON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
+<pixelmap_id>BLUETOOTH_30X30</pixelmap_id>
 </widget>
 <widget>
 <type>prompt</type>
@@ -8329,7 +8337,7 @@
 <right>235</right>
 <bottom>117</bottom>
 </size>
-<style>268439552</style>
+<style>1342181376</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>WIDGET_FILL</normal_fill_color>
@@ -8353,7 +8361,7 @@
 <right>64</right>
 <bottom>153</bottom>
 </size>
-<style>269025280</style>
+<style>1342767104</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>BTN_LOWER</normal_fill_color>
@@ -8362,6 +8370,7 @@
 <id_name>THIRD_ICON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
+<pixelmap_id>BLUETOOTH_30X30</pixelmap_id>
 </widget>
 <widget>
 <type>prompt</type>
@@ -8372,7 +8381,7 @@
 <right>235</right>
 <bottom>153</bottom>
 </size>
-<style>268439552</style>
+<style>1342181376</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>WIDGET_FILL</normal_fill_color>
@@ -8396,7 +8405,7 @@
 <right>347</right>
 <bottom>8</bottom>
 </size>
-<style>268435456</style>
+<style>1342177280</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>BLACK</normal_fill_color>
@@ -8415,7 +8424,7 @@
 <right>64</right>
 <bottom>225</bottom>
 </size>
-<style>269025280</style>
+<style>1342767104</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>BTN_LOWER</normal_fill_color>
@@ -8424,6 +8433,7 @@
 <id_name>Fifth_ICON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
+<pixelmap_id>BLUETOOTH_30X30</pixelmap_id>
 </widget>
 <widget>
 <type>prompt</type>
@@ -8434,7 +8444,7 @@
 <right>235</right>
 <bottom>225</bottom>
 </size>
-<style>268439552</style>
+<style>1342181376</style>
 <allocation>0</allocation>
 <accepts_focus>FALSE</accepts_focus>
 <normal_fill_color>WIDGET_FILL</normal_fill_color>

@@ -137,7 +137,7 @@ UINT FeatureSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
 			gx_widget_show ((GX_WIDGET*) &FeatureWindowPtr->FeatureSettingsScreen_FeatureList_vertical_scroll);
 			screen_toggle((GX_WINDOW *)&UserSelectionScreen, window);
 			UpdateFeatureSettings();    // Update the "ON"/"OFF" button status of the features.
-			// Delete all widgets so each time this screen gets accessed, we must re-establish the list becuase it might change
+			// Delete all widgets so each time this screen gets accessed, we must re-establish the list because it might change
 			// due to RNet Enabled/Disabled.
 			for (feature = 0; feature < NUM_FEATURES; ++feature)
 			{
