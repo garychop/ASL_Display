@@ -52,14 +52,14 @@ UINT AttendantSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_p
         }
 
         // Override
-        if ((g_AttendantSettings & 0x04) == 0)
-        {
-            gx_button_select ((GX_BUTTON*) &AttendantSettingsScreen.AttendantSettingsScreen_OverrideToggleBtn);
-        }
-        else
-        {
-            gx_button_deselect ((GX_BUTTON*) &AttendantSettingsScreen.AttendantSettingsScreen_OverrideToggleBtn, false);
-        }
+//        if ((g_AttendantSettings & 0x04) == 0)
+//        {
+//            gx_button_select ((GX_BUTTON*) &AttendantSettingsScreen.AttendantSettingsScreen_OverrideToggleBtn);
+//        }
+//        else
+//        {
+//            gx_button_deselect ((GX_BUTTON*) &AttendantSettingsScreen.AttendantSettingsScreen_OverrideToggleBtn, false);
+//        }
 
         break;
 
@@ -80,12 +80,12 @@ UINT AttendantSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_p
         break;
 
     // Override toggle button processing
-    case GX_SIGNAL(OVERRIDE_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_ON):
-        g_AttendantSettings &= 0xfb;        // D2 = 0 = ASSIST
-        break;
-    case GX_SIGNAL(OVERRIDE_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_OFF):
-        g_AttendantSettings |= 0x04;        // D2 = 1 = OVERRIDE
-        break;
+//    case GX_SIGNAL(OVERRIDE_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_ON):
+//        g_AttendantSettings &= 0xfb;        // D2 = 0 = ASSIST
+//        break;
+//    case GX_SIGNAL(OVERRIDE_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_OFF):
+//        g_AttendantSettings |= 0x04;        // D2 = 1 = OVERRIDE
+//        break;
 
     case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
         SendAttendantSettingsSet_toHeadArray (g_AttendantSettings, g_AttendantTimeout);

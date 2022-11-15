@@ -106,7 +106,6 @@ VOID Initialize_MainScreenInfo()
 //*************************************************************************************
 void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad)
 {
-#if 0
     switch (center_pad)
     {
     case PAD_OFF:
@@ -178,7 +177,6 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
         break;
     }
-#endif
 }
 
 //*************************************************************************************
@@ -230,7 +228,7 @@ UINT DisplayMainScreenActiveFeatures ()
     // Count the number of active items so we can populate appropriately.
     // Hide the Non-Active features.
     enabledCount = 0;
-//------------------------------------------------------------------------------------------------------------------
+
     // Locate the first feature to display
     for (feature = 0; feature < NUM_FEATURES; ++feature)
     {
@@ -243,24 +241,24 @@ UINT DisplayMainScreenActiveFeatures ()
             switch (g_MainScreenFeatureInfo[feature].m_Location)
             {
             case 0: // Show the first line
-//                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, g_MainScreenFeatureInfo[feature].m_LargeDescriptionID);
-//                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FirstIcon, g_MainScreenFeatureInfo[feature].m_LargeIcon);
+                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, g_MainScreenFeatureInfo[feature].m_LargeDescriptionID);
+                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FirstIcon, g_MainScreenFeatureInfo[feature].m_LargeIcon);
                 break;
             case 1: // Show second line item
-//                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_SecondPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
-//                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_SecondIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
+                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_SecondPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
+                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_SecondIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
             case 2: // Show third line item
-//                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_ThirdPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
-//                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_ThirdIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
+                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_ThirdPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
+                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_ThirdIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
             case 3: // Show fourth line item
-//                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
-//                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
+                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
+                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
             case 4: // Show fifth line item
-//                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
-//                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
+                myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, g_MainScreenFeatureInfo[feature].m_SmallDescriptionID);
+                myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, g_MainScreenFeatureInfo[feature].m_SmallIcon);
                 break;
             default:
                 break;
@@ -268,7 +266,9 @@ UINT DisplayMainScreenActiveFeatures ()
         }
     }
 
-	// Show the Fusion Logo if no features are enabled.... We are just driving.
+
+#if 0   // See if this is causing the bad behaviour
+    // Show the Fusion Logo if no features are enabled.... We are just driving.
 	MainUserScreen.MainUserScreen_Fusion_Button.gx_widget_size.gx_rectangle_top = 60;
 	MainUserScreen.MainUserScreen_Fusion_Button.gx_widget_size.gx_rectangle_right = 310;
 	MainUserScreen.MainUserScreen_Fusion_Button.gx_widget_size.gx_rectangle_bottom = 160;
@@ -276,6 +276,12 @@ UINT DisplayMainScreenActiveFeatures ()
 		MainUserScreen.MainUserScreen_Fusion_Button.gx_widget_size.gx_rectangle_left = 10;
 	else
 		MainUserScreen.MainUserScreen_Fusion_Button.gx_widget_size.gx_rectangle_left = 400;
+#else
+	if (enabledCount == 0)
+	    gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_Fusion_Button);
+    else
+        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_Fusion_Button);
+#endif
 
 	// Now blank any unused items.
     for ( ; enabledCount < NUM_FEATURES; ++enabledCount)   // Start with the number of items that are enabled.
@@ -283,31 +289,29 @@ UINT DisplayMainScreenActiveFeatures ()
         switch (enabledCount)
         {
         case 0: // Show the first line
-//            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, GX_STRING_ID_BLANK);
-//            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FirstIcon, GX_PIXELMAP_ID_BLANK_30X30);
+            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, GX_STRING_ID_BLANK);
+            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FirstIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
         case 1: // Show second line item
-//            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_SecondPrompt, GX_STRING_ID_BLANK);
-//            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_SecondIcon, GX_PIXELMAP_ID_BLANK_30X30);
+            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_SecondPrompt, GX_STRING_ID_BLANK);
+            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_SecondIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
         case 2: // Process third line item, move to the 2nd line
-//            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_ThirdPrompt, GX_STRING_ID_BLANK);
-//            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_ThirdIcon, GX_PIXELMAP_ID_BLANK_30X30);
+            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_ThirdPrompt, GX_STRING_ID_BLANK);
+            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_ThirdIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
         case 3: // Process fourth line item, move to the 3rd line.
-//            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, GX_STRING_ID_BLANK);
-//            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, GX_PIXELMAP_ID_BLANK_30X30);
+            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, GX_STRING_ID_BLANK);
+            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
         case 4: // Show fifth line item
-//            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, GX_STRING_ID_BLANK);
-//            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, GX_PIXELMAP_ID_BLANK_30X30);
+            myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, GX_STRING_ID_BLANK);
+            myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
         default:
             break;
         } // end of switch
     } // end of for
-
-//------------------------------------------------------------------------------------------------------------------
 
     // Show or Hide Attendant Icon
     if (g_AttendantSettings & 0x01)
@@ -348,11 +352,10 @@ VOID MainUserScreen_draw_function(GX_WINDOW *window)
 {
     ++myCounter;
 
-    g_ActiveScreen = (GX_WIDGET*) window;
-
     DisplayMainScreenActiveFeatures();  // Redraw the items.
 
     gx_window_draw(window);
+
 }
 
 //*************************************************************************************
@@ -369,7 +372,7 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
 	switch (event_ptr->gx_event_type)
 	{
-    case GX_EVENT_TIMER:
+	    case GX_EVENT_TIMER:
         if (event_ptr->gx_event_payload.gx_event_timer_id == ARROW_PUSHED_TIMER_ID)
 		{
 	        screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
@@ -391,8 +394,9 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 //
 
     case GX_EVENT_SHOW:
-		DisplayMainScreenActiveFeatures();
-		break;
+        g_ActiveScreen = (GX_WIDGET*) window;
+        DisplayMainScreenActiveFeatures();
+        break;
 
 	case GX_SIGNAL (LONG_PRESS_BUTTON_ID, GX_EVENT_CLICKED):
 		// TODO: Add code to process long presses.
@@ -522,10 +526,14 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         screen_toggle((GX_WINDOW *)&Error_Screen, window);
         break;
 
+//    default:
+//        myErr = gx_window_event_process(window, event_ptr);
+//        break;
+
 	} // end switch
 
     myErr = gx_window_event_process(window, event_ptr);
 
-	return myErr;
+    return myErr;
 }
 

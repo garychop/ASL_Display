@@ -64,6 +64,7 @@ int g_ChangeScreen_WIP;
 // These are received from the Head Array in the Heart Beat Message
 FEATURE_ID_ENUM g_ActiveFeature = POWER_ONOFF_ID;     // this indicates the active feature.
 uint8_t g_HeadArrayStatus1 = 0x00;
+uint8_t g_HeadArrayStatus2 = 0x00;
 
 GX_WIDGET *g_ActiveScreen = GX_NULL;
 GX_WINDOW_ROOT * p_window_root;
@@ -323,7 +324,7 @@ void my_gui_thread_entry(void)
 
         ProcessCommunicationMsgs ();    // Process any messages from the Head Array Comm process.
 
-        tx_thread_sleep (1);
+        tx_thread_sleep (10);
     }
 
     //Open WDT; 4.46s; PCLKB 30MHz
@@ -358,6 +359,9 @@ void AdjustActiveFeature (FEATURE_ID_ENUM newMode)
 
     for (featureCount = 0; featureCount < NUM_FEATURES; ++featureCount)
     {
+        if (featureCount == PAD_SENSOR_DISPLAY_FEATURE_ID)  // This is Virtual Mode
+            continue;
+
         if ((g_MainScreenFeatureInfo[myMode].m_Enabled) && (g_MainScreenFeatureInfo[myMode].m_Available))
         {
             g_MainScreenFeatureInfo[myMode].m_Location = lineNumber;
@@ -377,9 +381,8 @@ void AdjustActiveFeature (FEATURE_ID_ENUM newMode)
 
 void SaveSystemStatus (uint8_t status1, uint8_t status2)
 {
-    // status2 = status2;      // Future Use of Center Pad setting.
-
     g_HeadArrayStatus1 = status1;
+    g_HeadArrayStatus2 = status2;
 }
 
 //*************************************************************************************

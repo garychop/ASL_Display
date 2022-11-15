@@ -1080,15 +1080,15 @@ void ProcessCommunicationMsgs ()
                             gx_system_event_send(&gxe);
                         }
                         // Determine the Pad Status (Digital Proximity Sensor or the Pressure Sensor has changed status.
-//                        else if (g_PadSensorStatus != HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus)
-//                        {
-//                            g_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus;
-//                            gxe.gx_event_type = GX_EVENT_REDRAW;
-//                            gxe.gx_event_sender = GX_ID_NONE;
-//                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
-//                            gxe.gx_event_display_handle = 0;
-//                            gx_system_event_send(&gxe);
-//                        }
+                        else if (g_PadSensorStatus != HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus)
+                        {
+                            g_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus;
+                            gxe.gx_event_type = GX_EVENT_REDRAW;
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
                     }
                     else if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x00)// Bit 0 = 0; means Head Array in Power Off, Idle Mode, we are recommending to change screens.
                     {

@@ -80,8 +80,8 @@ typedef enum PAD_STATUS_COLORS_ENUM {PAD_OFF, PAD_GREEN, PAD_WHITE, PAD_ORANGE} 
 typedef struct MAIN_SCREEN_FEATURE_STRUCT
 {
     int m_Location;     // This indicates the Main Screen location, 0=Top most, 3=bottom most
-	bool m_Available;	// This is true if this feature should be displayed for Enabling/Disabling. Typically based upon RNet setting.
-    bool m_Enabled;      // Indicates if this feature is active.
+	int /*bool*/ m_Available;	// This is true if this feature should be displayed for Enabling/Disabling. Typically based upon RNet setting.
+    int /*bool*/ m_Enabled;      // Indicates if this feature is active.
     GX_RESOURCE_ID m_SmallIcon;
     GX_RESOURCE_ID m_LargeIcon;
     GX_RESOURCE_ID m_SmallDescriptionID;
