@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 16.11.2022   Time (hh:mm): 10:56                        */
+/*  Date (dd.mm.yyyy): 16.11.2022   Time (hh:mm): 12:46                        */
 /*******************************************************************************/
 
 
@@ -1193,7 +1193,7 @@ GX_CONST GX_STUDIO_WIDGET PerformanceSelectionScreen_define =
     gx_studio_window_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) PerformanceSelectionScreen_event_process, /* event function override */
-    {0, 0, 319, 255},                        /* widget size                    */
+    {0, 0, 319, 239},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
     &PerformanceSelectionScreen_GotoVeerAdjust_Button_define, /* child widget  */
     0,                                       /* control block                  */
@@ -1724,7 +1724,7 @@ GX_CONST GX_STUDIO_WIDGET UserSelectionScreen_define =
     gx_studio_window_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) UserSelectionScreen_event_process, /* event function override */
-    {0, 0, 319, 255},                        /* widget size                    */
+    {0, 0, 319, 239},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
     &UserSelectionScreen_FeatureSettings_lButton_define, /* child widget       */
     0,                                       /* control block                  */
@@ -1798,7 +1798,7 @@ GX_CONST GX_STUDIO_WIDGET ResetScreen_Prompt4_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {105, 183, 226, 206},                    /* widget size                    */
+    {105, 174, 226, 197},                    /* widget size                    */
     GX_NULL,                                 /* no next widget                 */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(RESETSCREEN_CONTROL_BLOCK, ResetScreen_Prompt4), /* control block */
@@ -1890,7 +1890,7 @@ GX_CONST GX_STUDIO_WIDGET ResetScreen_OK_Button_define =
     gx_studio_text_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {230, 165, 309, 228},                    /* widget size                    */
+    {230, 156, 309, 219},                    /* widget size                    */
     &ResetScreen_Prompt1_define,             /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(RESETSCREEN_CONTROL_BLOCK, ResetScreen_OK_Button), /* control block */
@@ -1936,7 +1936,7 @@ GX_CONST GX_STUDIO_WIDGET ResetScreen_Continue_Button_define =
     gx_studio_text_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {19, 165, 98, 228},                      /* widget size                    */
+    {20, 156, 99, 219},                      /* widget size                    */
     &ResetScreen_icon_define,                /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(RESETSCREEN_CONTROL_BLOCK, ResetScreen_Continue_Button), /* control block */
@@ -1959,7 +1959,7 @@ GX_CONST GX_STUDIO_WIDGET ResetScreen_define =
     gx_studio_window_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) ResetScreen_event_process, /* event function override */
-    {0, 0, 319, 255},                        /* widget size                    */
+    {0, 0, 319, 239},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
     &ResetScreen_Continue_Button_define,     /* child widget                   */
     0,                                       /* control block                  */
@@ -2046,7 +2046,7 @@ GX_CONST GX_STUDIO_WIDGET ResetFinishScreen_define =
     gx_studio_window_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) ResetFinishScreen_event_process, /* event function override */
-    {0, 0, 319, 255},                        /* widget size                    */
+    {0, 0, 319, 239},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
     &ResetFinishScreen_OK_Button_define,     /* child widget                   */
     0,                                       /* control block                  */
@@ -2183,11 +2183,11 @@ GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_define =
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
-    GX_STYLE_BORDER_THIN,                    /* style flags                    */
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT,   /* style flags                */
     0,                                       /* status flags                   */
     sizeof(PRIMARYTEMPLATE_CONTROL_BLOCK),   /* control block size             */
-    GX_COLOR_ID_CANVAS,                      /* normal color id                */
-    GX_COLOR_ID_CANVAS,                      /* selected color id              */
+    GX_COLOR_ID_SHINE,                       /* normal color id                */
+    GX_COLOR_ID_SHINE,                       /* selected color id              */
     gx_studio_window_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
@@ -5543,7 +5543,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_Attendant_Button_define =
     gx_studio_icon_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {236, 124, 315, 203},                    /* widget size                    */
+    {236, 110, 315, 189},                    /* widget size                    */
     &MainUserScreen_HA_Status_define,        /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_Attendant_Button), /* control block */
