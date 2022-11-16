@@ -18,6 +18,7 @@
 #define GRAPH_CENTER_PT_XPOS 139    // From Left of screen
 #define GRAPH_CENTER_PT_YPOS 130    // From Top of screen
 
+#define MINIMUM_CALIBRATION_WINDOW (15) // This is minimum value between the MIN and MAX calibration values.
 
 //*************************************************************************************
 // Local declarations.
@@ -627,7 +628,8 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_EVENT_SHOW:
         gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_MaximumInstructionsText, &g_HiddenRectangle);
         gx_widget_resize ((GX_WIDGET*) &PadCalibrationScreen.PadCalibrationScreen_MinimumInstructionsText, &g_CalibrationPromptLocations[0]);
-        g_CalibrationStepNumber = 0;
+
+        g_CalibrationStepNumber = 0;    // "0" = Setting Minimum, "1" = Setting Maximum value.
 
         gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
 
@@ -685,7 +687,7 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         }
         else if (g_CalibrationStepNumber == 1)  // Doing maximum
         {
-            if (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue > 2)
+            if ((g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue > 2) && (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue - g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue > MINIMUM_CALIBRATION_WINDOW))
                 --g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue);
         }
@@ -694,7 +696,7 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_SIGNAL(UP_ARROW_BTN_ID, GX_EVENT_CLICKED):
         if (g_CalibrationStepNumber == 0)       // We are doing minimum
         {
-            if (g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue < 100)
+            if ((g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue < 100) && (g_PadSettings[g_CalibrationPadNumber].m_PadMaximumCalibrationValue - g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue > MINIMUM_CALIBRATION_WINDOW))
                 ++g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue;
             gx_numeric_prompt_value_set (&PadCalibrationScreen.PadCalibrationScreen_Value_Prompt, g_PadSettings[g_CalibrationPadNumber].m_PadMinimumCalibrationValue);
         }

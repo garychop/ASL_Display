@@ -5,7 +5,7 @@
 <project_version>55</project_version>
 <guix_version>50400</guix_version>
 <studio_version>5040209</studio_version>
-<project_name>asl_hhp_display_guix</project_name>
+<project_name>ASL_HHP_Display_GUIX</project_name>
 <source_path>.\src</source_path>
 <header_path>.\src</header_path>
 <resource_path>.\src</resource_path>
@@ -3701,7 +3701,7 @@
 <string_record>
 <id>PROMPT</id>
 <font>0</font>
-<val>---------------</val>
+<val></val>
 </string_record>
 <string_record>
 <id>STRING_10</id>
@@ -8129,13 +8129,13 @@
 <app_name>Attendant_Button</app_name>
 <size>
 <left>236</left>
-<top>122</top>
+<top>124</top>
 <right>315</right>
-<bottom>201</bottom>
+<bottom>203</bottom>
 </size>
-<style>269025280</style>
+<style>1342767104</style>
 <allocation>0</allocation>
-<accepts_focus>FALSE</accepts_focus>
+<accepts_focus>TRUE</accepts_focus>
 <normal_fill_color>BTN_LOWER</normal_fill_color>
 <selected_fill_color>BTN_UPPER</selected_fill_color>
 <disabled_fill_color>DISABLED_FILL</disabled_fill_color>

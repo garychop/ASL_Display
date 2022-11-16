@@ -73,7 +73,7 @@ all: ASL_Display.elf secondary-outputs
 ASL_Display.elf: $(OBJS) $(USER_OBJS) $(LINKER_SCRIPT)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU ARM Cross C Linker'
-	$(file > ASL_Display.elf.in,-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O2 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal  -g -T "C:\\asl\\ASL_Display\\script/s7g2.ld" -Xlinker --gc-sections -L "C:\\asl\\ASL_Display\\synergy\\ssp\\src\\bsp\\cmsis\\DSP_Lib\\cm4_gcc" -L "C:\\asl\\ASL_Display\\synergy\\ssp\\src\\framework\\el\\tx\\cm4_gcc" -L "C:\\asl\\ASL_Display\\synergy\\ssp\\src\\framework\\el\\gx\\cm4_gcc" -Wl,-Map,"ASL_Display.map" --specs=nano.specs --specs=rdimon.specs -o "ASL_Display.elf" -Wl,--start-group $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--end-group)
+	$(file > ASL_Display.elf.in,-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wunused -Wuninitialized -Wall -Wextra -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Waggregate-return -Wfloat-equal  -g -T "C:\\asl\\ASL_Display\\script/s7g2.ld" -Xlinker --gc-sections -L "C:\\asl\\ASL_Display\\synergy\\ssp\\src\\bsp\\cmsis\\DSP_Lib\\cm4_gcc" -L "C:\\asl\\ASL_Display\\synergy\\ssp\\src\\framework\\el\\tx\\cm4_gcc" -L "C:\\asl\\ASL_Display\\synergy\\ssp\\src\\framework\\el\\gx\\cm4_gcc" -Wl,-Map,"ASL_Display.map" --specs=nano.specs --specs=rdimon.specs -o "ASL_Display.elf" -Wl,--start-group $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--end-group)
 	arm-none-eabi-gcc @"ASL_Display.elf.in"
 	@echo 'Finished building target: $@'
 	@echo ' '

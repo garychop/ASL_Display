@@ -322,16 +322,11 @@ UINT DisplayMainScreenActiveFeatures ()
 //
 //*************************************************************************************
 
-int16_t myCounter = 0;
-
 VOID MainUserScreen_draw_function(GX_WINDOW *window)
 {
-    ++myCounter;
-
     DisplayMainScreenActiveFeatures();  // Redraw the items.
 
     gx_window_draw(window);
-
 }
 
 //*************************************************************************************
@@ -355,27 +350,17 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 			g_ChangeScreen_WIP = true;
 		}
 		break;
-//	case GX_EVENT_PEN_DOWN:	// We are going to determine if the Up or Down arrow buttons have been held for a
-//							// ... long time (2 seconds) and goto Programming if so.
-//
-//		if ((event_ptr->gx_event_target->gx_widget_name == "DownArrowButton") || (event_ptr->gx_event_target->gx_widget_name == "UpArrowButton"))
-//		{
-//			gx_system_timer_start(window, ARROW_PUSHED_TIMER_ID, 100, 0);
-//                g_ChangeScreen_WIP = false;
-//		}
-//		break;
-//	case GX_EVENT_PEN_UP:
-//		gx_system_timer_stop(window, ARROW_PUSHED_TIMER_ID);
-//		break;
-//
 
     case GX_EVENT_SHOW:
         g_ActiveScreen = (GX_WIDGET*) window;
         DisplayMainScreenActiveFeatures();
         break;
 
+    case GX_SIGNAL (ATTENDANT_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&AttendantScreen, window);
+        break;
+
 	case GX_SIGNAL (LONG_PRESS_BUTTON_ID, GX_EVENT_CLICKED):
-		// TODO: Add code to process long presses.
 		DisplayMainScreenActiveFeatures();
         //Use the following to show Out Of Neutral screen
 		//screen_toggle((GX_WINDOW *)&OON_Screen, window);
@@ -477,10 +462,6 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         DisplayMainScreenActiveFeatures();
         break;
 
-    case GX_SIGNAL (ATTENDANT_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&AttendantScreen, window);
-        break;
-
     case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
         g_ChangeScreen_WIP = true;
@@ -501,10 +482,6 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_SIGNAL (PAD_ERROR_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&Error_Screen, window);
         break;
-
-//    default:
-//        myErr = gx_window_event_process(window, event_ptr);
-//        break;
 
 	} // end switch
 
