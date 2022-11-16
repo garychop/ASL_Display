@@ -49,10 +49,16 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                     screen_toggle((GX_WINDOW *)&MainUserScreen, window);
                     g_StartupDelayCounter = -1; // This prevents us from doing a "startup" delay should the Heart Beat stop.
                 }
-                else if (g_StartupDelayCounter == 10)    // We need to send a Version Request to the Head Array.
+                else if (g_StartupDelayCounter == 8)    // We need to send a Version Request to the Head Array.
                 {
                     SendGetVersionCommand ();
+                }
+                else if (g_StartupDelayCounter == 10)    // We need to send a Version Request to the Head Array.
+                {
                     SendFeatureGetCommand();                // Send command to get the current users settings.
+                }
+                else if (g_StartupDelayCounter == 12)    // We need to send a Version Request to the Head Array.
+                {
                     SendAttendantSettingsGet_toHeadArray(); // Request Attendant Settings
                 }
             }

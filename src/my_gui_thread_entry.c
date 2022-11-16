@@ -54,7 +54,7 @@ PAD_INFO g_PadSettings[3];
 
 bool g_ClicksActive = false;
 bool g_PowerUpInIdle = false;
-bool g_RNet_Active = true;
+bool g_RNet_Active = false;
 MODE_SWITCH_SCHEMA_ENUM g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
 
 int g_SettingsChanged;
@@ -324,7 +324,7 @@ void my_gui_thread_entry(void)
 
         ProcessCommunicationMsgs ();    // Process any messages from the Head Array Comm process.
 
-        tx_thread_sleep (10);
+        tx_thread_sleep (1);
     }
 
     //Open WDT; 4.46s; PCLKB 30MHz
@@ -334,7 +334,7 @@ void my_gui_thread_entry(void)
 
 //*************************************************************************************
 
-void AdjustActiveFeature (FEATURE_ID_ENUM newMode)
+void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode)
 {
     uint8_t featureCount, myMode, lineNumber;
 
@@ -359,10 +359,7 @@ void AdjustActiveFeature (FEATURE_ID_ENUM newMode)
 
     for (featureCount = 0; featureCount < NUM_FEATURES; ++featureCount)
     {
-        if (featureCount == PAD_SENSOR_DISPLAY_FEATURE_ID)  // This is Virtual Mode
-            continue;
-
-        if ((g_MainScreenFeatureInfo[myMode].m_Enabled) && (g_MainScreenFeatureInfo[myMode].m_Available))
+        if ((g_MainScreenFeatureInfo[myMode].m_Enabled) && (g_MainScreenFeatureInfo[myMode].m_Available) && (myMode != PAD_SENSOR_DISPLAY_FEATURE_ID))
         {
             g_MainScreenFeatureInfo[myMode].m_Location = lineNumber;
             ++lineNumber;

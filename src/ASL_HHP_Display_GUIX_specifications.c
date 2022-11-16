@@ -6,7 +6,7 @@
 /*  www.expresslogic.com.                                                      */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 14.11.2022   Time (hh:mm): 18:19                        */
+/*  Date (dd.mm.yyyy): 15.11.2022   Time (hh:mm): 13:18                        */
 /*******************************************************************************/
 
 
@@ -5183,55 +5183,55 @@ GX_WINDOW_PROPERTIES MainUserScreen_properties =
 };
 GX_ICON_BUTTON_PROPERTIES MainUserScreen_FirstIcon_properties =
 {
-    GX_PIXELMAP_ID_BLUETOOTH_70X70           /* pixelmap id                    */
+    0                                        /* pixelmap id                    */
 };
 GX_PROMPT_PROPERTIES MainUserScreen_FirstPrompt_properties =
 {
-    GX_STRING_ID_STRING_105,                 /* string id                      */
+    GX_STRING_ID_PROMPT,                     /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_ICON_BUTTON_PROPERTIES MainUserScreen_FourthIcon_properties =
 {
-    GX_PIXELMAP_ID_BLUETOOTH_30X30           /* pixelmap id                    */
+    0                                        /* pixelmap id                    */
 };
 GX_PROMPT_PROPERTIES MainUserScreen_FourthPrompt_properties =
 {
-    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_STRING_ID_PROMPT,                     /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_BTN_BORDER,                  /* normal text color              */
     GX_COLOR_ID_BTN_BORDER                   /* selected text color            */
 };
 GX_ICON_BUTTON_PROPERTIES MainUserScreen_SecondIcon_properties =
 {
-    GX_PIXELMAP_ID_BLUETOOTH_30X30           /* pixelmap id                    */
+    0                                        /* pixelmap id                    */
 };
 GX_PROMPT_PROPERTIES MainUserScreen_SecondPrompt_properties =
 {
-    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_STRING_ID_PROMPT,                     /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_BTN_BORDER,                  /* normal text color              */
     GX_COLOR_ID_BTN_BORDER                   /* selected text color            */
 };
 GX_ICON_BUTTON_PROPERTIES MainUserScreen_ThirdIcon_properties =
 {
-    GX_PIXELMAP_ID_BLUETOOTH_30X30           /* pixelmap id                    */
+    0                                        /* pixelmap id                    */
 };
 GX_PROMPT_PROPERTIES MainUserScreen_ThirdPrompt_properties =
 {
-    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_STRING_ID_PROMPT,                     /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_BTN_BORDER,                  /* normal text color              */
     GX_COLOR_ID_BTN_BORDER                   /* selected text color            */
 };
 GX_ICON_BUTTON_PROPERTIES MainUserScreen_FifthIcon_properties =
 {
-    GX_PIXELMAP_ID_BLUETOOTH_30X30           /* pixelmap id                    */
+    0                                        /* pixelmap id                    */
 };
 GX_PROMPT_PROPERTIES MainUserScreen_FifthPrompt_properties =
 {
-    GX_STRING_ID_STRING_1,                   /* string id                      */
+    GX_STRING_ID_PROMPT,                     /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_BTN_BORDER,                  /* normal text color              */
     GX_COLOR_ID_BTN_BORDER                   /* selected text color            */

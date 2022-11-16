@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 14.11.2022   Time (hh:mm): 18:19                        */
+/*  Date (dd.mm.yyyy): 15.11.2022   Time (hh:mm): 13:18                        */
 /*******************************************************************************/
 
 
@@ -40588,7 +40588,7 @@ GX_CONST GX_UBYTE main_display_NEXT_FUNCTION_English[14] = "NEXT FUNCTION";
 GX_CONST GX_UBYTE main_display_NEXT_PROFILE_English[13] = "NEXT PROFILE";
 GX_CONST GX_UBYTE main_display_STRING_29_English[7] = "PAD ON";
 GX_CONST GX_UBYTE main_display_STRING_3_English[5] = "LONG";
-GX_CONST GX_UBYTE main_display_STRING_1_English[7] = "prompt";
+GX_CONST GX_UBYTE main_display_PROMPT_English[16] = "---------------";
 GX_CONST GX_UBYTE main_display_STRING_10_English[12] = "DIAGNOSTICS";
 GX_CONST GX_UBYTE main_display_STRING_11_English[9] = "SETTINGS";
 GX_CONST GX_UBYTE main_display_STRING_24_English[3] = "OK";
@@ -40688,7 +40688,7 @@ GX_CONST GX_UBYTE *main_display_English_string_table[96] =
     main_display_NEXT_PROFILE_English,
     main_display_STRING_29_English,
     main_display_STRING_3_English,
-    main_display_STRING_1_English,
+    main_display_PROMPT_English,
     main_display_STRING_10_English,
     main_display_STRING_11_English,
     main_display_STRING_24_English,

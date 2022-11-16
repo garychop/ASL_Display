@@ -2,7 +2,7 @@
   FileVersion = 2
 [GENERAL]
   ConnectMode = 0
-  CurrentFile = "C:\asl\ASL_Display\Release\ASL_Display.srec"
+  CurrentFile = "C:\asl\ASL_Display\Debug\ASL_Display.srec"
   DataFileSAddr = 0x00000000
   GUIMode = 0
   HostName = ""

@@ -30,7 +30,7 @@ VOID Initialize_MainScreenInfo()
 {
     // Populate the screen stuff.
     // "Power ON/OFF" information and description
-    g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = true;
+    g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Available = true;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Location = 0;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_LargeDescriptionID = GX_STRING_ID_POWER_ONOFF; //"POWER ON/OFF"
@@ -39,7 +39,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_LargeIcon = GX_PIXELMAP_ID_POWERICON_LARGE;
 
     // "Bluetooth" information and description
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = true;
+    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Available = true;
     g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Location = 1;
     g_MainScreenFeatureInfo[BLUETOOTH_ID].m_LargeDescriptionID = GX_STRING_ID_BLUETOOTH;
@@ -48,7 +48,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[BLUETOOTH_ID].m_LargeIcon = GX_PIXELMAP_ID_BLUETOOTH_70X70;
 
     // "Next Function" information and description
-    g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = true;
+    g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Available = true;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Location = 2;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_LargeDescriptionID = GX_STRING_ID_NEXT_FUNCTION; // "NEXT FUNCTION")
@@ -57,7 +57,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_LargeIcon = GX_PIXELMAP_ID_FUNCTIONNEXT_70X70;
 
     // "Next Profile" information and description
-    g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = true;
+    g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Available = true;
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Location = 3;
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_LargeDescriptionID = GX_STRING_ID_NEXT_PROFILE; // "NEXT PROFILE"
@@ -66,7 +66,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_LargeIcon = GX_PIXELMAP_ID_PROFILENEXT_70X70;
 
     // "RNet SEATING" information and description
-    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled = true;
+    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Available = true;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Location = 4;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_LargeDescriptionID = GX_STRING_ID_RNET_SEATING;
@@ -75,7 +75,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_LargeIcon = GX_PIXELMAP_ID_RNET_LOGO_70X70;
 
     // "SLEEP" information and description
-    g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = true;
+    g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available = true;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Location = 5;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_LargeDescriptionID = GX_STRING_ID_RNET_SLEEP;
@@ -85,7 +85,7 @@ VOID Initialize_MainScreenInfo()
 
     // This is the feature to display the Pad Digital and Proportional Sensors on the Main User Screen.
     // PAD_SENSOR_DISPLAY_FEATURE_ID
-    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled = true;
+    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Available = true;
     g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Location = -1;
     g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_LargeDescriptionID = GX_STRING_ID_DISPLAY_PADS;
@@ -96,7 +96,9 @@ VOID Initialize_MainScreenInfo()
     if (g_RNet_Active == false)
 	{
 		g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available = false;
-		g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Location = 0;
+		g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Location = -1;
+        g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Available = false;
+        g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Location = -1;
 	}
 
 }
@@ -106,26 +108,27 @@ VOID Initialize_MainScreenInfo()
 //*************************************************************************************
 void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad)
 {
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
+
     switch (center_pad)
     {
     case PAD_OFF:
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
         break;
     case PAD_GREEN:
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
         break;
     case PAD_ORANGE:
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
         break;
     case PAD_WHITE:
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
         break;
     }
@@ -133,23 +136,14 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
     switch (left_pad)
     {
     case PAD_OFF:
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
         break;
     case PAD_GREEN:
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
         break;
     case PAD_ORANGE:
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
         break;
     case PAD_WHITE:
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
         break;
     }
@@ -157,23 +151,14 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
     switch (right_pad)
     {
     case PAD_OFF:
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
         break;
     case PAD_GREEN:
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
         break;
     case PAD_ORANGE:
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
         break;
     case PAD_WHITE:
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
-        gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
         break;
     }
@@ -192,6 +177,8 @@ UINT DisplayMainScreenActiveFeatures ()
 	int enabledCount;
 	int feature;
 	UINT myErr = GX_SUCCESS;
+
+	AdjustActiveFeaturePositions (g_ActiveFeature);   // This function also store "g_ActiveFeature" if appropriate.
 
 	// Adjust the displayed information based upon the RNet setting.
 	// .. If RNet is enabled, the NEXT FUNCTION feature becomes RNet TOGGLE
@@ -266,45 +253,34 @@ UINT DisplayMainScreenActiveFeatures ()
         }
     }
 
-
-#if 0   // See if this is causing the bad behaviour
-    // Show the Fusion Logo if no features are enabled.... We are just driving.
-	MainUserScreen.MainUserScreen_Fusion_Button.gx_widget_size.gx_rectangle_top = 60;
-	MainUserScreen.MainUserScreen_Fusion_Button.gx_widget_size.gx_rectangle_right = 310;
-	MainUserScreen.MainUserScreen_Fusion_Button.gx_widget_size.gx_rectangle_bottom = 160;
-	if (enabledCount == 0)
-		MainUserScreen.MainUserScreen_Fusion_Button.gx_widget_size.gx_rectangle_left = 10;
-	else
-		MainUserScreen.MainUserScreen_Fusion_Button.gx_widget_size.gx_rectangle_left = 400;
-#else
+    // If no features are enabled, simply draw the FUSION logo.
 	if (enabledCount == 0)
 	    gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_Fusion_Button);
     else
         gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_Fusion_Button);
-#endif
 
 	// Now blank any unused items.
     for ( ; enabledCount < NUM_FEATURES; ++enabledCount)   // Start with the number of items that are enabled.
     {
         switch (enabledCount)
         {
-        case 0: // Show the first line
+        case 0: // Hide the first line
             myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FirstPrompt, GX_STRING_ID_BLANK);
             myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FirstIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
-        case 1: // Show second line item
+        case 1: // Hide second line item
             myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_SecondPrompt, GX_STRING_ID_BLANK);
             myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_SecondIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
-        case 2: // Process third line item, move to the 2nd line
+        case 2: // Hide the 3rd line
             myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_ThirdPrompt, GX_STRING_ID_BLANK);
             myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_ThirdIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
-        case 3: // Process fourth line item, move to the 3rd line.
+        case 3: // Hide the 4th line
             myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FourthPrompt, GX_STRING_ID_BLANK);
             myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FourthIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;
-        case 4: // Show fifth line item
+        case 4: // Hide the fifth line item
             myErr = gx_prompt_text_id_set (&MainUserScreen.MainUserScreen_FifthPrompt, GX_STRING_ID_BLANK);
             myErr = gx_icon_button_pixelmap_set (&MainUserScreen.MainUserScreen_FifthIcon, GX_PIXELMAP_ID_BLANK_30X30);
             break;

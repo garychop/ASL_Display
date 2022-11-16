@@ -156,7 +156,7 @@ extern uint8_t g_AttendantTimeout;     // 0=127 seconds, 0 = No Timeout
 
 VOID screen_toggle(GX_WINDOW *new_win, GX_WINDOW *old_win);
 VOID screen_switch(GX_WIDGET *parent, GX_WIDGET *new_screen);
-void AdjustActiveFeature (FEATURE_ID_ENUM newMode);
+void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode);
 void SaveSystemStatus (uint8_t Status1, uint8_t Status2);
 void ProcessCommunicationMsgs ();
 void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures, uint8_t *features2);

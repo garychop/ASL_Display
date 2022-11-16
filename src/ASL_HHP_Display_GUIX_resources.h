@@ -6,7 +6,7 @@
 /*  site at www.expresslogic.com.                                              */
 /*                                                                             */
 /*  GUIX Studio Revision 5.4.2.9                                               */
-/*  Date (dd.mm.yyyy): 14.11.2022   Time (hh:mm): 18:19                        */
+/*  Date (dd.mm.yyyy): 15.11.2022   Time (hh:mm): 13:18                        */
 /*******************************************************************************/
 
 
@@ -173,7 +173,7 @@
 #define GX_STRING_ID_NEXT_PROFILE 13
 #define GX_STRING_ID_STRING_29 14
 #define GX_STRING_ID_STRING_3 15
-#define GX_STRING_ID_STRING_1 16
+#define GX_STRING_ID_PROMPT 16
 #define GX_STRING_ID_STRING_10 17
 #define GX_STRING_ID_STRING_11 18
 #define GX_STRING_ID_STRING_24 19

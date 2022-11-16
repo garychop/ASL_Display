@@ -774,7 +774,8 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
 #endif
             // We are going to determine if the returned message contains the 2nd byte of features.
             // If not, we are going to set a default.
-            if (g_HA_EEPROM_Version < 6)
+            // We need to check for "0" because the EEPROM Version may not be processed yet.
+            if ((g_HA_EEPROM_Version > 0) && (g_HA_EEPROM_Version < 6))
                 HB_Response[3] = 0;     // Force NO features
 
             if (msgStatus == MSG_OK)
@@ -1043,6 +1044,7 @@ void ProcessCommunicationMsgs ()
 
                 if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
                 {
+                    AdjustActiveFeaturePositions ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
                     gxe.gx_event_type = GX_SIGNAL (HB_OK_ID, GX_EVENT_CLICKED);
                     gxe.gx_event_sender = GX_ID_NONE;
                     gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
@@ -1072,7 +1074,7 @@ void ProcessCommunicationMsgs ()
                         // This triggers redrawing the main screen if the mode changes.
                         else if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
                         {
-                            AdjustActiveFeature ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
+                            AdjustActiveFeaturePositions ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
                             gxe.gx_event_type = GX_EVENT_REDRAW;
                             gxe.gx_event_sender = GX_ID_NONE;
                             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
@@ -1234,6 +1236,7 @@ void ProcessCommunicationMsgs ()
             g_ClicksActive = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_SOUND_ENABLED_BIT_MASK ? true : false);              // Clicks on/off
             g_PowerUpInIdle = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_POWER_UP_IN_IDLE_BIT_MASK ? true : false);          // Power up in idle
             g_RNet_Active = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_RNET_SEATING_MASK ? true : false); // Process RNet
+            g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled = g_RNet_Active;
 
             // Process the second feature byte... if available from the Head Array
             if (g_HA_EEPROM_Version >= 6)
@@ -1258,7 +1261,8 @@ void ProcessCommunicationMsgs ()
                 g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled = false; // FEATURE_DISABLED;
             }
 
-            AdjustActiveFeature (g_ActiveFeature);   // This function also store "g_ActiveFeature" if appropriate.
+            AdjustActiveFeaturePositions (g_ActiveFeature);   // This function also store "g_ActiveFeature" if appropriate.
+
             // Redraw the current window.
             gxe.gx_event_type = GX_EVENT_REDRAW;
             gxe.gx_event_sender = GX_ID_NONE;

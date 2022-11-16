@@ -3699,9 +3699,9 @@
 <val>LONG</val>
 </string_record>
 <string_record>
-<id>STRING_1</id>
+<id>PROMPT</id>
 <font>0</font>
-<val>prompt</val>
+<val>---------------</val>
 </string_record>
 <string_record>
 <id>STRING_10</id>
@@ -7889,7 +7889,6 @@
 <id_name>FIRST_ICON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<pixelmap_id>BLUETOOTH_70X70</pixelmap_id>
 </widget>
 <widget>
 <type>prompt</type>
@@ -7909,7 +7908,7 @@
 <id_name>FIRST_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_105</string_id>
+<string_id>PROMPT</string_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -7933,7 +7932,6 @@
 <id_name>FOURTH_ICON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<pixelmap_id>BLUETOOTH_30X30</pixelmap_id>
 </widget>
 <widget>
 <type>prompt</type>
@@ -7953,7 +7951,7 @@
 <id_name>FOURTH_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_1</string_id>
+<string_id>PROMPT</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>BTN_BORDER</normal_text_color>
 <selected_text_color>BTN_BORDER</selected_text_color>
@@ -7977,7 +7975,6 @@
 <id_name>SECOND_ICON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<pixelmap_id>BLUETOOTH_30X30</pixelmap_id>
 </widget>
 <widget>
 <type>prompt</type>
@@ -7997,7 +7994,7 @@
 <id_name>SECOND_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_1</string_id>
+<string_id>PROMPT</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>BTN_BORDER</normal_text_color>
 <selected_text_color>BTN_BORDER</selected_text_color>
@@ -8021,7 +8018,6 @@
 <id_name>THIRD_ICON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<pixelmap_id>BLUETOOTH_30X30</pixelmap_id>
 </widget>
 <widget>
 <type>prompt</type>
@@ -8041,7 +8037,7 @@
 <id_name>THIRD_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_1</string_id>
+<string_id>PROMPT</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>BTN_BORDER</normal_text_color>
 <selected_text_color>BTN_BORDER</selected_text_color>
@@ -8084,7 +8080,6 @@
 <id_name>Fifth_ICON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<pixelmap_id>BLUETOOTH_30X30</pixelmap_id>
 </widget>
 <widget>
 <type>prompt</type>
@@ -8104,7 +8099,7 @@
 <id_name>FIFTH_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_1</string_id>
+<string_id>PROMPT</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>BTN_BORDER</normal_text_color>
 <selected_text_color>BTN_BORDER</selected_text_color>
