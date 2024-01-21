@@ -162,6 +162,7 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("ResetFinishScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("SetPadDirectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("SetPadTypeScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("SNP_CalibrationScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("UserSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("UserSelectionScreen", GX_NULL, GX_NULL);
     //gx_studio_named_widget_create("SettingsScreen", GX_NULL, GX_NULL);

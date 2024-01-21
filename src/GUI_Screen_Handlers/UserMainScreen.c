@@ -122,14 +122,21 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
     {
     case PAD_OFF:
         break;
-    case PAD_GREEN:
+    case PAD_GREEN:     // Only the Proximity Sensor is active.
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
         break;
-    case PAD_ORANGE:
-        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
+    case PAD_ORANGE:    // Only paint orange if its set to Proportional and both
+                        // .. the Proximity, Digital sensor and the Pressure
+                        // .. sensor are active.
+        if (g_PadSettings[CENTER_PAD].m_PadType == DIGITAL_PADTYPE)
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
+        else
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
         break;
-    case PAD_WHITE:
-        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
+    case PAD_WHITE: // If it's only the Pressure Sensor, then paint White only
+                    // .. if the PAD TYPE is set to Proportional
+        if (g_PadSettings[CENTER_PAD].m_PadType == PROPORTIONAL_PADTYPE)
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
         break;
     }
 
@@ -140,11 +147,15 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
     case PAD_GREEN:
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
         break;
-    case PAD_ORANGE:
-        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
+    case PAD_ORANGE:    // Only paint orange if its set to Proportional
+        if (g_PadSettings[LEFT_PAD].m_PadType == DIGITAL_PADTYPE)
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
+        else
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
         break;
     case PAD_WHITE:
-        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
+        if (g_PadSettings[LEFT_PAD].m_PadType == PROPORTIONAL_PADTYPE)
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
         break;
     }
 
@@ -155,11 +166,15 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
     case PAD_GREEN:
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
         break;
-    case PAD_ORANGE:
-        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
+    case PAD_ORANGE:    // Only paint orange if its set to Proportional
+        if (g_PadSettings[RIGHT_PAD].m_PadType == DIGITAL_PADTYPE)
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
+        else
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
         break;
     case PAD_WHITE:
-        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
+        if (g_PadSettings[RIGHT_PAD].m_PadType == PROPORTIONAL_PADTYPE)
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
         break;
     }
 }
@@ -353,6 +368,9 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
     case GX_EVENT_SHOW:
         g_ActiveScreen = (GX_WIDGET*) window;
+//        SendGetPadAssignmentMsg (LEFT_PAD);
+//        SendGetPadAssignmentMsg (RIGHT_PAD);
+//        SendGetPadAssignmentMsg (CENTER_PAD);
         DisplayMainScreenActiveFeatures();
         break;
 

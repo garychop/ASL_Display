@@ -416,6 +416,8 @@ uint8_t ExecuteHeartBeat(void)
     HeadArrayMsg.HeartBeatMsg.m_HB_Count = HB_Response[1];
     HeadArrayMsg.HeartBeatMsg.m_ActiveMode = TranslateFeature_CharToEnum ((char) HB_Response[2]);// Translate the Active Feature from COMM protocol (1-based) to GUI Array position (0-based).
     HeadArrayMsg.HeartBeatMsg.m_HA_Status = HB_Response[3];
+    if (g_HA_EEPROM_Version < 8)
+        HB_Response[4] = 0; // Since this is older ASL110 firmware, clear the Sensor Status since it's garbage and causing excessive delays.
     HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus = HB_Response[4];   // Transfer the Sensor Status's.
 
     HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;
@@ -1171,7 +1173,7 @@ void ProcessCommunicationMsgs ()
 
             break;
 
-        case HHP_HA_PAD_ASSIGMENT_SET:  // Yes, the COMM task is responding with a "set" command.
+        case HHP_HA_PAD_ASSIGMENT_GET:  // Yes, the COMM task is responding with a "set" command.
             myPad = HeadArrayMsg.PadAssignmentResponseMsg.m_PhysicalPadNumber;
             if (myPad != INVALID_PAD)
             {

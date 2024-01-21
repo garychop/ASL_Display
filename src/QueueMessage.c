@@ -254,7 +254,7 @@ void SendPadGetResponse (PHYSICAL_PAD_ENUM physicalPad, PAD_DIRECTION_ENUM assig
 {
     HHP_HA_MSG_STRUCT HHP_Msg;
 
-    HHP_Msg.m_MsgType = HHP_HA_PAD_ASSIGMENT_SET;
+    HHP_Msg.m_MsgType = HHP_HA_PAD_ASSIGMENT_GET;
     HHP_Msg.PadAssignmentResponseMsg.m_PhysicalPadNumber = physicalPad;
     HHP_Msg.PadAssignmentResponseMsg.m_LogicalDirection = assignment;
     HHP_Msg.PadAssignmentResponseMsg.m_PadType = padType;
