@@ -5,8 +5,8 @@
 /*  specification file(s). For more information please refer to the Azure RTOS */
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
-/*  GUIX Studio Revision 6.3.0.1                                               */
-/*  Date (dd.mm.yyyy): 26.12.2023   Time (hh:mm): 10:47                        */
+/*  GUIX Studio Revision 6.4.0.0                                               */
+/*  Date (dd.mm.yyyy): 21. 1.2024   Time (hh:mm): 10:46                        */
 /*******************************************************************************/
 
 
@@ -129,34 +129,26 @@ extern   "C" {
 #define PAD_TYPE_BTN_ID 105
 #define PAD_DIRECTIONS_BTN_ID 106
 #define MINIMUM_DRIVE_BTN_ID 107
-#define CENTER_PAD_FORWARD_ARROW_BTN_ID 108
-#define LEFT_PAD_LEFT_ARROW_BTN_ID 109
-#define RIGHT_PAD_RIGHT_ARROW_BTN_ID 110
-#define LEFT_PAD_RIGHT_ARROW_BTN_ID 111
-#define LEFT_PAD_FORWARD_ARROW_BTN_ID 112
-#define RIGHT_PAD_LEFT_ARROW_BTN_ID 113
-#define RIGHT_PAD_FORWARD_ARROW_BTN_ID 114
-#define CENTER_PAD_LEFT_ARROW_BTN_ID 115
-#define CENTER_PAD_RIGHT_ARROW_BTN_ID 116
-#define CENTER_PAD_QUESTION_BTN_ID 117
-#define LEFT_PAD_QUESTION_BTN_ID 118
-#define RIGHT_PAD_QUESTION_BTN_ID 119
-#define PAD_SETTINGS_BTN_ID 120
-#define SETTINGS_BTN_ID 121
-#define MORE_BTN_ID 122
-#define MAIN_USER_SCREEN_ID 123
-#define FIRST_ICON 124
-#define FIRST_PROMPT 125
-#define FOURTH_ICON 126
-#define FOURTH_PROMPT 127
-#define SECOND_ICON 128
-#define SECOND_PROMPT 129
-#define THIRD_ICON 130
-#define THIRD_PROMPT 131
-#define BOTH_ARROW_BTN_ID 132
-#define Fifth_ICON 133
-#define FIFTH_PROMPT 134
-#define ATTENDANT_BTN_ID 135
+#define CENTER_PAD_BTN_ID 108
+#define LEFT_PAD_BTN_ID 109
+#define RIGHT_PAD_BTN_ID 110
+#define SETTING_PROMPT_ID 111
+#define PAD_SETTINGS_BTN_ID 112
+#define SETTINGS_BTN_ID 113
+#define MORE_BTN_ID 114
+#define MAIN_USER_SCREEN_ID 115
+#define FIRST_ICON 116
+#define FIRST_PROMPT 117
+#define FOURTH_ICON 118
+#define FOURTH_PROMPT 119
+#define SECOND_ICON 120
+#define SECOND_PROMPT 121
+#define THIRD_ICON 122
+#define THIRD_PROMPT 123
+#define BOTH_ARROW_BTN_ID 124
+#define Fifth_ICON 125
+#define FIFTH_PROMPT 126
+#define ATTENDANT_BTN_ID 127
 
 
 /* Define animation ids                                                        */
@@ -543,24 +535,11 @@ typedef struct PADOPTIONSSETTINGSSCREEN_CONTROL_BLOCK_STRUCT
 typedef struct SETPADDIRECTIONSCREEN_CONTROL_BLOCK_STRUCT
 {
     GX_WINDOW_MEMBERS_DECLARE
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_CenterPad_ForwardArrow_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_LeftPad_LeftArrow_Button;
+    GX_PIXELMAP_BUTTON SetPadDirectionScreen_CenterPad_Button;
+    GX_PIXELMAP_BUTTON SetPadDirectionScreen_LeftPad_Button;
     GX_TEXT_BUTTON SetPadDirectionScreen_OK_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_RightPad_RightArrow_Button;
+    GX_PIXELMAP_BUTTON SetPadDirectionScreen_RightPad_Button;
     GX_PROMPT SetPadDirectionScreen_SettingPadPrompt;
-    GX_PROMPT SetPadDirectionScreen_SettingPadPrompt_1;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_LeftPad_RightArrow_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_LeftPad_ForwardArrow_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_LeftPad_Off_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_RightPad_LeftArrow_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_RightPad_ForwardArrow_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_RightPad_Off_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_CenterPad_LeftArrow_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_CenterPad_RightArrow_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_CenterPad_Off_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_CenterPad_Question_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_LeftPad_Question_Button;
-    GX_PIXELMAP_BUTTON SetPadDirectionScreen_RightPad_Question_Button;
 } SETPADDIRECTIONSCREEN_CONTROL_BLOCK;
 
 typedef struct HHP_START_SCREEN_CONTROL_BLOCK_STRUCT

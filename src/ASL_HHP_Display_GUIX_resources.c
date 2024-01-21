@@ -5,8 +5,8 @@
 /*  resource file(s). For more information please refer to the Azure RTOS GUIX */
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
-/*  GUIX Studio Revision 6.3.0.1                                               */
-/*  Date (dd.mm.yyyy): 26.12.2023   Time (hh:mm): 10:47                        */
+/*  GUIX Studio Revision 6.4.0.0                                               */
+/*  Date (dd.mm.yyyy): 21. 1.2024   Time (hh:mm): 10:46                        */
 /*******************************************************************************/
 
 
@@ -42756,7 +42756,7 @@ GX_CONST GX_UBYTE main_display_STRING_24_English[] = "OK";
 GX_CONST GX_UBYTE main_display_STRING_4_English[] = "UP Arrow";
 GX_CONST GX_UBYTE main_display_STRING_5_English[] = "POWER ON/OFF";
 GX_CONST GX_UBYTE main_display_STRING_6_English[] = "NEXT FUNCTION";
-GX_CONST GX_UBYTE main_display_STRING_28_English[] = "TOUCH PAD TO CHANGE";
+GX_CONST GX_UBYTE main_display_STRING_28_English[] = "TOUCH PAD TO CHANGE DIRECTION";
 GX_CONST GX_UBYTE main_display_STRING_17_English[] = "DIRECTION";
 GX_CONST GX_UBYTE main_display_STRING_46_English[] = "PAD SETTINGS";
 GX_CONST GX_UBYTE main_display_STRING_45_English[] = "USER SETTINGS";

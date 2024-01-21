@@ -209,17 +209,13 @@ void my_gui_thread_entry(void)
     // Setup the ILI9341V LCD Driver and Touchscreen.
     ILI9341V_Init();
 
-    // Populate the default Pad settings.
-    g_PadSettings[LEFT_PAD].m_PadDirection = INVALID_DIRECTION;
+    // Populate the default Left Pad settings.
+    g_PadSettings[LEFT_PAD].m_PadDirection = LEFT_DIRECTION;
     g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[LEFT_PAD].m_PadStatus = PAD_STATUS_OK;
     g_PadSettings[LEFT_PAD].m_PadSensorStatus = PAD_OFF;
     g_PadSettings[LEFT_PAD].m_MinimumDriveValue = 20;
-    g_PadSettings[LEFT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Off_Button;
-    g_PadSettings[LEFT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_RightArrow_Button;
-    g_PadSettings[LEFT_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_LeftArrow_Button;
-    g_PadSettings[LEFT_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_ForwardArrow_Button;
-    g_PadSettings[LEFT_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Question_Button;
+    g_PadSettings[LEFT_PAD].m_DirectionIcons = &SetPadDirectionScreen.SetPadDirectionScreen_LeftPad_Button;
     g_PadSettings[LEFT_PAD].m_PadMinimumCalibrationValue = 0;
     g_PadSettings[LEFT_PAD].m_PadMaximumCalibrationValue = 100;
     g_PadSettings[LEFT_PAD].m_Minimum_ADC_Threshold = 50;
@@ -235,17 +231,13 @@ void my_gui_thread_entry(void)
     strcpy (g_PadSettings[LEFT_PAD].m_RawValueString, "");
     strcpy (g_PadSettings[LEFT_PAD].m_DriveDemandString, "");
 
-
-    g_PadSettings[RIGHT_PAD].m_PadDirection = INVALID_DIRECTION;
+    // Populate the Right Pad default settings.
+    g_PadSettings[RIGHT_PAD].m_PadDirection = RIGHT_DIRECTION;
     g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[RIGHT_PAD].m_PadStatus = PAD_STATUS_OK;
     g_PadSettings[RIGHT_PAD].m_PadSensorStatus = PAD_OFF;
     g_PadSettings[RIGHT_PAD].m_MinimumDriveValue = 20;
-    g_PadSettings[RIGHT_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Off_Button;
-    g_PadSettings[RIGHT_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_RightArrow_Button;
-    g_PadSettings[RIGHT_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_LeftArrow_Button;
-    g_PadSettings[RIGHT_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_ForwardArrow_Button;
-    g_PadSettings[RIGHT_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Question_Button;
+    g_PadSettings[RIGHT_PAD].m_DirectionIcons = &SetPadDirectionScreen.SetPadDirectionScreen_RightPad_Button;
     g_PadSettings[RIGHT_PAD].m_PadMinimumCalibrationValue = 0;
     g_PadSettings[RIGHT_PAD].m_PadMaximumCalibrationValue = 100;
     g_PadSettings[RIGHT_PAD].m_Minimum_ADC_Threshold = 25;
@@ -261,17 +253,13 @@ void my_gui_thread_entry(void)
     strcpy (g_PadSettings[RIGHT_PAD].m_RawValueString, "");
     strcpy (g_PadSettings[RIGHT_PAD].m_DriveDemandString, "");
 
-
-    g_PadSettings[CENTER_PAD].m_PadDirection = INVALID_DIRECTION;
+    // Populate the Center Pad default settings.
+    g_PadSettings[CENTER_PAD].m_PadDirection = FORWARD_DIRECTION;
     g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[CENTER_PAD].m_PadStatus = PAD_STATUS_OK;
     g_PadSettings[CENTER_PAD].m_PadSensorStatus = PAD_OFF;
     g_PadSettings[CENTER_PAD].m_MinimumDriveValue = 20;
-    g_PadSettings[CENTER_PAD].m_DirectionIcons[OFF_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Off_Button;
-    g_PadSettings[CENTER_PAD].m_DirectionIcons[RIGHT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_RightArrow_Button;
-    g_PadSettings[CENTER_PAD].m_DirectionIcons[LEFT_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_LeftArrow_Button;
-    g_PadSettings[CENTER_PAD].m_DirectionIcons[FORWARD_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_ForwardArrow_Button;
-    g_PadSettings[CENTER_PAD].m_DirectionIcons[INVALID_DIRECTION] = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Question_Button;
+    g_PadSettings[CENTER_PAD].m_DirectionIcons = &SetPadDirectionScreen.SetPadDirectionScreen_CenterPad_Button;
     g_PadSettings[CENTER_PAD].m_PadMinimumCalibrationValue = 0;
     g_PadSettings[CENTER_PAD].m_PadMaximumCalibrationValue = 100;
     g_PadSettings[CENTER_PAD].m_Minimum_ADC_Threshold = 20;

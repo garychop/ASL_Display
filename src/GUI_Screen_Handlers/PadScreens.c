@@ -15,6 +15,9 @@
 // Local Macros
 //*************************************************************************************
 
+static GX_RESOURCE_ID Pad_Direction_IDs [] = {GX_PIXELMAP_ID_PAD_OFF, GX_PIXELMAP_ID_LEFTWHITEARROW, GX_PIXELMAP_ID_UPWHITEARROW, GX_PIXELMAP_ID_RIGHTWHITEARROW, GX_PIXELMAP_ID_RIGHTWHITEARROW};
+
+
 #define GRAPH_CENTER_PT_XPOS 139    // From Left of screen
 #define GRAPH_CENTER_PT_YPOS 130    // From Top of screen
 
@@ -229,6 +232,18 @@ UINT MinimumDriveScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
 VOID SetPadDirectionScreen_draw_function (GX_WINDOW *window)
 {
+    UINT pads;
+    GX_RESOURCE_ID myIcon;
+
+    for (pads = 0; pads < 3; ++pads)
+    {
+        myIcon = Pad_Direction_IDs[g_PadSettings[pads].m_PadDirection];
+        gx_pixelmap_button_pixelmap_set (g_PadSettings[pads].m_DirectionIcons, myIcon, myIcon, myIcon);
+    }
+
+    gx_window_draw(window);
+
+#ifdef USE_ORIGINAL_CODE
     UINT pads, icons;
 
     for (pads = 0; pads < 3; ++pads)            // for each pad
@@ -242,97 +257,59 @@ VOID SetPadDirectionScreen_draw_function (GX_WINDOW *window)
     }
 
     gx_window_draw(window);
+#endif // #ifdef USE_ORIGINAL_CODE
 }
 
 //*************************************************************************************
 
 UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
-    UINT pads, icons;
+    UINT pads;
+    GX_RESOURCE_ID myIcon;
+
     switch (event_ptr->gx_event_type)
     {
-        case GX_EVENT_SHOW:
-            // Show correct settings for LEFT pad. Off, Right, Forward or Left.
-            // First let's hide all choices for all pads.
-            for (pads = 0; pads < 3; ++pads)
-            {
-                for (icons = 0; icons < 5; ++icons)
-                {
-                    gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[icons], &g_HiddenRectangle);
-                }
-                gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DirectionIcons[INVALID_DIRECTION], &g_PadDirectionLocation[pads]);
-            }
-            SendGetPadAssignmentMsg (LEFT_PAD);
-            SendGetPadAssignmentMsg (RIGHT_PAD);
-            SendGetPadAssignmentMsg (CENTER_PAD);
-            break;
+    case GX_EVENT_SHOW:
+        for (pads = 0; pads < 3; ++pads)
+        {
+            myIcon = Pad_Direction_IDs[0]; // This is the OFF icon
+            gx_pixelmap_button_pixelmap_set (g_PadSettings[pads].m_DirectionIcons, myIcon, myIcon, myIcon);
+        }
+        SendGetPadAssignmentMsg (LEFT_PAD);
+        SendGetPadAssignmentMsg (RIGHT_PAD);
+        SendGetPadAssignmentMsg (CENTER_PAD);
+        break;
 
-        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-            screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
-            break;
-        // Process LEFT button pushes
-        case GX_SIGNAL(LEFT_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
-            g_PadSettings[LEFT_PAD].m_PadDirection = LEFT_DIRECTION;
-            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (LEFT_PAD);
-            break;
-        case GX_SIGNAL(LEFT_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
-            g_PadSettings[LEFT_PAD].m_PadDirection = FORWARD_DIRECTION;
-            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (LEFT_PAD);
-            break;
-        case GX_SIGNAL(LEFT_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
-            g_PadSettings[LEFT_PAD].m_PadDirection = RIGHT_DIRECTION;
-            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (LEFT_PAD);
-            break;
-        case GX_SIGNAL(LEFT_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+    case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&PadOptionsSettingsScreen, window);
+        break;
+
+    // Process LEFT button pushes
+    case GX_SIGNAL(LEFT_PAD_BTN_ID, GX_EVENT_CLICKED):
+        ++g_PadSettings[LEFT_PAD].m_PadDirection;
+        if (g_PadSettings[LEFT_PAD].m_PadDirection >= INVALID_DIRECTION)
             g_PadSettings[LEFT_PAD].m_PadDirection = OFF_DIRECTION;
-            SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (LEFT_PAD);
-            break;
-        // Process RIGHT button pushes
-        case GX_SIGNAL(RIGHT_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
-            g_PadSettings[RIGHT_PAD].m_PadDirection = LEFT_DIRECTION;
-            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (RIGHT_PAD);
-            break;
-        case GX_SIGNAL(RIGHT_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
-            g_PadSettings[RIGHT_PAD].m_PadDirection = FORWARD_DIRECTION;
-            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (RIGHT_PAD);
-            break;
-        case GX_SIGNAL(RIGHT_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
-            g_PadSettings[RIGHT_PAD].m_PadDirection = RIGHT_DIRECTION;
-            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (RIGHT_PAD);
-            break;
-        case GX_SIGNAL(RIGHT_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
+        SendGetPadAssignmentMsg (LEFT_PAD);
+        break;
+
+    // Process RIGHT button pushes
+    case GX_SIGNAL(RIGHT_PAD_BTN_ID, GX_EVENT_CLICKED):
+        ++g_PadSettings[RIGHT_PAD].m_PadDirection;
+        if (g_PadSettings[RIGHT_PAD].m_PadDirection >= INVALID_DIRECTION)
             g_PadSettings[RIGHT_PAD].m_PadDirection = OFF_DIRECTION;
-            SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
-            SendGetPadAssignmentMsg (RIGHT_PAD);
-            break;
-        // Process CENTER PAD button pushes
-        case GX_SIGNAL(CENTER_PAD_OFF_BTN_ID, GX_EVENT_CLICKED):
-            g_PadSettings[CENTER_PAD].m_PadDirection = LEFT_DIRECTION;
-            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
-            SendGetPadAssignmentMsg (CENTER_PAD);
-            break;
-        case GX_SIGNAL(CENTER_PAD_LEFT_ARROW_BTN_ID, GX_EVENT_CLICKED):
-            g_PadSettings[CENTER_PAD].m_PadDirection = FORWARD_DIRECTION;
-            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
-            SendGetPadAssignmentMsg (CENTER_PAD);
-            break;
-        case GX_SIGNAL(CENTER_PAD_FORWARD_ARROW_BTN_ID, GX_EVENT_CLICKED):
-            g_PadSettings[CENTER_PAD].m_PadDirection = RIGHT_DIRECTION;
-            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
-            SendGetPadAssignmentMsg (CENTER_PAD);
-            break;
-        case GX_SIGNAL(CENTER_PAD_RIGHT_ARROW_BTN_ID, GX_EVENT_CLICKED):
+        SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
+        SendGetPadAssignmentMsg (RIGHT_PAD);
+        break;
+
+    // Process CENTER PAD button pushes
+    case GX_SIGNAL(CENTER_PAD_BTN_ID, GX_EVENT_CLICKED):
+        ++g_PadSettings[CENTER_PAD].m_PadDirection;
+        if (g_PadSettings[CENTER_PAD].m_PadDirection >= INVALID_DIRECTION)
             g_PadSettings[CENTER_PAD].m_PadDirection = OFF_DIRECTION;
-            SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
-            SendGetPadAssignmentMsg (CENTER_PAD);
-            break;
+        SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
+        SendGetPadAssignmentMsg (CENTER_PAD);
+        break;
     } // end switch
 
     gx_window_event_process(window, event_ptr);

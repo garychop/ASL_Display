@@ -17,7 +17,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 #include "custom_checkbox.h"
 
-#define ASL165_DispalyVersionString "ASL165: 1.14.2"
+#define ASL165_DispalyVersionString "ASL165: 1.14.3"
 
 
 //#define MAXIMUM_DRIVE_SPEED (40)
@@ -108,7 +108,8 @@ typedef struct PadInfoStruct
     GX_PIXELMAP_BUTTON *m_DiagnosticDigital_Widget;
     GX_PIXELMAP_BUTTON *m_DiagnosticProportional_Widget;
     GX_RECTANGLE m_DiagnosticWidigetLocation;
-    GX_PIXELMAP_BUTTON *m_DirectionIcons[5];
+    //GX_PIXELMAP_BUTTON *m_DirectionIcons[5];
+    GX_PIXELMAP_BUTTON *m_DirectionIcons;
     GX_PROMPT *m_RawValuePrompt;
     GX_PROMPT *m_AdjustedValuePrompt;
     uint16_t m_Proportional_RawValue;
