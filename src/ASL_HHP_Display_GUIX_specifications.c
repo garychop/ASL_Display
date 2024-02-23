@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 23. 2.2024   Time (hh:mm): 14:21                        */
+/*  Date (dd.mm.yyyy): 23. 2.2024   Time (hh:mm): 16:33                        */
 /*******************************************************************************/
 
 
@@ -361,7 +361,7 @@ GX_CONST GX_STUDIO_WIDGET SNP_CalibrationScreen_define =
 };
 GX_WINDOW_PROPERTIES Error_Screen_properties =
 {
-    GX_PIXELMAP_ID_HEADARRAY004              /* wallpaper pixelmap id          */
+    0                                        /* wallpaper pixelmap id          */
 };
 GX_PROMPT_PROPERTIES Error_Screen_CyclePower_Prompt_properties =
 {
@@ -2604,7 +2604,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_RightPadProp_Button_properties =
 };
 GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadOff_Button_properties =
 {
-    GX_PIXELMAP_ID_CENTERPAD_DIAGNOSTIC_OFF, /* normal pixelmap id             */
+    0,                                       /* normal pixelmap id             */
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };
@@ -3200,7 +3200,7 @@ GX_PIXELMAP_PROMPT_PROPERTIES ReadyScreen_PowerLargeOrangePrompt_properties =
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT,               /* selected text color            */
-    GX_PIXELMAP_ID_POWERICON_ORANGE_LARGE,   /* left pixelmap id               */
+    0,                                       /* left pixelmap id               */
     0,                                       /* fill pixelmap id               */
     0,                                       /* right pixelmap id              */
     0,                                       /* selected left pixelmap id      */
@@ -3289,7 +3289,7 @@ GX_WINDOW_PROPERTIES StartupSplashScreen_properties =
 };
 GX_PIXELMAP_BUTTON_PROPERTIES StartupSplashScreen_pixelmap_button_properties =
 {
-    GX_PIXELMAP_ID_FUSION_LOGO_REDWHITE,     /* normal pixelmap id             */
+    GX_PIXELMAP_ID_ASL165_STARTUP_LOGO_REDWHITE, /* normal pixelmap id         */
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };
@@ -3486,7 +3486,7 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_define =
 };
 GX_WINDOW_PROPERTIES PadCalibrationScreen_properties =
 {
-    GX_PIXELMAP_ID_HEADARRAY003              /* wallpaper pixelmap id          */
+    0                                        /* wallpaper pixelmap id          */
 };
 GX_PIXELMAP_BUTTON_PROPERTIES PadCalibrationScreen_CenterPadON_Button_properties =
 {

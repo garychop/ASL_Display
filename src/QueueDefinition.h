@@ -49,7 +49,8 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_DRIVE_OFFSET_SET = 0x41,
     HHP_HA_ATTENDANT_SETTINGS_GET = 0x42,
     HHP_HA_ATTENDANT_SETTINGS_SET = 0x43,
-    HHP_HA_ATTENDANT_CONTROLS_CMD = 0x44
+    HHP_HA_ATTENDANT_CONTROLS_CMD = 0x44,
+    HHP_HA_WHO_ARE_YOU_CMD = 0x46
 } HHP_HA_MESSAGES_ENUM;
 
 // This structure is used to send messages from the GUI to the Head Array Communication Task
