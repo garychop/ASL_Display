@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 23. 2.2024   Time (hh:mm): 16:33                        */
+/*  Date (dd.mm.yyyy): 25. 2.2024   Time (hh:mm): 10:21                        */
 /*******************************************************************************/
 
 
@@ -100,55 +100,56 @@ extern   "C" {
 #define POWER_LARGE_ORANGE_PROMPT_ID 76
 #define PRESS_SWITCH_PROMPT_ID 77
 #define STARTUP_SPLASH_SCREEN_ID 78
-#define STATUS_PROMPT_ID 79
-#define HB_OK_ID 80
-#define HB_TIMEOUT_ID 81
-#define POWER_OFF_ID 82
-#define POWER_ON_ID 83
-#define HB_OON_ID 84
-#define CENTER_PAD_ON_BTN_ID 85
-#define MINIMUM_INSTRUCT_PROMPT_ID 86
-#define LEFT_PAD_ON_BTN_ID 87
-#define RIGHT_PAD_ON_BTN_ID 88
-#define MAXIMUM_INSTRUCT_PROMPT_ID 89
-#define VALUE_PROMPT_ID 90
-#define PAD_VALUE_PROMPT_ID 91
-#define CENTER_PAD_PROPORTIONAL_BTN_ID 92
-#define LEFT_PAD_PROPORTIONAL_BTN_ID 93
-#define RIGHT_PAD_PROPORTIONAL_BTN_ID 94
-#define SETTING_PROMPT01_ID 95
-#define CLICKS_PROMPT_ID 96
-#define POWERUP_IDLE_PROMPT_ID 97
-#define TIMEOUT_BTN_ID 98
-#define RNET_ACTIVE_PROMPT_ID 99
-#define CLICKS_TOGGLE_BTN 100
-#define POWER_UP_TOGGLE_BTN 101
-#define RNET_TOGGLE_BTN 102
-#define MODE_PORT_SCHEMA_PROMPT_ID 103
-#define MODE_REVERSE_TOGGLE_BTN 104
-#define PAD_TYPE_BTN_ID 105
-#define PAD_DIRECTIONS_BTN_ID 106
-#define MINIMUM_DRIVE_BTN_ID 107
-#define CENTER_PAD_BTN_ID 108
-#define LEFT_PAD_BTN_ID 109
-#define RIGHT_PAD_BTN_ID 110
-#define SETTING_PROMPT_ID 111
-#define PAD_SETTINGS_BTN_ID 112
-#define SETTINGS_BTN_ID 113
-#define MORE_BTN_ID 114
-#define MAIN_USER_SCREEN_ID 115
-#define FIRST_ICON 116
-#define FIRST_PROMPT 117
-#define FOURTH_ICON 118
-#define FOURTH_PROMPT 119
-#define SECOND_ICON 120
-#define SECOND_PROMPT 121
-#define THIRD_ICON 122
-#define THIRD_PROMPT 123
-#define BOTH_ARROW_BTN_ID 124
-#define Fifth_ICON 125
-#define FIFTH_PROMPT 126
-#define ATTENDANT_BTN_ID 127
+#define STARTUP_PROMPT_ID 79
+#define STATUS_PROMPT_ID 80
+#define HB_OK_ID 81
+#define HB_TIMEOUT_ID 82
+#define POWER_OFF_ID 83
+#define POWER_ON_ID 84
+#define HB_OON_ID 85
+#define CENTER_PAD_ON_BTN_ID 86
+#define MINIMUM_INSTRUCT_PROMPT_ID 87
+#define LEFT_PAD_ON_BTN_ID 88
+#define RIGHT_PAD_ON_BTN_ID 89
+#define MAXIMUM_INSTRUCT_PROMPT_ID 90
+#define VALUE_PROMPT_ID 91
+#define PAD_VALUE_PROMPT_ID 92
+#define CENTER_PAD_PROPORTIONAL_BTN_ID 93
+#define LEFT_PAD_PROPORTIONAL_BTN_ID 94
+#define RIGHT_PAD_PROPORTIONAL_BTN_ID 95
+#define SETTING_PROMPT01_ID 96
+#define CLICKS_PROMPT_ID 97
+#define POWERUP_IDLE_PROMPT_ID 98
+#define TIMEOUT_BTN_ID 99
+#define RNET_ACTIVE_PROMPT_ID 100
+#define CLICKS_TOGGLE_BTN 101
+#define POWER_UP_TOGGLE_BTN 102
+#define RNET_TOGGLE_BTN 103
+#define MODE_PORT_SCHEMA_PROMPT_ID 104
+#define MODE_REVERSE_TOGGLE_BTN 105
+#define PAD_TYPE_BTN_ID 106
+#define PAD_DIRECTIONS_BTN_ID 107
+#define MINIMUM_DRIVE_BTN_ID 108
+#define CENTER_PAD_BTN_ID 109
+#define LEFT_PAD_BTN_ID 110
+#define RIGHT_PAD_BTN_ID 111
+#define SETTING_PROMPT_ID 112
+#define PAD_SETTINGS_BTN_ID 113
+#define SETTINGS_BTN_ID 114
+#define MORE_BTN_ID 115
+#define MAIN_USER_SCREEN_ID 116
+#define FIRST_ICON 117
+#define FIRST_PROMPT 118
+#define FOURTH_ICON 119
+#define FOURTH_PROMPT 120
+#define SECOND_ICON 121
+#define SECOND_PROMPT 122
+#define THIRD_ICON 123
+#define THIRD_PROMPT 124
+#define BOTH_ARROW_BTN_ID 125
+#define Fifth_ICON 126
+#define FIFTH_PROMPT 127
+#define ATTENDANT_BTN_ID 128
 
 
 /* Define animation ids                                                        */
@@ -471,7 +472,7 @@ typedef struct READYSCREEN_CONTROL_BLOCK_STRUCT
 typedef struct STARTUPSPLASHSCREEN_CONTROL_BLOCK_STRUCT
 {
     GX_WINDOW_MEMBERS_DECLARE
-    GX_PIXELMAP_BUTTON StartupSplashScreen_pixelmap_button;
+    GX_PIXELMAP_BUTTON StartupSplashScreen_StartupPrompt;
     GX_PROMPT StartupSplashScreen_StatusPrompt;
     GX_BUTTON StartupSplashScreen_HB_OK_Button;
     GX_BUTTON StartupSplashScreen_HB_TimeoutButton;

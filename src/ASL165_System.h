@@ -19,6 +19,7 @@
 
 #define ASL165_DispalyVersionString "ASL165: 1.14.3"
 
+typedef enum WHOAMI_ENUM_DEF {DEVICE_ID_UNKNOWN = 0x00, DEVICE_ID_ION = 0x01} WHOAMI_ENUM;
 
 //#define MAXIMUM_DRIVE_SPEED (40)
 #define MAXIMUM_DRIVE_SPEED_OLD_FIRMWARE (30)
@@ -125,6 +126,7 @@ typedef struct PadInfoStruct
 //*****************************************************************************
 
 extern int8_t g_StartupDelayCounter;
+extern WHOAMI_ENUM g_WhoAmI;        // Holds the Connected Device identifier, Fusion or ION.
 extern int g_ChangeScreen_WIP;
 extern unsigned char g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 extern bool g_ClicksActive;

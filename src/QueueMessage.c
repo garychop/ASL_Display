@@ -175,6 +175,31 @@ FEATURE_ID_ENUM TranslateFeature_CharToEnum (char feature)
 }
 
 //****************************************************************************
+// Description: This creates a queue msg to request the connected device
+//      identification, either FUSION (no response) or ION.
+//
+//****************************************************************************
+
+void SendWhoAmICommand (void)
+{
+    GUI_MSG_STRUCT msg;
+
+    msg.m_MsgType = HHP_HA_WHO_ARE_YOU;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+void SendWhoAmItoGUI (uint8_t deviceID)
+{
+    HHP_HA_MSG_STRUCT HHP_Msg;
+
+    HHP_Msg.m_MsgType = HHP_HA_WHO_ARE_YOU;
+    HHP_Msg.SendWhoAmiIStruct.m_DeviceID = deviceID;
+
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+//****************************************************************************
 // Function: SendGetVersionCommand
 // Description: This creates a queue msg to ask for the Head Array Version.
 //

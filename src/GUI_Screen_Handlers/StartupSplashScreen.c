@@ -49,9 +49,25 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                     screen_toggle((GX_WINDOW *)&MainUserScreen, window);
                     g_StartupDelayCounter = -1; // This prevents us from doing a "startup" delay should the Heart Beat stop.
                 }
+                else if (g_StartupDelayCounter == 4)
+                {
+                    SendWhoAmICommand();            // We want to know who we are connected with... either Fusion or ION.
+                }
                 else if (g_StartupDelayCounter == 8)    // We need to send a Version Request to the Head Array.
                 {
                     SendGetVersionCommand ();
+                    // Check to see if the connected device reponded. Fusion's will not respond
+                    // ... ION's will respond.
+                    if (DEVICE_ID_ION == g_WhoAmI)  // Did we get a response from ION.
+                    {
+                        gx_pixelmap_button_pixelmap_set (&StartupSplashScreen.StartupSplashScreen_StartupPrompt,
+                                                         GX_PIXELMAP_ID_ION_LOGO_REDWHITE, GX_PIXELMAP_ID_ION_LOGO_REDWHITE, GX_PIXELMAP_ID_ION_LOGO_REDWHITE);
+                    }
+                    else
+                    {
+                        gx_pixelmap_button_pixelmap_set (&StartupSplashScreen.StartupSplashScreen_StartupPrompt,
+                                                         GX_PIXELMAP_ID_FUSION_LOGO_REDWHITE, GX_PIXELMAP_ID_FUSION_LOGO_REDWHITE, GX_PIXELMAP_ID_FUSION_LOGO_REDWHITE);
+                    }
                 }
                 else if (g_StartupDelayCounter == 10)    // We need to send a Version Request to the Head Array.
                 {

@@ -6650,12 +6650,12 @@
 <wallpaper>ASL_LOGO_BLACKBG04_FLATTEN</wallpaper>
 <widget>
 <type>pixelmap_button</type>
-<app_name>pixelmap_button</app_name>
+<app_name>StartupPrompt</app_name>
 <size>
 <left>8</left>
 <top>42</top>
-<right>306</right>
-<bottom>139</bottom>
+<right>307</right>
+<bottom>141</bottom>
 </size>
 <style>268435456</style>
 <allocation>0</allocation>
@@ -6663,6 +6663,7 @@
 <normal_fill_color>WINDOW_FILL</normal_fill_color>
 <selected_fill_color>WINDOW_FILL</selected_fill_color>
 <disabled_fill_color>WINDOW_FILL</disabled_fill_color>
+<id_name>STARTUP_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
 <normal_pixelmap>ASL165_STARTUP_LOGO_REDWHITE</normal_pixelmap>

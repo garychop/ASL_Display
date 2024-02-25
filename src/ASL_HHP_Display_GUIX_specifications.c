@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 23. 2.2024   Time (hh:mm): 16:33                        */
+/*  Date (dd.mm.yyyy): 25. 2.2024   Time (hh:mm): 10:21                        */
 /*******************************************************************************/
 
 
@@ -3287,7 +3287,7 @@ GX_WINDOW_PROPERTIES StartupSplashScreen_properties =
 {
     GX_PIXELMAP_ID_ASL_LOGO_BLACKBG04_FLATTEN  /* wallpaper pixelmap id        */
 };
-GX_PIXELMAP_BUTTON_PROPERTIES StartupSplashScreen_pixelmap_button_properties =
+GX_PIXELMAP_BUTTON_PROPERTIES StartupSplashScreen_StartupPrompt_properties =
 {
     GX_PIXELMAP_ID_ASL165_STARTUP_LOGO_REDWHITE, /* normal pixelmap id         */
     0,                                       /* selected pixelmap id           */
@@ -3439,11 +3439,11 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_StatusPrompt_define =
     (void *) &StartupSplashScreen_StatusPrompt_properties /* extended properties */
 };
 
-GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_pixelmap_button_define =
+GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_StartupPrompt_define =
 {
-    "pixelmap_button",
+    "StartupPrompt",
     GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
-    GX_ID_NONE,                              /* widget id                      */
+    STARTUP_PROMPT_ID,                       /* widget id                      */
     #if defined(GX_WIDGET_USER_DATA)
     0,                                       /* user data                      */
     #endif
@@ -3455,11 +3455,11 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_pixelmap_button_define =
     gx_studio_pixelmap_button_create,        /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {8, 42, 306, 139},                       /* widget size                    */
+    {8, 42, 307, 141},                       /* widget size                    */
     &StartupSplashScreen_StatusPrompt_define, /* next widget definition        */
     GX_NULL,                                 /* no child widgets               */ 
-    offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_pixelmap_button), /* control block */
-    (void *) &StartupSplashScreen_pixelmap_button_properties /* extended properties */
+    offsetof(STARTUPSPLASHSCREEN_CONTROL_BLOCK, StartupSplashScreen_StartupPrompt), /* control block */
+    (void *) &StartupSplashScreen_StartupPrompt_properties /* extended properties */
 };
 
 GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_define =
@@ -3480,7 +3480,7 @@ GX_CONST GX_STUDIO_WIDGET StartupSplashScreen_define =
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) StartupSplashScreen_event_process, /* event function override */
     {0, 0, 319, 239},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
-    &StartupSplashScreen_pixelmap_button_define, /* child widget               */
+    &StartupSplashScreen_StartupPrompt_define, /* child widget                 */
     0,                                       /* control block                  */
     (void *) &StartupSplashScreen_properties /* extended properties            */
 };

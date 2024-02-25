@@ -59,6 +59,8 @@ MODE_SWITCH_SCHEMA_ENUM g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
 
 int g_SettingsChanged;
 int8_t g_StartupDelayCounter = 0;
+WHOAMI_ENUM g_WhoAmI = DEVICE_ID_UNKNOWN;
+
 int g_ChangeScreen_WIP;
 
 // These are received from the Head Array in the Heart Beat Message

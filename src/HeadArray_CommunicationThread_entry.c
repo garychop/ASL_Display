@@ -995,6 +995,19 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             }
             break;
 
+        case HHP_HA_WHO_ARE_YOU:
+            HA_Msg[0] = 0x03;     // msg length
+            HA_Msg[1] = HHP_HA_WHO_ARE_YOU;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                SendWhoAmItoGUI (HB_Response[1]);
+            }
+            break;
+
         default:
             msgSent = false;
             break;
@@ -1296,6 +1309,10 @@ void ProcessCommunicationMsgs ()
             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
             gxe.gx_event_display_handle = 0;
             gx_system_event_send(&gxe);
+            break;
+
+        case HHP_HA_WHO_ARE_YOU:
+            g_WhoAmI = HeadArrayMsg.SendWhoAmiIStruct.m_DeviceID;
             break;
 
 //        case HHP_HA_ATTENDANT_SETTINGS_GET:

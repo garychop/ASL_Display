@@ -50,7 +50,7 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_ATTENDANT_SETTINGS_GET = 0x42,
     HHP_HA_ATTENDANT_SETTINGS_SET = 0x43,
     HHP_HA_ATTENDANT_CONTROLS_CMD = 0x44,
-    HHP_HA_WHO_ARE_YOU_CMD = 0x46
+    HHP_HA_WHO_ARE_YOU = 0x46
 } HHP_HA_MESSAGES_ENUM;
 
 // This structure is used to send messages from the GUI to the Head Array Communication Task
@@ -143,6 +143,7 @@ extern void SendDriveOffsetSet (uint8_t CenterPad_driveOffset, uint8_t LeftPad_d
 extern void SendAttendantControl_toHeadArray (uint8_t active, int8_t speed, int8_t direction);
 extern void SendAttendantSettingsGet_toHeadArray (void);
 extern void SendAttendantSettingsSet_toHeadArray (uint8_t attendantSettings, uint8_t attendantTimeout);
+extern void SendWhoAmICommand (void);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -222,6 +223,10 @@ typedef struct HHP_HA_MSG_S
             uint8_t m_AttendantTimeout;
         } AttendantSettings_Get_Response;
         struct
+        {   // Used with HA_HHP_WHO_AMI_I
+            uint8_t m_DeviceID;
+        } SendWhoAmiIStruct;
+        struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
@@ -235,6 +240,7 @@ extern void SendCalDataResponse (PHYSICAL_PAD_ENUM physicalPad, uint16_t minADC,
 extern void SendFeatureGet (uint8_t featureSet, uint8_t timeout, uint8_t featureSet2);
 extern void SendDriveOffsetGetResponse (uint8_t, uint8_t, uint8_t);
 extern void SendAttendantSettingsGet (uint8_t attendantSettings, uint8_t attendantTimeout);
+extern void SendWhoAmItoGUI (uint8_t deviceID);
 
 // Helper functions
 extern PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad);
