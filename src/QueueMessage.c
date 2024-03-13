@@ -174,6 +174,28 @@ FEATURE_ID_ENUM TranslateFeature_CharToEnum (char feature)
     return ((FEATURE_ID_ENUM) (feature - 1));    // this should be one to one correlation, adjusted for fence-posting.
 }
 
+/******************************************************************************
+ * This function sends the "Who Am I" request command to the Slave Device (ASL110 or ION)
+ */
+void SendWhoAmiCommand (void)
+{
+    GUI_MSG_STRUCT msg;
+
+    msg.m_MsgType = HHP_HA_WHO_ARE_YOU_CMD;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+void SendWhoAmItoGUI (uint8_t whoami)
+{
+    HHP_HA_MSG_STRUCT HHP_Msg;
+
+    HHP_Msg.m_MsgType = HHP_HA_WHO_ARE_YOU_CMD;
+    HHP_Msg.WhoAmI_Response.m_WhoAmi = whoami;
+
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
 //****************************************************************************
 // Function: SendGetVersionCommand
 // Description: This creates a queue msg to ask for the Head Array Version.

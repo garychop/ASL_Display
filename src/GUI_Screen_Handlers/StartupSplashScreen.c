@@ -27,8 +27,6 @@ VOID StartupSplashScreen_draw_function (GX_WINDOW *window)
 
 UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
-    gx_window_event_process(window, event_ptr);
-
     switch (event_ptr->gx_event_type)
     {
         case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
@@ -49,8 +47,20 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                     screen_toggle((GX_WINDOW *)&MainUserScreen, window);
                     g_StartupDelayCounter = -1; // This prevents us from doing a "startup" delay should the Heart Beat stop.
                 }
+                else if (g_StartupDelayCounter == 6)    // We need to send a Version Request to the Head Array.
+                {
+                    SendWhoAmiCommand ();
+                }
                 else if (g_StartupDelayCounter == 8)    // We need to send a Version Request to the Head Array.
                 {
+                    if (g_WhoAmi)   // This is the response from the ION if connected.
+                    {
+                        gx_pixelmap_button_pixelmap_set (&StartupSplashScreen.StartupSplashScreen_pixelmap_button, GX_PIXELMAP_ID_ION_LOGO_REDWHITE, GX_PIXELMAP_ID_ION_LOGO_REDWHITE, GX_PIXELMAP_ID_ION_LOGO_REDWHITE);
+                    }
+                    else
+                    {
+                        gx_pixelmap_button_pixelmap_set (&StartupSplashScreen.StartupSplashScreen_pixelmap_button, GX_PIXELMAP_ID_FUSION_LOGO_REDWHITE, GX_PIXELMAP_ID_FUSION_LOGO_REDWHITE, GX_PIXELMAP_ID_FUSION_LOGO_REDWHITE);
+                    }
                     SendGetVersionCommand ();
                 }
                 else if (g_StartupDelayCounter == 10)    // We need to send a Version Request to the Head Array.
@@ -70,6 +80,8 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             }
             break;
     } // end switch
+
+    gx_window_event_process(window, event_ptr);
 
     return GX_SUCCESS;
 }

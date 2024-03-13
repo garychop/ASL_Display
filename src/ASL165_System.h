@@ -151,6 +151,8 @@ extern GX_RECTANGLE g_HiddenRectangle;
 extern uint8_t g_AttendantSettings;    // D0 = 1 = Attendant Active, D1 = 0 = Proportional, D2 = 0 = Override
 extern uint8_t g_AttendantTimeout;     // 0=127 seconds, 0 = No Timeout
 
+extern uint8_t g_WhoAmi;         // Default to Unknown
+
 //*****************************************************************************
 // EXTERNAL, GLOBALLY available functions
 //*****************************************************************************

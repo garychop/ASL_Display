@@ -535,8 +535,8 @@ uint8_t SendAttendantData (void)
     HA_Msg[0] = 0x07;     // msg length
     HA_Msg[1] = HHP_HA_ATTENDANT_CONTROLS_CMD;
     HA_Msg[2] = g_AttendantActive;
-    HA_Msg[3] = g_AttendantSpeedDemand;
-    HA_Msg[4] = g_AttentantDirectionDemand;
+    HA_Msg[3] = (uint8_t) g_AttendantSpeedDemand;
+    HA_Msg[4] = (uint8_t) g_AttentantDirectionDemand;
     HA_Msg[5] = 0;      // Heartbeat... TODO... change to send incremented value.
     cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
     HA_Msg[HA_Msg[0]-1] = cs;
@@ -992,6 +992,22 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             else
             {
                 msgSent = false;
+            }
+            break;
+
+        case HHP_HA_WHO_ARE_YOU_CMD:
+            HA_Msg[0] = 0x03;     // msg length
+            HA_Msg[1] = HHP_HA_WHO_ARE_YOU_CMD;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    g_WhoAmi = 0x01;
+                }
             }
             break;
 
