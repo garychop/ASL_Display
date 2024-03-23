@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 13. 3.2024   Time (hh:mm): 14:26                        */
+/*  Date (dd.mm.yyyy): 23. 3.2024   Time (hh:mm): 15:53                        */
 /*******************************************************************************/
 
 
@@ -308,7 +308,7 @@ GX_WINDOW_PROPERTIES SNP_CalibrationScreen_properties =
 };
 GX_PROMPT_PROPERTIES SNP_CalibrationScreen_prompt_1_properties =
 {
-    GX_STRING_ID_STRING_41,                  /* string id                      */
+    GX_STRING_ID_SNP_CALIBRATION_SCREEN,     /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -365,7 +365,7 @@ GX_WINDOW_PROPERTIES Error_Screen_properties =
 };
 GX_PROMPT_PROPERTIES Error_Screen_CyclePower_Prompt_properties =
 {
-    GX_STRING_ID_STRING_35,                  /* string id                      */
+    GX_STRING_ID_CYCLE_POWER,                /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -377,7 +377,7 @@ GX_ICON_PROPERTIES Error_Screen_icon_properties =
 };
 GX_PROMPT_PROPERTIES Error_Screen_Faulty_Pad_Prompt_properties =
 {
-    GX_STRING_ID_STRING_40,                  /* string id                      */
+    GX_STRING_ID_FAULT,                      /* string id                      */
     GX_FONT_ID_LARGESIZE,                    /* font id                        */
     GX_COLOR_ID_YELLOW,                      /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -587,21 +587,21 @@ GX_WINDOW_PROPERTIES AttendantSettingsScreen_properties =
 };
 GX_PROMPT_PROPERTIES AttendantSettingsScreen_ActivePrompt_properties =
 {
-    GX_STRING_ID_STRING_102,                 /* string id                      */
+    GX_STRING_ID_ACTIVE,                     /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_PROMPT_PROPERTIES AttendantSettingsScreen_ProportionalPrompt_properties =
 {
-    GX_STRING_ID_STRING_103,                 /* string id                      */
+    0,                                       /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES AttendantSettingsScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -781,14 +781,14 @@ GX_ICON_BUTTON_PROPERTIES AttendantScreen_OK_Btn_properties =
 };
 GX_PROMPT_PROPERTIES AttendantScreen_RawPosition_Prompt_properties =
 {
-    GX_STRING_ID_STRING_70,                  /* string id                      */
+    GX_STRING_ID_NUM100_X_100,               /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_TEXT,                        /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_PROMPT_PROPERTIES AttendantScreen_DriveDemand_Prompt_properties =
 {
-    GX_STRING_ID_STRING_70,                  /* string id                      */
+    GX_STRING_ID_NUM100_X_100,               /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_TEXT,                        /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -1070,7 +1070,7 @@ GX_SCROLLBAR_APPEARANCE  FeatureSettingsScreen_FeatureList_vertical_scroll_prope
 };
 GX_TEXT_BUTTON_PROPERTIES FeatureSettingsScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -1173,21 +1173,21 @@ GX_WINDOW_PROPERTIES PerformanceSelectionScreen_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES PerformanceSelectionScreen_GotoVeerAdjust_Button_properties =
 {
-    GX_STRING_ID_STRING_51,                  /* string id                      */
+    GX_STRING_ID_SET_VEER_ADJUST,            /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES PerformanceSelectionScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES PerformanceSelectionScreen_AttendantSetting_Button_properties =
 {
-    GX_STRING_ID_STRING_101,                 /* string id                      */
+    0,                                       /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -1290,35 +1290,35 @@ GX_WINDOW_PROPERTIES MoreSelectionScreen_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES MoreSelectionScreen_GotoDiagostics_Button_properties =
 {
-    GX_STRING_ID_STRING_10,                  /* string id                      */
+    GX_STRING_ID_DIAGNOSTICS,                /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES MoreSelectionScreen_GotoResetSettings_lButton_properties =
 {
-    GX_STRING_ID_STRING_27,                  /* string id                      */
+    GX_STRING_ID_RESET_SETTINGS,             /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_PROMPT_PROPERTIES MoreSelectionScreen_HeadArray_VersionPrompt_properties =
 {
-    GX_STRING_ID_STRING_65_1,                /* string id                      */
+    GX_STRING_ID_ASL110_BLANK_VERSION,       /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_PROMPT_PROPERTIES MoreSelectionScreen_VersionPrompt_properties =
 {
-    GX_STRING_ID_STRING_69_1,                /* string id                      */
+    GX_STRING_ID_ASL165_BLANK_VERSION,       /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES MoreSelectionScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -1467,42 +1467,42 @@ GX_WINDOW_PROPERTIES MinimumDriveScreen_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES MinimumDriveScreen_RightPadPercentage_Button_properties =
 {
-    GX_STRING_ID_STRING_52,                  /* string id                      */
+    GX_STRING_ID_PERCENTAGE_20,              /* string id                      */
     GX_FONT_ID_LARGESIZE,                    /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES MinimumDriveScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_PROMPT_PROPERTIES MinimumDriveScreen_Prompt_ForEachPad_properties =
 {
-    GX_STRING_ID_STRING_36,                  /* string id                      */
+    GX_STRING_ID_FOR_EACH_PAD,               /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_PROMPT_PROPERTIES MinimumDriveScreen_Prompt_SetMinimumSpeed_properties =
 {
-    GX_STRING_ID_STRING_14,                  /* string id                      */
+    GX_STRING_ID_SET_MINIMUM_DRIVE_SPEED,    /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES MinimumDriveScreen_CenterPadPercentage_Button_properties =
 {
-    GX_STRING_ID_STRING_52,                  /* string id                      */
+    GX_STRING_ID_PERCENTAGE_20,              /* string id                      */
     GX_FONT_ID_LARGESIZE,                    /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES MinimumDriveScreen_LeftPadPercentage_Button_properties =
 {
-    GX_STRING_ID_STRING_52,                  /* string id                      */
+    GX_STRING_ID_PERCENTAGE_20,              /* string id                      */
     GX_FONT_ID_LARGESIZE,                    /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -1674,28 +1674,28 @@ GX_WINDOW_PROPERTIES UserSelectionScreen_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES UserSelectionScreen_FeatureSettings_lButton_properties =
 {
-    GX_STRING_ID_STRING_67_1,                /* string id                      */
+    GX_STRING_ID_FEATURE_LIST,               /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES UserSelectionScreen_Settings_Button_properties =
 {
-    GX_STRING_ID_STRING_45,                  /* string id                      */
+    GX_STRING_ID_USER_SETTINGS,              /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES UserSelectionScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_ML_TEXT_BUTTON_PROPERTIES UserSelectionScreen_Performance_Attendant_Button_properties =
 {
-    GX_STRING_ID_STRING_77_1,                /* string id                      */
+    GX_STRING_ID_PERFORMANCE_ATTENDANT,      /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -1821,7 +1821,7 @@ GX_WINDOW_PROPERTIES ResetScreen_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES ResetScreen_Continue_Button_properties =
 {
-    GX_STRING_ID_STRING_98,                  /* string id                      */
+    GX_STRING_ID_YES,                        /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -1833,35 +1833,35 @@ GX_ICON_PROPERTIES ResetScreen_icon_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES ResetScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_99,                  /* string id                      */
+    GX_STRING_ID_NO,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_PROMPT_PROPERTIES ResetScreen_Prompt1_properties =
 {
-    GX_STRING_ID_STRING_27,                  /* string id                      */
+    GX_STRING_ID_RESET_SETTINGS,             /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_YELLOW,                      /* normal text color              */
     GX_COLOR_ID_MAROON                       /* selected text color            */
 };
 GX_PROMPT_PROPERTIES ResetScreen_Prompt2_properties =
 {
-    GX_STRING_ID_STRING_73_1,                /* string id                      */
+    GX_STRING_ID_RESET_STATEMENT,            /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_PROMPT_PROPERTIES ResetScreen_Prompt3_properties =
 {
-    GX_STRING_ID_STRING_74_1,                /* string id                      */
+    GX_STRING_ID_RESET_FACTORY_DEFAULT,      /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_PROMPT_PROPERTIES ResetScreen_Prompt4_properties =
 {
-    GX_STRING_ID_STRING_97,                  /* string id                      */
+    GX_STRING_ID_ARE_YOU_SURE,               /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -2056,14 +2056,14 @@ GX_WINDOW_PROPERTIES ResetFinishScreen_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES ResetFinishScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_PROMPT_PROPERTIES ResetFinishScreen_Prompt_properties =
 {
-    GX_STRING_ID_STRING_96,                  /* string id                      */
+    GX_STRING_ID_ALL_SETTINGS_RESET,         /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_YELLOW,                      /* normal text color              */
     GX_COLOR_ID_YELLOW                       /* selected text color            */
@@ -2153,16 +2153,9 @@ GX_PIXELMAP_BUTTON_PROPERTIES PrimaryTemplate_DownArrowButton_properties =
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };
-GX_TEXT_BUTTON_PROPERTIES PrimaryTemplate_PadActiveButton_properties =
-{
-    GX_STRING_ID_STRING_29,                  /* string id                      */
-    GX_FONT_ID_BUTTON,                       /* font id                        */
-    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
-    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
-};
 GX_TEXT_BUTTON_PROPERTIES PrimaryTemplate_LongPressButton_properties =
 {
-    GX_STRING_ID_STRING_3,                   /* string id                      */
+    0,                                       /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -2191,29 +2184,6 @@ GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_LongPressButton_define =
     (void *) &PrimaryTemplate_LongPressButton_properties /* extended properties */
 };
 
-GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_PadActiveButton_define =
-{
-    "PadActiveButton",
-    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
-    PAD_ACTIVE_BTN_ID,                       /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_RAISED|GX_STYLE_TEXT_CENTER,   /* style flags              */
-    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
-    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_text_button_create,            /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {326, 174, 395, 197},                    /* widget size                    */
-    &PrimaryTemplate_LongPressButton_define, /* next widget definition         */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(PRIMARYTEMPLATE_CONTROL_BLOCK, PrimaryTemplate_PadActiveButton), /* control block */
-    (void *) &PrimaryTemplate_PadActiveButton_properties /* extended properties */
-};
-
 GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_DownArrowButton_define =
 {
     "DownArrowButton",
@@ -2231,7 +2201,7 @@ GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_DownArrowButton_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {326, 96, 395, 165},                     /* widget size                    */
-    &PrimaryTemplate_PadActiveButton_define, /* next widget definition         */
+    &PrimaryTemplate_LongPressButton_define, /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(PRIMARYTEMPLATE_CONTROL_BLOCK, PrimaryTemplate_DownArrowButton), /* control block */
     (void *) &PrimaryTemplate_DownArrowButton_properties /* extended properties */
@@ -2304,28 +2274,28 @@ GX_PIXELMAP_SLIDER_PROPERTIES VeerAdjustScreen_VeerSlider_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES VeerAdjustScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES VeerAdjustScreen_SliderValue_Button_properties =
 {
-    GX_STRING_ID_STRING_25,                  /* string id                      */
+    GX_STRING_ID_NUMBER_ZERO,                /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_PROMPT_PROPERTIES VeerAdjustScreen_InstructionLine_1_properties =
 {
-    GX_STRING_ID_STRING_53,                  /* string id                      */
+    GX_STRING_ID_SLIDE_THE_ANCHOR_POINT,     /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_PROMPT_PROPERTIES VeerAdjustScreen_InstructionLine_2_properties =
 {
-    GX_STRING_ID_STRING_56_1,                /* string id                      */
+    GX_STRING_ID_TO_REDUCE_VEERING,          /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -2474,7 +2444,7 @@ GX_WINDOW_PROPERTIES OON_Screen_properties =
 };
 GX_PROMPT_PROPERTIES OON_Screen_prompt_properties =
 {
-    GX_STRING_ID_STRING_22,                  /* string id                      */
+    GX_STRING_ID_RELEASE_PAD,                /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -2560,7 +2530,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadDigital_Button_propertie
 };
 GX_PROMPT_PROPERTIES DiagnosticScreen_InstructionsText_properties =
 {
-    GX_STRING_ID_STRING_15,                  /* string id                      */
+    GX_STRING_ID_ACTIVATE_PAD,               /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -2573,7 +2543,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_LeftPadDigital_Button_properties 
 };
 GX_TEXT_BUTTON_PROPERTIES DiagnosticScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -2604,7 +2574,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_RightPadProp_Button_properties =
 };
 GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadOff_Button_properties =
 {
-    0,                                       /* normal pixelmap id             */
+    GX_PIXELMAP_ID_CENTERPAD_DIAGNOSTIC_OFF, /* normal pixelmap id             */
     0,                                       /* selected pixelmap id           */
     0                                        /* disabled pixelmap id           */
 };
@@ -2622,42 +2592,42 @@ GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_RightPadOff_Button_properties =
 };
 GX_PROMPT_PROPERTIES DiagnosticScreen_LeftPad_RawValue_Prompt_properties =
 {
-    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_STRING_ID_NUMBER_100,                 /* string id                      */
     GX_FONT_ID_MINSIZE,                      /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
 };
 GX_PROMPT_PROPERTIES DiagnosticScreen_RightPad_RawValue_Prompt_properties =
 {
-    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_STRING_ID_NUMBER_100,                 /* string id                      */
     GX_FONT_ID_MINSIZE,                      /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
 };
 GX_PROMPT_PROPERTIES DiagnosticScreen_CenterPad_RawValue_Prompt_properties =
 {
-    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_STRING_ID_NUMBER_100,                 /* string id                      */
     GX_FONT_ID_MINSIZE,                      /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
 };
 GX_PROMPT_PROPERTIES DiagnosticScreen_LeftPad_Adjusted_Prompt_properties =
 {
-    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_STRING_ID_NUMBER_100,                 /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
 };
 GX_PROMPT_PROPERTIES DiagnosticScreen_RightPad_Adjusted_Prompt_properties =
 {
-    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_STRING_ID_NUMBER_100,                 /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
 };
 GX_PROMPT_PROPERTIES DiagnosticScreen_CenterPad_Adjusted_Prompt_properties =
 {
-    GX_STRING_ID_STRING_21,                  /* string id                      */
+    GX_STRING_ID_NUMBER_100,                 /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
@@ -2668,7 +2638,7 @@ GX_ICON_BUTTON_PROPERTIES DiagnosticScreen_ModePort_IconButton_properties =
 };
 GX_PROMPT_PROPERTIES DiagnosticScreen_ModePort_Prompt_properties =
 {
-    GX_STRING_ID_STRING_69_2,                /* string id                      */
+    GX_STRING_ID_MODE_PORT,                  /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
@@ -2679,7 +2649,7 @@ GX_ICON_BUTTON_PROPERTIES DiagnosticScreen_UserPort_IconButton_properties =
 };
 GX_PROMPT_PROPERTIES DiagnosticScreen_UserPort_Prompt_properties =
 {
-    GX_STRING_ID_STRING_66,                  /* string id                      */
+    GX_STRING_ID_USER_PORT,                  /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
@@ -3196,7 +3166,7 @@ GX_WINDOW_PROPERTIES ReadyScreen_properties =
 };
 GX_PIXELMAP_PROMPT_PROPERTIES ReadyScreen_PowerLargeOrangePrompt_properties =
 {
-    GX_STRING_ID_STRING_39,                  /* string id                      */
+    GX_STRING_ID_FUSION_OFF,                 /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT,               /* selected text color            */
@@ -3209,7 +3179,7 @@ GX_PIXELMAP_PROMPT_PROPERTIES ReadyScreen_PowerLargeOrangePrompt_properties =
 };
 GX_PROMPT_PROPERTIES ReadyScreen_PressSwitchPrompt_properties =
 {
-    GX_STRING_ID_STRING_38,                  /* string id                      */
+    GX_STRING_ID_PRESS_SWITCH,               /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -3295,7 +3265,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES StartupSplashScreen_pixelmap_button_properties =
 };
 GX_PROMPT_PROPERTIES StartupSplashScreen_StatusPrompt_properties =
 {
-    GX_STRING_ID_STRING_9,                   /* string id                      */
+    GX_STRING_ID_STARTING,                   /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_WHITE,                       /* normal text color              */
     GX_COLOR_ID_WHITE                        /* selected text color            */
@@ -3496,7 +3466,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES PadCalibrationScreen_CenterPadON_Button_properties
 };
 GX_PROMPT_PROPERTIES PadCalibrationScreen_MinimumInstructionsText_properties =
 {
-    GX_STRING_ID_STRING_12,                  /* string id                      */
+    GX_STRING_ID_BUTTONS_MINIMUM,            /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_YELLOW,                      /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -3509,7 +3479,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES PadCalibrationScreen_LeftPadON_Button_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES PadCalibrationScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -3522,7 +3492,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES PadCalibrationScreen_RightPadON_Button_properties 
 };
 GX_PROMPT_PROPERTIES PadCalibrationScreen_MaximumInstructionsText_properties =
 {
-    GX_STRING_ID_STRING_2,                   /* string id                      */
+    GX_STRING_ID_BUTTONS_MAXIMUM,            /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -3782,7 +3752,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES SetPadTypeScreen_LeftPadProportional_Button_proper
 };
 GX_TEXT_BUTTON_PROPERTIES SetPadTypeScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -3801,14 +3771,14 @@ GX_PIXELMAP_BUTTON_PROPERTIES SetPadTypeScreen_RightPadProportional_Button_prope
 };
 GX_PROMPT_PROPERTIES SetPadTypeScreen_SettingPadPrompt_properties =
 {
-    GX_STRING_ID_STRING_28,                  /* string id                      */
+    GX_STRING_ID_CHANGE_PAD_DIRECTION,       /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_PROMPT_PROPERTIES SetPadTypeScreen_SettingPadPrompt_1_properties =
 {
-    GX_STRING_ID_STRING_50,                  /* string id                      */
+    GX_STRING_ID_HOLD_PAD_TO_CALIBRATE,      /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -4049,35 +4019,35 @@ GX_WINDOW_PROPERTIES UserSettingsScreen_properties =
 };
 GX_PROMPT_PROPERTIES UserSettingsScreen_Clicks_Prompt_properties =
 {
-    GX_STRING_ID_STRING_20,                  /* string id                      */
+    GX_STRING_ID_CLICKS,                     /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES UserSettingsScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_PROMPT_PROPERTIES UserSettingsScreen_Tmeout_Prompt_properties =
 {
-    GX_STRING_ID_STRING_18,                  /* string id                      */
+    GX_STRING_ID_TIMEOUT,                    /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_PROMPT_PROPERTIES UserSettingsScreen_PowerUpIdle_Prompt_properties =
 {
-    GX_STRING_ID_STRING_62,                  /* string id                      */
+    GX_STRING_ID_POWER_UP_IDLE,              /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES UserSettingsScreen_Timeout_Button_properties =
 {
-    GX_STRING_ID_STRING_57,                  /* string id                      */
+    0,                                       /* string id                      */
     GX_FONT_ID_LARGESIZE,                    /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -4124,7 +4094,7 @@ GX_CHECKBOX_PROPERTIES UserSettingsScreen_RNET_ToggleBtn_properties =
 };
 GX_PROMPT_PROPERTIES UserSettingsScreen_ModePortSchema_Prompt_properties =
 {
-    GX_STRING_ID_STRING_49,                  /* string id                      */
+    GX_STRING_ID_MODE_REVERSE,               /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -4422,28 +4392,28 @@ GX_WINDOW_PROPERTIES PadOptionsSettingsScreen_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES PadOptionsSettingsScreen_PadType_Button_properties =
 {
-    GX_STRING_ID_STRING_13,                  /* string id                      */
+    GX_STRING_ID_SET_PAD_TYPE,               /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES PadOptionsSettingsScreen_PadDirections_Button_properties =
 {
-    GX_STRING_ID_STRING_16,                  /* string id                      */
+    0,                                       /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES PadOptionsSettingsScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES PadOptionsSettingsScreen_MinimumDrive_lButton_properties =
 {
-    GX_STRING_ID_STRING_30,                  /* string id                      */
+    GX_STRING_ID_SET_MINIMUM_SPEED,          /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -4581,7 +4551,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES SetPadDirectionScreen_LeftPad_Button_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES SetPadDirectionScreen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
@@ -4594,7 +4564,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES SetPadDirectionScreen_RightPad_Button_properties =
 };
 GX_PROMPT_PROPERTIES SetPadDirectionScreen_SettingPadPrompt_properties =
 {
-    GX_STRING_ID_STRING_28,                  /* string id                      */
+    GX_STRING_ID_CHANGE_PAD_DIRECTION,       /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -4743,28 +4713,28 @@ GX_WINDOW_PROPERTIES HHP_Start_Screen_properties =
 };
 GX_TEXT_BUTTON_PROPERTIES HHP_Start_Screen_OK_Button_properties =
 {
-    GX_STRING_ID_STRING_24,                  /* string id                      */
+    GX_STRING_ID_OK,                         /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES HHP_Start_Screen_PadSettings_Button_properties =
 {
-    GX_STRING_ID_STRING_46,                  /* string id                      */
+    GX_STRING_ID_PAD_SETTINGS,               /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES HHP_Start_Screen_Settings_Button_properties =
 {
-    GX_STRING_ID_STRING_11,                  /* string id                      */
+    GX_STRING_ID_SETTINGS,                   /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 GX_TEXT_BUTTON_PROPERTIES HHP_Start_Screen_MainMore_Button_properties =
 {
-    GX_STRING_ID_STRING_44,                  /* string id                      */
+    GX_STRING_ID_MORE,                       /* string id                      */
     GX_FONT_ID_BUTTON,                       /* font id                        */
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */

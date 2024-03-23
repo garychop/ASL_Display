@@ -3784,6 +3784,24 @@
 <binary_mode>FALSE</binary_mode>
 <palette_type>None</palette_type>
 </resource>
+<resource>
+<type>PIXELMAP</type>
+<name>CENTERPAD_DIAGNOSTIC_OFF</name>
+<pathinfo>
+<pathname>guix_pics\CenterPad_Diagnostic_OFF.png</pathname>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>TRUE</compress>
+<alpha>TRUE</alpha>
+<dither>FALSE</dither>
+<raw>FALSE</raw>
+<color_format>GX_COLOR_FORMAT_32ARGB</color_format>
+<output_file_enabled>FALSE</output_file_enabled>
+<binary_mode>FALSE</binary_mode>
+<palette_type>None</palette_type>
+</resource>
 </resource>
 </resource>
 <resource>
@@ -3796,6 +3814,1041 @@
 <enabled>TRUE</enabled>
 <compress>FALSE</compress>
 <folder_id>STRING_GROUP</folder_id>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
 <resource>
 <name>Add New String</name>
 <pathinfo>
@@ -3842,57 +4895,12 @@
 <English>TRUE</English>
 <string_table>
 <sort_column>0</sort_column>
-<num_strings>98</num_strings>
+<num_strings>127</num_strings>
 <num_languages>1</num_languages>
 <string_record>
-<id>STRING_15</id>
+<id>ACTIVATE_PAD</id>
 <font>0</font>
 <val>ACTIVATE PAD</val>
-</string_record>
-<string_record>
-<id>STRING_32</id>
-<font>0</font>
-<val>SAVE</val>
-</string_record>
-<string_record>
-<id>STRING_60</id>
-<font>0</font>
-<val>LEFT PAD</val>
-</string_record>
-<string_record>
-<id>STRING_63</id>
-<font>0</font>
-<val>CENTER PAD</val>
-</string_record>
-<string_record>
-<id>STRING_64</id>
-<font>0</font>
-<val>RIGHT PAD</val>
-</string_record>
-<string_record>
-<id>STRING_69</id>
-<font>0</font>
-<val>Status: OK</val>
-</string_record>
-<string_record>
-<id>STRING_74</id>
-<font>0</font>
-<val>Left Pad</val>
-</string_record>
-<string_record>
-<id>STRING_77</id>
-<font>0</font>
-<val>Right Pad</val>
-</string_record>
-<string_record>
-<id>STRING_78</id>
-<font>0</font>
-<val>Center Pad</val>
-</string_record>
-<string_record>
-<id>STRING_79</id>
-<font>0</font>
-<val>Power</val>
 </string_record>
 <string_record>
 <id>BLUETOOTH</id>
@@ -3910,122 +4918,67 @@
 <val>NEXT PROFILE</val>
 </string_record>
 <string_record>
-<id>STRING_29</id>
-<font>0</font>
-<val>PAD ON</val>
-</string_record>
-<string_record>
-<id>STRING_3</id>
-<font>0</font>
-<val>LONG</val>
-</string_record>
-<string_record>
 <id>PROMPT</id>
 <font>0</font>
 <val></val>
 </string_record>
 <string_record>
-<id>STRING_10</id>
-<font>0</font>
-<val>DIAGNOSTICS</val>
-</string_record>
-<string_record>
-<id>STRING_11</id>
+<id>SETTINGS</id>
 <font>0</font>
 <val>SETTINGS</val>
 </string_record>
 <string_record>
-<id>STRING_24</id>
+<id>OK</id>
 <font>0</font>
 <val>OK</val>
 </string_record>
 <string_record>
-<id>STRING_4</id>
-<font>0</font>
-<val>UP Arrow</val>
-</string_record>
-<string_record>
-<id>STRING_5</id>
-<font>0</font>
-<val>POWER ON/OFF</val>
-</string_record>
-<string_record>
-<id>STRING_6</id>
-<font>0</font>
-<val>NEXT FUNCTION</val>
-</string_record>
-<string_record>
-<id>STRING_28</id>
+<id>CHANGE_PAD_DIRECTION</id>
 <font>0</font>
 <val>TOUCH PAD TO CHANGE DIRECTION</val>
 </string_record>
 <string_record>
-<id>STRING_17</id>
-<font>0</font>
-<val>DIRECTION</val>
-</string_record>
-<string_record>
-<id>STRING_46</id>
+<id>PAD_SETTINGS</id>
 <font>0</font>
 <val>PAD SETTINGS</val>
 </string_record>
 <string_record>
-<id>STRING_45</id>
+<id>USER_SETTINGS</id>
 <font>0</font>
 <val>USER SETTINGS</val>
 </string_record>
 <string_record>
-<id>STRING_19</id>
-<font>0</font>
-<val>FEATURE SETTINGS</val>
-</string_record>
-<string_record>
-<id>STRING_13</id>
+<id>SET_PAD_TYPE</id>
 <font>0</font>
 <val>SET PAD TYPE</val>
 </string_record>
 <string_record>
-<id>STRING_16</id>
-<font>0</font>
-<val>SET PAD DIRECTION</val>
-</string_record>
-<string_record>
-<id>STRING_7</id>
-<font>0</font>
-<val>BLUETOOTH</val>
-</string_record>
-<string_record>
-<id>STRING_8</id>
-<font>0</font>
-<val>NEXT PROFILE</val>
-</string_record>
-<string_record>
-<id>STRING_20</id>
+<id>CLICKS</id>
 <font>0</font>
 <val>CLICKS (Audio)</val>
 </string_record>
 <string_record>
-<id>STRING_18</id>
+<id>TIMEOUT</id>
 <font>0</font>
 <val>TIMEOUT</val>
 </string_record>
 <string_record>
-<id>STRING_50</id>
+<id>HOLD_PAD_TO_CALIBRATE</id>
 <font>0</font>
 <val>HOLD PAD TO CALIBRATE</val>
 </string_record>
 <string_record>
-<id>STRING_23</id>
+<id>ADJUST_MIMIMUM</id>
 <font>0</font>
 <val>Use arrows to adjust MINIMUM</val>
 </string_record>
 <string_record>
-<id>STRING_26</id>
+<id>ADJUST_MAXIMUM</id>
 <font>0</font>
 <val>Use arrows to adjust MAXIMUM</val>
 </string_record>
 <string_record>
-<id>STRING_9</id>
+<id>STARTING</id>
 <font>0</font>
 <val>STARTING...</val>
 </string_record>
@@ -4035,159 +4988,109 @@
 <val>POWER ON/OFF</val>
 </string_record>
 <string_record>
-<id>STRING_39</id>
+<id>FUSION_OFF</id>
 <font>0</font>
 <val>FUSION OFF</val>
 </string_record>
 <string_record>
-<id>STRING_38</id>
+<id>PRESS_SWITCH</id>
 <font>0</font>
 <val>PRESS SWITCH</val>
 </string_record>
 <string_record>
-<id>STRING_21</id>
+<id>NUMBER_100</id>
 <font>0</font>
 <val>100</val>
 </string_record>
 <string_record>
-<id>STRING_22</id>
+<id>RELEASE_PAD</id>
 <font>0</font>
 <val>RELEASE PAD</val>
 </string_record>
 <string_record>
-<id>STRING_57</id>
-<font>0</font>
-<val>20</val>
-</string_record>
-<string_record>
-<id>STRING_53</id>
+<id>SLIDE_THE_ANCHOR_POINT</id>
 <font>0</font>
 <val>Slide the anchor point</val>
 </string_record>
 <string_record>
-<id>STRING_56_1</id>
+<id>TO_REDUCE_VEERING</id>
 <font>0</font>
 <val>to eliminate veering</val>
 </string_record>
 <string_record>
-<id>STRING_51</id>
+<id>SET_VEER_ADJUST</id>
 <font>0</font>
 <val>SET VEER ADJUST</val>
 </string_record>
 <string_record>
-<id>STRING_25</id>
+<id>NUMBER_ZERO</id>
 <font>0</font>
 <val>0</val>
 </string_record>
 <string_record>
-<id>STRING_62</id>
+<id>POWER_UP_IDLE</id>
 <font>0</font>
 <val>POWER UP IDLE</val>
 </string_record>
 <string_record>
-<id>STRING_44</id>
+<id>MORE</id>
 <font>0</font>
 <val>MORE</val>
 </string_record>
 <string_record>
-<id>STRING_94</id>
+<id>PERFORMANCE</id>
 <font>0</font>
 <val>PERFORMANCE</val>
 </string_record>
 <string_record>
-<id>STRING_96</id>
+<id>ALL_SETTINGS_RESET</id>
 <font>0</font>
 <val>ALL SETTINGS HAVE BEEN RESET</val>
 </string_record>
 <string_record>
-<id>STRING_98</id>
+<id>YES</id>
 <font>0</font>
 <val>YES</val>
 </string_record>
 <string_record>
-<id>STRING_99</id>
+<id>NO</id>
 <font>0</font>
 <val>NO</val>
 </string_record>
 <string_record>
-<id>STRING_27</id>
-<font>0</font>
-<val>RESET SETTINGS</val>
-</string_record>
-<string_record>
-<id>STRING_73_1</id>
+<id>RESET_STATEMENT</id>
 <font>0</font>
 <val>THIS RESETS ALL SETTINGS</val>
 </string_record>
 <string_record>
-<id>STRING_74_1</id>
+<id>RESET_FACTORY_DEFAULT</id>
 <font>0</font>
 <val>TO FACTORY DEFAULT.</val>
 </string_record>
 <string_record>
-<id>STRING_97</id>
+<id>ARE_YOU_SURE</id>
 <font>0</font>
 <val>ARE YOU SURE?</val>
 </string_record>
 <string_record>
-<id>STRING_67_1</id>
-<font>0</font>
-<val>FEATURE LIST</val>
-</string_record>
-<string_record>
-<id>STRING_52</id>
+<id>PERCENTAGE_20</id>
 <font>0</font>
 <val>20%</val>
 </string_record>
 <string_record>
-<id>STRING_89</id>
-<font>0</font>
-<val>SELECT PROPORTIONAL</val>
-</string_record>
-<string_record>
-<id>STRING_83_1</id>
-<font>0</font>
-<val>MINIMUM DRIVE SPEED</val>
-</string_record>
-<string_record>
-<id>STRING_65_1</id>
+<id>ASL110_BLANK_VERSION</id>
 <font>0</font>
 <val>ASL110: 00.00.00</val>
 </string_record>
 <string_record>
-<id>STRING_69_1</id>
+<id>ASL165_BLANK_VERSION</id>
 <font>0</font>
 <val>Display: 00.00.00</val>
 </string_record>
 <string_record>
-<id>STRING_95</id>
-<font>0</font>
-<val>SET DIGITAL MINIMUM</val>
-</string_record>
-<string_record>
-<id>STRING_30</id>
+<id>SET_MINIMUM_SPEED</id>
 <font>0</font>
 <val>SET MINIMUM SPEED</val>
-</string_record>
-<string_record>
-<id>STRING_105</id>
-<font>0</font>
-<val>TOP PROMPT</val>
-</string_record>
-<string_record>
-<id>STRING_110</id>
-<font>0</font>
-<val>FOURTH PROMPT</val>
-</string_record>
-<string_record>
-<id>STRING_108</id>
-<font>0</font>
-<val>SECOND PROMPT</val>
-</string_record>
-<string_record>
-<id>STRING_109</id>
-<font>0</font>
-<val>THIRD PROMPT</val>
 </string_record>
 <string_record>
 <id>RNET_SEATING</id>
@@ -4215,27 +5118,22 @@
 <val>TOGGLE F/R</val>
 </string_record>
 <string_record>
-<id>STRING_2</id>
+<id>BUTTONS_MAXIMUM</id>
 <font>0</font>
 <val>Use buttons to adjust MAXIMUM</val>
 </string_record>
 <string_record>
-<id>STRING_12</id>
+<id>BUTTONS_MINIMUM</id>
 <font>0</font>
 <val>Use buttons to adjust MINIMUM</val>
 </string_record>
 <string_record>
-<id>STRING_36</id>
+<id>FOR_EACH_PAD</id>
 <font>0</font>
 <val>FOR EACH PAD</val>
 </string_record>
 <string_record>
-<id>STRING_31</id>
-<font>0</font>
-<val>SELECT MINIMUM DRIVE SPEED</val>
-</string_record>
-<string_record>
-<id>STRING_14</id>
+<id>SET_MINIMUM_DRIVE_SPEED</id>
 <font>0</font>
 <val>SET MINIMUM DRIVE SPEED</val>
 </string_record>
@@ -4245,72 +5143,37 @@
 <val>SLEEP</val>
 </string_record>
 <string_record>
-<id>STRING_69_2</id>
-<font>0</font>
-<val>MODE PORT</val>
-</string_record>
-<string_record>
-<id>STRING_66</id>
+<id>USER_PORT</id>
 <font>0</font>
 <val>USER PORT</val>
 </string_record>
 <string_record>
-<id>STRING_49</id>
+<id>MODE_REVERSE</id>
 <font>0</font>
 <val>MODE (Reverse)</val>
 </string_record>
 <string_record>
-<id>STRING_70</id>
+<id>NUM100_X_100</id>
 <font>0</font>
 <val>100,100</val>
 </string_record>
 <string_record>
-<id>STRING_33</id>
-<font>0</font>
-<val>1000,1000</val>
-</string_record>
-<string_record>
-<id>STRING_102</id>
+<id>ACTIVE</id>
 <font>0</font>
 <val>ACTIVE</val>
 </string_record>
 <string_record>
-<id>STRING_103</id>
-<font>0</font>
-<val>PROPORTIONAL</val>
-</string_record>
-<string_record>
-<id>STRING_111</id>
-<font>0</font>
-<val>OVERRIDE/ASSIST</val>
-</string_record>
-<string_record>
-<id>STRING_101</id>
-<font>0</font>
-<val>ATTENDANT SETTING</val>
-</string_record>
-<string_record>
-<id>STRING_77_1</id>
+<id>PERFORMANCE_ATTENDANT</id>
 <font>0</font>
 <val>PERFORMANCEATTENDANT</val>
 </string_record>
 <string_record>
-<id>STRING_34</id>
-<font>0</font>
-<val>FAULTY PAD ERROR</val>
-</string_record>
-<string_record>
-<id>STRING_35</id>
+<id>CYCLE_POWER</id>
 <font>0</font>
 <val>CYCLE POWER</val>
 </string_record>
 <string_record>
-<id>STRING_37</id>
-<font>0</font>
-<val>ERROR: FAULTY PAD</val>
-</string_record>
-<string_record>
-<id>STRING_40</id>
+<id>FAULT</id>
 <font>0</font>
 <val>FAULT</val>
 </string_record>
@@ -4320,14 +5183,349 @@
 <val>SHOW PADS</val>
 </string_record>
 <string_record>
-<id>STRING_1</id>
-<font>0</font>
-<val>prompt</val>
-</string_record>
-<string_record>
-<id>STRING_41</id>
+<id>SNP_CALIBRATION_SCREEN</id>
 <font>0</font>
 <val>SNP Calibration Screen</val>
+</string_record>
+<string_record>
+<id>STANDBY_SELECT</id>
+<font>0</font>
+<val>STANDBY SELECT</val>
+</string_record>
+<string_record>
+<id>ATTENDANT_SETTING</id>
+<font>0</font>
+<val>ATTENDANT SETTING</val>
+</string_record>
+<string_record>
+<id>ATT_REMOTE_ENABLE</id>
+<font>0</font>
+<val>REMOTE ENABLE</val>
+</string_record>
+<string_record>
+<id>AUDITORY_CUES</id>
+<font>0</font>
+<val>AUDITORY CUES</val>
+</string_record>
+<string_record>
+<id>BT_3_SWITCH</id>
+<font>0</font>
+<val>3 SWITCH</val>
+</string_record>
+<string_record>
+<id>BT_4_SWITCH</id>
+<font>0</font>
+<val>4 SWITCH</val>
+</string_record>
+<string_record>
+<id>BT_AAC_DEVICE</id>
+<font>0</font>
+<val>AAC DEVICE</val>
+</string_record>
+<string_record>
+<id>BT_ACU</id>
+<font>0</font>
+<val>BT ATTENDANT</val>
+</string_record>
+<string_record>
+<id>BT_FEEDER</id>
+<font>0</font>
+<val>FEEDER</val>
+</string_record>
+<string_record>
+<id>BT_FORGET</id>
+<font>0</font>
+<val>FORGET DEVICE</val>
+</string_record>
+<string_record>
+<id>BT_GEN_A</id>
+<font>0</font>
+<val>BLUETOOTH A</val>
+</string_record>
+<string_record>
+<id>BT_GEN_B</id>
+<font>0</font>
+<val>BLUETOOTH B</val>
+</string_record>
+<string_record>
+<id>BT_GEN_C</id>
+<font>0</font>
+<val>BLUETOOTH C</val>
+</string_record>
+<string_record>
+<id>BT_GEN_D</id>
+<font>0</font>
+<val>BLUETOOTH D</val>
+</string_record>
+<string_record>
+<id>BT_LEGACY</id>
+<font>0</font>
+<val>LEGACY</val>
+</string_record>
+<string_record>
+<id>BT_MOUSE</id>
+<font>0</font>
+<val>MOUSE</val>
+</string_record>
+<string_record>
+<id>BT_PHONE</id>
+<font>0</font>
+<val>PHONE</val>
+</string_record>
+<string_record>
+<id>BT_SEATING</id>
+<font>0</font>
+<val>SEATING</val>
+</string_record>
+<string_record>
+<id>BT_START_PAIR</id>
+<font>0</font>
+<val>START PAIRING</val>
+</string_record>
+<string_record>
+<id>BT_TABLET</id>
+<font>0</font>
+<val>TABLET</val>
+</string_record>
+<string_record>
+<id>CALIBRATE</id>
+<font>0</font>
+<val>CALIBRATE</val>
+</string_record>
+<string_record>
+<id>CANCEL</id>
+<font>0</font>
+<val>CANCEL</val>
+</string_record>
+<string_record>
+<id>COMPLETE_STATUS</id>
+<font>0</font>
+<val>COMPLETE</val>
+</string_record>
+<string_record>
+<id>CONNECTING</id>
+<font>0</font>
+<val>Connecting...</val>
+</string_record>
+<string_record>
+<id>DIAGNOSTICS</id>
+<font>0</font>
+<val>DIAGNOSTICS</val>
+</string_record>
+<string_record>
+<id>DIR_FORWARD</id>
+<font>0</font>
+<val>FORWARD</val>
+</string_record>
+<string_record>
+<id>DIR_LEFT</id>
+<font>0</font>
+<val>LEFT</val>
+</string_record>
+<string_record>
+<id>DIR_REVERSE</id>
+<font>0</font>
+<val>REVERSE</val>
+</string_record>
+<string_record>
+<id>DIR_RIGHT</id>
+<font>0</font>
+<val>RIGHT</val>
+</string_record>
+<string_record>
+<id>DOUBLE_TAP</id>
+<font>0</font>
+<val>DOUBLE TAP</val>
+</string_record>
+<string_record>
+<id>DRIVER_CONTROL</id>
+<font>0</font>
+<val>DRIVER CONTROL</val>
+</string_record>
+<string_record>
+<id>ENABLE</id>
+<font>0</font>
+<val>ENABLE</val>
+</string_record>
+<string_record>
+<id>FEATURE_LIST</id>
+<font>0</font>
+<val>FEATURE LIST</val>
+</string_record>
+<string_record>
+<id>HEAD_ARRAY</id>
+<font>0</font>
+<val>HEAD ARRAY</val>
+</string_record>
+<string_record>
+<id>HUB</id>
+<font>0</font>
+<val>HUB SETTINGS</val>
+</string_record>
+<string_record>
+<id>HUB_PORT1</id>
+<font>0</font>
+<val>PORT 1</val>
+</string_record>
+<string_record>
+<id>HUB_PORT2</id>
+<font>0</font>
+<val>PORT 2</val>
+</string_record>
+<string_record>
+<id>HUB_PORT3</id>
+<font>0</font>
+<val>PORT 3</val>
+</string_record>
+<string_record>
+<id>JUMP_TO_BT</id>
+<font>0</font>
+<val>JUMP to BT</val>
+</string_record>
+<string_record>
+<id>MINUS_SIGN</id>
+<font>0</font>
+<val>-</val>
+</string_record>
+<string_record>
+<id>MODE_PORT</id>
+<font>0</font>
+<val>MODE PORT</val>
+</string_record>
+<string_record>
+<id>MODE_RESET</id>
+<font>0</font>
+<val>MODE / RESET</val>
+</string_record>
+<string_record>
+<id>NONE</id>
+<font>0</font>
+<val>OFF</val>
+</string_record>
+<string_record>
+<id>NUMBER_20</id>
+<font>0</font>
+<val>20</val>
+</string_record>
+<string_record>
+<id>OK_TO_USE</id>
+<font>0</font>
+<val>OK to USE</val>
+</string_record>
+<string_record>
+<id>PAIRING_STATUS</id>
+<font>0</font>
+<val>Pairing...</val>
+</string_record>
+<string_record>
+<id>PLUS_SIGN</id>
+<font>0</font>
+<val>+</val>
+</string_record>
+<string_record>
+<id>QUADRANT_3</id>
+<font>0</font>
+<val>3 QUADRANT</val>
+</string_record>
+<string_record>
+<id>QUADRANT_4</id>
+<font>0</font>
+<val>4 QUADRANT</val>
+</string_record>
+<string_record>
+<id>RESET_SETTINGS</id>
+<font>0</font>
+<val>RESET SETTINGS</val>
+</string_record>
+<string_record>
+<id>SLECT_BT_DEVICE</id>
+<font>0</font>
+<val>SELECT B DEVICE TO CHANGE</val>
+</string_record>
+<string_record>
+<id>DRIVE_FEATURE</id>
+<font>0</font>
+<val>DRIVE</val>
+</string_record>
+<string_record>
+<id>MODE_PORT_SETTING</id>
+<font>0</font>
+<val>MODE PORTRESET</val>
+</string_record>
+<string_record>
+<id>SELECT_DEVICE</id>
+<font>0</font>
+<val>SELECT DEVICE</val>
+</string_record>
+<string_record>
+<id>SET_COLOR</id>
+<font>0</font>
+<val>SET COLOR</val>
+</string_record>
+<string_record>
+<id>SET_DIRECTION</id>
+<font>0</font>
+<val>SET PAD DIRECTION</val>
+</string_record>
+<string_record>
+<id>SET_DESCRIPTION</id>
+<font>0</font>
+<val>SET DESCRIPTION</val>
+</string_record>
+<string_record>
+<id>SET_ICON</id>
+<font>0</font>
+<val>SET ICON</val>
+</string_record>
+<string_record>
+<id>SINGLE_TAP</id>
+<font>0</font>
+<val>SINGLE TAP</val>
+</string_record>
+<string_record>
+<id>SIP_N_PUFF</id>
+<font>0</font>
+<val>SIP-N-PUFF</val>
+</string_record>
+<string_record>
+<id>SNP_HEAD_ARRAY</id>
+<font>0</font>
+<val>SNP HEAD ARRAY</val>
+</string_record>
+<string_record>
+<id>SNP_SET_HARD_PUFF</id>
+<font>0</font>
+<val>SNP - Set HARD PUFF</val>
+</string_record>
+<string_record>
+<id>SNP_SET_HARD_SIP</id>
+<font>0</font>
+<val>SNP - Set HARD SIP</val>
+</string_record>
+<string_record>
+<id>SNP_SET_SOFT_PUFF</id>
+<font>0</font>
+<val>SNP - Set SOFT PUFF</val>
+</string_record>
+<string_record>
+<id>SNP_SET_SOFT_SIP</id>
+<font>0</font>
+<val>SNP - Set SOFT SIP</val>
+</string_record>
+<string_record>
+<id>ATTENDANT_HHP_ENABLE</id>
+<font>0</font>
+<val>HHP ENABLE</val>
+</string_record>
+<string_record>
+<id>BACK</id>
+<font>0</font>
+<val>   BACK</val>
+</string_record>
+<string_record>
+<id>HUB_PORT_SETTINGS</id>
+<font>0</font>
+<val>HUB PORT SETTINGS</val>
 </string_record>
 </string_table>
 <widget_folder>
@@ -4367,7 +5565,7 @@
 <disabled_fill_color>DISABLED_FILL</disabled_fill_color>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_41</string_id>
+<string_id>SNP_CALIBRATION_SCREEN</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -4411,7 +5609,7 @@
 <id_name>CYCLE_POWER_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_35</string_id>
+<string_id>CYCLE_POWER</string_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -4473,7 +5671,7 @@
 <id_name>FAULTY_PAD_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_40</string_id>
+<string_id>FAULT</string_id>
 <font_id>LARGESIZE</font_id>
 <normal_text_color>YELLOW</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -4577,7 +5775,7 @@
 <id_name>ACTIVE_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_102</string_id>
+<string_id>ACTIVE</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -4601,7 +5799,6 @@
 <id_name>PROPORTIONAL_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_103</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -4625,7 +5822,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -4764,7 +5961,7 @@
 <id_name>RAW_POSITION_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_70</string_id>
+<string_id>NUM100_X_100</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -4788,7 +5985,7 @@
 <id_name>DRIVE_DEMAND_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_70</string_id>
+<string_id>NUM100_X_100</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -4985,7 +6182,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5030,7 +6227,7 @@
 <id_name>GOTO_VEER_ADJUST_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_51</text_id>
+<text_id>SET_VEER_ADJUST</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5054,7 +6251,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5078,7 +6275,6 @@
 <id_name>ATTENDANT_SETTING_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_101</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5122,7 +6318,7 @@
 <id_name>GOTO_DIAGNOSTICS_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_10</text_id>
+<text_id>DIAGNOSTICS</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5146,7 +6342,7 @@
 <id_name>GOTO_RESET_SCREEN_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_27</text_id>
+<text_id>RESET_SETTINGS</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5170,7 +6366,7 @@
 <id_name>HEAD_ARRAY_VERSION_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_65_1</string_id>
+<string_id>ASL110_BLANK_VERSION</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -5194,7 +6390,7 @@
 <id_name>DISPLAY_VERSION_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_69_1</string_id>
+<string_id>ASL165_BLANK_VERSION</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -5218,7 +6414,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5262,7 +6458,7 @@
 <id_name>RIGHT_PAD_PERCENTAGE_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_52</text_id>
+<text_id>PERCENTAGE_20</text_id>
 <font_id>LARGESIZE</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -5286,7 +6482,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5310,7 +6506,7 @@
 <id_name>PROMPT_FOR_EACH_PAD</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_36</string_id>
+<string_id>FOR_EACH_PAD</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -5334,7 +6530,7 @@
 <id_name>PROMPT_SET_MINIMUM_SPEED</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_14</string_id>
+<string_id>SET_MINIMUM_DRIVE_SPEED</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -5358,7 +6554,7 @@
 <id_name>CENTER_PAD_PERCENTAGE_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_52</text_id>
+<text_id>PERCENTAGE_20</text_id>
 <font_id>LARGESIZE</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -5382,7 +6578,7 @@
 <id_name>LEFT_PAD_PERCENTAGE_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_52</text_id>
+<text_id>PERCENTAGE_20</text_id>
 <font_id>LARGESIZE</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -5426,7 +6622,7 @@
 <id_name>FEATURE_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_67_1</text_id>
+<text_id>FEATURE_LIST</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5450,7 +6646,7 @@
 <id_name>USER_SETTINGS_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_45</text_id>
+<text_id>USER_SETTINGS</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5474,7 +6670,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5498,7 +6694,7 @@
 <id_name>PERF_ATTEND_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_77_1</text_id>
+<text_id>PERFORMANCE_ATTENDANT</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5542,7 +6738,7 @@
 <id_name>CONTINUE_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_98</text_id>
+<text_id>YES</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5585,7 +6781,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_99</text_id>
+<text_id>NO</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5609,7 +6805,7 @@
 <id_name>PROMPT1_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_27</string_id>
+<string_id>RESET_SETTINGS</string_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>YELLOW</normal_text_color>
 <selected_text_color>MAROON</selected_text_color>
@@ -5633,7 +6829,7 @@
 <id_name>PROMPT2_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_73_1</string_id>
+<string_id>RESET_STATEMENT</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -5657,7 +6853,7 @@
 <id_name>PROMPT3_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_74_1</string_id>
+<string_id>RESET_FACTORY_DEFAULT</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -5681,7 +6877,7 @@
 <id_name>PROMPT4_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_97</string_id>
+<string_id>ARE_YOU_SURE</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -5725,7 +6921,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5749,7 +6945,7 @@
 <id_name>PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_96</string_id>
+<string_id>ALL_SETTINGS_RESET</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>YELLOW</normal_text_color>
 <selected_text_color>YELLOW</selected_text_color>
@@ -5815,30 +7011,6 @@
 </widget>
 <widget>
 <type>text_button</type>
-<app_name>PadActiveButton</app_name>
-<size>
-<left>326</left>
-<top>174</top>
-<right>395</right>
-<bottom>197</bottom>
-</size>
-<style>16385</style>
-<allocation>0</allocation>
-<accepts_focus>TRUE</accepts_focus>
-<normal_fill_color>BTN_LOWER</normal_fill_color>
-<selected_fill_color>BTN_UPPER</selected_fill_color>
-<disabled_fill_color>DISABLED_FILL</disabled_fill_color>
-<id_name>PAD_ACTIVE_BTN_ID</id_name>
-<template>FALSE</template>
-<visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_29</text_id>
-<font_id>BUTTON</font_id>
-<normal_text_color>BTN_TEXT</normal_text_color>
-<selected_text_color>BTN_TEXT</selected_text_color>
-<disabled_text_color>DISABLED_TEXT</disabled_text_color>
-</widget>
-<widget>
-<type>text_button</type>
 <app_name>LongPressButton</app_name>
 <size>
 <left>325</left>
@@ -5855,7 +7027,6 @@
 <id_name>LONG_PRESS_BUTTON_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_3</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5936,7 +7107,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5960,7 +7131,7 @@
 <id_name>SLIDE_VALUE_BUTTON</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_25</text_id>
+<text_id>NUMBER_ZERO</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -5983,7 +7154,7 @@
 <disabled_fill_color>DISABLED_FILL</disabled_fill_color>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_53</string_id>
+<string_id>SLIDE_THE_ANCHOR_POINT</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -6006,7 +7177,7 @@
 <disabled_fill_color>DISABLED_FILL</disabled_fill_color>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_56_1</string_id>
+<string_id>TO_REDUCE_VEERING</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -6051,7 +7222,7 @@
 <disabled_fill_color>DISABLED_FILL</disabled_fill_color>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_22</string_id>
+<string_id>RELEASE_PAD</string_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BRIGHT_ORANGE</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -6135,7 +7306,7 @@
 <id_name>INSTRUCT_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_15</string_id>
+<string_id>ACTIVATE_PAD</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>TEXT_INPUT_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -6179,7 +7350,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -6283,6 +7454,7 @@
 <id_name>CENTER_PAD_OFF_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
+<normal_pixelmap>CENTERPAD_DIAGNOSTIC_OFF</normal_pixelmap>
 </widget>
 <widget>
 <type>pixelmap_button</type>
@@ -6342,7 +7514,7 @@
 <id_name>LEFT_PAD_RAW_VALUE_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_21</string_id>
+<string_id>NUMBER_100</string_id>
 <font_id>MINSIZE</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>WHITE</selected_text_color>
@@ -6366,7 +7538,7 @@
 <id_name>RIGHT_PAD_RAW_VALUE_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_21</string_id>
+<string_id>NUMBER_100</string_id>
 <font_id>MINSIZE</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>WHITE</selected_text_color>
@@ -6390,7 +7562,7 @@
 <id_name>CENTER_PAD_RAW_VALUE_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_21</string_id>
+<string_id>NUMBER_100</string_id>
 <font_id>MINSIZE</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>WHITE</selected_text_color>
@@ -6414,7 +7586,7 @@
 <id_name>LEFT_PAD_ADJUSTED_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_21</string_id>
+<string_id>NUMBER_100</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>WHITE</selected_text_color>
@@ -6438,7 +7610,7 @@
 <id_name>RIGHT_PAD_ADJUSTED_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_21</string_id>
+<string_id>NUMBER_100</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>WHITE</selected_text_color>
@@ -6462,7 +7634,7 @@
 <id_name>CENTER_PAD_ADJUSTED_PROMPT</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_21</string_id>
+<string_id>NUMBER_100</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>WHITE</selected_text_color>
@@ -6505,7 +7677,7 @@
 <id_name>Mode_PORT_PROMPT_DIAG_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_69_2</string_id>
+<string_id>MODE_PORT</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>WHITE</selected_text_color>
@@ -6549,7 +7721,7 @@
 <id_name>USER_PORT_PROMPT_DIAG_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_66</string_id>
+<string_id>USER_PORT</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>WHITE</selected_text_color>
@@ -6596,7 +7768,7 @@
 <id_name>POWER_LARGE_ORANGE_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_39</string_id>
+<string_id>FUSION_OFF</string_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BRIGHT_ORANGE</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -6620,7 +7792,7 @@
 <id_name>PRESS_SWITCH_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_38</string_id>
+<string_id>PRESS_SWITCH</string_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BRIGHT_ORANGE</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -6685,7 +7857,7 @@
 <id_name>STATUS_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_9</string_id>
+<string_id>STARTING</string_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>WHITE</normal_text_color>
 <selected_text_color>WHITE</selected_text_color>
@@ -6844,7 +8016,7 @@
 <id_name>MINIMUM_INSTRUCT_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_12</string_id>
+<string_id>BUTTONS_MINIMUM</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>YELLOW</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -6888,7 +8060,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -6932,7 +8104,7 @@
 <id_name>MAXIMUM_INSTRUCT_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_2</string_id>
+<string_id>BUTTONS_MAXIMUM</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>BRIGHT_ORANGE</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -7105,7 +8277,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -7169,7 +8341,7 @@
 <id_name>SETTING_PROMPT01_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_28</string_id>
+<string_id>CHANGE_PAD_DIRECTION</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>TEXT_INPUT_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -7193,7 +8365,7 @@
 <id_name>SETTING_PROMPT01_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_50</string_id>
+<string_id>HOLD_PAD_TO_CALIBRATE</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>TEXT_INPUT_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -7237,7 +8409,7 @@
 <id_name>CLICKS_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_20</string_id>
+<string_id>CLICKS</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -7261,7 +8433,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -7284,7 +8456,7 @@
 <disabled_fill_color>DISABLED_FILL</disabled_fill_color>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_18</string_id>
+<string_id>TIMEOUT</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -7308,7 +8480,7 @@
 <id_name>POWERUP_IDLE_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_62</string_id>
+<string_id>POWER_UP_IDLE</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -7332,7 +8504,6 @@
 <id_name>TIMEOUT_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_57</text_id>
 <font_id>LARGESIZE</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -7461,7 +8632,7 @@
 <id_name>MODE_PORT_SCHEMA_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_49</string_id>
+<string_id>MODE_REVERSE</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>SELECTED_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -7532,7 +8703,7 @@
 <id_name>PAD_TYPE_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_13</text_id>
+<text_id>SET_PAD_TYPE</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -7556,7 +8727,6 @@
 <id_name>PAD_DIRECTIONS_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_16</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -7580,7 +8750,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -7604,7 +8774,7 @@
 <id_name>MINIMUM_DRIVE_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_30</text_id>
+<text_id>SET_MINIMUM_SPEED</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -7689,7 +8859,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -7733,7 +8903,7 @@
 <id_name>SETTING_PROMPT_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<string_id>STRING_28</string_id>
+<string_id>CHANGE_PAD_DIRECTION</string_id>
 <font_id>PROMPT</font_id>
 <normal_text_color>TEXT_INPUT_TEXT</normal_text_color>
 <selected_text_color>SELECTED_TEXT</selected_text_color>
@@ -7777,7 +8947,7 @@
 <id_name>OK_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_24</text_id>
+<text_id>OK</text_id>
 <font_id>ASC24PT</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -7801,7 +8971,7 @@
 <id_name>PAD_SETTINGS_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_46</text_id>
+<text_id>PAD_SETTINGS</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -7825,7 +8995,7 @@
 <id_name>SETTINGS_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_11</text_id>
+<text_id>SETTINGS</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>
@@ -7849,7 +9019,7 @@
 <id_name>MORE_BTN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>
-<text_id>STRING_44</text_id>
+<text_id>MORE</text_id>
 <font_id>BUTTON</font_id>
 <normal_text_color>BTN_TEXT</normal_text_color>
 <selected_text_color>BTN_TEXT</selected_text_color>

@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 13. 3.2024   Time (hh:mm): 14:26                        */
+/*  Date (dd.mm.yyyy): 23. 3.2024   Time (hh:mm): 15:53                        */
 /*******************************************************************************/
 
 
@@ -25801,6 +25801,179 @@ GX_CONST GX_PIXELMAP MAIN_DISPLAY_THEME_1_CENTERPADERROR_pixelmap =
     42                                       /* height in pixel                */
 };
 
+/* THEME_1_CENTERPAD_DIAGNOSTIC_OFF pixelmap data                              */
+
+#ifdef WIN32
+static GX_CONST GX_UBYTE MAIN_DISPLAY_THEME_1_CENTERPAD_DIAGNOSTIC_OFF_pixelmap_data[1933] =
+#else
+static GX_CONST GX_UBYTE MAIN_DISPLAY_THEME_1_CENTERPAD_DIAGNOSTIC_OFF_pixelmap_data[1933] __attribute__((aligned(4))) =
+#endif
+{
+    0xff, 0x00, 0x00, 0x00, 0x00, 0x90, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 
+    0x00, 0x00, 0x90, 0x00, 0x00, 0x00, 0x00, 0x87, 0x00, 0x00, 0x00, 0x00, 0x01, 
+    0xf8, 0xfc, 0xf8, 0xff, 0xe8, 0xe8, 0xe8, 0xff, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 
+    0xee, 0x00, 0x00, 0x00, 0x00, 0x89, 0xf8, 0xfc, 0xf8, 0xff, 0x86, 0x00, 0x00, 
+    0x00, 0x00, 0x85, 0x00, 0x00, 0x00, 0x00, 0x8d, 0xf8, 0xfc, 0xf8, 0xff, 0xe8, 
+    0x00, 0x00, 0x00, 0x00, 0x8d, 0xf8, 0xfc, 0xf8, 0xff, 0x85, 0x00, 0x00, 0x00, 
+    0x00, 0x84, 0x00, 0x00, 0x00, 0x00, 0x92, 0xf8, 0xfc, 0xf8, 0xff, 0x01, 0xf0, 
+    0xf0, 0xf0, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0xdc, 0x00, 0x00, 0x00, 0x00, 0x02, 
+    0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xf8, 0xf8, 0xff, 0xf8, 0xf8, 0xf8, 0xff, 0x91, 
+    0xf8, 0xfc, 0xf8, 0xff, 0x84, 0x00, 0x00, 0x00, 0x00, 0x84, 0x00, 0x00, 0x00, 
+    0x00, 0x98, 0xf8, 0xfc, 0xf8, 0xff, 0xd4, 0x00, 0x00, 0x00, 0x00, 0x98, 0xf8, 
+    0xfc, 0xf8, 0xff, 0x84, 0x00, 0x00, 0x00, 0x00, 0x84, 0x00, 0x00, 0x00, 0x00, 
+    0x86, 0xf8, 0xfc, 0xf8, 0xff, 0x82, 0x00, 0x00, 0x00, 0x00, 0x94, 0xf8, 0xfc, 
+    0xf8, 0xff, 0x01, 0xd0, 0xd4, 0xd0, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0xc5, 0x00, 
+    0x00, 0x00, 0x00, 0x01, 0xe8, 0xec, 0xe8, 0xff, 0xe8, 0xe8, 0xe8, 0xff, 0x93, 
+    0xf8, 0xfc, 0xf8, 0xff, 0x83, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 
+    0xff, 0x84, 0x00, 0x00, 0x00, 0x00, 0x84, 0x00, 0x00, 0x00, 0x00, 0x83, 0xf8, 
+    0xfc, 0xf8, 0xff, 0x02, 0xf0, 0xf4, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 
+    0xfc, 0xf8, 0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x98, 0xf8, 0xfc, 0xf8, 0xff, 
+    0x00, 0xc0, 0xc0, 0xc0, 0xff, 0xb5, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd8, 0xd8, 
+    0xd8, 0xff, 0x97, 0xf8, 0xfc, 0xf8, 0xff, 0x88, 0x00, 0x00, 0x00, 0x00, 0x85, 
+    0xf8, 0xfc, 0xf8, 0xff, 0x84, 0x00, 0x00, 0x00, 0x00, 0x83, 0x00, 0x00, 0x00, 
+    0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0x8c, 0x00, 0x00, 0x00, 0x00, 0xe0, 0xf8, 
+    0xfc, 0xf8, 0xff, 0x8d, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 
+    0x83, 0x00, 0x00, 0x00, 0x00, 0x83, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 
+    0xf8, 0xff, 0x92, 0x00, 0x00, 0x00, 0x00, 0xd4, 0xf8, 0xfc, 0xf8, 0xff, 0x93, 
+    0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0x83, 0x00, 0x00, 0x00, 
+    0x00, 0x83, 0x00, 0x00, 0x00, 0x00, 0x84, 0xf8, 0xfc, 0xf8, 0xff, 0x00, 0xf8, 
+    0xf8, 0xf8, 0xff, 0x9a, 0x00, 0x00, 0x00, 0x00, 0xc6, 0xf8, 0xfc, 0xf8, 0xff, 
+    0x9a, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0x83, 0x00, 0x00, 
+    0x00, 0x00, 0x83, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0xa3, 
+    0x00, 0x00, 0x00, 0x00, 0xb5, 0xf8, 0xfc, 0xf8, 0xff, 0xa3, 0x00, 0x00, 0x00, 
+    0x00, 0x84, 0xf8, 0xfc, 0xf8, 0xff, 0x83, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0xff, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 0x84, 0xf8, 0xfc, 0xf8, 
+    0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0xff, 0x00, 
+    0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 0x84, 
+    0xf8, 0xfc, 0xf8, 0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 
+    0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 
+    0xf0, 0xff, 0x84, 0xf8, 0xfc, 0xf8, 0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x85, 
+    0xf8, 0xfc, 0xf8, 0xff, 0xb3, 0x00, 0x00, 0x00, 0x00, 0x82, 0xf8, 0xfc, 0xf8, 
+    0xff, 0xc9, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 0x84, 0xf8, 
+    0xfc, 0xf8, 0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 
+    0xb1, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0x84, 0x00, 0x00, 
+    0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0x82, 0x00, 0x00, 0x00, 0x00, 0x86, 
+    0xf8, 0xfc, 0xf8, 0xff, 0xb1, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 
+    0xff, 0x84, 0xf8, 0xfc, 0xf8, 0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 
+    0xfc, 0xf8, 0xff, 0xaf, 0x00, 0x00, 0x00, 0x00, 0x82, 0xf8, 0xfc, 0xf8, 0xff, 
+    0x83, 0x00, 0x00, 0x00, 0x00, 0x82, 0xf8, 0xfc, 0xf8, 0xff, 0x83, 0x00, 0x00, 
+    0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x87, 0x00, 
+    0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0xb6, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 0x84, 0xf8, 0xfc, 0xf8, 
+    0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0xaf, 0x00, 0x00, 0x00, 0x00, 0x01, 
+    0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x85, 0x00, 0x00, 0x00, 0x00, 
+    0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x83, 0x00, 0x00, 0x00, 
+    0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x87, 0x00, 0x00, 
+    0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0xb6, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 
+    0xf8, 0xff, 0xae, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 
+    0xfc, 0xf8, 0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 
+    0xf8, 0xfc, 0xf8, 0xff, 0x82, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 
+    0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 
+    0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0xb6, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 
+    0xf4, 0xf0, 0xff, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0xae, 0x00, 0x00, 
+    0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x87, 0x00, 
+    0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x82, 
+    0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 
+    0x87, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 
+    0xff, 0xb6, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 0x85, 0xf8, 
+    0xfc, 0xf8, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0x86, 0xf8, 0xfc, 0xf8, 0xff, 0xae, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 
+    0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 
+    0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x82, 0x00, 0x00, 0x00, 0x00, 0x01, 
+    0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 
+    0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0xb6, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 
+    0xae, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 
+    0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 
+    0xf8, 0xff, 0x82, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0x82, 
+    0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0xb1, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 
+    0xae, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 
+    0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 
+    0xf8, 0xff, 0x82, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 
+    0xfc, 0xf8, 0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 
+    0xf8, 0xfc, 0xf8, 0xff, 0xb6, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 
+    0xff, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0xae, 
+    0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 
+    0x87, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 
+    0xff, 0x82, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 
+    0xf8, 0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 
+    0xfc, 0xf8, 0xff, 0xb6, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 
+    0x84, 0xf8, 0xfc, 0xf8, 0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 
+    0xf8, 0xff, 0xae, 0x00, 0x00, 0x00, 0x00, 0x82, 0xf8, 0xfc, 0xf8, 0xff, 0x85, 
+    0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 
+    0x83, 0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 
+    0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf8, 0xfc, 0xf8, 0xff, 0xb7, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 0x84, 0xf8, 0xfc, 0xf8, 0xff, 
+    0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0xaf, 0x00, 0x00, 
+    0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x85, 0x00, 
+    0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x83, 
+    0x00, 0x00, 0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 
+    0x87, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf8, 0xfc, 0xf8, 0xff, 0xb7, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0xf0, 0xf4, 0xf0, 0xff, 0x84, 0xf8, 0xfc, 0xf8, 0xff, 0x01, 
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0xb0, 0x00, 0x00, 0x00, 
+    0x00, 0x82, 0xf8, 0xfc, 0xf8, 0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x82, 0xf8, 0xfc, 0xf8, 0xff, 0x84, 0x00, 0x00, 0x00, 0x00, 0x01, 
+    0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 
+    0x00, 0xf8, 0xfc, 0xf8, 0xff, 0xb7, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0xf4, 
+    0xf0, 0xff, 0x84, 0xf8, 0xfc, 0xf8, 0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x83, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 
+    0xaf, 0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0x85, 0x00, 0x00, 
+    0x00, 0x00, 0x01, 0xf8, 0xfc, 0xf8, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x87, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 0xf8, 0xfc, 0xf8, 0xff, 0xb6, 0x00, 0x00, 0x00, 0x00, 
+    0x00, 0xe0, 0xec, 0xf8, 0xff, 0x83, 0xf8, 0xfc, 0xf8, 0xff, 0x83, 0x00, 0x00, 
+    0x00, 0x00, 0x83, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0xfb, 
+    0x00, 0x00, 0x00, 0x00, 0x85, 0xf8, 0xfc, 0xf8, 0xff, 0x83, 0x00, 0x00, 0x00, 
+    0x00, 0x83, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0xfa, 0x00, 
+    0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0x83, 0x00, 0x00, 0x00, 0x00, 
+    0x84, 0x00, 0x00, 0x00, 0x00, 0x86, 0xf8, 0xfc, 0xf8, 0xff, 0xf9, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0xf0, 0xf0, 0xf0, 0xff, 0x84, 0xf8, 0xfc, 0xf8, 0xff, 0x84, 
+    0x00, 0x00, 0x00, 0x00, 0x84, 0x00, 0x00, 0x00, 0x00, 0x90, 0xf8, 0xfc, 0xf8, 
+    0xff, 0xe4, 0x00, 0x00, 0x00, 0x00, 0x90, 0xf8, 0xfc, 0xf8, 0xff, 0x84, 0x00, 
+    0x00, 0x00, 0x00, 0x84, 0x00, 0x00, 0x00, 0x00, 0xa3, 0xf8, 0xfc, 0xf8, 0xff, 
+    0xbf, 0x00, 0x00, 0x00, 0x00, 0xa2, 0xf8, 0xfc, 0xf8, 0xff, 0x84, 0x00, 0x00, 
+    0x00, 0x00, 0x87, 0x00, 0x00, 0x00, 0x00, 0xff, 0xf8, 0xfc, 0xf8, 0xff, 0x00, 
+    0xf8, 0xfc, 0xf8, 0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x87, 0x00, 0x00, 0x00, 
+    0x00, 0xfe, 0xf8, 0xfc, 0xf8, 0xff, 0x01, 0xf0, 0xf0, 0xf0, 0xff, 0xf8, 0xfc, 
+    0xf8, 0xff, 0x87, 0x00, 0x00, 0x00, 0x00, 0x95, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0xb0, 0xb0, 0xb0, 0xff, 0xe2, 0xf8, 0xfc, 0xf8, 0xff, 0x00, 0xd0, 0xd0, 0xd0, 
+    0xff, 0x95, 0x00, 0x00, 0x00, 0x00, 0xa8, 0x00, 0x00, 0x00, 0x00, 0xbf, 0xf8, 
+    0xfc, 0xf8, 0xff, 0xa7, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 
+    0x90, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x90, 0x00, 0x00, 
+    0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x90, 0x00, 0x00, 0x00, 0x00, 0xff, 
+    0x00, 0x00, 0x00, 0x00, 0x90, 0x00, 0x00, 0x00, 0x00
+};
+GX_CONST GX_PIXELMAP MAIN_DISPLAY_THEME_1_CENTERPAD_DIAGNOSTIC_OFF_pixelmap =
+{
+    0x00000001,                              /* major version                  */
+    0x00000000,                              /* minor version                  */
+    GX_PIXELMAP_COMPRESSED|GX_PIXELMAP_ALPHA,         /* flags                 */
+    GX_COLOR_FORMAT_32ARGB,                  /* Format                         */
+    (GX_UBYTE *) MAIN_DISPLAY_THEME_1_CENTERPAD_DIAGNOSTIC_OFF_pixelmap_data,
+    sizeof(MAIN_DISPLAY_THEME_1_CENTERPAD_DIAGNOSTIC_OFF_pixelmap_data),    /* the size of pixelmap_data*/
+    NULL,
+    0,                                       /* auxiliary data size            */
+    0x00,                                    /* used for transparent iamges    */
+    145,                                     /* width in pixel                 */
+    42                                       /* height in pixel                */
+};
+
 /* THEME_1_DIAGCENTERPADACTIVE pixelmap data                                   */
 
 #ifdef WIN32
@@ -41754,6 +41927,7 @@ GX_CONST GX_PIXELMAP *main_display_theme_1_pixelmap_table[] =
     &MAIN_DISPLAY_THEME_1_BLUETOOTH_30X30_ALLBLUE_pixelmap,
     &MAIN_DISPLAY_THEME_1_BLUETOOTH_70X70_BLUE_pixelmap,
     &MAIN_DISPLAY_THEME_1_CENTERPADERROR_pixelmap,
+    &MAIN_DISPLAY_THEME_1_CENTERPAD_DIAGNOSTIC_OFF_pixelmap,
     &MAIN_DISPLAY_THEME_1_DIAGCENTERPADACTIVE_pixelmap,
     &MAIN_DISPLAY_THEME_1_DIAGLEFTRIGHTPADACTIVE_pixelmap,
     &MAIN_DISPLAY_THEME_1_DIGITAL_INDICATOR_pixelmap,
@@ -41816,204 +41990,262 @@ GX_CONST GX_PIXELMAP *main_display_theme_1_pixelmap_table[] =
 
 /* String values                                                               */
 
-GX_CONST GX_UBYTE main_display_STRING_15_English[] = "ACTIVATE PAD";
-GX_CONST GX_UBYTE main_display_STRING_32_English[] = "SAVE";
-GX_CONST GX_UBYTE main_display_STRING_60_English[] = "LEFT PAD";
-GX_CONST GX_UBYTE main_display_STRING_63_English[] = "CENTER PAD";
-GX_CONST GX_UBYTE main_display_STRING_64_English[] = "RIGHT PAD";
-GX_CONST GX_UBYTE main_display_STRING_69_English[] = "Status: OK";
-GX_CONST GX_UBYTE main_display_STRING_74_English[] = "Left Pad";
-GX_CONST GX_UBYTE main_display_STRING_77_English[] = "Right Pad";
-GX_CONST GX_UBYTE main_display_STRING_78_English[] = "Center Pad";
-GX_CONST GX_UBYTE main_display_STRING_79_English[] = "Power";
+GX_CONST GX_UBYTE main_display_ACTIVATE_PAD_English[] = "ACTIVATE PAD";
 GX_CONST GX_UBYTE main_display_BLUETOOTH_English[] = "BLUETOOTH";
 GX_CONST GX_UBYTE main_display_NEXT_FUNCTION_English[] = "NEXT FUNCTION";
 GX_CONST GX_UBYTE main_display_NEXT_PROFILE_English[] = "NEXT PROFILE";
-GX_CONST GX_UBYTE main_display_STRING_29_English[] = "PAD ON";
-GX_CONST GX_UBYTE main_display_STRING_3_English[] = "LONG";
-GX_CONST GX_UBYTE main_display_STRING_10_English[] = "DIAGNOSTICS";
-GX_CONST GX_UBYTE main_display_STRING_11_English[] = "SETTINGS";
-GX_CONST GX_UBYTE main_display_STRING_24_English[] = "OK";
-GX_CONST GX_UBYTE main_display_STRING_4_English[] = "UP Arrow";
-GX_CONST GX_UBYTE main_display_STRING_5_English[] = "POWER ON/OFF";
-GX_CONST GX_UBYTE main_display_STRING_6_English[] = "NEXT FUNCTION";
-GX_CONST GX_UBYTE main_display_STRING_28_English[] = "TOUCH PAD TO CHANGE DIRECTION";
-GX_CONST GX_UBYTE main_display_STRING_17_English[] = "DIRECTION";
-GX_CONST GX_UBYTE main_display_STRING_46_English[] = "PAD SETTINGS";
-GX_CONST GX_UBYTE main_display_STRING_45_English[] = "USER SETTINGS";
-GX_CONST GX_UBYTE main_display_STRING_19_English[] = "FEATURE SETTINGS";
-GX_CONST GX_UBYTE main_display_STRING_13_English[] = "SET PAD TYPE";
-GX_CONST GX_UBYTE main_display_STRING_16_English[] = "SET PAD DIRECTION";
-GX_CONST GX_UBYTE main_display_STRING_7_English[] = "BLUETOOTH";
-GX_CONST GX_UBYTE main_display_STRING_8_English[] = "NEXT PROFILE";
-GX_CONST GX_UBYTE main_display_STRING_20_English[] = "CLICKS (Audio)";
-GX_CONST GX_UBYTE main_display_STRING_18_English[] = "TIMEOUT";
-GX_CONST GX_UBYTE main_display_STRING_50_English[] = "HOLD PAD TO CALIBRATE";
-GX_CONST GX_UBYTE main_display_STRING_23_English[] = "Use arrows to adjust MINIMUM";
-GX_CONST GX_UBYTE main_display_STRING_26_English[] = "Use arrows to adjust MAXIMUM";
-GX_CONST GX_UBYTE main_display_STRING_9_English[] = "STARTING...";
+GX_CONST GX_UBYTE main_display_SETTINGS_English[] = "SETTINGS";
+GX_CONST GX_UBYTE main_display_OK_English[] = "OK";
+GX_CONST GX_UBYTE main_display_CHANGE_PAD_DIRECTION_English[] = "TOUCH PAD TO CHANGE DIRECTION";
+GX_CONST GX_UBYTE main_display_PAD_SETTINGS_English[] = "PAD SETTINGS";
+GX_CONST GX_UBYTE main_display_USER_SETTINGS_English[] = "USER SETTINGS";
+GX_CONST GX_UBYTE main_display_SET_PAD_TYPE_English[] = "SET PAD TYPE";
+GX_CONST GX_UBYTE main_display_CLICKS_English[] = "CLICKS (Audio)";
+GX_CONST GX_UBYTE main_display_TIMEOUT_English[] = "TIMEOUT";
+GX_CONST GX_UBYTE main_display_HOLD_PAD_TO_CALIBRATE_English[] = "HOLD PAD TO CALIBRATE";
+GX_CONST GX_UBYTE main_display_ADJUST_MIMIMUM_English[] = "Use arrows to adjust MINIMUM";
+GX_CONST GX_UBYTE main_display_ADJUST_MAXIMUM_English[] = "Use arrows to adjust MAXIMUM";
+GX_CONST GX_UBYTE main_display_STARTING_English[] = "STARTING...";
 GX_CONST GX_UBYTE main_display_POWER_ONOFF_English[] = "POWER ON/OFF";
-GX_CONST GX_UBYTE main_display_STRING_39_English[] = "FUSION OFF";
-GX_CONST GX_UBYTE main_display_STRING_38_English[] = "PRESS SWITCH";
-GX_CONST GX_UBYTE main_display_STRING_21_English[] = "100";
-GX_CONST GX_UBYTE main_display_STRING_22_English[] = "RELEASE PAD";
-GX_CONST GX_UBYTE main_display_STRING_57_English[] = "20";
-GX_CONST GX_UBYTE main_display_STRING_53_English[] = "Slide the anchor point";
-GX_CONST GX_UBYTE main_display_STRING_56_1_English[] = "to eliminate veering";
-GX_CONST GX_UBYTE main_display_STRING_51_English[] = "SET VEER ADJUST";
-GX_CONST GX_UBYTE main_display_STRING_25_English[] = "0";
-GX_CONST GX_UBYTE main_display_STRING_62_English[] = "POWER UP IDLE";
-GX_CONST GX_UBYTE main_display_STRING_44_English[] = "MORE";
-GX_CONST GX_UBYTE main_display_STRING_94_English[] = "PERFORMANCE";
-GX_CONST GX_UBYTE main_display_STRING_96_English[] = "ALL SETTINGS HAVE BEEN RESET";
-GX_CONST GX_UBYTE main_display_STRING_98_English[] = "YES";
-GX_CONST GX_UBYTE main_display_STRING_99_English[] = "NO";
-GX_CONST GX_UBYTE main_display_STRING_27_English[] = "RESET SETTINGS";
-GX_CONST GX_UBYTE main_display_STRING_73_1_English[] = "THIS RESETS ALL SETTINGS";
-GX_CONST GX_UBYTE main_display_STRING_74_1_English[] = "TO FACTORY DEFAULT.";
-GX_CONST GX_UBYTE main_display_STRING_97_English[] = "ARE YOU SURE?";
-GX_CONST GX_UBYTE main_display_STRING_67_1_English[] = "FEATURE LIST";
-GX_CONST GX_UBYTE main_display_STRING_52_English[] = "20%";
-GX_CONST GX_UBYTE main_display_STRING_89_English[] = "SELECT PROPORTIONAL";
-GX_CONST GX_UBYTE main_display_STRING_83_1_English[] = "MINIMUM DRIVE SPEED";
-GX_CONST GX_UBYTE main_display_STRING_65_1_English[] = "ASL110: 00.00.00";
-GX_CONST GX_UBYTE main_display_STRING_69_1_English[] = "Display: 00.00.00";
-GX_CONST GX_UBYTE main_display_STRING_95_English[] = "SET DIGITAL MINIMUM";
-GX_CONST GX_UBYTE main_display_STRING_30_English[] = "SET MINIMUM SPEED";
-GX_CONST GX_UBYTE main_display_STRING_105_English[] = "TOP PROMPT";
-GX_CONST GX_UBYTE main_display_STRING_110_English[] = "FOURTH PROMPT";
-GX_CONST GX_UBYTE main_display_STRING_108_English[] = "SECOND PROMPT";
-GX_CONST GX_UBYTE main_display_STRING_109_English[] = "THIRD PROMPT";
+GX_CONST GX_UBYTE main_display_FUSION_OFF_English[] = "FUSION OFF";
+GX_CONST GX_UBYTE main_display_PRESS_SWITCH_English[] = "PRESS SWITCH";
+GX_CONST GX_UBYTE main_display_NUMBER_100_English[] = "100";
+GX_CONST GX_UBYTE main_display_RELEASE_PAD_English[] = "RELEASE PAD";
+GX_CONST GX_UBYTE main_display_SLIDE_THE_ANCHOR_POINT_English[] = "Slide the anchor point";
+GX_CONST GX_UBYTE main_display_TO_REDUCE_VEERING_English[] = "to eliminate veering";
+GX_CONST GX_UBYTE main_display_SET_VEER_ADJUST_English[] = "SET VEER ADJUST";
+GX_CONST GX_UBYTE main_display_NUMBER_ZERO_English[] = "0";
+GX_CONST GX_UBYTE main_display_POWER_UP_IDLE_English[] = "POWER UP IDLE";
+GX_CONST GX_UBYTE main_display_MORE_English[] = "MORE";
+GX_CONST GX_UBYTE main_display_PERFORMANCE_English[] = "PERFORMANCE";
+GX_CONST GX_UBYTE main_display_ALL_SETTINGS_RESET_English[] = "ALL SETTINGS HAVE BEEN RESET";
+GX_CONST GX_UBYTE main_display_YES_English[] = "YES";
+GX_CONST GX_UBYTE main_display_NO_English[] = "NO";
+GX_CONST GX_UBYTE main_display_RESET_STATEMENT_English[] = "THIS RESETS ALL SETTINGS";
+GX_CONST GX_UBYTE main_display_RESET_FACTORY_DEFAULT_English[] = "TO FACTORY DEFAULT.";
+GX_CONST GX_UBYTE main_display_ARE_YOU_SURE_English[] = "ARE YOU SURE?";
+GX_CONST GX_UBYTE main_display_PERCENTAGE_20_English[] = "20%";
+GX_CONST GX_UBYTE main_display_ASL110_BLANK_VERSION_English[] = "ASL110: 00.00.00";
+GX_CONST GX_UBYTE main_display_ASL165_BLANK_VERSION_English[] = "Display: 00.00.00";
+GX_CONST GX_UBYTE main_display_SET_MINIMUM_SPEED_English[] = "SET MINIMUM SPEED";
 GX_CONST GX_UBYTE main_display_RNET_SEATING_English[] = "SEATING";
 GX_CONST GX_UBYTE main_display_RNET_MENU_English[] = "USER MENU";
 GX_CONST GX_UBYTE main_display_RNET_ENABLE_English[] = "RNet ENABLE";
 GX_CONST GX_UBYTE main_display_RNET_TOGGLE_English[] = "TOGGLE F/R";
-GX_CONST GX_UBYTE main_display_STRING_2_English[] = "Use buttons to adjust MAXIMUM";
-GX_CONST GX_UBYTE main_display_STRING_12_English[] = "Use buttons to adjust MINIMUM";
-GX_CONST GX_UBYTE main_display_STRING_36_English[] = "FOR EACH PAD";
-GX_CONST GX_UBYTE main_display_STRING_31_English[] = "SELECT MINIMUM DRIVE SPEED";
-GX_CONST GX_UBYTE main_display_STRING_14_English[] = "SET MINIMUM DRIVE SPEED";
+GX_CONST GX_UBYTE main_display_BUTTONS_MAXIMUM_English[] = "Use buttons to adjust MAXIMUM";
+GX_CONST GX_UBYTE main_display_BUTTONS_MINIMUM_English[] = "Use buttons to adjust MINIMUM";
+GX_CONST GX_UBYTE main_display_FOR_EACH_PAD_English[] = "FOR EACH PAD";
+GX_CONST GX_UBYTE main_display_SET_MINIMUM_DRIVE_SPEED_English[] = "SET MINIMUM DRIVE SPEED";
 GX_CONST GX_UBYTE main_display_RNET_SLEEP_English[] = "SLEEP";
-GX_CONST GX_UBYTE main_display_STRING_69_2_English[] = "MODE PORT";
-GX_CONST GX_UBYTE main_display_STRING_66_English[] = "USER PORT";
-GX_CONST GX_UBYTE main_display_STRING_49_English[] = "MODE (Reverse)";
-GX_CONST GX_UBYTE main_display_STRING_70_English[] = "100,100";
-GX_CONST GX_UBYTE main_display_STRING_33_English[] = "1000,1000";
-GX_CONST GX_UBYTE main_display_STRING_102_English[] = "ACTIVE";
-GX_CONST GX_UBYTE main_display_STRING_103_English[] = "PROPORTIONAL";
-GX_CONST GX_UBYTE main_display_STRING_111_English[] = "OVERRIDE/ASSIST";
-GX_CONST GX_UBYTE main_display_STRING_101_English[] = "ATTENDANT SETTING";
-GX_CONST GX_UBYTE main_display_STRING_77_1_English[] = "PERFORMANCE\rATTENDANT";
-GX_CONST GX_UBYTE main_display_STRING_34_English[] = "FAULTY PAD ERROR";
-GX_CONST GX_UBYTE main_display_STRING_35_English[] = "CYCLE POWER";
-GX_CONST GX_UBYTE main_display_STRING_37_English[] = "ERROR: FAULTY PAD";
-GX_CONST GX_UBYTE main_display_STRING_40_English[] = "FAULT";
+GX_CONST GX_UBYTE main_display_USER_PORT_English[] = "USER PORT";
+GX_CONST GX_UBYTE main_display_MODE_REVERSE_English[] = "MODE (Reverse)";
+GX_CONST GX_UBYTE main_display_NUM100_X_100_English[] = "100,100";
+GX_CONST GX_UBYTE main_display_ACTIVE_English[] = "ACTIVE";
+GX_CONST GX_UBYTE main_display_PERFORMANCE_ATTENDANT_English[] = "PERFORMANCE\rATTENDANT";
+GX_CONST GX_UBYTE main_display_CYCLE_POWER_English[] = "CYCLE POWER";
+GX_CONST GX_UBYTE main_display_FAULT_English[] = "FAULT";
 GX_CONST GX_UBYTE main_display_DISPLAY_PADS_English[] = "SHOW PADS";
-GX_CONST GX_UBYTE main_display_STRING_1_English[] = "prompt";
-GX_CONST GX_UBYTE main_display_STRING_41_English[] = "SNP Calibration Screen";
+GX_CONST GX_UBYTE main_display_SNP_CALIBRATION_SCREEN_English[] = "SNP Calibration Screen";
+GX_CONST GX_UBYTE main_display_STANDBY_SELECT_English[] = "STANDBY SELECT";
+GX_CONST GX_UBYTE main_display_ATTENDANT_SETTING_English[] = "ATTENDANT SETTING";
+GX_CONST GX_UBYTE main_display_ATT_REMOTE_ENABLE_English[] = "REMOTE ENABLE";
+GX_CONST GX_UBYTE main_display_AUDITORY_CUES_English[] = "AUDITORY CUES";
+GX_CONST GX_UBYTE main_display_BT_3_SWITCH_English[] = "3 SWITCH";
+GX_CONST GX_UBYTE main_display_BT_4_SWITCH_English[] = "4 SWITCH";
+GX_CONST GX_UBYTE main_display_BT_AAC_DEVICE_English[] = "AAC DEVICE";
+GX_CONST GX_UBYTE main_display_BT_ACU_English[] = "BT ATTENDANT";
+GX_CONST GX_UBYTE main_display_BT_FEEDER_English[] = "FEEDER";
+GX_CONST GX_UBYTE main_display_BT_FORGET_English[] = "FORGET DEVICE";
+GX_CONST GX_UBYTE main_display_BT_GEN_A_English[] = "BLUETOOTH A";
+GX_CONST GX_UBYTE main_display_BT_GEN_B_English[] = "BLUETOOTH B";
+GX_CONST GX_UBYTE main_display_BT_GEN_C_English[] = "BLUETOOTH C";
+GX_CONST GX_UBYTE main_display_BT_GEN_D_English[] = "BLUETOOTH D";
+GX_CONST GX_UBYTE main_display_BT_LEGACY_English[] = "LEGACY";
+GX_CONST GX_UBYTE main_display_BT_MOUSE_English[] = "MOUSE";
+GX_CONST GX_UBYTE main_display_BT_PHONE_English[] = "PHONE";
+GX_CONST GX_UBYTE main_display_BT_SEATING_English[] = "SEATING";
+GX_CONST GX_UBYTE main_display_BT_START_PAIR_English[] = "START PAIRING";
+GX_CONST GX_UBYTE main_display_BT_TABLET_English[] = "TABLET";
+GX_CONST GX_UBYTE main_display_CALIBRATE_English[] = "CALIBRATE";
+GX_CONST GX_UBYTE main_display_CANCEL_English[] = "CANCEL";
+GX_CONST GX_UBYTE main_display_COMPLETE_STATUS_English[] = "COMPLETE";
+GX_CONST GX_UBYTE main_display_CONNECTING_English[] = "Connecting...";
+GX_CONST GX_UBYTE main_display_DIAGNOSTICS_English[] = "DIAGNOSTICS";
+GX_CONST GX_UBYTE main_display_DIR_FORWARD_English[] = "FORWARD";
+GX_CONST GX_UBYTE main_display_DIR_LEFT_English[] = "LEFT";
+GX_CONST GX_UBYTE main_display_DIR_REVERSE_English[] = "REVERSE";
+GX_CONST GX_UBYTE main_display_DIR_RIGHT_English[] = "RIGHT";
+GX_CONST GX_UBYTE main_display_DOUBLE_TAP_English[] = "DOUBLE TAP";
+GX_CONST GX_UBYTE main_display_DRIVER_CONTROL_English[] = "DRIVER CONTROL";
+GX_CONST GX_UBYTE main_display_ENABLE_English[] = "ENABLE";
+GX_CONST GX_UBYTE main_display_FEATURE_LIST_English[] = "FEATURE LIST";
+GX_CONST GX_UBYTE main_display_HEAD_ARRAY_English[] = "HEAD ARRAY";
+GX_CONST GX_UBYTE main_display_HUB_English[] = "HUB SETTINGS";
+GX_CONST GX_UBYTE main_display_HUB_PORT1_English[] = "PORT 1";
+GX_CONST GX_UBYTE main_display_HUB_PORT2_English[] = "PORT 2";
+GX_CONST GX_UBYTE main_display_HUB_PORT3_English[] = "PORT 3";
+GX_CONST GX_UBYTE main_display_JUMP_TO_BT_English[] = "JUMP to BT";
+GX_CONST GX_UBYTE main_display_MINUS_SIGN_English[] = "-";
+GX_CONST GX_UBYTE main_display_MODE_PORT_English[] = "MODE PORT";
+GX_CONST GX_UBYTE main_display_MODE_RESET_English[] = "MODE / RESET";
+GX_CONST GX_UBYTE main_display_NONE_English[] = "OFF";
+GX_CONST GX_UBYTE main_display_NUMBER_20_English[] = "20";
+GX_CONST GX_UBYTE main_display_OK_TO_USE_English[] = "OK to USE";
+GX_CONST GX_UBYTE main_display_PAIRING_STATUS_English[] = "Pairing...";
+GX_CONST GX_UBYTE main_display_PLUS_SIGN_English[] = "+";
+GX_CONST GX_UBYTE main_display_QUADRANT_3_English[] = "3 QUADRANT";
+GX_CONST GX_UBYTE main_display_QUADRANT_4_English[] = "4 QUADRANT";
+GX_CONST GX_UBYTE main_display_RESET_SETTINGS_English[] = "RESET SETTINGS";
+GX_CONST GX_UBYTE main_display_SLECT_BT_DEVICE_English[] = "SELECT B DEVICE TO CHANGE";
+GX_CONST GX_UBYTE main_display_DRIVE_FEATURE_English[] = "DRIVE";
+GX_CONST GX_UBYTE main_display_MODE_PORT_SETTING_English[] = "MODE PORT\rRESET";
+GX_CONST GX_UBYTE main_display_SELECT_DEVICE_English[] = "SELECT DEVICE";
+GX_CONST GX_UBYTE main_display_SET_COLOR_English[] = "SET COLOR";
+GX_CONST GX_UBYTE main_display_SET_DIRECTION_English[] = "SET PAD DIRECTION";
+GX_CONST GX_UBYTE main_display_SET_DESCRIPTION_English[] = "SET DESCRIPTION";
+GX_CONST GX_UBYTE main_display_SET_ICON_English[] = "SET ICON";
+GX_CONST GX_UBYTE main_display_SINGLE_TAP_English[] = "SINGLE TAP";
+GX_CONST GX_UBYTE main_display_SIP_N_PUFF_English[] = "SIP-N-PUFF";
+GX_CONST GX_UBYTE main_display_SNP_HEAD_ARRAY_English[] = "SNP HEAD ARRAY";
+GX_CONST GX_UBYTE main_display_SNP_SET_HARD_PUFF_English[] = "SNP - Set HARD PUFF";
+GX_CONST GX_UBYTE main_display_SNP_SET_HARD_SIP_English[] = "SNP - Set HARD SIP";
+GX_CONST GX_UBYTE main_display_SNP_SET_SOFT_PUFF_English[] = "SNP - Set SOFT PUFF";
+GX_CONST GX_UBYTE main_display_SNP_SET_SOFT_SIP_English[] = "SNP - Set SOFT SIP";
+GX_CONST GX_UBYTE main_display_ATTENDANT_HHP_ENABLE_English[] = "HHP ENABLE";
+GX_CONST GX_UBYTE main_display_BACK_English[] = "   BACK";
+GX_CONST GX_UBYTE main_display_HUB_PORT_SETTINGS_English[] = "HUB PORT SETTINGS";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[98] =
+GX_CONST GX_UBYTE *main_display_English_string_table[127] =
 {
     GX_NULL,
-    main_display_STRING_15_English,
-    main_display_STRING_32_English,
-    main_display_STRING_60_English,
-    main_display_STRING_63_English,
-    main_display_STRING_64_English,
-    main_display_STRING_69_English,
-    main_display_STRING_74_English,
-    main_display_STRING_77_English,
-    main_display_STRING_78_English,
-    main_display_STRING_79_English,
+    main_display_ACTIVATE_PAD_English,
     main_display_BLUETOOTH_English,
     main_display_NEXT_FUNCTION_English,
     main_display_NEXT_PROFILE_English,
-    main_display_STRING_29_English,
-    main_display_STRING_3_English,
     GX_NULL,
-    main_display_STRING_10_English,
-    main_display_STRING_11_English,
-    main_display_STRING_24_English,
-    main_display_STRING_4_English,
-    main_display_STRING_5_English,
-    main_display_STRING_6_English,
-    main_display_STRING_28_English,
-    main_display_STRING_17_English,
-    main_display_STRING_46_English,
-    main_display_STRING_45_English,
-    main_display_STRING_19_English,
-    main_display_STRING_13_English,
-    main_display_STRING_16_English,
-    main_display_STRING_7_English,
-    main_display_STRING_8_English,
-    main_display_STRING_20_English,
-    main_display_STRING_18_English,
-    main_display_STRING_50_English,
-    main_display_STRING_23_English,
-    main_display_STRING_26_English,
-    main_display_STRING_9_English,
+    main_display_SETTINGS_English,
+    main_display_OK_English,
+    main_display_CHANGE_PAD_DIRECTION_English,
+    main_display_PAD_SETTINGS_English,
+    main_display_USER_SETTINGS_English,
+    main_display_SET_PAD_TYPE_English,
+    main_display_CLICKS_English,
+    main_display_TIMEOUT_English,
+    main_display_HOLD_PAD_TO_CALIBRATE_English,
+    main_display_ADJUST_MIMIMUM_English,
+    main_display_ADJUST_MAXIMUM_English,
+    main_display_STARTING_English,
     main_display_POWER_ONOFF_English,
-    main_display_STRING_39_English,
-    main_display_STRING_38_English,
-    main_display_STRING_21_English,
-    main_display_STRING_22_English,
-    main_display_STRING_57_English,
-    main_display_STRING_53_English,
-    main_display_STRING_56_1_English,
-    main_display_STRING_51_English,
-    main_display_STRING_25_English,
-    main_display_STRING_62_English,
-    main_display_STRING_44_English,
-    main_display_STRING_94_English,
-    main_display_STRING_96_English,
-    main_display_STRING_98_English,
-    main_display_STRING_99_English,
-    main_display_STRING_27_English,
-    main_display_STRING_73_1_English,
-    main_display_STRING_74_1_English,
-    main_display_STRING_97_English,
-    main_display_STRING_67_1_English,
-    main_display_STRING_52_English,
-    main_display_STRING_89_English,
-    main_display_STRING_83_1_English,
-    main_display_STRING_65_1_English,
-    main_display_STRING_69_1_English,
-    main_display_STRING_95_English,
-    main_display_STRING_30_English,
-    main_display_STRING_105_English,
-    main_display_STRING_110_English,
-    main_display_STRING_108_English,
-    main_display_STRING_109_English,
+    main_display_FUSION_OFF_English,
+    main_display_PRESS_SWITCH_English,
+    main_display_NUMBER_100_English,
+    main_display_RELEASE_PAD_English,
+    main_display_SLIDE_THE_ANCHOR_POINT_English,
+    main_display_TO_REDUCE_VEERING_English,
+    main_display_SET_VEER_ADJUST_English,
+    main_display_NUMBER_ZERO_English,
+    main_display_POWER_UP_IDLE_English,
+    main_display_MORE_English,
+    main_display_PERFORMANCE_English,
+    main_display_ALL_SETTINGS_RESET_English,
+    main_display_YES_English,
+    main_display_NO_English,
+    main_display_RESET_STATEMENT_English,
+    main_display_RESET_FACTORY_DEFAULT_English,
+    main_display_ARE_YOU_SURE_English,
+    main_display_PERCENTAGE_20_English,
+    main_display_ASL110_BLANK_VERSION_English,
+    main_display_ASL165_BLANK_VERSION_English,
+    main_display_SET_MINIMUM_SPEED_English,
     main_display_RNET_SEATING_English,
     main_display_RNET_MENU_English,
     GX_NULL,
     main_display_RNET_ENABLE_English,
     main_display_RNET_TOGGLE_English,
-    main_display_STRING_2_English,
-    main_display_STRING_12_English,
-    main_display_STRING_36_English,
-    main_display_STRING_31_English,
-    main_display_STRING_14_English,
+    main_display_BUTTONS_MAXIMUM_English,
+    main_display_BUTTONS_MINIMUM_English,
+    main_display_FOR_EACH_PAD_English,
+    main_display_SET_MINIMUM_DRIVE_SPEED_English,
     main_display_RNET_SLEEP_English,
-    main_display_STRING_69_2_English,
-    main_display_STRING_66_English,
-    main_display_STRING_49_English,
-    main_display_STRING_70_English,
-    main_display_STRING_33_English,
-    main_display_STRING_102_English,
-    main_display_STRING_103_English,
-    main_display_STRING_111_English,
-    main_display_STRING_101_English,
-    main_display_STRING_77_1_English,
-    main_display_STRING_34_English,
-    main_display_STRING_35_English,
-    main_display_STRING_37_English,
-    main_display_STRING_40_English,
+    main_display_USER_PORT_English,
+    main_display_MODE_REVERSE_English,
+    main_display_NUM100_X_100_English,
+    main_display_ACTIVE_English,
+    main_display_PERFORMANCE_ATTENDANT_English,
+    main_display_CYCLE_POWER_English,
+    main_display_FAULT_English,
     main_display_DISPLAY_PADS_English,
-    main_display_STRING_1_English,
-    main_display_STRING_41_English
+    main_display_SNP_CALIBRATION_SCREEN_English,
+    main_display_STANDBY_SELECT_English,
+    main_display_ATTENDANT_SETTING_English,
+    main_display_ATT_REMOTE_ENABLE_English,
+    main_display_AUDITORY_CUES_English,
+    main_display_BT_3_SWITCH_English,
+    main_display_BT_4_SWITCH_English,
+    main_display_BT_AAC_DEVICE_English,
+    main_display_BT_ACU_English,
+    main_display_BT_FEEDER_English,
+    main_display_BT_FORGET_English,
+    main_display_BT_GEN_A_English,
+    main_display_BT_GEN_B_English,
+    main_display_BT_GEN_C_English,
+    main_display_BT_GEN_D_English,
+    main_display_BT_LEGACY_English,
+    main_display_BT_MOUSE_English,
+    main_display_BT_PHONE_English,
+    main_display_BT_SEATING_English,
+    main_display_BT_START_PAIR_English,
+    main_display_BT_TABLET_English,
+    main_display_CALIBRATE_English,
+    main_display_CANCEL_English,
+    main_display_COMPLETE_STATUS_English,
+    main_display_CONNECTING_English,
+    main_display_DIAGNOSTICS_English,
+    main_display_DIR_FORWARD_English,
+    main_display_DIR_LEFT_English,
+    main_display_DIR_REVERSE_English,
+    main_display_DIR_RIGHT_English,
+    main_display_DOUBLE_TAP_English,
+    main_display_DRIVER_CONTROL_English,
+    main_display_ENABLE_English,
+    main_display_FEATURE_LIST_English,
+    main_display_HEAD_ARRAY_English,
+    main_display_HUB_English,
+    main_display_HUB_PORT1_English,
+    main_display_HUB_PORT2_English,
+    main_display_HUB_PORT3_English,
+    main_display_JUMP_TO_BT_English,
+    main_display_MINUS_SIGN_English,
+    main_display_MODE_PORT_English,
+    main_display_MODE_RESET_English,
+    main_display_NONE_English,
+    main_display_NUMBER_20_English,
+    main_display_OK_TO_USE_English,
+    main_display_PAIRING_STATUS_English,
+    main_display_PLUS_SIGN_English,
+    main_display_QUADRANT_3_English,
+    main_display_QUADRANT_4_English,
+    main_display_RESET_SETTINGS_English,
+    main_display_SLECT_BT_DEVICE_English,
+    main_display_DRIVE_FEATURE_English,
+    main_display_MODE_PORT_SETTING_English,
+    main_display_SELECT_DEVICE_English,
+    main_display_SET_COLOR_English,
+    main_display_SET_DIRECTION_English,
+    main_display_SET_DESCRIPTION_English,
+    main_display_SET_ICON_English,
+    main_display_SINGLE_TAP_English,
+    main_display_SIP_N_PUFF_English,
+    main_display_SNP_HEAD_ARRAY_English,
+    main_display_SNP_SET_HARD_PUFF_English,
+    main_display_SNP_SET_HARD_SIP_English,
+    main_display_SNP_SET_SOFT_PUFF_English,
+    main_display_SNP_SET_SOFT_SIP_English,
+    main_display_ATTENDANT_HHP_ENABLE_English,
+    main_display_BACK_English,
+    main_display_HUB_PORT_SETTINGS_English
 
 };
 
@@ -42063,7 +42295,7 @@ GX_THEME main_display_theme_1 =
     GX_SCROLLBAR_RELATIVE_THUMB|GX_SCROLLBAR_END_BUTTONS|GX_SCROLLBAR_HORIZONTAL,
     36,                                      /* color table size               */
     12,                                      /* font table size                */
-    73,                                      /* pixelmap table size            */
+    74,                                      /* pixelmap table size            */
     0                                        /* palette size                   */
 
 };

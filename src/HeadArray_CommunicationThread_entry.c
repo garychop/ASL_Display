@@ -1248,7 +1248,7 @@ void ProcessCommunicationMsgs ()
         case HHP_HA_FEATURE_GET:
             g_TimeoutValue = HeadArrayMsg.GetFeatureResponse.m_Timeout;
             g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_POWER_ON_OFF_BIT_MASK ? true : false); // Power On/Off
-            g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_OUT_CTRL_TO_BT_MODULE_BIT_MASK ? true : false); // Bluetooth
+            g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_OUT_CTRL_TO_BT_MODULE_BIT_MASK ? true : false); // Bluetooth
             g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_NEXT_FUNCTION_BIT_MASK ? true : false); // Next Function
             g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_NEXT_PROFILE_BIT_MASK ? true : false); // Next Profile
             g_ClicksActive = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet & FUNC_FEATURE_SOUND_ENABLED_BIT_MASK ? true : false);              // Clicks on/off

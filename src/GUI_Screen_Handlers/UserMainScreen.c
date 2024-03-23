@@ -29,6 +29,18 @@ UINT DisplayMainScreenActiveFeatures ();
 VOID Initialize_MainScreenInfo()
 {
     // Populate the screen stuff.
+    // "DRIVE" information and description
+    g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_Enabled = true;
+    g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_Available = true;
+    g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_Location = 0;
+    g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_LargeDescriptionID = GX_STRING_ID_DRIVE_FEATURE;
+    g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_SmallDescriptionID = GX_STRING_ID_DRIVE_FEATURE;
+    //g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_DRIVEFEATUREICON_30X30;
+    //g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_LargeIcon = GX_PIXELMAP_ID_DRIVEFEATUREICON_LARGE;
+    g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_DRIVEFEATUREICON_30X30_GREEN;
+    g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_LargeIcon = GX_PIXELMAP_ID_DRIVEFEATUREICON_LARGE_GREEN;
+    g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_FontColorID = GX_COLOR_ID_WHITE;
+
     // "Power ON/OFF" information and description
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Available = true;
@@ -39,13 +51,13 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_LargeIcon = GX_PIXELMAP_ID_POWERICON_LARGE_ORANGE;
 
     // "Bluetooth" information and description
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Enabled = false;
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Available = true;
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_Location = 1;
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_LargeDescriptionID = GX_STRING_ID_BLUETOOTH;
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_SmallDescriptionID = GX_STRING_ID_BLUETOOTH;
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_SmallIcon = GX_PIXELMAP_ID_BLUETOOTH_30X30_ALLBLUE;
-    g_MainScreenFeatureInfo[BLUETOOTH_ID].m_LargeIcon = GX_PIXELMAP_ID_BLUETOOTH_70X70_BLUE;
+    g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Enabled = false;
+    g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Available = true;
+    g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Location = 1;
+    g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_LargeDescriptionID = GX_STRING_ID_BLUETOOTH;
+    g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_SmallDescriptionID = GX_STRING_ID_BLUETOOTH;
+    g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_BLUETOOTH_30X30_ALLBLUE;
+    g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_LargeIcon = GX_PIXELMAP_ID_BLUETOOTH_70X70_BLUE;
 
     // "Next Function" information and description
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = false;
