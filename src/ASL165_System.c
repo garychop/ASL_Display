@@ -22,6 +22,8 @@ PAD_INFO g_PadSettings[3];
 bool g_ClicksActive = false;
 bool g_PowerUpInIdle = false;
 bool g_RNet_Active = false;
+int8_t g_BluetoothSubIndex = 0x00;
+bool g_ShowPadsOnMainScreen = false;
 MODE_SWITCH_SCHEMA_ENUM g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
 
 int g_SettingsChanged;
@@ -29,7 +31,7 @@ int8_t g_StartupDelayCounter = 0;
 int g_ChangeScreen_WIP;
 
 // These are received from the Head Array in the Heart Beat Message
-FEATURE_ID_ENUM g_ActiveFeature = POWER_ONOFF_ID;     // this indicates the active feature.
+HEARTBEAT_FEATURE_ID_ENUM g_ActiveFeature = POWER_ONOFF_ID;     // this indicates the active feature.
 uint8_t g_HeadArrayStatus1 = 0x00;
 uint8_t g_HeadArrayStatus2 = 0x00;
 
@@ -43,6 +45,6 @@ bool g_WaitingForVeerResponse = false;
 uint8_t g_AttendantSettings;    // D0 = 1 = Attendant Active, D1 = 0 = Proportional, D2 = 0 = Override
 uint8_t g_AttendantTimeout;     // 0=127 seconds, 0 = No Timeout
 
-uint8_t g_WhoAmi = 0x0;         // Default to Unknown
+WHOAMI_ENUM g_WhoAmi = I_AM_FUSION;
 
 /* end of file */

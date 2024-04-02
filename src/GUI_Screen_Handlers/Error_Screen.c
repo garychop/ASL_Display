@@ -15,7 +15,7 @@
 // Global Variables
 //*************************************************************************************
 
-const GX_RECTANGLE g_ErrorPadLocations[] = {
+GX_RECTANGLE g_ErrorPadLocations[] = {
     {55, 36, 55+62, 36+98},         // Left Pad location
     {204, 36, 204+62, 36+98},       // Right Pad location
     {89, 146, 89+145, 146+42},      // Center Pad Location

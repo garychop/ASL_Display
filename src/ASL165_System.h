@@ -17,7 +17,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 #include "custom_checkbox.h"
 
-#define ASL165_DispalyVersionString "ASL165: 1.14.3"
+#define ASL165_DispalyVersionString "ASL165: 2.0.1"
 
 
 //#define MAXIMUM_DRIVE_SPEED (40)
@@ -44,7 +44,19 @@ typedef struct myColorS
 
 
 // The following hold the Digital (non0) vs Proportional (0) setting for each pad.
-typedef enum {DRIVE_FEATURE_ID, POWER_ONOFF_ID, SWITCH_DRV_CTRL_FEATURE_ID, BLUETOOTH_FEATURE_ID, NEXT_FUNCTION_OR_TOGGLE_ID, NEXT_PROFILE_OR_USER_MENU_ID, RNET_SEATING_ID, RNET_SLEEP_FEATURE_ID, PAD_SENSOR_DISPLAY_FEATURE_ID, NUM_FEATURES} FEATURE_ID_ENUM; // "invalid" must be last enum
+typedef enum {DRIVE_FEATURE_ID, POWER_ONOFF_ID, SWITCH_DRV_CTRL_FEATURE_ID, BLUETOOTH_FEATURE_ID, NEXT_FUNCTION_OR_TOGGLE_ID, NEXT_PROFILE_OR_USER_MENU_ID, RNET_SEATING_ID, RNET_SLEEP_FEATURE_ID, NUM_FEATURES} FEATURE_ID_ENUM; // "invalid" must be last enum
+typedef enum {INVALID_FEATURE_HB_ID,
+    POWERONOFF_FEATURE_HB_ID = 1,
+    BLUETOOTH_FEATURE_HB_ID = 2,
+    NEXT_FUNCTION_FEATURE_HB_ID = 3,
+    NEXT_PROFILE_FEATURE_HB_ID = 4,
+    RNET_MENU_SEATING_FEATURE_HB_ID = 5,
+    RNET_SLEEP_FEATURE_HB_ID = 6,
+    DRIVE_MODE_FEATURE_HB_ID = 7,
+    SWITCH_DRIVER_FEATURE_HB_ID = 8,
+    STANDBY_SELECT_STANDBY_FEATURE_HB_ID = 9,
+    STANDBY_SELECT_MODE_SELECT_FEATURE_HB_ID = 10
+} HEARTBEAT_FEATURE_ID_ENUM;
 typedef enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PAD_ACTIVE_TIMER_ID} ENUM_TIMER_IDS_ENUM;
 typedef enum ENUM_MODE_SWITCH_SCHEMA {MODE_SWITCH_PIN5, MODE_SWITCH_REVERSE} MODE_SWITCH_SCHEMA_ENUM;
 typedef enum PHYSICAL_PAD {LEFT_PAD, RIGHT_PAD, CENTER_PAD, INVALID_PAD} PHYSICAL_PAD_ENUM;
@@ -66,6 +78,7 @@ typedef enum ENABLE_STATUS {FEATURE_DISABLED = 0, FEATURE_ENABLED = 1} ENABLE_ST
 #define FUNC_FEATURE2_RNET_SLEEP_BIT_MASK               (0x01)
 #define FUNC_FEATURE2_MODE_REVERSE_BIT_MASK             (0x02)
 #define FUNC_FEATURE2_SHOW_PADS_BIT_MASK                (0x04)
+#define FUNC_FEATURE2_DRIVING_MODE_BIT_MASK             (0x08)
 
 
 // The positions in the following enum relate the 2 status bits for each pad where:
@@ -79,6 +92,7 @@ typedef enum PAD_STATUS_COLORS_ENUM {PAD_OFF, PAD_GREEN, PAD_WHITE, PAD_ORANGE} 
 
 typedef struct MAIN_SCREEN_FEATURE_STRUCT
 {
+    int m_HB_ID;    // This establishes the connection between the ION Hub / Fusion and this feature.
     int m_Location;     // This indicates the Main Screen location, 0=Top most, 3=bottom most
 	int /*bool*/ m_Available;	// This is true if this feature should be displayed for Enabling/Disabling. Typically based upon RNet setting.
     int /*bool*/ m_Enabled;      // Indicates if this feature is active.
@@ -132,8 +146,10 @@ extern bool g_ClicksActive;
 extern bool g_PowerUpInIdle;
 extern uint8_t g_TimeoutValue;
 extern bool g_RNet_Active;
+extern int8_t g_BluetoothSubIndex;
+extern bool g_ShowPadsOnMainScreen;
 extern MODE_SWITCH_SCHEMA_ENUM g_Mode_Switch_Schema;
-extern FEATURE_ID_ENUM g_ActiveFeature;     // this indicates the active feature.
+extern HEARTBEAT_FEATURE_ID_ENUM g_ActiveFeature;     // this indicates the active feature.
 extern GX_WIDGET *g_ActiveScreen;
 
 extern MAIN_SCREEN_FEATURE g_MainScreenFeatureInfo[];
@@ -152,7 +168,8 @@ extern GX_RECTANGLE g_HiddenRectangle;
 extern uint8_t g_AttendantSettings;    // D0 = 1 = Attendant Active, D1 = 0 = Proportional, D2 = 0 = Override
 extern uint8_t g_AttendantTimeout;     // 0=127 seconds, 0 = No Timeout
 
-extern uint8_t g_WhoAmi;         // Default to Unknown
+typedef enum {I_AM_FUSION, I_AM_ION} WHOAMI_ENUM;
+extern WHOAMI_ENUM g_WhoAmi;         // Default to Unknown
 
 //*****************************************************************************
 // EXTERNAL, GLOBALLY available functions
@@ -160,6 +177,9 @@ extern uint8_t g_WhoAmi;         // Default to Unknown
 
 VOID screen_toggle(GX_WINDOW *new_win, GX_WINDOW *old_win);
 VOID screen_switch(GX_WIDGET *parent, GX_WIDGET *new_screen);
+void PushWindow (GX_WINDOW* window);
+GX_WINDOW *PopPushedWindow();
+
 void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode);
 void SaveSystemStatus (uint8_t Status1, uint8_t Status2);
 void ProcessCommunicationMsgs ();

@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 23. 3.2024   Time (hh:mm): 15:53                        */
+/*  Date (dd.mm.yyyy):  2. 4.2024   Time (hh:mm): 17:23                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,8 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK ION_BT_UserSelectionScreen;
+ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK ION_BT_DeviceSelectionScreen;
 SNP_CALIBRATIONSCREEN_CONTROL_BLOCK SNP_CalibrationScreen;
 ERROR_SCREEN_CONTROL_BLOCK Error_Screen;
 ATTENDANTSETTINGSSCREEN_CONTROL_BLOCK AttendantSettingsScreen;
@@ -235,32 +237,6 @@ UINT gx_studio_numeric_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET 
     return status;
 }
 
-UINT gx_studio_pixelmap_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent)
-{
-    UINT status;
-    GX_PIXELMAP_PROMPT *pix_prompt = (GX_PIXELMAP_PROMPT *) control_block;
-    GX_PROMPT *prompt = (GX_PROMPT *) pix_prompt;
-    GX_PIXELMAP_PROMPT_PROPERTIES *props = (GX_PIXELMAP_PROMPT_PROPERTIES *) info->properties;
-    status = gx_pixelmap_prompt_create(pix_prompt, info->widget_name, parent,
-               props->string_id,
-               props->fill_map_id,
-               info->style, info->widget_id, &info->size);
-
-    if (status == GX_SUCCESS)
-    {
-        gx_pixelmap_prompt_pixelmap_set(pix_prompt,
-                                        props->left_map_id,
-                                        props->fill_map_id,
-                                        props->right_map_id,
-                                        props->selected_left_map_id,
-                                        props->selected_fill_map_id,
-                                        props->selected_right_map_id);
-        gx_prompt_font_set(prompt, props->font_id);
-        gx_prompt_text_color_set(prompt, props->normal_text_color_id, props->selected_text_color_id);
-    }
-    return status;
-}
-
 UINT gx_studio_window_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent)
 {
     UINT status;
@@ -302,6 +278,254 @@ UINT gx_studio_vertical_scrollbar_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WID
     status = gx_vertical_scrollbar_create(scroll, info->widget_name, parent, appearance, info->style);
     return status;
 }
+GX_WINDOW_PROPERTIES ION_BT_UserSelectionScreen_properties =
+{
+    GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
+};
+GX_VERTICAL_LIST_PROPERTIES ION_BT_UserSelectionScreen_BluetoothDeviceListBox_properties =
+{
+    0,                                       /* wallpaper id                   */
+    BluetoothList_callback,                  /* callback function              */
+    20                                       /* total rows                     */
+};
+GX_SCROLLBAR_APPEARANCE  ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_properties =
+{
+    18,                                      /* scroll width                   */
+    12,                                      /* thumb width                    */
+    0,                                       /* thumb travel min               */
+    0,                                       /* thumb travel max               */
+    4,                                       /* thumb border style             */
+    0,                                       /* scroll fill pixelmap           */
+    0,                                       /* scroll thumb pixelmap          */
+    0,                                       /* scroll up pixelmap             */
+    0,                                       /* scroll down pixelmap           */
+    GX_COLOR_ID_SHINE,                       /* scroll thumb color             */
+    GX_COLOR_ID_SHINE,                       /* scroll thumb border color      */
+    GX_COLOR_ID_WINDOW_BORDER,               /* scroll button color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_define =
+{
+    "FeatureList_vertical_scroll",
+    GX_TYPE_VERTICAL_SCROLL,                 /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_SCROLLBAR_RELATIVE_THUMB|GX_SCROLLBAR_VERTICAL,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_SCROLLBAR),                    /* control block size             */
+    GX_COLOR_ID_BLACK,                       /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_vertical_scrollbar_create,     /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {287, 10, 304, 224},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK, ION_BT_UserSelectionScreen_FeatureList_vertical_scroll), /* control block */
+    (void *) &ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_BluetoothDeviceListBox_define =
+{
+    "BluetoothDeviceListBox",
+    GX_TYPE_VERTICAL_LIST,                   /* widget type                    */
+    BLUETOOTH_DEVICE_LIST_BOX_ID,            /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_VERTICAL_LIST),                /* control block size             */
+    GX_COLOR_ID_BLACK,                       /* normal color id                */
+    GX_COLOR_ID_BLACK,                       /* selected color id              */
+    gx_studio_vertical_list_create,          /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {20, 10, 304, 224},                      /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    &ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_define, /* child widget definition */
+    offsetof(ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK, ION_BT_UserSelectionScreen_BluetoothDeviceListBox), /* control block */
+    (void *) &ION_BT_UserSelectionScreen_BluetoothDeviceListBox_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_define =
+{
+    "ION_BT_UserSelectionScreen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    ION_BT_DEVICE_SELECT_SCREEN_ID,          /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT,   /* style flags                */
+    0,                                       /* status flags                   */
+    sizeof(ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK), /* control block size    */
+    GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) ION_BT_UserSelectionScreen_event_handler, /* event function override */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &ION_BT_UserSelectionScreen_BluetoothDeviceListBox_define, /* child widget */
+    0,                                       /* control block                  */
+    (void *) &ION_BT_UserSelectionScreen_properties /* extended properties     */
+};
+GX_WINDOW_PROPERTIES ION_BT_DeviceSelectionScreen_properties =
+{
+    GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
+};
+GX_VERTICAL_LIST_PROPERTIES ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox_properties =
+{
+    0,                                       /* wallpaper id                   */
+    FeatureList_callback,                    /* callback function              */
+    20                                       /* total rows                     */
+};
+GX_SCROLLBAR_APPEARANCE  ION_BT_DeviceSelectionScreen_FeatureList_vertical_scroll_properties =
+{
+    14,                                      /* scroll width                   */
+    6,                                       /* thumb width                    */
+    0,                                       /* thumb travel min               */
+    0,                                       /* thumb travel max               */
+    4,                                       /* thumb border style             */
+    0,                                       /* scroll fill pixelmap           */
+    0,                                       /* scroll thumb pixelmap          */
+    0,                                       /* scroll up pixelmap             */
+    0,                                       /* scroll down pixelmap           */
+    GX_COLOR_ID_SHINE,                       /* scroll thumb color             */
+    GX_COLOR_ID_SHINE,                       /* scroll thumb border color      */
+    GX_COLOR_ID_WINDOW_BORDER,               /* scroll button color            */
+};
+GX_TEXT_BUTTON_PROPERTIES ION_BT_DeviceSelectionScreen_OK_Button_properties =
+{
+    GX_STRING_ID_OK,                         /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_PROMPT_PROPERTIES ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt_properties =
+{
+    GX_STRING_ID_SELECT_BT_DEVICE,           /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_FeatureList_vertical_scroll_define =
+{
+    "FeatureList_vertical_scroll",
+    GX_TYPE_VERTICAL_SCROLL,                 /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_TRANSPARENT|GX_SCROLLBAR_RELATIVE_THUMB|GX_SCROLLBAR_VERTICAL,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_SCROLLBAR),                    /* control block size             */
+    GX_COLOR_ID_BLACK,                       /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_vertical_scrollbar_create,     /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {208, 32, 221, 227},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK, ION_BT_DeviceSelectionScreen_FeatureList_vertical_scroll), /* control block */
+    (void *) &ION_BT_DeviceSelectionScreen_FeatureList_vertical_scroll_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt_define =
+{
+    "SetOrChangedDevice_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {4, 5, 313, 28},                         /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK, ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt), /* control block */
+    (void *) &ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_OK_Button_define =
+{
+    "OK_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    OK_BTN_ID,                               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {230, 165, 309, 228},                    /* widget size                    */
+    &ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK, ION_BT_DeviceSelectionScreen_OK_Button), /* control block */
+    (void *) &ION_BT_DeviceSelectionScreen_OK_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox_define =
+{
+    "BluetoothDeviceListBox",
+    GX_TYPE_VERTICAL_LIST,                   /* widget type                    */
+    BLUETOOTH_DEVICE_LIST_BOX_ID,            /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_VERTICAL_LIST),                /* control block size             */
+    GX_COLOR_ID_BLACK,                       /* normal color id                */
+    GX_COLOR_ID_BLACK,                       /* selected color id              */
+    gx_studio_vertical_list_create,          /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {16, 32, 221, 227},                      /* widget size                    */
+    &ION_BT_DeviceSelectionScreen_OK_Button_define, /* next widget definition  */
+    &ION_BT_DeviceSelectionScreen_FeatureList_vertical_scroll_define, /* child widget definition */
+    offsetof(ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK, ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox), /* control block */
+    (void *) &ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_define =
+{
+    "ION_BT_DeviceSelectionScreen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT,   /* style flags                */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK), /* control block size  */
+    GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
+    GX_COLOR_ID_SCROLL_BUTTON,               /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) ION_BluetoothDeviceSelectionScreen_event_process, /* event function override */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox_define, /* child widget */
+    0,                                       /* control block                  */
+    (void *) &ION_BT_DeviceSelectionScreen_properties /* extended properties   */
+};
 GX_WINDOW_PROPERTIES SNP_CalibrationScreen_properties =
 {
     0                                        /* wallpaper pixelmap id          */
@@ -2161,6 +2385,52 @@ GX_TEXT_BUTTON_PROPERTIES PrimaryTemplate_LongPressButton_properties =
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 
+GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_GotoBluetoothSubmenu_define =
+{
+    "GotoBluetoothSubmenu",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    GOTO_BT_SUBMENU_ID,                      /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED,   /* style flags                  */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {340, 108, 419, 131},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(PRIMARYTEMPLATE_CONTROL_BLOCK, PrimaryTemplate_GotoBluetoothSubmenu), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
+};
+
+GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_OON_OK_Button_define =
+{
+    "OON_OK_Button",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    OON_OK_BTN_ID,                           /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {400, 108, 479, 131},                    /* widget size                    */
+    &PrimaryTemplate_GotoBluetoothSubmenu_define, /* next widget definition    */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(PRIMARYTEMPLATE_CONTROL_BLOCK, PrimaryTemplate_OON_OK_Button), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
+};
+
 GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_LongPressButton_define =
 {
     "LongPressButton",
@@ -2178,7 +2448,7 @@ GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_LongPressButton_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {325, 200, 394, 223},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &PrimaryTemplate_OON_OK_Button_define,   /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(PRIMARYTEMPLATE_CONTROL_BLOCK, PrimaryTemplate_LongPressButton), /* control block */
     (void *) &PrimaryTemplate_LongPressButton_properties /* extended properties */
@@ -2450,29 +2720,6 @@ GX_PROMPT_PROPERTIES OON_Screen_prompt_properties =
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
 };
 
-GX_CONST GX_STUDIO_WIDGET OON_Screen_OON_OK_Button_define =
-{
-    "OON_OK_Button",
-    GX_TYPE_BUTTON,                          /* widget type                    */
-    OON_OK_BTN_ID,                           /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED,   /* style flags */
-    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
-    sizeof(GX_BUTTON),                       /* control block size             */
-    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
-    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
-    gx_studio_button_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {340, 5, 419, 28},                       /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(OON_SCREEN_CONTROL_BLOCK, OON_Screen_OON_OK_Button), /* control block */
-    (void *) GX_NULL                         /* no extended properties         */
-};
-
 GX_CONST GX_STUDIO_WIDGET OON_Screen_prompt_define =
 {
     "prompt",
@@ -2490,7 +2737,7 @@ GX_CONST GX_STUDIO_WIDGET OON_Screen_prompt_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {69, 178, 247, 210},                     /* widget size                    */
-    &OON_Screen_OON_OK_Button_define,        /* next widget definition         */
+    GX_NULL,                                 /* no next widget                 */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(OON_SCREEN_CONTROL_BLOCK, OON_Screen_prompt), /* control block    */
     (void *) &OON_Screen_prompt_properties   /* extended properties            */
@@ -3164,25 +3411,42 @@ GX_WINDOW_PROPERTIES ReadyScreen_properties =
 {
     GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
 };
-GX_PIXELMAP_PROMPT_PROPERTIES ReadyScreen_PowerLargeOrangePrompt_properties =
+GX_PROMPT_PROPERTIES ReadyScreen_PressSwitchPrompt_properties =
+{
+    GX_STRING_ID_PRESS_SWITCH,               /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_PROMPT_PROPERTIES ReadyScreen_DevicePrompt_properties =
 {
     GX_STRING_ID_FUSION_OFF,                 /* string id                      */
     GX_FONT_ID_ASC24PT,                      /* font id                        */
     GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
-    GX_COLOR_ID_SELECTED_TEXT,               /* selected text color            */
-    0,                                       /* left pixelmap id               */
-    0,                                       /* fill pixelmap id               */
-    0,                                       /* right pixelmap id              */
-    0,                                       /* selected left pixelmap id      */
-    0,                                       /* selected fill pixelmap id      */
-    0                                        /* selected right pixelmap id     */
+    GX_COLOR_ID_BRIGHT_ORANGE                /* selected text color            */
 };
-GX_PROMPT_PROPERTIES ReadyScreen_PressSwitchPrompt_properties =
+
+GX_CONST GX_STUDIO_WIDGET ReadyScreen_DevicePrompt_define =
 {
-    GX_STRING_ID_PRESS_SWITCH,               /* string id                      */
-    GX_FONT_ID_ASC24PT,                      /* font id                        */
-    GX_COLOR_ID_BRIGHT_ORANGE,               /* normal text color              */
-    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+    "DevicePrompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    DEVICE_PROMPT_ID,                        /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {66, 64, 264, 100},                      /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(READYSCREEN_CONTROL_BLOCK, ReadyScreen_DevicePrompt), /* control block */
+    (void *) &ReadyScreen_DevicePrompt_properties /* extended properties       */
 };
 
 GX_CONST GX_STUDIO_WIDGET ReadyScreen_PressSwitchPrompt_define =
@@ -3201,34 +3465,11 @@ GX_CONST GX_STUDIO_WIDGET ReadyScreen_PressSwitchPrompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {87, 90, 263, 123},                      /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    {78, 110, 254, 143},                     /* widget size                    */
+    &ReadyScreen_DevicePrompt_define,        /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(READYSCREEN_CONTROL_BLOCK, ReadyScreen_PressSwitchPrompt), /* control block */
     (void *) &ReadyScreen_PressSwitchPrompt_properties /* extended properties  */
-};
-
-GX_CONST GX_STUDIO_WIDGET ReadyScreen_PowerLargeOrangePrompt_define =
-{
-    "PowerLargeOrangePrompt",
-    GX_TYPE_PIXELMAP_PROMPT,                 /* widget type                    */
-    POWER_LARGE_ORANGE_PROMPT_ID,            /* widget id                      */
-    #if defined(GX_WIDGET_USER_DATA)
-    0,                                       /* user data                      */
-    #endif
-    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
-    0,                                       /* status flags                   */
-    sizeof(GX_PIXELMAP_PROMPT),              /* control block size             */
-    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
-    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
-    gx_studio_pixelmap_prompt_create,        /* create function                */
-    GX_NULL,                                 /* drawing function override      */
-    GX_NULL,                                 /* event function override        */
-    {10, 16, 309, 85},                       /* widget size                    */
-    &ReadyScreen_PressSwitchPrompt_define,   /* next widget definition         */
-    GX_NULL,                                 /* no child widgets               */ 
-    offsetof(READYSCREEN_CONTROL_BLOCK, ReadyScreen_PowerLargeOrangePrompt), /* control block */
-    (void *) &ReadyScreen_PowerLargeOrangePrompt_properties /* extended properties */
 };
 
 GX_CONST GX_STUDIO_WIDGET ReadyScreen_define =
@@ -3249,7 +3490,7 @@ GX_CONST GX_STUDIO_WIDGET ReadyScreen_define =
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) Ready_Screen_event_process, /* event function override */
     {0, 0, 319, 239},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
-    &ReadyScreen_PowerLargeOrangePrompt_define, /* child widget                */
+    &ReadyScreen_PressSwitchPrompt_define,   /* child widget                   */
     0,                                       /* control block                  */
     (void *) &ReadyScreen_properties         /* extended properties            */
 };
@@ -5527,6 +5768,8 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
+    { &ION_BT_UserSelectionScreen_define, (GX_WIDGET *) &ION_BT_UserSelectionScreen },
+    { &ION_BT_DeviceSelectionScreen_define, (GX_WIDGET *) &ION_BT_DeviceSelectionScreen },
     { &SNP_CalibrationScreen_define, (GX_WIDGET *) &SNP_CalibrationScreen },
     { &Error_Screen_define, (GX_WIDGET *) &Error_Screen },
     { &AttendantSettingsScreen_define, (GX_WIDGET *) &AttendantSettingsScreen },

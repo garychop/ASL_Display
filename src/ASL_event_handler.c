@@ -62,3 +62,27 @@ VOID screen_toggle(GX_WINDOW *new_win, GX_WINDOW *old_win)
     gx_widget_detach((GX_WIDGET *)old_win);
 }
 
+//******************************************************************************************
+// These functions support saving and restoring Windows to make "going back" easier and
+// more sensitive to changes.
+//******************************************************************************************
+
+#define MAX_PUSHED_WINDOWS (8)
+int g_PushedWindowCounter = 0;
+GX_WINDOW *g_PushedWindows[MAX_PUSHED_WINDOWS]; //  = {(GX_WINDOW*) &IdleScreen};
+
+void PushWindow (GX_WINDOW* window)
+{
+    g_PushedWindows[g_PushedWindowCounter] = window;
+    if (g_PushedWindowCounter < MAX_PUSHED_WINDOWS)
+        ++g_PushedWindowCounter;
+}
+
+GX_WINDOW *PopPushedWindow()
+{
+    if (g_PushedWindowCounter > 0)
+        --g_PushedWindowCounter;
+    return (g_PushedWindows[g_PushedWindowCounter]);
+
+}
+

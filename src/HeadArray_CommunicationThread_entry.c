@@ -419,6 +419,7 @@ uint8_t ExecuteHeartBeat(void)
     if (g_HA_EEPROM_Version < 8)
         HB_Response[4] = 0; // Since this is older ASL110 firmware, clear the Sensor Status since it's garbage and causing excessive delays.
     HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus = HB_Response[4];   // Transfer the Sensor Status's.
+    HeadArrayMsg.HeartBeatMsg.m_SubIndex = HB_Response[5];          // Transfer the Sub-Index
 
     HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;
     if (msgStatus == MSG_OK)
@@ -1109,6 +1110,20 @@ void ProcessCommunicationMsgs ()
                             gxe.gx_event_display_handle = 0;
                             gx_system_event_send(&gxe);
                         }
+                        // Let's see if the Bluetooth Feature is selected in the User Main Menu
+                        // ... and a submenu is requested.
+                        if (g_ActiveFeature == BLUETOOTH_FEATURE_HB_ID)
+                        {
+                            if (g_BluetoothSubIndex != HeadArrayMsg.HeartBeatMsg.m_SubIndex)
+                            {
+                                g_BluetoothSubIndex = (int8_t) HeadArrayMsg.HeartBeatMsg.m_SubIndex;
+                                gxe.gx_event_type = GX_SIGNAL (GOTO_BT_SUBMENU_ID, GX_EVENT_CLICKED);
+                                gxe.gx_event_sender = GX_ID_NONE;
+                                gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                                gxe.gx_event_display_handle = 0;
+                                gx_system_event_send(&gxe);
+                            }
+                        }
                     }
                     else if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x00)// Bit 0 = 0; means Head Array in Power Off, Idle Mode, we are recommending to change screens.
                     {
@@ -1272,12 +1287,15 @@ void ProcessCommunicationMsgs ()
             //      - Added PAD SENSOR status to protocol
             if (g_HA_EEPROM_Version >= 7)
             {
-                g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled = ((HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_SHOW_PADS_BIT_MASK) ? true : false); // FEATURE_ENABLED : FEATURE_DISABLED);
+                g_ShowPadsOnMainScreen = ((HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_SHOW_PADS_BIT_MASK) ? true : false); // FEATURE_ENABLED : FEATURE_DISABLED);
             }
             else
             {
-                g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled = false; // FEATURE_DISABLED;
+                g_ShowPadsOnMainScreen = false;
             }
+
+            // Add Driving Mode
+            g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_Enabled = ((HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_DRIVING_MODE_BIT_MASK) ? true : false);
 
             AdjustActiveFeaturePositions (g_ActiveFeature);   // This function also store "g_ActiveFeature" if appropriate.
 

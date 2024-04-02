@@ -23,6 +23,14 @@ VOID Ready_Screen_draw_function(GX_WINDOW *window)
 {
     g_ActiveScreen = (GX_WIDGET*) window;
 
+    if (g_WhoAmi == I_AM_FUSION)
+    {
+        gx_prompt_text_id_set (&ReadyScreen.ReadyScreen_DevicePrompt, GX_STRING_ID_FUSION_OFF);
+    }
+    else
+    {
+        gx_prompt_text_id_set (&ReadyScreen.ReadyScreen_DevicePrompt, GX_STRING_ID_ION_OFF);
+    }
     gx_window_draw(window);
 }
 

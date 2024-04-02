@@ -202,11 +202,6 @@ void CreateFeatureWidgets (GX_VERTICAL_LIST *list)
 	activeFeatureCount = 0;
 	for (index = 0; index < NUM_FEATURES; ++index)
 	{
-	    if (index == PAD_SENSOR_DISPLAY_FEATURE_ID) // Need to see if the ASL110 supports the PAD SENSOR features.
-	    {
-	         if (g_HA_EEPROM_Version < 8)
-	             continue;
-	    }
 		if (g_MainScreenFeatureInfo[index].m_Available)
 		{
 			FeatureList_callback (list, (GX_WIDGET*) &g_MainScreenFeatureInfo[index], index);

@@ -155,7 +155,7 @@ typedef struct HHP_HA_MSG_S
         {
             uint32_t m_HB_OK;   // Non0 if Heart Beat is OK, 0 = failed.
             uint32_t m_HB_Count;  // number that increments with each successful heart beat.
-            FEATURE_ID_ENUM m_ActiveMode;   // 1=Power On/Off, 2=Bluetooh, 3=Next Function 4=Next Profile
+            HEARTBEAT_FEATURE_ID_ENUM m_ActiveMode;   // 1=Power On/Off, 2=Bluetooh, 3=Next Function 4=Next Profile
             uint8_t m_HA_Status;    // bit0, Head Array Ready Status, 0 = idle, 1 = Ready
                                     // bit1, Left Pad, 0 = Disconnected, 1 = connected.
                                     // bit2, right pad, 0 = Disconnected, 1 = connected.
@@ -167,6 +167,7 @@ typedef struct HHP_HA_MSG_S
                                         // Bit3 = Right Pad Pressure Sensor Active
                                         // Bit4 = Left Pad Proximity Sensor Active
                                         // Bit5 = Left Pad Pressure Sensor Active
+            uint8_t m_SubIndex;     // Used to clarify / Expand Active Mode.
         } HeartBeatMsg;
         struct          // Supports the HHP_HA_PAD_ASSIGMENT_GET_RESPONSE message from the Head Array
         {

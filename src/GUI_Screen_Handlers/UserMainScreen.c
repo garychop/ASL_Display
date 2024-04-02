@@ -30,6 +30,7 @@ VOID Initialize_MainScreenInfo()
 {
     // Populate the screen stuff.
     // "DRIVE" information and description
+    g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_HB_ID = DRIVE_MODE_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_Enabled = true;
     g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_Available = true;
     g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_Location = 0;
@@ -42,6 +43,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_FontColorID = GX_COLOR_ID_WHITE;
 
     // "Power ON/OFF" information and description
+    g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_HB_ID = POWERONOFF_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Available = true;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Location = 0;
@@ -51,6 +53,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_LargeIcon = GX_PIXELMAP_ID_POWERICON_LARGE_ORANGE;
 
     // "Bluetooth" information and description
+    g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_HB_ID = BLUETOOTH_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Available = true;
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Location = 1;
@@ -60,6 +63,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_LargeIcon = GX_PIXELMAP_ID_BLUETOOTH_70X70_BLUE;
 
     // "Next Function" information and description
+    g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_HB_ID = NEXT_FUNCTION_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Available = true;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Location = 2;
@@ -69,6 +73,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_LargeIcon = GX_PIXELMAP_ID_FUNCTIONNEXT_70X70_YELLOWA;
 
     // "Next Profile" information and description
+    g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_HB_ID = NEXT_PROFILE_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Available = true;
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Location = 3;
@@ -78,6 +83,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_LargeIcon = GX_PIXELMAP_ID_PROFILE_70X70_K;
 
     // "RNet SEATING" information and description
+    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_HB_ID = RNET_MENU_SEATING_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Available = true;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Location = 4;
@@ -87,6 +93,7 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_LargeIcon = GX_PIXELMAP_ID_RNET_SEATINGB_70X70;
 
     // "SLEEP" information and description
+    g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_HB_ID = RNET_SLEEP_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available = true;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Location = 5;
@@ -94,16 +101,6 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_SmallDescriptionID = GX_STRING_ID_RNET_SLEEP;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_RNET_SLEEPB_30X30;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_LargeIcon = GX_PIXELMAP_ID_RNET_SLEEPB_70X70;
-
-    // This is the feature to display the Pad Digital and Proportional Sensors on the Main User Screen.
-    // PAD_SENSOR_DISPLAY_FEATURE_ID
-    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled = false;
-    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Available = true;
-    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Location = -1;
-    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_LargeDescriptionID = GX_STRING_ID_DISPLAY_PADS;
-    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_SmallDescriptionID = GX_STRING_ID_DISPLAY_PADS;
-    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_RADIO_OFF;  // Not used, but populated
-    g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_LargeIcon = GX_PIXELMAP_ID_RADIO_ON;   // Not used, but populated.
 
     if (g_RNet_Active == false)
 	{
@@ -113,6 +110,57 @@ VOID Initialize_MainScreenInfo()
         g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Location = -1;
 	}
 
+}
+
+//*************************************************************************************
+
+void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode)
+{
+    uint8_t featureCount, lineNumber, featureIdx;
+
+    // Adjust available features based upon RNet setting.
+    if (g_RNet_Active)
+    {
+        g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available = true;
+        g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Available = true;
+    }
+    else
+    {
+        g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available = false;
+        g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Available = false;
+    }
+
+    if (newMode >= NUM_FEATURES)    // Check for valid mode
+        return;
+
+    g_ActiveFeature = newMode;          // Store the active feature in global var.
+    // Locate the Feature Information and set an Index to point to it.
+    for (featureCount = 0; featureCount < NUM_FEATURES; ++featureCount)
+    {
+        if (g_MainScreenFeatureInfo[featureCount].m_HB_ID == newMode)
+        {
+            featureIdx = featureCount;
+            break;
+        }
+    }
+
+    lineNumber = 0;                     // Need to keep track of which line is next.
+
+    for (featureCount = 0; featureCount < NUM_FEATURES; ++featureCount)
+    {
+        if ((g_MainScreenFeatureInfo[featureIdx].m_Enabled) && (g_MainScreenFeatureInfo[featureIdx].m_Available))
+        {
+            g_MainScreenFeatureInfo[featureIdx].m_Location = lineNumber;
+            ++lineNumber;
+        }
+        else
+        {
+            g_MainScreenFeatureInfo[featureIdx].m_Location = -1;
+        }
+        ++featureIdx;               // Look at the next feature information.
+        if (featureIdx >= NUM_FEATURES)         // Rollover
+            featureIdx = 0;
+    }
 }
 
 //*************************************************************************************
@@ -246,9 +294,6 @@ UINT DisplayMainScreenActiveFeatures ()
     // Locate the first feature to display
     for (feature = 0; feature < NUM_FEATURES; ++feature)
     {
-        if (feature == PAD_SENSOR_DISPLAY_FEATURE_ID)
-            continue;   // Don't process this feature.
-
 		if (g_MainScreenFeatureInfo[feature].m_Enabled && g_MainScreenFeatureInfo[feature].m_Available)
         {
             ++enabledCount;
@@ -326,7 +371,7 @@ UINT DisplayMainScreenActiveFeatures ()
         gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_Attendant_Button);
     }
 
-    if (g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled == true) // FEATURE_ENABLED)
+    if (g_ShowPadsOnMainScreen == true) // FEATURE_ENABLED)
     {
         // Show the wire-representation of the Head Array.
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HA_Status);
@@ -373,16 +418,16 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 	    case GX_EVENT_TIMER:
         if (event_ptr->gx_event_payload.gx_event_timer_id == ARROW_PUSHED_TIMER_ID)
 		{
-	        screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+            if (g_WhoAmi == I_AM_FUSION)
+                screen_toggle((GX_WINDOW*)&HHP_Start_Screen, window);
+            else
+                screen_toggle((GX_WINDOW*)&ION_BT_DeviceSelectionScreen, window);
 			g_ChangeScreen_WIP = true;
 		}
 		break;
 
     case GX_EVENT_SHOW:
         g_ActiveScreen = (GX_WIDGET*) window;
-//        SendGetPadAssignmentMsg (LEFT_PAD);
-//        SendGetPadAssignmentMsg (RIGHT_PAD);
-//        SendGetPadAssignmentMsg (CENTER_PAD);
         DisplayMainScreenActiveFeatures();
         break;
 
@@ -407,20 +452,12 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         activeCount = 0;
         for (feature = 0; feature < NUM_FEATURES; ++feature)
         {
-            // Don't process the PAD SENSOR setting
-            if (feature == PAD_SENSOR_DISPLAY_FEATURE_ID)
-                continue;
-
             if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
                 ++activeCount;
         }
         // Move Top Feature to Bottom and move Bottom upward.
         for (feature = 0; feature < NUM_FEATURES; ++feature)
         {
-            // Don't process the PAD SENSOR setting
-            if (feature == PAD_SENSOR_DISPLAY_FEATURE_ID)
-                continue;
-
             if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
             {
                 if (g_MainScreenFeatureInfo[feature].m_Location == 0)
@@ -454,10 +491,6 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         activeCount = 0;
         for (feature = 0; feature < NUM_FEATURES; ++feature)
         {
-            // Don't process the PAD SENSOR setting
-            if (feature == PAD_SENSOR_DISPLAY_FEATURE_ID)
-                continue;
-
             if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
                 ++activeCount;
         }
@@ -466,10 +499,6 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         // Move the features downward, limiting the movement by the number of Active Features.
         for (feature = 0; feature < NUM_FEATURES; ++feature)
         {
-            // Don't process the PAD SENSOR setting
-            if (feature == PAD_SENSOR_DISPLAY_FEATURE_ID)
-                continue;
-
             if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
             {
                 if (g_MainScreenFeatureInfo[feature].m_Location == activeCount)
@@ -513,6 +542,9 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         screen_toggle((GX_WINDOW *)&Error_Screen, window);
         break;
 
+    case GX_SIGNAL (GOTO_BT_SUBMENU_ID, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&ION_BT_UserSelectionScreen, window);
+        break;
 	} // end switch
 
     myErr = gx_window_event_process(window, event_ptr);

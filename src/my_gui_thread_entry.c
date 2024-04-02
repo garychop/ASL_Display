@@ -123,6 +123,8 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("Error_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ION_BT_DeviceSelectionScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ION_BT_UserSelectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("MainUserScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
     gx_studio_named_widget_create("MinimumDriveScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("MoreSelectionScreen", GX_NULL, GX_NULL);
@@ -296,48 +298,6 @@ void my_gui_thread_entry(void)
 
 //*************************************************************************************
 
-void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode)
-{
-    uint8_t featureCount, myMode, lineNumber;
-
-    // Adjust available features based upon RNet setting.
-    if (g_RNet_Active)
-    {
-        g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available = TRUE;
-        g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Available = TRUE;
-    }
-    else
-    {
-        g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available = FALSE;
-        g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Available = FALSE;
-    }
-
-    if (newMode >= NUM_FEATURES)    // Check for valid mode
-        return;
-
-    g_ActiveFeature = newMode;          // Store the active feature in global var.
-    myMode = (uint8_t) newMode;
-    lineNumber = 0;                     // Need to keep track of which line is next.
-
-    for (featureCount = 0; featureCount < NUM_FEATURES; ++featureCount)
-    {
-        if ((g_MainScreenFeatureInfo[myMode].m_Enabled) && (g_MainScreenFeatureInfo[myMode].m_Available) && (myMode != PAD_SENSOR_DISPLAY_FEATURE_ID))
-        {
-            g_MainScreenFeatureInfo[myMode].m_Location = lineNumber;
-            ++lineNumber;
-        }
-        else
-        {
-            g_MainScreenFeatureInfo[myMode].m_Location = -1;
-        }
-        ++myMode;               // Look at the next feature information.
-        if (myMode >= NUM_FEATURES)         // Rollover
-            myMode = 0;
-    }
-}
-
-//*************************************************************************************
-
 void SaveSystemStatus (uint8_t status1, uint8_t status2)
 {
     g_HeadArrayStatus1 = status1;
@@ -396,7 +356,7 @@ void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures, uint8_t *ActiveFeatur
         *ActiveFeatures_Byte2 |= FUNC_FEATURE2_RNET_SLEEP_BIT_MASK;
     if (g_Mode_Switch_Schema == MODE_SWITCH_REVERSE)    // Add Mode Switch schema setting
         *ActiveFeatures_Byte2 |= FUNC_FEATURE2_MODE_REVERSE_BIT_MASK;
-    if ((g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Enabled) && (g_MainScreenFeatureInfo[PAD_SENSOR_DISPLAY_FEATURE_ID].m_Available))
+    if (g_ShowPadsOnMainScreen)
         *ActiveFeatures_Byte2 |= FUNC_FEATURE2_SHOW_PADS_BIT_MASK;
 }
 

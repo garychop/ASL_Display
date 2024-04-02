@@ -42,7 +42,7 @@ uint8_t g_AttendantStatus = 0;  // D0 = 1 = Attendant Active, D1 = 1 if ESTOP ac
 
 UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
-	GX_POINT myPoint;
+	//GX_POINT myPoint;
 	double myDistance;
 	double diffX, diffY;
 	int8_t speedDemand = 0, directionDemand = 0;
@@ -134,51 +134,51 @@ UINT AttendantScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 {
                     speed -= INNER_CIRCLE_DIAMETER_FLOAT;   // eliminate inner circle offset
                     speed *= (100.0f / (100.0f - INNER_CIRCLE_DIAMETER_FLOAT));                     // convert to 0-100
-                    if (speed > 75)
-                        speed = 100;
+                    if (speed > 75.0f)
+                        speed = 100.0f;
                     // If Digital Option is set, force a full demand
                     if (g_AttendantSettings & 0x02) // D1 = 1 if Digital
-                        speed = 100;
+                        speed = 100.0f;
                 }
                 else                    // Must be reverse
                 {
                     speed += INNER_CIRCLE_DIAMETER; // adjust for inner circle offset
                     speed *= (100.0f / (100.0f - INNER_CIRCLE_DIAMETER_FLOAT));                     // convert to 0-100
-                    if (speed < -65)
-                        speed = -100;
+                    if (speed < -65.0f)
+                        speed = -100.0f;
                     // If Digital Option is set, force a full demand
                     if (g_AttendantSettings & 0x02) // D1 = 1 if Digital
-                        speed = -100;
+                        speed = -100.0f;
                 }
-                speedDemand = (int) speed;
+                speedDemand = (int8_t) speed;
             }
 
             // Calculate direction demand
             // First determine if it's in the "dead zone" which is within the circle.
             if ((event_ptr->gx_event_payload.gx_event_pointdata.gx_point_y < (120-INNER_CIRCLE_DIAMETER)) || (event_ptr->gx_event_payload.gx_event_pointdata.gx_point_y > (120+INNER_CIRCLE_DIAMETER)))
             {
-                direction = event_ptr->gx_event_payload.gx_event_pointdata.gx_point_y - 120;
+                direction = event_ptr->gx_event_payload.gx_event_pointdata.gx_point_y - 120.0f;
                 if (direction > 0)  // Right
                 {
                     direction -= INNER_CIRCLE_DIAMETER_FLOAT;   // eliminate inner circle offset
                     direction *= (100.0f / (100.0f - INNER_CIRCLE_DIAMETER_FLOAT));                     // convert to 0-100
-                    if (direction > 40)
-                        direction = 100;
+                    if (direction > 40.0f)
+                        direction = 100.0f;
                     // If Digital Option is set, force a full demand
                     if (g_AttendantSettings & 0x02) // D1 = 1 if Digital
-                        direction = 100;
+                        direction = 100.0f;
                 }
                 else                    // Must be left
                 {
                     direction += INNER_CIRCLE_DIAMETER; // adjust for inner circle offset
                     direction *= (100.0f / (100.0f - INNER_CIRCLE_DIAMETER_FLOAT));                     // convert to 0-100
-                    if (direction < -40)
-                        direction = -100;
+                    if (direction < -40.0f)
+                        direction = -100.0f;
                     // If Digital Option is set, force a full demand
                     if (g_AttendantSettings & 0x02) // D1 = 1 if Digital
-                        direction = -100;
+                        direction = -100.0f;
                 }
-                directionDemand = direction;
+                directionDemand = (int8_t) direction;
             }
 
 	        SendAttendantControl_toHeadArray (g_AttendantStatus, speedDemand, directionDemand);
