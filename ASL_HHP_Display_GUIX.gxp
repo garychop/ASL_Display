@@ -4412,6 +4412,123 @@
 <enabled>TRUE</enabled>
 <compress>FALSE</compress>
 </resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
 </resource>
 <vscroll_appearance>
 <scroll_width>20</scroll_width>
@@ -4755,17 +4872,17 @@
 <string_record>
 <id>BT_3_SWITCH</id>
 <font>0</font>
-<val>3 SWITCH</val>
+<val>   3 SWITCH</val>
 </string_record>
 <string_record>
 <id>BT_4_SWITCH</id>
 <font>0</font>
-<val>4 SWITCH</val>
+<val>   4 SWITCH</val>
 </string_record>
 <string_record>
 <id>BT_AAC_DEVICE</id>
 <font>0</font>
-<val>AAC DEVICE</val>
+<val>   AAC DEVICE</val>
 </string_record>
 <string_record>
 <id>BT_ACU</id>
@@ -4775,7 +4892,7 @@
 <string_record>
 <id>BT_FEEDER</id>
 <font>0</font>
-<val>FEEDER</val>
+<val>   FEEDER</val>
 </string_record>
 <string_record>
 <id>BT_FORGET</id>
@@ -4785,42 +4902,42 @@
 <string_record>
 <id>BT_GEN_A</id>
 <font>0</font>
-<val>BLUETOOTH A</val>
+<val>   BLUETOOTH A</val>
 </string_record>
 <string_record>
 <id>BT_GEN_B</id>
 <font>0</font>
-<val>BLUETOOTH B</val>
+<val>   BLUETOOTH B</val>
 </string_record>
 <string_record>
 <id>BT_GEN_C</id>
 <font>0</font>
-<val>BLUETOOTH C</val>
+<val>   BLUETOOTH C</val>
 </string_record>
 <string_record>
 <id>BT_GEN_D</id>
 <font>0</font>
-<val>BLUETOOTH D</val>
+<val>   BLUETOOTH D</val>
 </string_record>
 <string_record>
 <id>BT_LEGACY</id>
 <font>0</font>
-<val>LEGACY</val>
+<val>   LEGACY</val>
 </string_record>
 <string_record>
 <id>BT_MOUSE</id>
 <font>0</font>
-<val>MOUSE</val>
+<val>   MOUSE</val>
 </string_record>
 <string_record>
 <id>BT_PHONE</id>
 <font>0</font>
-<val>PHONE</val>
+<val>   PHONE</val>
 </string_record>
 <string_record>
 <id>BT_SEATING</id>
 <font>0</font>
-<val>SEATING</val>
+<val>   SEATING</val>
 </string_record>
 <string_record>
 <id>BT_START_PAIR</id>
@@ -4830,7 +4947,7 @@
 <string_record>
 <id>BT_TABLET</id>
 <font>0</font>
-<val>TABLET</val>
+<val>   TABLET</val>
 </string_record>
 <string_record>
 <id>CALIBRATE</id>
@@ -5085,6 +5202,75 @@
 </string_table>
 <widget_folder>
 <folder_name>default_folder</folder_name>
+<widget>
+<type>window</type>
+<app_name>ION_BT_ActiveScreen</app_name>
+<size>
+<left>0</left>
+<top>0</top>
+<right>319</right>
+<bottom>239</bottom>
+</size>
+<style>268435456</style>
+<allocation>0</allocation>
+<accepts_focus>TRUE</accepts_focus>
+<normal_fill_color>WINDOW_FILL</normal_fill_color>
+<selected_fill_color>WINDOW_FILL</selected_fill_color>
+<disabled_fill_color>DISABLED_FILL</disabled_fill_color>
+<event_handler>ION_BT_ActiveScreen_event_process</event_handler>
+<id_name>ION_BT_ACTIVE_SCREEN_ID</id_name>
+<template>FALSE</template>
+<visible_at_startup>FALSE</visible_at_startup>
+<wallpaper>NEWBACKGROUND_FLATTEN_1</wallpaper>
+<widget>
+<type>pixelmap_prompt</type>
+<app_name>ActiveDeviceName</app_name>
+<size>
+<left>36</left>
+<top>30</top>
+<right>285</right>
+<bottom>89</bottom>
+</size>
+<style>1073745924</style>
+<allocation>0</allocation>
+<accepts_focus>TRUE</accepts_focus>
+<normal_fill_color>WIDGET_FILL</normal_fill_color>
+<selected_fill_color>SELECTED_FILL</selected_fill_color>
+<disabled_fill_color>DISABLED_FILL</disabled_fill_color>
+<id_name>ACTIVE_DEVICE_NAME_ID</id_name>
+<template>FALSE</template>
+<visible_at_startup>FALSE</visible_at_startup>
+<font_id>ASC24PT</font_id>
+<normal_text_color>BLACK</normal_text_color>
+<selected_text_color>BLACK</selected_text_color>
+<disabled_text_color>BLACK</disabled_text_color>
+<right_map_id>BT_ICON_LEGACY_WHITE_60X60</right_map_id>
+</widget>
+<widget>
+<type>prompt</type>
+<app_name>ActiveStatusPrompt</app_name>
+<size>
+<left>63</left>
+<top>137</top>
+<right>254</right>
+<bottom>198</bottom>
+</size>
+<style>1342193664</style>
+<allocation>0</allocation>
+<accepts_focus>TRUE</accepts_focus>
+<normal_fill_color>WIDGET_FILL</normal_fill_color>
+<selected_fill_color>SELECTED_FILL</selected_fill_color>
+<disabled_fill_color>DISABLED_FILL</disabled_fill_color>
+<id_name>ACTIVE_STATUS_PROMPT_ID</id_name>
+<template>FALSE</template>
+<visible_at_startup>FALSE</visible_at_startup>
+<string_id>CONNECTING</string_id>
+<font_id>ASC24PT</font_id>
+<normal_text_color>WHITE</normal_text_color>
+<selected_text_color>SELECTED_TEXT</selected_text_color>
+<disabled_text_color>DISABLED_TEXT</disabled_text_color>
+</widget>
+</widget>
 <widget>
 <type>window</type>
 <app_name>ION_BT_UserSelectionScreen</app_name>

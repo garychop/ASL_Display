@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  3. 4.2024   Time (hh:mm): 09:43                        */
+/*  Date (dd.mm.yyyy):  3. 4.2024   Time (hh:mm): 14:06                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+ION_BT_ACTIVESCREEN_CONTROL_BLOCK ION_BT_ActiveScreen;
 ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK ION_BT_UserSelectionScreen;
 ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK ION_BT_DeviceSelectionScreen;
 SNP_CALIBRATIONSCREEN_CONTROL_BLOCK SNP_CalibrationScreen;
@@ -237,6 +238,32 @@ UINT gx_studio_numeric_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET 
     return status;
 }
 
+UINT gx_studio_pixelmap_prompt_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent)
+{
+    UINT status;
+    GX_PIXELMAP_PROMPT *pix_prompt = (GX_PIXELMAP_PROMPT *) control_block;
+    GX_PROMPT *prompt = (GX_PROMPT *) pix_prompt;
+    GX_PIXELMAP_PROMPT_PROPERTIES *props = (GX_PIXELMAP_PROMPT_PROPERTIES *) info->properties;
+    status = gx_pixelmap_prompt_create(pix_prompt, info->widget_name, parent,
+               props->string_id,
+               props->fill_map_id,
+               info->style, info->widget_id, &info->size);
+
+    if (status == GX_SUCCESS)
+    {
+        gx_pixelmap_prompt_pixelmap_set(pix_prompt,
+                                        props->left_map_id,
+                                        props->fill_map_id,
+                                        props->right_map_id,
+                                        props->selected_left_map_id,
+                                        props->selected_fill_map_id,
+                                        props->selected_right_map_id);
+        gx_prompt_font_set(prompt, props->font_id);
+        gx_prompt_text_color_set(prompt, props->normal_text_color_id, props->selected_text_color_id);
+    }
+    return status;
+}
+
 UINT gx_studio_window_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WIDGET *control_block, GX_WIDGET *parent)
 {
     UINT status;
@@ -278,6 +305,99 @@ UINT gx_studio_vertical_scrollbar_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WID
     status = gx_vertical_scrollbar_create(scroll, info->widget_name, parent, appearance, info->style);
     return status;
 }
+GX_WINDOW_PROPERTIES ION_BT_ActiveScreen_properties =
+{
+    GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
+};
+GX_PIXELMAP_PROMPT_PROPERTIES ION_BT_ActiveScreen_ActiveDeviceName_properties =
+{
+    0,                                       /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BLACK,                       /* normal text color              */
+    GX_COLOR_ID_BLACK,                       /* selected text color            */
+    0,                                       /* left pixelmap id               */
+    0,                                       /* fill pixelmap id               */
+    GX_PIXELMAP_ID_BT_ICON_LEGACY_WHITE_60X60, /* right pixelmap id            */
+    0,                                       /* selected left pixelmap id      */
+    0,                                       /* selected fill pixelmap id      */
+    0                                        /* selected right pixelmap id     */
+};
+GX_PROMPT_PROPERTIES ION_BT_ActiveScreen_ActiveStatusPrompt_properties =
+{
+    GX_STRING_ID_CONNECTING,                 /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_ActiveScreen_ActiveStatusPrompt_define =
+{
+    "ActiveStatusPrompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    ACTIVE_STATUS_PROMPT_ID,                 /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {63, 137, 254, 198},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_BT_ACTIVESCREEN_CONTROL_BLOCK, ION_BT_ActiveScreen_ActiveStatusPrompt), /* control block */
+    (void *) &ION_BT_ActiveScreen_ActiveStatusPrompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_ActiveScreen_ActiveDeviceName_define =
+{
+    "ActiveDeviceName",
+    GX_TYPE_PIXELMAP_PROMPT,                 /* widget type                    */
+    ACTIVE_DEVICE_NAME_ID,                   /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_LEFT,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_PIXELMAP_PROMPT),              /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_pixelmap_prompt_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {36, 30, 285, 89},                       /* widget size                    */
+    &ION_BT_ActiveScreen_ActiveStatusPrompt_define, /* next widget definition  */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_BT_ACTIVESCREEN_CONTROL_BLOCK, ION_BT_ActiveScreen_ActiveDeviceName), /* control block */
+    (void *) &ION_BT_ActiveScreen_ActiveDeviceName_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_BT_ActiveScreen_define =
+{
+    "ION_BT_ActiveScreen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    ION_BT_ACTIVE_SCREEN_ID,                 /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT,   /* style flags                */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(ION_BT_ACTIVESCREEN_CONTROL_BLOCK), /* control block size           */
+    GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) ION_BT_ActiveScreen_event_process, /* event function override */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &ION_BT_ActiveScreen_ActiveDeviceName_define, /* child widget              */
+    0,                                       /* control block                  */
+    (void *) &ION_BT_ActiveScreen_properties /* extended properties            */
+};
 GX_WINDOW_PROPERTIES ION_BT_UserSelectionScreen_properties =
 {
     GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
@@ -5791,6 +5911,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
+    { &ION_BT_ActiveScreen_define, (GX_WIDGET *) &ION_BT_ActiveScreen },
     { &ION_BT_UserSelectionScreen_define, (GX_WIDGET *) &ION_BT_UserSelectionScreen },
     { &ION_BT_DeviceSelectionScreen_define, (GX_WIDGET *) &ION_BT_DeviceSelectionScreen },
     { &SNP_CalibrationScreen_define, (GX_WIDGET *) &SNP_CalibrationScreen },

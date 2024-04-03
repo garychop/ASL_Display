@@ -1169,6 +1169,18 @@ void ProcessCommunicationMsgs ()
                         gx_system_event_send(&gxe);
                     }
                 }
+                else if (g_ActiveScreen->gx_widget_id == ION_BT_ACTIVE_SCREEN_ID)
+                {
+                    if (g_BluetoothSubIndex != (int8_t) HeadArrayMsg.HeartBeatMsg.m_SubIndex)
+                    {
+                        g_BluetoothSubIndex = (int8_t) HeadArrayMsg.HeartBeatMsg.m_SubIndex;
+                        gxe.gx_event_type = GX_SIGNAL (BT_SUBMENU_CHANGED_ID, GX_EVENT_CLICKED);;
+                        gxe.gx_event_sender = GX_ID_NONE;
+                        gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                        gxe.gx_event_display_handle = 0;
+                        gx_system_event_send(&gxe);
+                    }
+                }
                 else if (g_ActiveScreen->gx_widget_id == ATTENDANT_SCREEN_ID)
                 {
                     if ((g_HeadArrayStatus1 & 0x01) != (HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01))

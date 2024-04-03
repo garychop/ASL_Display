@@ -22,6 +22,7 @@
 void CreateUserBluetoothWidgets (GX_VERTICAL_LIST *list);
 VOID UserBluetoothList_callback(GX_VERTICAL_LIST *list, GX_WIDGET *widget, INT index);
 void UpdateBTUserSelection (void);
+static void CleanUpWidgets (void);
 
 //*************************************************************************************
 // Global and Local variables
@@ -83,7 +84,19 @@ void CreateUserBluetoothWidgets (GX_VERTICAL_LIST *list)
 }
 
 //*************************************************************************************
+static void CleanUpWidgets (void)
+{
+//    int i;
 //
+//    for (i = 0; i < MAX_BLUETOOTH_DEVICES + 1; ++i)
+//    {
+//      if (&g_BT_ScreenInfo[i].m_PixelPromptWidget != NULL)
+//          gx_widget_delete ((GX_WIDGET*) &g_BT_ScreenInfo[i].m_PixelPromptWidget);
+//      if (&g_BT_ScreenInfo[i].m_ItemWidget != NULL)
+//          gx_widget_delete ((GX_WIDGET*) &g_BT_ScreenInfo[i].m_ItemWidget);
+//    }
+}
+
 //*************************************************************************************
 
 void UpdateBTUserSelection (void)
@@ -192,11 +205,23 @@ UINT ION_BT_UserSelectionScreen_event_handler (GX_WINDOW *window, GX_EVENT *even
         g_ActiveScreen = (GX_WIDGET*) window;
 		break;
 
-
 	case GX_SIGNAL (BT_SUBMENU_CHANGED_ID, GX_EVENT_CLICKED): // This event is triggered by a change in the Bluetooth SubIndex message from ION Hub
 	    if (g_BluetoothSubIndex == 0x00)        // "00" = Main Menu with Bluetooth feature selected.
 	    {
+	        CleanUpWidgets();
 	        screen_toggle((GX_WINDOW *)&MainUserScreen, window);
+	    }
+        else if (g_BluetoothSubIndex == 0x01)   // Are we back at "BACK"?
+        {
+            g_Selected_Button_Index = 0;
+            UpdateBTUserSelection();
+            gx_vertical_list_selected_set (&UserBluetoothWindowPtr->ION_BT_UserSelectionScreen_BluetoothDeviceListBox, g_Selected_Button_Index);
+        }
+	    else if ((g_BluetoothSubIndex & 0x01) == 0x01)  // Are we trying to connect?
+	    {
+	        CleanUpWidgets();
+	        g_SelectedBluetoothDeviceIndex = (g_BluetoothSubIndex >> 4) - 1;  // The device is in the upper nibble and make 0-based
+	        screen_toggle((GX_WINDOW *)&ION_BT_ActiveScreen, window);
 	    }
 	    else
 	    {

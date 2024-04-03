@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  3. 4.2024   Time (hh:mm): 09:43                        */
+/*  Date (dd.mm.yyyy):  3. 4.2024   Time (hh:mm): 14:06                        */
 /*******************************************************************************/
 
 
@@ -47124,22 +47124,22 @@ GX_CONST GX_UBYTE main_display_STANDBY_SELECT_English[] = "STANDBY SELECT";
 GX_CONST GX_UBYTE main_display_ATTENDANT_SETTING_English[] = "ATTENDANT SETTING";
 GX_CONST GX_UBYTE main_display_ATT_REMOTE_ENABLE_English[] = "REMOTE ENABLE";
 GX_CONST GX_UBYTE main_display_AUDITORY_CUES_English[] = "AUDITORY CUES";
-GX_CONST GX_UBYTE main_display_BT_3_SWITCH_English[] = "3 SWITCH";
-GX_CONST GX_UBYTE main_display_BT_4_SWITCH_English[] = "4 SWITCH";
-GX_CONST GX_UBYTE main_display_BT_AAC_DEVICE_English[] = "AAC DEVICE";
+GX_CONST GX_UBYTE main_display_BT_3_SWITCH_English[] = "   3 SWITCH";
+GX_CONST GX_UBYTE main_display_BT_4_SWITCH_English[] = "   4 SWITCH";
+GX_CONST GX_UBYTE main_display_BT_AAC_DEVICE_English[] = "   AAC DEVICE";
 GX_CONST GX_UBYTE main_display_BT_ACU_English[] = "BT ATTENDANT";
-GX_CONST GX_UBYTE main_display_BT_FEEDER_English[] = "FEEDER";
+GX_CONST GX_UBYTE main_display_BT_FEEDER_English[] = "   FEEDER";
 GX_CONST GX_UBYTE main_display_BT_FORGET_English[] = "FORGET DEVICE";
-GX_CONST GX_UBYTE main_display_BT_GEN_A_English[] = "BLUETOOTH A";
-GX_CONST GX_UBYTE main_display_BT_GEN_B_English[] = "BLUETOOTH B";
-GX_CONST GX_UBYTE main_display_BT_GEN_C_English[] = "BLUETOOTH C";
-GX_CONST GX_UBYTE main_display_BT_GEN_D_English[] = "BLUETOOTH D";
-GX_CONST GX_UBYTE main_display_BT_LEGACY_English[] = "LEGACY";
-GX_CONST GX_UBYTE main_display_BT_MOUSE_English[] = "MOUSE";
-GX_CONST GX_UBYTE main_display_BT_PHONE_English[] = "PHONE";
-GX_CONST GX_UBYTE main_display_BT_SEATING_English[] = "SEATING";
+GX_CONST GX_UBYTE main_display_BT_GEN_A_English[] = "   BLUETOOTH A";
+GX_CONST GX_UBYTE main_display_BT_GEN_B_English[] = "   BLUETOOTH B";
+GX_CONST GX_UBYTE main_display_BT_GEN_C_English[] = "   BLUETOOTH C";
+GX_CONST GX_UBYTE main_display_BT_GEN_D_English[] = "   BLUETOOTH D";
+GX_CONST GX_UBYTE main_display_BT_LEGACY_English[] = "   LEGACY";
+GX_CONST GX_UBYTE main_display_BT_MOUSE_English[] = "   MOUSE";
+GX_CONST GX_UBYTE main_display_BT_PHONE_English[] = "   PHONE";
+GX_CONST GX_UBYTE main_display_BT_SEATING_English[] = "   SEATING";
 GX_CONST GX_UBYTE main_display_BT_START_PAIR_English[] = "START PAIRING";
-GX_CONST GX_UBYTE main_display_BT_TABLET_English[] = "TABLET";
+GX_CONST GX_UBYTE main_display_BT_TABLET_English[] = "   TABLET";
 GX_CONST GX_UBYTE main_display_CALIBRATE_English[] = "CALIBRATE";
 GX_CONST GX_UBYTE main_display_CANCEL_English[] = "CANCEL";
 GX_CONST GX_UBYTE main_display_COMPLETE_STATUS_English[] = "COMPLETE";
