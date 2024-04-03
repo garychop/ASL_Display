@@ -21,6 +21,8 @@
 #include "QueueDefinition.h"
 #include "HeadArray_CommunicationThread.h"
 #include "UserMainScreen.h"
+#include "BluetoothDeviceInfo.h"
+
 //-------------------------------------------------------------------------
 // Typedefs and defines
 //-------------------------------------------------------------------------
@@ -113,6 +115,7 @@ void my_gui_thread_entry(void)
     }
 
     Initialize_MainScreenInfo();
+    InitializeBluetoothDeviceInformation();
 
     /* Create the widgets we have defined with the GUIX data structures and resources. */
     GX_WIDGET * p_first_screen = NULL;

@@ -181,7 +181,7 @@ UINT ION_BT_UserSelectionScreen_event_handler (GX_WINDOW *window, GX_EVENT *even
 	switch (event_ptr->gx_event_type)
 	{
 	case GX_EVENT_SHOW:
-		// This functions sets up the "container" for the widgets that make up the Bluetooth Device list for the user.
+	    // This functions sets up the "container" for the widgets that make up the Bluetooth Device list for the user.
 		InitializeUserBluetoothDeviceInformation();
 		// Create the List and populate the items with Text, Color and Icons.
 		CreateUserBluetoothWidgets (&UserBluetoothWindowPtr->ION_BT_UserSelectionScreen_BluetoothDeviceListBox);
@@ -191,6 +191,22 @@ UINT ION_BT_UserSelectionScreen_event_handler (GX_WINDOW *window, GX_EVENT *even
         g_ChangeScreen_WIP = false;
         g_ActiveScreen = (GX_WIDGET*) window;
 		break;
+
+
+	case GX_SIGNAL (BT_SUBMENU_CHANGED_ID, GX_EVENT_CLICKED): // This event is triggered by a change in the Bluetooth SubIndex message from ION Hub
+	    if (g_BluetoothSubIndex == 0x00)        // "00" = Main Menu with Bluetooth feature selected.
+	    {
+	        screen_toggle((GX_WINDOW *)&MainUserScreen, window);
+	    }
+	    else
+	    {
+	        g_Selected_Button_Index = g_BluetoothSubIndex >> 4;      // The 1-based index is in the upper nibble
+	        if (g_Selected_Button_Index >= MAX_BLUETOOTH_DEVICES)
+	            g_Selected_Button_Index = 0;
+	        UpdateBTUserSelection();
+	        gx_vertical_list_selected_set (&UserBluetoothWindowPtr->ION_BT_UserSelectionScreen_BluetoothDeviceListBox, g_Selected_Button_Index);
+	    }
+	    break;
 
     case GX_SIGNAL (DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):
 		// Select the next item, rolling to the first item.

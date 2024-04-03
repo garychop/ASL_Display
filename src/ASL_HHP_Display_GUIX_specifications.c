@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  2. 4.2024   Time (hh:mm): 17:23                        */
+/*  Date (dd.mm.yyyy):  3. 4.2024   Time (hh:mm): 09:43                        */
 /*******************************************************************************/
 
 
@@ -327,6 +327,29 @@ GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_FeatureList_vertical_scroll
     (void *) &ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_properties /* extended properties */
 };
 
+GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_BluetoothSubmenuChanged_Btn_define =
+{
+    "BluetoothSubmenuChanged_Btn",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    BT_SUBMENU_CHANGED_ID,                   /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED,   /* style flags                  */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {400, 108, 479, 131},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK, ION_BT_UserSelectionScreen_BluetoothSubmenuChanged_Btn), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
+};
+
 GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_BluetoothDeviceListBox_define =
 {
     "BluetoothDeviceListBox",
@@ -344,7 +367,7 @@ GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_BluetoothDeviceListBox_defi
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {20, 10, 304, 224},                      /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &ION_BT_UserSelectionScreen_BluetoothSubmenuChanged_Btn_define, /* next widget definition */
     &ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_define, /* child widget definition */
     offsetof(ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK, ION_BT_UserSelectionScreen_BluetoothDeviceListBox), /* control block */
     (void *) &ION_BT_UserSelectionScreen_BluetoothDeviceListBox_properties /* extended properties */
@@ -359,7 +382,7 @@ GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_define =
     0,                                       /* user data                      */
     #endif
     GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT,   /* style flags                */
-    0,                                       /* status flags                   */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
     sizeof(ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK), /* control block size    */
     GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
     GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */

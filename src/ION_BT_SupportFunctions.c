@@ -59,29 +59,29 @@ void InitializeBluetoothDeviceInformation(void)
 	BT_SetDeviceColor (0, BT_GREEN);
 	BT_SetDeviceStatus (0, BT_PAIRED);
 
-	BT_SetDeviceTypeInformation (1, BT_3_SWITCH_TYPE);
+	BT_SetDeviceTypeInformation (1, BT_LEGACY_TYPE);
 	BT_SetDeviceColor (1, BT_BLUE);
 	BT_SetDeviceStatus (1, BT_PAIRED);
 
-	BT_SetDeviceTypeInformation (2, BT_SEATING_TYPE);
-	BT_SetDeviceColor (2, BT_ORANGE);
+	BT_SetDeviceTypeInformation (2, BT_FEEDER_TYPE);
+	BT_SetDeviceColor (2, BT_YELLOW);
 	BT_SetDeviceStatus (2, BT_PAIRED);
 
-	BT_SetDeviceTypeInformation (3, BT_AUX_COMM_TYPE);
+	BT_SetDeviceTypeInformation (3, BT_TYPE_END);
 	BT_SetDeviceColor (3, BT_RED);
-	BT_SetDeviceStatus (3, BT_PAIRED);
+	BT_SetDeviceStatus (3, BT_DISABLED);
 
-	BT_SetDeviceTypeInformation (4, BT_FEEDER_TYPE);
+	BT_SetDeviceTypeInformation (4, BT_TYPE_END);
 	BT_SetDeviceColor (4, BT_YELLOW);
-	BT_SetDeviceStatus (4, BT_PAIRED);
+	BT_SetDeviceStatus (4, BT_DISABLED);
 
-	BT_SetDeviceTypeInformation (5, BT_LEGACY_TYPE);
+	BT_SetDeviceTypeInformation (5, BT_TYPE_END);
 	BT_SetDeviceColor (5, BT_YELLOW);
-	BT_SetDeviceStatus (5, BT_PAIRED);
+	BT_SetDeviceStatus (5, BT_DISABLED);
 
-	BT_SetDeviceTypeInformation (6, BT_PHONE_TYPE);
+	BT_SetDeviceTypeInformation (6, BT_TYPE_END);
 	BT_SetDeviceColor (6, BT_BLUE);
-	BT_SetDeviceStatus (6, BT_PAIRED);
+	BT_SetDeviceStatus (6, BT_DISABLED);
 
 	BT_SetDeviceTypeInformation (7, BT_ACU_TYPE);
 	BT_SetDeviceColor (7, BT_WHITE);
