@@ -25,7 +25,7 @@ typedef enum BT_COLOR_ENUM {BT_WHITE, BT_BLUE, BT_ORANGE, BT_RED, BT_GREEN, BT_Y
 typedef enum BT_DEVICE_TYPE_ENUM {BT_MOUSE_TYPE, BT_3_SWITCH_TYPE, BT_4_SWITCH_TYPE, BT_AUX_COMM_TYPE, BT_FEEDER_TYPE, BT_PHONE_TYPE, BT_TABLET_TYPE, BT_LEGACY_TYPE, BT_SEATING_TYPE, BT_GENERIC_TYPE_1, BT_GENERIC_TYPE_2, BT_GENERIC_TYPE_3, BT_GENERIC_TYPE_4, BT_ACU_TYPE, BT_TYPE_END} BT_DEVICE_TYPE;
 
 // The following describes the possible BT device Statii
-typedef enum BT_STATUS_ENUM {BT_DISABLED, BT_PAIRING_WIP, BT_PAIRED, BT_STATUS_END} BT_STATUS;
+typedef enum BT_STATUS_ENUM {BT_DISABLED, BT_ENABLED, BT_ERROR, BT_STATUS_END} BT_STATUS;
 
 // This holds the Global Bluetooth Device Data but not the Screen Information.
 typedef struct BLUETOOTH_DEVICE_DATA_STRUCT
@@ -58,21 +58,22 @@ typedef struct BLUETOOTH_SCREEN_DATA_STRUCT
 //*****************************************************************************
 
 extern BLUETOOTH_DEVICE_DATA g_BluetoothDeviceSettings[MAX_BLUETOOTH_DEVICES];
-extern const char g_BT_DESCRIPTION_STRINGS [BT_TYPE_END][DESCRIPTION_STRING_WIDTH+1];
 extern const char g_BT_COLOR_TEXT [][BT_COLOR_STRING_WIDTH];
 extern int g_SelectedBluetoothDeviceIndex;
-extern int g_SelectedBTDevice_ToProgram;	// This contains the array index into the Bluetooth setup information.
+extern uint8_t g_SelectedBTDevice_ToProgram;	// This contains the array index into the Bluetooth setup information.
 
 //*****************************************************************************
 // Function Prototypes
 //*****************************************************************************
 
 void InitializeBluetoothDeviceInformation(void);
-void BT_SetDeviceTypeInformation (UINT index, BT_DEVICE_TYPE deviceType);
-void BT_SetDeviceColor (UINT index, BT_COLOR color);
-void BT_SetDeviceStatus (UINT index, BT_STATUS newStatus);
+void BT_Process_HUB_DeviceDefintion (uint8_t slotNumber, BT_DEVICE_TYPE deviceType, BT_COLOR color, BT_STATUS bt_status);
+void BT_SetDeviceTypeInformation (uint8_t index, BT_DEVICE_TYPE deviceType);
+void BT_SetDeviceColor (uint8_t index, BT_COLOR color);
+void BT_SetDeviceStatus (uint8_t index, BT_STATUS newStatus);
 BT_STATUS BT_GetDeviceStatus (UINT index);
 VOID BT_Screen_Widget_Cleanup (BLUETOOTH_SCREEN_DATA *bt_screen_info, INT arraySize);
+const char* GetColorString (BT_COLOR color);
 
 #endif // BLUETOOTH_DEVICE_INFORMATON_H
 

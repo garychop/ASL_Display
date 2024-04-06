@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include "tx_api.h"
 #include "ASL165_System.h"
+#include "BluetoothDeviceInfo.h"
 
 //*************************************************************************
 // Typedefs
@@ -50,7 +51,9 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_ATTENDANT_SETTINGS_GET = 0x42,
     HHP_HA_ATTENDANT_SETTINGS_SET = 0x43,
     HHP_HA_ATTENDANT_CONTROLS_CMD = 0x44,
-    HHP_HA_WHO_ARE_YOU_CMD = 0x46
+    HHP_HA_WHO_ARE_YOU_CMD = 0x46,
+    HHP_HA_BLUETOOTH_SETUP_GET_CMD = 0x4b,
+    HHP_HA_BLUETOOTH_SETUP_SET_CMD = 0x4c
 } HHP_HA_MESSAGES_ENUM;
 
 // This structure is used to send messages from the GUI to the Head Array Communication Task
@@ -116,6 +119,13 @@ typedef struct GUI_MSG_S
             uint8_t m_AttendantTimeout;
         } SendAttendantSettings;
         struct
+        {   // used with HHP_HA_BLUETOOTH_SETUP_GET_CMD and SET CMD
+            uint8_t m_SlotNumber;   // Used in GET and SETcommand
+            BT_DEVICE_TYPE m_DeviceIdenfication; // Used in SET command only
+            BT_COLOR m_Color; // Used in SET command only
+            BT_STATUS m_Status; // Used in SET command only
+        } Send_BT_DeviceDefinition;
+        struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
@@ -144,6 +154,8 @@ extern void SendAttendantControl_toHeadArray (uint8_t active, int8_t speed, int8
 extern void SendAttendantSettingsGet_toHeadArray (void);
 extern void SendAttendantSettingsSet_toHeadArray (uint8_t attendantSettings, uint8_t attendantTimeout);
 extern void SendWhoAmiCommand (void);
+extern void Send_Get_BT_DeviceDefinitions (uint8_t slotNumber);
+extern void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS bt_status);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -228,6 +240,13 @@ typedef struct HHP_HA_MSG_S
             uint8_t m_WhoAmi;
         } WhoAmI_Response;
         struct
+        {   // used with HHP_HA_BLUETOOTH_SETUP_GET_CMD and SET CMD
+            uint8_t m_SlotNumber;   // Used in GET and SETcommand
+            BT_DEVICE_TYPE m_DeviceIdenfication; // Used in SET command only
+            BT_COLOR m_Color; // Used in SET command only
+            BT_STATUS m_Status; // Used in SET command only
+        } BT_DeviceDefinition;
+        struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
@@ -242,6 +261,7 @@ extern void SendFeatureGet (uint8_t featureSet, uint8_t timeout, uint8_t feature
 extern void SendDriveOffsetGetResponse (uint8_t, uint8_t, uint8_t);
 extern void SendAttendantSettingsGet (uint8_t attendantSettings, uint8_t attendantTimeout);
 extern void SendWhoAmItoGUI (uint8_t whoami);
+extern void Send_Get_BT_DeviceDefinitions_Response (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS bt_status);
 
 // Helper functions
 extern PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad);

@@ -15,7 +15,7 @@
 // Local/Global variables
 //*************************************************************************************
 
-int g_SelectedBTDevice_ToProgram = 0;
+uint8_t g_SelectedBTDevice_ToProgram = 0;
 int g_SelectedBluetoothDeviceIndex;
 
 // The following is the Bluetooth Device information.
@@ -24,30 +24,17 @@ BLUETOOTH_DEVICE_DATA g_BluetoothDeviceSettings[MAX_BLUETOOTH_DEVICES];
 // The following hold the Bluetooth Data for the User Bluetooth Screen.
 BLUETOOTH_SCREEN_DATA g_BTDeviceSetup_ScreenInfo[MAX_BLUETOOTH_DEVICES];
 
-const char g_BT_DESCRIPTION_STRINGS [BT_TYPE_END][DESCRIPTION_STRING_WIDTH+1] =  
-{	//" MOUSE ",
-	" 3-SWITCH ",
-	" 4-SWITCH ",
-	" AAC DEVICE ",
-	" FEEDER ",
-	" PHONE ",
-	" TABLET ",
-	" LEGACY ",
-	" SEATING ",
-	" Bluetooth A",
-	" Bluetooth B",
-	" Bluetooth C",
-	" Bluetooth D"
-	/*" Bluetooth E",
-	" Bluetooth F",
-	" Bluetooth G"*/};
-
 const char g_BT_COLOR_TEXT [][BT_COLOR_STRING_WIDTH] = 
 { "WHITE", "BLUE", "ORANGE", "RED", "GREEN", "YELLOW", "NONE" };
 
 //*************************************************************************************
-// Forward Declarations
-//*************************************************************************************
+
+void BT_Process_HUB_DeviceDefintion (uint8_t slotNumber, BT_DEVICE_TYPE deviceType, BT_COLOR color, BT_STATUS bt_status)
+{
+    BT_SetDeviceTypeInformation (slotNumber, deviceType);
+    BT_SetDeviceColor (slotNumber, color);
+    BT_SetDeviceStatus (slotNumber, bt_status);
+}
 
 //*************************************************************************************
 // This is called by the main routine at startup to retrieve the Bluetooth Device Setup information.
@@ -57,15 +44,15 @@ void InitializeBluetoothDeviceInformation(void)
 {
 	BT_SetDeviceTypeInformation (0, BT_MOUSE_TYPE);
 	BT_SetDeviceColor (0, BT_GREEN);
-	BT_SetDeviceStatus (0, BT_PAIRED);
+	BT_SetDeviceStatus (0, BT_DISABLED);
 
 	BT_SetDeviceTypeInformation (1, BT_LEGACY_TYPE);
 	BT_SetDeviceColor (1, BT_BLUE);
-	BT_SetDeviceStatus (1, BT_PAIRED);
+	BT_SetDeviceStatus (1, BT_DISABLED);
 
 	BT_SetDeviceTypeInformation (2, BT_FEEDER_TYPE);
 	BT_SetDeviceColor (2, BT_YELLOW);
-	BT_SetDeviceStatus (2, BT_PAIRED);
+	BT_SetDeviceStatus (2, BT_DISABLED);
 
 	BT_SetDeviceTypeInformation (3, BT_TYPE_END);
 	BT_SetDeviceColor (3, BT_RED);
@@ -85,7 +72,7 @@ void InitializeBluetoothDeviceInformation(void)
 
 	BT_SetDeviceTypeInformation (7, BT_ACU_TYPE);
 	BT_SetDeviceColor (7, BT_WHITE);
-	BT_SetDeviceStatus (7, BT_PAIRED);
+	BT_SetDeviceStatus (7, BT_ENABLED);
 
 }
 
@@ -93,7 +80,7 @@ void InitializeBluetoothDeviceInformation(void)
 // This function sets the Type and Icons in the Bluetooth Device Information.
 //*************************************************************************************
 
-void BT_SetDeviceTypeInformation (UINT index, BT_DEVICE_TYPE deviceType)
+void BT_SetDeviceTypeInformation (uint8_t index, BT_DEVICE_TYPE deviceType)
 {
 	switch (deviceType)
 	{
@@ -195,29 +182,30 @@ void BT_SetDeviceTypeInformation (UINT index, BT_DEVICE_TYPE deviceType)
 		g_BluetoothDeviceSettings[index].m_DescriptionID = GX_STRING_ID_BT_ACU;
 		break;
 
-	//case BT_GENERIC_TYPE_6:
-	//	g_BluetoothDeviceSettings[index].m_BT_Type = BT_GENERIC_TYPE_6;
-	//	g_BluetoothDeviceSettings[index].m_BT_Icon_Selected = GX_PIXELMAP_ID_BT_ICON_BTF_BLACK_60X60;
-	//	g_BluetoothDeviceSettings[index].m_BT_Icon_Normal = GX_PIXELMAP_ID_BT_ICON_BTF_WHITE_60X60;
-	//	break;
-
-	//case BT_GENERIC_TYPE_7:
-	//	g_BluetoothDeviceSettings[index].m_BT_Type = BT_GENERIC_TYPE_7;
-	//	g_BluetoothDeviceSettings[index].m_BT_Icon_Selected = GX_PIXELMAP_ID_BT_ICON_BTG_BLACK_60X60;
-	//	g_BluetoothDeviceSettings[index].m_BT_Icon_Normal = GX_PIXELMAP_ID_BT_ICON_BTG_WHITE_60X60;
-	//	break;
-
 	case BT_TYPE_END:
-	default:
+    default:
+        g_BluetoothDeviceSettings[index].m_BT_Type = BT_TYPE_END;
+        g_BluetoothDeviceSettings[index].m_BT_Icon_Selected = GX_PIXELMAP_ID_BLANK_30X30;
+        g_BluetoothDeviceSettings[index].m_BT_Icon_Normal = GX_PIXELMAP_ID_BLANK_30X30;
+        g_BluetoothDeviceSettings[index].m_DescriptionID = GX_STRING_ID_BT_SET_DEVICE;
+        break;
 	    break;
 	} // end of switch (deviceType)
 }
 
 //*************************************************************************************
-// Set BT Device Color
+// Get and Set BT Device Color
 //*************************************************************************************
 
-void BT_SetDeviceColor (UINT index, BT_COLOR color)
+const char* GetColorString (BT_COLOR color)
+{
+    if (color < BT_COLOR_END)
+        return (g_BT_COLOR_TEXT[color]);
+    return (g_BT_COLOR_TEXT[BT_COLOR_END]);
+}
+
+
+void BT_SetDeviceColor (uint8_t index, BT_COLOR color)
 {
 	if (index < MAX_BLUETOOTH_DEVICES)
 	{
@@ -266,7 +254,7 @@ BT_STATUS BT_GetDeviceStatus (UINT index)
 }
 
 //*************************************************************************************
-void BT_SetDeviceStatus (UINT index, BT_STATUS newStatus)
+void BT_SetDeviceStatus (uint8_t index, BT_STATUS newStatus)
 {
 	if (index < MAX_BLUETOOTH_DEVICES)
 	{

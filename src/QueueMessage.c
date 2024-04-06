@@ -27,6 +27,7 @@
 #include "QueueDefinition.h"
 #include "HeadArray_CommunicationThread.h"
 #include "tx_api.h"
+#include "BluetoothDeviceInfo.h"
 
 //****************************************************************************
 // External References
@@ -566,7 +567,7 @@ void SendAttendantSettingsSet_toHeadArray (uint8_t attendantSettings, uint8_t at
 //      data includes speed and direction.
 //****************************************************************************
 
-extern void SendAttendantControl_toHeadArray (uint8_t active, int8_t speed, int8_t direction)
+void SendAttendantControl_toHeadArray (uint8_t active, int8_t speed, int8_t direction)
 {
     GUI_MSG_STRUCT q_Msg;
 
@@ -574,6 +575,46 @@ extern void SendAttendantControl_toHeadArray (uint8_t active, int8_t speed, int8
     q_Msg.SendAttendantControl.m_AttendantActive = active;
     q_Msg.SendAttendantControl.m_SpeedDemand = speed;
     q_Msg.SendAttendantControl.m_DirectionDemand = direction;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+//****************************************************************************
+// Get and Set Bluetooth Device Settings functions.
+//****************************************************************************
+
+void Send_Get_BT_DeviceDefinitions (uint8_t slotNumber)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_BLUETOOTH_SETUP_GET_CMD;
+    q_Msg.Send_BT_DeviceDefinition.m_SlotNumber = slotNumber;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+void Send_Get_BT_DeviceDefinitions_Response (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS bt_status)
+{
+    HHP_HA_MSG_STRUCT HHP_Msg;
+
+    HHP_Msg.m_MsgType = HHP_HA_BLUETOOTH_SETUP_GET_CMD;
+    HHP_Msg.BT_DeviceDefinition.m_SlotNumber = slotNumber;
+    HHP_Msg.BT_DeviceDefinition.m_DeviceIdenfication = devID;
+    HHP_Msg.BT_DeviceDefinition.m_Color = color;
+    HHP_Msg.BT_DeviceDefinition.m_Status = bt_status;
+
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS bt_status)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_BLUETOOTH_SETUP_SET_CMD;
+    q_Msg.Send_BT_DeviceDefinition.m_SlotNumber = slotNumber;
+    q_Msg.Send_BT_DeviceDefinition.m_DeviceIdenfication = devID;
+    q_Msg.Send_BT_DeviceDefinition.m_Color = color;
+    q_Msg.Send_BT_DeviceDefinition.m_Status = bt_status;
 
     tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }

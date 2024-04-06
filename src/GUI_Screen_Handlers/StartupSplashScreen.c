@@ -27,6 +27,8 @@ VOID StartupSplashScreen_draw_function (GX_WINDOW *window)
 
 UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
+    uint8_t counter;
+
     switch (event_ptr->gx_event_type)
     {
         case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
@@ -42,7 +44,7 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             else // OK, we are starting up.
             {
                 ++g_StartupDelayCounter;
-                if (g_StartupDelayCounter > 16)  // Have we shown the startup screen long enough?
+                if (g_StartupDelayCounter > 18)  // Have we shown the startup screen long enough?
                 {
                     screen_toggle((GX_WINDOW *)&MainUserScreen, window);
                     g_StartupDelayCounter = -1; // This prevents us from doing a "startup" delay should the Heart Beat stop.
@@ -76,6 +78,13 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                     SendGetPadAssignmentMsg (LEFT_PAD);
                     SendGetPadAssignmentMsg (RIGHT_PAD);
                     SendGetPadAssignmentMsg (CENTER_PAD);
+                }
+                else if (g_StartupDelayCounter == 16)
+                {
+                    for (counter = 0; counter < MAX_BLUETOOTH_DEVICES; ++counter)
+                    {
+                        Send_Get_BT_DeviceDefinitions (counter);
+                    }
                 }
             }
             break;

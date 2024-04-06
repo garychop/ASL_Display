@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  3. 4.2024   Time (hh:mm): 14:06                        */
+/*  Date (dd.mm.yyyy):  6. 4.2024   Time (hh:mm): 10:39                        */
 /*******************************************************************************/
 
 
@@ -47190,10 +47190,16 @@ GX_CONST GX_UBYTE main_display_BACK_English[] = "   BACK";
 GX_CONST GX_UBYTE main_display_HUB_PORT_SETTINGS_English[] = "HUB PORT SETTINGS";
 GX_CONST GX_UBYTE main_display_ION_OFF_English[] = "ION OFF";
 GX_CONST GX_UBYTE main_display_STRING_1_English[] = "prompt";
+GX_CONST GX_UBYTE main_display_BT_SET_DEVICE_English[] = "<Setup Device>";
+GX_CONST GX_UBYTE main_display_STRING_2_English[] = "button";
+GX_CONST GX_UBYTE main_display_BT_COLOR_English[] = "Bt Color";
+GX_CONST GX_UBYTE main_display_BT_PAIRING_English[] = "BT Pairing";
+GX_CONST GX_UBYTE main_display_STRING_3_English[] = "#1";
+GX_CONST GX_UBYTE main_display_SELECT_TYPE_AND_COLOR_English[] = "Select TYPE and COLOR then PAIR";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[129] =
+GX_CONST GX_UBYTE *main_display_English_string_table[135] =
 {
     GX_NULL,
     main_display_ACTIVATE_PAD_English,
@@ -47323,7 +47329,13 @@ GX_CONST GX_UBYTE *main_display_English_string_table[129] =
     main_display_BACK_English,
     main_display_HUB_PORT_SETTINGS_English,
     main_display_ION_OFF_English,
-    main_display_STRING_1_English
+    main_display_STRING_1_English,
+    main_display_BT_SET_DEVICE_English,
+    main_display_STRING_2_English,
+    main_display_BT_COLOR_English,
+    main_display_BT_PAIRING_English,
+    main_display_STRING_3_English,
+    main_display_SELECT_TYPE_AND_COLOR_English
 
 };
 

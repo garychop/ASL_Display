@@ -1012,6 +1012,40 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             }
             break;
 
+        case HHP_HA_BLUETOOTH_SETUP_GET_CMD:
+            HA_Msg[0] = 0x04;     // msg length
+            HA_Msg[1] = HHP_HA_BLUETOOTH_SETUP_GET_CMD;
+            HA_Msg[2] = GUI_Msg.Send_BT_DeviceDefinition.m_SlotNumber;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    // parametes are BT Device Type [2], Slot Number [1], Color [3], status [4];
+                    Send_Get_BT_DeviceDefinitions_Response (HB_Response[1], HB_Response[2], HB_Response[3], HB_Response[4]);
+                }
+            }
+            break;
+
+        case HHP_HA_BLUETOOTH_SETUP_SET_CMD:
+            HA_Msg[0] = 0x07;     // msg length
+            HA_Msg[1] = HHP_HA_BLUETOOTH_SETUP_SET_CMD;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    ; // Process response
+                }
+            }
+            break;
+
         default:
             msgSent = false;
             break;
@@ -1357,6 +1391,11 @@ void ProcessCommunicationMsgs ()
             gx_system_event_send(&gxe);
             break;
 
+        case HHP_HA_BLUETOOTH_SETUP_GET_CMD:
+            //void BT_Process_HUB_DeviceDefintion (uint8_t slotNumber, BT_DEVICE_TYPE deviceType, BT_COLOR color, BT_STATUS bt_status)
+            BT_Process_HUB_DeviceDefintion (HeadArrayMsg.BT_DeviceDefinition.m_SlotNumber, HeadArrayMsg.BT_DeviceDefinition.m_DeviceIdenfication,
+                                            HeadArrayMsg.BT_DeviceDefinition.m_Color, HeadArrayMsg.BT_DeviceDefinition.m_Status);
+            break;
 //        case HHP_HA_ATTENDANT_SETTINGS_GET:
 //            g_AttendantSettings = HeadArrayMsg.AttendantSettings_Get_Response.m_AttendantSettings;
 //            g_AttendantTimeout = HeadArrayMsg.AttendantSettings_Get_Response.m_AttendantTimeout;

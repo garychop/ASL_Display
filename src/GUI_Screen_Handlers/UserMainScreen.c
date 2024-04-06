@@ -415,16 +415,16 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
 	switch (event_ptr->gx_event_type)
 	{
-	    case GX_EVENT_TIMER:
-        if (event_ptr->gx_event_payload.gx_event_timer_id == ARROW_PUSHED_TIMER_ID)
-		{
-            if (g_WhoAmi == I_AM_FUSION)
-                screen_toggle((GX_WINDOW*)&HHP_Start_Screen, window);
-            else
-                screen_toggle((GX_WINDOW*)&ION_BT_DeviceSelectionScreen, window);
-			g_ChangeScreen_WIP = true;
-		}
-		break;
+//	    case GX_EVENT_TIMER:
+//        if (event_ptr->gx_event_payload.gx_event_timer_id == ARROW_PUSHED_TIMER_ID)
+//		{
+//            if (g_WhoAmi == I_AM_FUSION)
+//                screen_toggle((GX_WINDOW*)&HHP_Start_Screen, window);
+//            else
+//                screen_toggle((GX_WINDOW*)&ION_BT_DeviceSelectionScreen, window);
+//			g_ChangeScreen_WIP = true;
+//		}
+//		break;
 
     case GX_EVENT_SHOW:
         g_ActiveScreen = (GX_WIDGET*) window;
@@ -522,7 +522,10 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         break;
 
     case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
-        screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
+            if (I_AM_ION == g_WhoAmi)
+                screen_toggle((GX_WINDOW *)&ION_BT_DeviceSelectionScreen, window);
+            else
+                screen_toggle((GX_WINDOW *)&HHP_Start_Screen, window);
         g_ChangeScreen_WIP = true;
         break;
 

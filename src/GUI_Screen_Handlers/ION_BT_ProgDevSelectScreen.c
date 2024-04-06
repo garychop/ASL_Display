@@ -18,7 +18,7 @@
 //*************************************************************************************
 
 // The following is the Bluetooth Device information.
-BLUETOOTH_DEVICE_DATA g_BluetoothDeviceSettings[MAX_BLUETOOTH_DEVICES];
+//BLUETOOTH_DEVICE_DATA g_BluetoothDeviceSettings[MAX_BLUETOOTH_DEVICES];
 
 // The following hold the Bluetooth Data for the User Bluetooth Screen.
 BLUETOOTH_SCREEN_DATA g_BTDeviceSetup_ScreenInfo[MAX_BLUETOOTH_DEVICES];
@@ -104,7 +104,7 @@ void CreateBluetoothWidgets (GX_VERTICAL_LIST *list)
 UINT ION_BluetoothDeviceSelectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
 	//UINT myErr = 0;
-	//int btnID;
+	int btnID;
 
 	ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK *BluetoothWindowPtr = (ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK*) window;
 
@@ -143,13 +143,6 @@ UINT ION_BluetoothDeviceSelectionScreen_event_process (GX_WINDOW *window, GX_EVE
 
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
 		BT_Screen_Widget_Cleanup (g_BTDeviceSetup_ScreenInfo, MAX_BLUETOOTH_DEVICES);
-		//for (i = 0; i < MAX_BLUETOOTH_DEVICES; ++i)
-		//{
-		//	if (&g_BTDeviceSetup_ScreenInfo[i].m_ButtonWidget != NULL)
-		//		gx_widget_delete ((GX_WIDGET*) &g_BTDeviceSetup_ScreenInfo[i].m_ButtonWidget);
-		//	if (&g_BTDeviceSetup_ScreenInfo[i].m_ItemWidget != NULL)
-		//		gx_widget_delete ((GX_WIDGET*) &g_BTDeviceSetup_ScreenInfo[i].m_ItemWidget);
-		//}
 		BluetoothWindowPtr->ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox.gx_vertical_list_child_count = 0;
 		screen_toggle((GX_WINDOW *)&MainUserScreen, window);
 		break;
@@ -162,9 +155,9 @@ UINT ION_BluetoothDeviceSelectionScreen_event_process (GX_WINDOW *window, GX_EVE
 	case GX_SIGNAL (BT_SELECTED_BTN_ID+5, GX_EVENT_CLICKED):
 	case GX_SIGNAL (BT_SELECTED_BTN_ID+6, GX_EVENT_CLICKED):
 	case GX_SIGNAL (BT_SELECTED_BTN_ID+7, GX_EVENT_CLICKED):
-//		btnID = event_ptr->gx_event_type >> 8;	// This isolates the Button ID
-//		g_SelectedBTDevice_ToProgram = btnID - BT_SELECTED_BTN_ID;
-//		screen_toggle((GX_WINDOW *)&ION_BT_SetupScreen, window);
+		btnID = (int)(event_ptr->gx_event_type) >> 8;	// This isolates the Button ID
+		g_SelectedBTDevice_ToProgram = (uint8_t) (btnID - BT_SELECTED_BTN_ID);
+		screen_toggle((GX_WINDOW *)&ION_BT_SetupScreen, window);
 		break;
 
 	} // end switch
