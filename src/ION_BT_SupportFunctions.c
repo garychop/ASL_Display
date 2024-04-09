@@ -271,22 +271,33 @@ void BT_SetDeviceStatus (uint8_t index, BT_STATUS newStatus)
 
 VOID BT_Screen_Widget_Cleanup (BLUETOOTH_SCREEN_DATA *bt_screen_info, INT arraySize)
 {
-	int i;
+	int i, exists;
 
 	for (i = 0; i < arraySize; ++i)
 	{
-		if (&bt_screen_info[i].m_ButtonWidget != NULL)
-			gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_ButtonWidget);
-		if (&bt_screen_info[i].m_ItemWidget != NULL)
-			gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_ItemWidget);
-		if (&bt_screen_info[i].m_IconWidget != NULL)
-			gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_IconWidget);
-		if (&bt_screen_info[i].m_MultilineBtnWidget != NULL)
-			gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_MultilineBtnWidget);
-		if (&bt_screen_info[i].m_PixelPromptWidget != NULL)
-			gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_PixelPromptWidget);
-		if (&bt_screen_info[i].m_PromptWidget != NULL)
-			gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_PromptWidget);
+        gx_widget_created_test(&bt_screen_info[i].m_ButtonWidget, &exists);
+        if (exists)
+            gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_ButtonWidget);
+
+        gx_widget_created_test(&bt_screen_info[i].m_IconWidget, &exists);
+        if (exists)
+            gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_IconWidget);
+
+        gx_widget_created_test(&bt_screen_info[i].m_MultilineBtnWidget, &exists);
+        if (exists)
+            gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_MultilineBtnWidget);
+
+        gx_widget_created_test(&bt_screen_info[i].m_PixelPromptWidget, &exists);
+        if (exists)
+            gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_PixelPromptWidget);
+
+        gx_widget_created_test(&bt_screen_info[i].m_PromptWidget, &exists);
+        if (exists)
+            gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_PromptWidget);
+
+        gx_widget_created_test(&bt_screen_info[i].m_ItemWidget, &exists);
+        if (exists)
+            gx_widget_delete ((GX_WIDGET*) &bt_screen_info[i].m_ItemWidget);
 	}
 }
 

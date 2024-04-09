@@ -22,7 +22,7 @@
 void CreateUserBluetoothWidgets (GX_VERTICAL_LIST *list);
 VOID UserBluetoothList_callback(GX_VERTICAL_LIST *list, GX_WIDGET *widget, INT index);
 void UpdateBTUserSelection (void);
-static void CleanUpWidgets (void);
+//static void CleanUpWidgets (void);
 
 //*************************************************************************************
 // Global and Local variables
@@ -51,7 +51,7 @@ static void InitializeUserBluetoothDeviceInformation(void)
 	{
 		if (g_BluetoothDeviceSettings[sourceArrayIndex].m_Status == BT_ENABLED)
 		{
-			g_BT_ScreenInfo[g_NumberOfPairedDevices].m_DeviceSettings = &g_BluetoothDeviceSettings[sourceArrayIndex];
+			g_BT_ScreenInfo[g_NumberOfPairedDevices].m_DeviceSettings = &(g_BluetoothDeviceSettings[sourceArrayIndex]);
 			++g_NumberOfPairedDevices;
 		}
 	}
@@ -81,20 +81,6 @@ void CreateUserBluetoothWidgets (GX_VERTICAL_LIST *list)
 		}
 	}
 	list->gx_vertical_list_total_rows = activeFeatureCount;
-}
-
-//*************************************************************************************
-static void CleanUpWidgets (void)
-{
-//    int i;
-//
-//    for (i = 0; i < MAX_BLUETOOTH_DEVICES + 1; ++i)
-//    {
-//      if (&g_BT_ScreenInfo[i].m_PixelPromptWidget != NULL)
-//          gx_widget_delete ((GX_WIDGET*) &g_BT_ScreenInfo[i].m_PixelPromptWidget);
-//      if (&g_BT_ScreenInfo[i].m_ItemWidget != NULL)
-//          gx_widget_delete ((GX_WIDGET*) &g_BT_ScreenInfo[i].m_ItemWidget);
-//    }
 }
 
 //*************************************************************************************
@@ -162,7 +148,7 @@ VOID UserBluetoothList_callback(GX_VERTICAL_LIST *list, GX_WIDGET *widget, INT i
 		// Create the Prompt that contains the String Description plus the Icon.
 		gx_utility_rectangle_define(&childsize, (GX_VALUE)(feature->m_ItemWidget.gx_widget_size.gx_rectangle_left + 2), 4, (GX_VALUE)(feature->m_ItemWidget.gx_widget_size.gx_rectangle_right - 24), (GX_VALUE)(feature->m_ItemWidget.gx_widget_size.gx_rectangle_bottom - 4));
 		gx_pixelmap_prompt_create (&feature->m_PixelPromptWidget, "PixelPrompt", &feature->m_ItemWidget, GX_ID_NONE, GX_ID_NONE,
-			/*GX_STYLE_BORDER_THIN | */GX_STYLE_ENABLED | GX_STYLE_TEXT_LEFT, (USHORT) (BUTTON_ID_BASE + index), &childsize);
+		        /*GX_STYLE_BORDER_THIN | */GX_STYLE_ENABLED | GX_STYLE_TEXT_LEFT, (USHORT) (BUTTON_ID_BASE + index), &childsize);
 
 		gx_prompt_font_set ((GX_PROMPT*) &feature->m_PixelPromptWidget, GX_FONT_ID_ASC24PT);
 		// Put the text into the button and into the screen structure.
@@ -173,11 +159,9 @@ VOID UserBluetoothList_callback(GX_VERTICAL_LIST *list, GX_WIDGET *widget, INT i
 		}
 		else
 		{
-			gx_prompt_text_id_set ((GX_PROMPT *) &feature->m_PixelPromptWidget, g_BluetoothDeviceSettings[index-1].m_DescriptionID);
+			gx_prompt_text_id_set ((GX_PROMPT *) &feature->m_PixelPromptWidget, g_BT_ScreenInfo[index].m_DeviceSettings->m_DescriptionID);
 			gx_pixelmap_prompt_pixelmap_set (&feature->m_PixelPromptWidget, GX_ID_NONE, GX_ID_NONE, g_BT_ScreenInfo[index].m_DeviceSettings->m_BT_Icon_Selected, GX_ID_NONE, GX_ID_NONE, GX_ID_NONE);
 		}
-		// Create and populate the icon
-		UpdateBTUserSelection();
 	}
 
 }
@@ -194,6 +178,16 @@ UINT ION_BT_UserSelectionScreen_event_handler (GX_WINDOW *window, GX_EVENT *even
 	switch (event_ptr->gx_event_type)
 	{
 	case GX_EVENT_SHOW:
+	    // Words of Wisdom:
+	    // Do not attempt to clean up the creation of widgets here.
+	    // It causes bad things to happen. I'm guessing that the GUIX library does NOT
+	    // actually perform 'deleting widgets' until the call at the end of this
+	    // event handler is executed. Thus, it really doesn't happen and it
+	    // does bad creation which are not captured.
+	    // If you need to clean up (delete) created widgets, do it as this
+	    // screen is being dismissed or toggled to a different screen.
+	    //BT_Screen_Widget_Cleanup(g_BT_ScreenInfo, MAX_BLUETOOTH_DEVICES);
+
 	    // This functions sets up the "container" for the widgets that make up the Bluetooth Device list for the user.
 		InitializeUserBluetoothDeviceInformation();
 		// Create the List and populate the items with Text, Color and Icons.
@@ -208,7 +202,7 @@ UINT ION_BT_UserSelectionScreen_event_handler (GX_WINDOW *window, GX_EVENT *even
 	case GX_SIGNAL (BT_SUBMENU_CHANGED_ID, GX_EVENT_CLICKED): // This event is triggered by a change in the Bluetooth SubIndex message from ION Hub
 	    if (g_BluetoothSubIndex == 0x00)        // "00" = Main Menu with Bluetooth feature selected.
 	    {
-	        CleanUpWidgets();
+//	        BT_Screen_Widget_Cleanup(g_BT_ScreenInfo, MAX_BLUETOOTH_DEVICES);
 	        screen_toggle((GX_WINDOW *)&MainUserScreen, window);
 	    }
         else if (g_BluetoothSubIndex == 0x01)   // Are we back at "BACK"?
@@ -219,7 +213,7 @@ UINT ION_BT_UserSelectionScreen_event_handler (GX_WINDOW *window, GX_EVENT *even
         }
 	    else if ((g_BluetoothSubIndex & 0x01) == 0x01)  // Are we trying to connect?
 	    {
-	        CleanUpWidgets();
+//	        BT_Screen_Widget_Cleanup(g_BT_ScreenInfo, MAX_BLUETOOTH_DEVICES);
 	        g_SelectedBluetoothDeviceIndex = (g_BluetoothSubIndex >> 4) - 1;  // The device is in the upper nibble and make 0-based
 	        screen_toggle((GX_WINDOW *)&ION_BT_ActiveScreen, window);
 	    }

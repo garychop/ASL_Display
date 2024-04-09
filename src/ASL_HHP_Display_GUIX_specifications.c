@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  6. 4.2024   Time (hh:mm): 10:39                        */
+/*  Date (dd.mm.yyyy):  9. 4.2024   Time (hh:mm): 11:17                        */
 /*******************************************************************************/
 
 
@@ -616,7 +616,7 @@ GX_VERTICAL_LIST_PROPERTIES ION_BT_UserSelectionScreen_BluetoothDeviceListBox_pr
     BluetoothList_callback,                  /* callback function              */
     20                                       /* total rows                     */
 };
-GX_SCROLLBAR_APPEARANCE  ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_properties =
+GX_SCROLLBAR_APPEARANCE  ION_BT_UserSelectionScreen_BT_User_List_vertical_scroll_properties =
 {
     18,                                      /* scroll width                   */
     12,                                      /* thumb width                    */
@@ -632,9 +632,9 @@ GX_SCROLLBAR_APPEARANCE  ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_
     GX_COLOR_ID_WINDOW_BORDER,               /* scroll button color            */
 };
 
-GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_define =
+GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_BT_User_List_vertical_scroll_define =
 {
-    "FeatureList_vertical_scroll",
+    "BT_User_List_vertical_scroll",
     GX_TYPE_VERTICAL_SCROLL,                 /* widget type                    */
     GX_ID_NONE,                              /* widget id                      */
     #if defined(GX_WIDGET_USER_DATA)
@@ -651,8 +651,8 @@ GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_FeatureList_vertical_scroll
     {287, 10, 304, 224},                     /* widget size                    */
     GX_NULL,                                 /* no next widget                 */
     GX_NULL,                                 /* no child widgets               */ 
-    offsetof(ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK, ION_BT_UserSelectionScreen_FeatureList_vertical_scroll), /* control block */
-    (void *) &ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_properties /* extended properties */
+    offsetof(ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK, ION_BT_UserSelectionScreen_BT_User_List_vertical_scroll), /* control block */
+    (void *) &ION_BT_UserSelectionScreen_BT_User_List_vertical_scroll_properties /* extended properties */
 };
 
 GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_BluetoothSubmenuChanged_Btn_define =
@@ -696,7 +696,7 @@ GX_CONST GX_STUDIO_WIDGET ION_BT_UserSelectionScreen_BluetoothDeviceListBox_defi
     GX_NULL,                                 /* event function override        */
     {20, 10, 304, 224},                      /* widget size                    */
     &ION_BT_UserSelectionScreen_BluetoothSubmenuChanged_Btn_define, /* next widget definition */
-    &ION_BT_UserSelectionScreen_FeatureList_vertical_scroll_define, /* child widget definition */
+    &ION_BT_UserSelectionScreen_BT_User_List_vertical_scroll_define, /* child widget definition */
     offsetof(ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK, ION_BT_UserSelectionScreen_BluetoothDeviceListBox), /* control block */
     (void *) &ION_BT_UserSelectionScreen_BluetoothDeviceListBox_properties /* extended properties */
 };

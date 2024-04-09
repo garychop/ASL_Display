@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  6. 4.2024   Time (hh:mm): 10:39                        */
+/*  Date (dd.mm.yyyy):  9. 4.2024   Time (hh:mm): 11:17                        */
 /*******************************************************************************/
 
 
@@ -334,7 +334,7 @@ typedef struct ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK_STRUCT
 {
     GX_WINDOW_MEMBERS_DECLARE
     GX_VERTICAL_LIST ION_BT_UserSelectionScreen_BluetoothDeviceListBox;
-    GX_SCROLLBAR ION_BT_UserSelectionScreen_FeatureList_vertical_scroll;
+    GX_SCROLLBAR ION_BT_UserSelectionScreen_BT_User_List_vertical_scroll;
     GX_BUTTON ION_BT_UserSelectionScreen_BluetoothSubmenuChanged_Btn;
 } ION_BT_USERSELECTIONSCREEN_CONTROL_BLOCK;
 

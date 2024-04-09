@@ -569,7 +569,7 @@ void sf_touch_panel_i2c_init0(void)
 }
 TX_SEMAPHORE g_my_gui_semaphore;
 TX_QUEUE g_GUI_to_COMM_queue;
-static uint8_t queue_memory_g_GUI_to_COMM_queue[512];
+static uint8_t queue_memory_g_GUI_to_COMM_queue[320];
 
 extern bool g_ssp_common_initialized;
 extern uint32_t g_ssp_common_thread_count;

@@ -10,6 +10,7 @@
 #include "ASL165_System.h"
 #include "custom_checkbox.h"
 #include "BluetoothDeviceInfo.h"
+#include "QueueDefinition.h"
 
 //*************************************************************************************
 // Macros
@@ -76,6 +77,10 @@ UINT ION_BT_Setup_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
 		screen_toggle((GX_WINDOW*)&ION_BT_DeviceSelectionScreen, window);
+	    // Send changed data to HUB
+	    //Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS bt_status);
+	    Send_Set_BT_DeviceDefinitions (g_SelectedBTDevice_ToProgram, g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type,
+	            g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Color, g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status);
 		break;
 
 	case GX_SIGNAL(TYPE_BTN_ID, GX_EVENT_CLICKED):

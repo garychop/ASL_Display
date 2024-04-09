@@ -1033,6 +1033,10 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
         case HHP_HA_BLUETOOTH_SETUP_SET_CMD:
             HA_Msg[0] = 0x07;     // msg length
             HA_Msg[1] = HHP_HA_BLUETOOTH_SETUP_SET_CMD;
+            HA_Msg[2] = GUI_Msg.Send_BT_DeviceDefinition.m_SlotNumber;
+            HA_Msg[3] = GUI_Msg.Send_BT_DeviceDefinition.m_DeviceIdenfication;
+            HA_Msg[4] = GUI_Msg.Send_BT_DeviceDefinition.m_Color;
+            HA_Msg[5] = GUI_Msg.Send_BT_DeviceDefinition.m_Status;
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
@@ -1041,7 +1045,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = Read_I2C_Package(HB_Response);
                 if (msgStatus == MSG_OK)
                 {
-                    ; // Process response
+                    ; // Process response and do what?!
                 }
             }
             break;
