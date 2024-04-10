@@ -1396,7 +1396,7 @@ void ProcessCommunicationMsgs ()
             break;
 
         case HHP_HA_BLUETOOTH_SETUP_GET_CMD:
-            //void BT_Process_HUB_DeviceDefintion (uint8_t slotNumber, BT_DEVICE_TYPE deviceType, BT_COLOR color, BT_STATUS bt_status)
+            //void BT_Process_HUB_DeviceDefintion (uint8_t slotNumber, BT_DEVICE_TYPE deviceType, BT_COLOR color, BT_STATUS_ENUM bt_status)
             BT_Process_HUB_DeviceDefintion (HeadArrayMsg.BT_DeviceDefinition.m_SlotNumber, HeadArrayMsg.BT_DeviceDefinition.m_DeviceIdenfication,
                                             HeadArrayMsg.BT_DeviceDefinition.m_Color, HeadArrayMsg.BT_DeviceDefinition.m_Status);
             break;

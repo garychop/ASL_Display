@@ -17,9 +17,6 @@
 // Local/Global variables
 //*************************************************************************************
 
-// The following is the Bluetooth Device information.
-//BLUETOOTH_DEVICE_DATA g_BluetoothDeviceSettings[MAX_BLUETOOTH_DEVICES];
-
 // The following hold the Bluetooth Data for the User Bluetooth Screen.
 BLUETOOTH_SCREEN_DATA g_BTDeviceSetup_ScreenInfo[MAX_BLUETOOTH_DEVICES];
 
@@ -103,7 +100,6 @@ void CreateBluetoothWidgets (GX_VERTICAL_LIST *list)
 
 UINT ION_BluetoothDeviceSelectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 {
-	//UINT myErr = 0;
 	int btnID;
 
 	ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK *BluetoothWindowPtr = (ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK*) window;
@@ -112,57 +108,40 @@ UINT ION_BluetoothDeviceSelectionScreen_event_process (GX_WINDOW *window, GX_EVE
 
 	switch (event_ptr->gx_event_type)
 	{
-	case GX_EVENT_SHOW:
-		Initialize_BT_SelectionScreenInfo(g_BTDeviceSetup_ScreenInfo);
-		BT_Screen_Widget_Cleanup (g_BTDeviceSetup_ScreenInfo, MAX_BLUETOOTH_DEVICES);
-		BluetoothWindowPtr->ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox.gx_vertical_list_child_count = 0;
+        case GX_EVENT_SHOW:
+            Initialize_BT_SelectionScreenInfo(g_BTDeviceSetup_ScreenInfo);
+            BT_Screen_Widget_Cleanup (g_BTDeviceSetup_ScreenInfo, MAX_BLUETOOTH_DEVICES);
+            BluetoothWindowPtr->ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox.gx_vertical_list_child_count = 0;
+            CreateBluetoothWidgets (&BluetoothWindowPtr->ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox);
+            break;
 
-		CreateBluetoothWidgets (&BluetoothWindowPtr->ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox);
-		break;
+        case GX_SIGNAL (BOTH_ARROW_BTN_ID, GX_EVENT_CLICKED):
+            PushWindow (window);
+            screen_toggle((GX_WINDOW *)&ION_MainProgrammingScreen, window);
+            break;
 
-	case GX_EVENT_PEN_DOWN:	// We are going to determine if the Up or Down arrow buttons have been held for a
-							// ... long time (2 seconds) and goto Programming if so.
+        case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
+            BT_Screen_Widget_Cleanup (g_BTDeviceSetup_ScreenInfo, MAX_BLUETOOTH_DEVICES);
+            BluetoothWindowPtr->ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox.gx_vertical_list_child_count = 0;
+            screen_toggle((GX_WINDOW *)&MainUserScreen, window);
+            break;
 
-//		if ((event_ptr->gx_event_target->gx_widget_name == "DownArrowButton") || (event_ptr->gx_event_target->gx_widget_name == "UpArrowButton"))
-//		{
-//			gx_system_timer_start(window, ARROW_PUSHED_TIMER_ID, 60, 0);
-//			g_ChangeScreen_WIP = FALSE;
-//		}
-		break;
-
-	case GX_EVENT_PEN_UP:
-		gx_system_timer_stop(window, ARROW_PUSHED_TIMER_ID);
-		break;
-
-    case GX_EVENT_TIMER:
-//        if (event_ptr->gx_event_payload.gx_event_timer_id == ARROW_PUSHED_TIMER_ID)
-//		{
-//			screen_toggle((GX_WINDOW *)&ION_MainProgrammingScreen, window);
-//		}
-		break;
-
-	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-		BT_Screen_Widget_Cleanup (g_BTDeviceSetup_ScreenInfo, MAX_BLUETOOTH_DEVICES);
-		BluetoothWindowPtr->ION_BT_DeviceSelectionScreen_BluetoothDeviceListBox.gx_vertical_list_child_count = 0;
-		screen_toggle((GX_WINDOW *)&MainUserScreen, window);
-		break;
-
-	case GX_SIGNAL (BT_SELECTED_BTN_ID, GX_EVENT_CLICKED):
-	case GX_SIGNAL (BT_SELECTED_BTN_ID+1, GX_EVENT_CLICKED):
-	case GX_SIGNAL (BT_SELECTED_BTN_ID+2, GX_EVENT_CLICKED):
-	case GX_SIGNAL (BT_SELECTED_BTN_ID+3, GX_EVENT_CLICKED):
-	case GX_SIGNAL (BT_SELECTED_BTN_ID+4, GX_EVENT_CLICKED):
-	case GX_SIGNAL (BT_SELECTED_BTN_ID+5, GX_EVENT_CLICKED):
-	case GX_SIGNAL (BT_SELECTED_BTN_ID+6, GX_EVENT_CLICKED):
-	case GX_SIGNAL (BT_SELECTED_BTN_ID+7, GX_EVENT_CLICKED):
-		btnID = (int)(event_ptr->gx_event_type) >> 8;	// This isolates the Button ID
-		g_SelectedBTDevice_ToProgram = (uint8_t) (btnID - BT_SELECTED_BTN_ID);
-		screen_toggle((GX_WINDOW *)&ION_BT_SetupScreen, window);
-		break;
+        case GX_SIGNAL (BT_SELECTED_BTN_ID, GX_EVENT_CLICKED):
+        case GX_SIGNAL (BT_SELECTED_BTN_ID+1, GX_EVENT_CLICKED):
+        case GX_SIGNAL (BT_SELECTED_BTN_ID+2, GX_EVENT_CLICKED):
+        case GX_SIGNAL (BT_SELECTED_BTN_ID+3, GX_EVENT_CLICKED):
+        case GX_SIGNAL (BT_SELECTED_BTN_ID+4, GX_EVENT_CLICKED):
+        case GX_SIGNAL (BT_SELECTED_BTN_ID+5, GX_EVENT_CLICKED):
+        case GX_SIGNAL (BT_SELECTED_BTN_ID+6, GX_EVENT_CLICKED):
+        case GX_SIGNAL (BT_SELECTED_BTN_ID+7, GX_EVENT_CLICKED):
+            btnID = (int)(event_ptr->gx_event_type) >> 8;	// This isolates the Button ID
+            g_SelectedBTDevice_ToProgram = (uint8_t) (btnID - BT_SELECTED_BTN_ID);
+            screen_toggle((GX_WINDOW *)&ION_BT_SetupScreen, window);
+            break;
 
 	} // end switch
 
-    /*myErr = */gx_window_event_process(window, event_ptr);
+    gx_window_event_process(window, event_ptr);
 
 	return 0;
 }

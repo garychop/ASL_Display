@@ -49,7 +49,7 @@ static void InitializeUserBluetoothDeviceInformation(void)
 	g_NumberOfPairedDevices = 1;	// First line is "BACK", start at Array Index "1"
 	for (sourceArrayIndex = 0; sourceArrayIndex < (MAX_BLUETOOTH_DEVICES - 1); ++sourceArrayIndex)	// "-1" cuz we don't want to show the BT Attendant
 	{
-		if (g_BluetoothDeviceSettings[sourceArrayIndex].m_Status == BT_ENABLED)
+		if (g_BluetoothDeviceSettings[sourceArrayIndex].m_Status == BT_PAIRED)
 		{
 			g_BT_ScreenInfo[g_NumberOfPairedDevices].m_DeviceSettings = &(g_BluetoothDeviceSettings[sourceArrayIndex]);
 			++g_NumberOfPairedDevices;
@@ -74,7 +74,7 @@ void CreateUserBluetoothWidgets (GX_VERTICAL_LIST *list)
 			UserBluetoothList_callback (list, (GX_WIDGET*) &g_BT_ScreenInfo[index], index);
 			++activeFeatureCount;
 		}
-		else if (g_BT_ScreenInfo[index].m_DeviceSettings->m_Status == BT_ENABLED)
+		else if (g_BT_ScreenInfo[index].m_DeviceSettings->m_Status == BT_PAIRED)
 		{
 			UserBluetoothList_callback (list, (GX_WIDGET*) &g_BT_ScreenInfo[index], index);
 			++activeFeatureCount;

@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  9. 4.2024   Time (hh:mm): 11:17                        */
+/*  Date (dd.mm.yyyy): 10. 4.2024   Time (hh:mm): 11:58                        */
 /*******************************************************************************/
 
 
@@ -47196,10 +47196,12 @@ GX_CONST GX_UBYTE main_display_BT_COLOR_English[] = "Bt Color";
 GX_CONST GX_UBYTE main_display_BT_PAIRING_English[] = "BT Pairing";
 GX_CONST GX_UBYTE main_display_STRING_3_English[] = "#1";
 GX_CONST GX_UBYTE main_display_SELECT_TYPE_AND_COLOR_English[] = "Select TYPE and COLOR then PAIR";
+GX_CONST GX_UBYTE main_display_BT_AVAILABLE_English[] = "<AVAILABLE>";
+GX_CONST GX_UBYTE main_display_SELECT_FEATURE_TO_CHANGE_English[] = "SELECT FEATURE TO CHANGE";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[135] =
+GX_CONST GX_UBYTE *main_display_English_string_table[137] =
 {
     GX_NULL,
     main_display_ACTIVATE_PAD_English,
@@ -47335,7 +47337,9 @@ GX_CONST GX_UBYTE *main_display_English_string_table[135] =
     main_display_BT_COLOR_English,
     main_display_BT_PAIRING_English,
     main_display_STRING_3_English,
-    main_display_SELECT_TYPE_AND_COLOR_English
+    main_display_SELECT_TYPE_AND_COLOR_English,
+    main_display_BT_AVAILABLE_English,
+    main_display_SELECT_FEATURE_TO_CHANGE_English
 
 };
 

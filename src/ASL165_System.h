@@ -107,6 +107,20 @@ typedef struct MAIN_SCREEN_FEATURE_STRUCT
     CUSTOM_CHECKBOX m_Checkbox;
 } MAIN_SCREEN_FEATURE;
 
+// This structure is used by each screen.
+typedef struct
+{
+    int m_Enabled;
+    GX_RESOURCE_ID m_LargeDescriptionID;
+    GX_WIDGET m_ItemWidget;
+    GX_PROMPT m_PromptWidget;
+    GX_TEXT_BUTTON m_ButtonWidget;
+    GX_MULTI_LINE_TEXT_BUTTON m_MultiLineButtonWidget;
+    CUSTOM_CHECKBOX m_Checkbox;
+} PROGRAMMING_SCREEN_INFO;
+
+extern void CleanupInfoStruct(PROGRAMMING_SCREEN_INFO* info, GX_VERTICAL_LIST* list, int depth);
+
 typedef struct PadInfoStruct
 {
     enum PAD_TYPE m_PadType;

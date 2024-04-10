@@ -52,23 +52,6 @@ UINT ION_BT_ActiveScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
         }
         break;
 
-//	case GX_EVENT_PEN_DOWN:
-//		if (event_ptr->gx_event_target->gx_widget_id == DRIVE_CONTROL_USERPORT_ID)
-//		{
-//			gx_system_timer_start(window, USER_PORT_TIMER_ID, g_TimeoutValue * 4, 0);	// "x4" seems to make the time real.
-//		}
-//		break;
-//
-//	case GX_EVENT_PEN_UP:
-//		gx_system_timer_stop(window, USER_PORT_TIMER_ID);
-//		if (g_ChangeScreen_WIP)
-//		{
-//			g_ChangeScreen_WIP = FALSE;
-//			break;
-//		}
-//		screen_toggle((GX_WINDOW *)&ION_BT_UserSelectionScreen, window);
-//		break;
-
 //    case GX_EVENT_TIMER:
 //		if (event_ptr->gx_event_payload.gx_event_timer_id == BT_CONNECTING_TIMER_ID)
 //		{

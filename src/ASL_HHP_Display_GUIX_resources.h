@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  9. 4.2024   Time (hh:mm): 11:17                        */
+/*  Date (dd.mm.yyyy): 10. 4.2024   Time (hh:mm): 11:58                        */
 /*******************************************************************************/
 
 
@@ -331,6 +331,8 @@
 #define GX_STRING_ID_BT_PAIRING 132
 #define GX_STRING_ID_STRING_3 133
 #define GX_STRING_ID_SELECT_TYPE_AND_COLOR 134
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 135
+#define GX_STRING_ID_BT_AVAILABLE 135
+#define GX_STRING_ID_SELECT_FEATURE_TO_CHANGE 136
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 137
 
 #endif                                       /* sentry                         */

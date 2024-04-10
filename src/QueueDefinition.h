@@ -123,7 +123,7 @@ typedef struct GUI_MSG_S
             uint8_t m_SlotNumber;   // Used in GET and SETcommand
             BT_DEVICE_TYPE m_DeviceIdenfication; // Used in SET command only
             BT_COLOR m_Color; // Used in SET command only
-            BT_STATUS m_Status; // Used in SET command only
+            BT_STATUS_ENUM m_Status; // Used in SET command only
         } Send_BT_DeviceDefinition;
         struct
         {
@@ -155,7 +155,7 @@ extern void SendAttendantSettingsGet_toHeadArray (void);
 extern void SendAttendantSettingsSet_toHeadArray (uint8_t attendantSettings, uint8_t attendantTimeout);
 extern void SendWhoAmiCommand (void);
 extern void Send_Get_BT_DeviceDefinitions (uint8_t slotNumber);
-extern void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS bt_status);
+extern void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -244,7 +244,7 @@ typedef struct HHP_HA_MSG_S
             uint8_t m_SlotNumber;   // Used in GET and SETcommand
             BT_DEVICE_TYPE m_DeviceIdenfication; // Used in SET command only
             BT_COLOR m_Color; // Used in SET command only
-            BT_STATUS m_Status; // Used in SET command only
+            BT_STATUS_ENUM m_Status; // Used in SET command only
         } BT_DeviceDefinition;
         struct
         {
@@ -261,7 +261,7 @@ extern void SendFeatureGet (uint8_t featureSet, uint8_t timeout, uint8_t feature
 extern void SendDriveOffsetGetResponse (uint8_t, uint8_t, uint8_t);
 extern void SendAttendantSettingsGet (uint8_t attendantSettings, uint8_t attendantTimeout);
 extern void SendWhoAmItoGUI (uint8_t whoami);
-extern void Send_Get_BT_DeviceDefinitions_Response (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS bt_status);
+extern void Send_Get_BT_DeviceDefinitions_Response (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
 
 // Helper functions
 extern PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad);

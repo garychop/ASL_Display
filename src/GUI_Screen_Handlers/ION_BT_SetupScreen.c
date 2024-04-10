@@ -44,17 +44,32 @@ static void Set_BT_Setup_ButtonInfo (ION_BT_SETUPSCREEN_CONTROL_BLOCK *window);
 
 static void Set_BT_Setup_ButtonInfo (ION_BT_SETUPSCREEN_CONTROL_BLOCK *window)
 {
+    ULONG style;
+
 	// Set Device Type Button
 	gx_text_button_text_id_set(&window->ION_BT_SetupScreen_BT_Type_Button, g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_DescriptionID);
 	// Set Color Button
 	window->ION_BT_SetupScreen_BT_Color_Button.gx_widget_normal_fill_color = g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_NormalFillColor;
 	window->ION_BT_SetupScreen_BT_Color_Button.gx_widget_selected_fill_color = g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_SelectedFillColor;
 	gx_text_button_text_set (&window->ION_BT_SetupScreen_BT_Color_Button, GetColorString(g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Color));
+
 	// Set the Pairing Button
-	if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status == BT_DISABLED)
-		gx_text_button_text_id_set ((GX_TEXT_BUTTON*) &window->ION_BT_SetupScreen_BT_Pairing_Button, GX_STRING_ID_BT_START_PAIR);
-//	else if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status == BT_PAIRED)
-//		gx_text_button_text_id_set ((GX_TEXT_BUTTON*) &window->ION_BT_SetupScreen_BT_Pairing_Button, GX_STRING_ID_BT_FORGET);
+    gx_widget_style_get(&window->ION_BT_SetupScreen_BT_Pairing_Button, &style);
+    if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type == BT_NOT_DEFINED)
+    {
+        // We're goig to disable the pairing button.
+        style &= ~GX_STYLE_ENABLED;
+    }
+    else
+    {
+        style |= GX_STYLE_ENABLED;
+    }
+    gx_widget_style_set(&window->ION_BT_SetupScreen_BT_Pairing_Button, style);
+
+    if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status == BT_CONFIGURED)
+        gx_text_button_text_id_set ((GX_TEXT_BUTTON*) &window->ION_BT_SetupScreen_BT_Pairing_Button, GX_STRING_ID_BT_START_PAIR);
+    else //if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status == BT_PAIRED)
+        gx_text_button_text_id_set ((GX_TEXT_BUTTON*) &window->ION_BT_SetupScreen_BT_Pairing_Button, GX_STRING_ID_BT_FORGET);
 }
 
 //*************************************************************************************
@@ -78,26 +93,33 @@ UINT ION_BT_Setup_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
 		screen_toggle((GX_WINDOW*)&ION_BT_DeviceSelectionScreen, window);
 	    // Send changed data to HUB
-	    //Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS bt_status);
+        if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type == BT_NOT_DEFINED)
+        {
+            BT_SetDeviceColor(g_SelectedBTDevice_ToProgram, BT_WHITE);
+            BT_SetDeviceStatus(g_SelectedBTDevice_ToProgram, BT_NOT_CONFIGURED);
+        }
 	    Send_Set_BT_DeviceDefinitions (g_SelectedBTDevice_ToProgram, g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type,
 	            g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Color, g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status);
 		break;
 
 	case GX_SIGNAL(TYPE_BTN_ID, GX_EVENT_CLICKED):
-		if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type != BT_ACU_TYPE)	// Don't change the BT ACU type.
-		{
-			// Set the next Bluetooth Device Type
-			++g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type;
-			if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type >= BT_ACU_TYPE)	// Don't allow ACU either
-				g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type = BT_MOUSE_TYPE;
-			// Set the Devices information.
-			BT_SetDeviceTypeInformation(g_SelectedBTDevice_ToProgram, g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type);
-			Set_BT_Setup_ButtonInfo(BT_SetupWindowPtr);
-		}
+        if (g_SelectedBTDevice_ToProgram != 7)
+        {
+            // Set the next Bluetooth Device Type
+            if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type == BT_NOT_DEFINED) // Rollover?
+                g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type = BT_MOUSE_TYPE;
+            else if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type == BT_GENERIC_TYPE_4) // Don't allow Bluetooth ACU to be selected.
+                g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type = BT_NOT_DEFINED;
+            else
+                ++g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type; // Advance to next TYPE
+            // Set the Devices information.
+            BT_SetDeviceTypeInformation(g_SelectedBTDevice_ToProgram, g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type);
+            Set_BT_Setup_ButtonInfo(BT_SetupWindowPtr);
+        }
 		break;
 
 	case GX_SIGNAL (COLOR_BTN_ID, GX_EVENT_CLICKED):
-		if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Type != BT_ACU_TYPE)	// Don't change the BT ACU type.
+        if (g_SelectedBTDevice_ToProgram != 7)
 		{
 			// Set to the next color
 			++g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_BT_Color;
@@ -110,11 +132,11 @@ UINT ION_BT_Setup_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 		break;
 
 	case GX_SIGNAL (BT_PAIRING_BTN_ID, GX_EVENT_CLICKED):
-		if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status == BT_DISABLED)
-		{
-		    g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status = BT_ENABLED;
+//		if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status == BT_CONFIGURED)
+//		{
+		    g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status = BT_PAIRED;
 
-		}
+//		}
 // Chop add this code back in
 //			g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status = BT_PAIRING_WIP;
 //			// Switch to Pairing Screen.
@@ -122,11 +144,11 @@ UINT ION_BT_Setup_Screen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 //		}
 //		else if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status == BT_ENABLED)
 //		{
-//			g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status = BT_DISABLED;
+//			g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status = BT_NOT_CONFIGURED;
 //		}
 //		else if (g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status == BT_PAIRED)
 //		{
-//			g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status = BT_DISABLED;
+//			g_BluetoothDeviceSettings[g_SelectedBTDevice_ToProgram].m_Status = BT_NOT_CONFIGURED;
 //		}
 		Set_BT_Setup_ButtonInfo (BT_SetupWindowPtr);
 		break;
