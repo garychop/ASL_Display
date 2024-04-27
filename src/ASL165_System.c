@@ -44,7 +44,7 @@ int16_t g_NeutralDAC_Range = 400;
 bool g_WaitingForVeerResponse = false;
 
 // Added in Version 1.9.x
-uint8_t g_AttendantSettings;    // D0 = 1 = Attendant Active, D1 = 0 = Proportional, D2 = 0 = Override
+uint8_t g_AttendantSettings = 0x00;    // D0 = 1 = Attendant Active, D1 = 0 = Proportional, D2 = 0 = Override
 uint8_t g_AttendantTimeout;     // 0=127 seconds, 0 = No Timeout
 
 WHOAMI_ENUM g_WhoAmi = I_AM_FUSION;

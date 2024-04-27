@@ -42,8 +42,6 @@ typedef struct myColorS
     };
 } RGB16_Struct;
 
-
-// The following hold the Digital (non0) vs Proportional (0) setting for each pad.
 typedef enum {DRIVE_FEATURE_ID, POWER_ONOFF_ID, SWITCH_DRV_CTRL_FEATURE_ID, BLUETOOTH_FEATURE_ID, NEXT_FUNCTION_OR_TOGGLE_ID, NEXT_PROFILE_OR_USER_MENU_ID, RNET_SEATING_ID, RNET_SLEEP_FEATURE_ID, NUM_FEATURES} FEATURE_ID_ENUM; // "invalid" must be last enum
 typedef enum {INVALID_FEATURE_HB_ID,
     POWERONOFF_FEATURE_HB_ID = 1,

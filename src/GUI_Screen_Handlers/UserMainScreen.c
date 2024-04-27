@@ -143,7 +143,7 @@ void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode)
         g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Available = false;
     }
 
-    if (newMode >= NUM_FEATURES)    // Check for valid mode
+    if (newMode > NUM_FEATURES)    // Check for valid mode
         return;
 
     g_ActiveFeature = newMode;          // Store the active feature in global var.

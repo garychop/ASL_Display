@@ -1100,7 +1100,6 @@ void ProcessCommunicationMsgs ()
                 g_PadSettings[RIGHT_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 2) & 0x03; // store only d2 and d3
                 g_PadSettings[LEFT_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 4) & 0x03; // store only d4 and d5
                 g_PadSettings[REVERSE_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 6) & 0x03; // store only D6 and D7
-                g_ActiveDriverControl = HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl;
 
                 if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
                 {
@@ -1145,6 +1144,16 @@ void ProcessCommunicationMsgs ()
                         else if (g_PadSensorStatus != HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus)
                         {
                             g_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus;
+                            gxe.gx_event_type = GX_EVENT_REDRAW;
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
+                        // Determine if the Driver Control has changed. If so, redraw the User Main Screen.
+                        else if (g_ActiveDriverControl != HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl)
+                        {
+                            g_ActiveDriverControl = HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl;
                             gxe.gx_event_type = GX_EVENT_REDRAW;
                             gxe.gx_event_sender = GX_ID_NONE;
                             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
