@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 10. 4.2024   Time (hh:mm): 11:58                        */
+/*  Date (dd.mm.yyyy): 27. 4.2024   Time (hh:mm): 07:43                        */
 /*******************************************************************************/
 
 
@@ -161,6 +161,7 @@ extern   "C" {
 #define Fifth_ICON 137
 #define FIFTH_PROMPT 138
 #define ATTENDANT_BTN_ID 139
+#define SIP_N_PUFF_ICON 140
 
 
 /* Define animation ids                                                        */
@@ -633,6 +634,12 @@ typedef struct MAINUSERSCREEN_CONTROL_BLOCK_STRUCT
     GX_ICON MainUserScreen_HAStatus_LeftPad_White;
     GX_ICON MainUserScreen_HAStatus_RightPad_Orange;
     GX_ICON MainUserScreen_HAStatus_RightPad_White;
+    GX_ICON MainUserScreen_SipNPuff_Icon;
+    GX_ICON MainUserScreen_DriverStatus;
+    GX_ICON MainUserScreen_DriverControl_FWD_Green;
+    GX_ICON MainUserScreen_DriverControl_LEFT_Green;
+    GX_ICON MainUserScreen_DriverControl_RIGHT_Green;
+    GX_ICON MainUserScreen_DriverControl_REV_Green;
 } MAINUSERSCREEN_CONTROL_BLOCK;
 
 

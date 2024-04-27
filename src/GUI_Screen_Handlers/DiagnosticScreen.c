@@ -92,12 +92,12 @@ UINT DiagnosticScreen_event_handler(GX_WINDOW *window, GX_EVENT *event_ptr)
                 else
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pads].m_DiagnosticOff_Widget, &g_HiddenRectangle);
             }
-            SendGetDataCommand (START_SENDING_DATA, INVALID_PAD);
+            SendGetDataCommand (START_SENDING_DATA, END_OF_PAD_ENUM);
             break;
 
         case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
                 screen_toggle((GX_WINDOW *)&MoreSelectionScreen, window);
-            SendGetDataCommand (STOP_SENDING_DATA, INVALID_PAD);
+            SendGetDataCommand (STOP_SENDING_DATA, END_OF_PAD_ENUM);
             break;
 
     } // end switch

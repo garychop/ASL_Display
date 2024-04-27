@@ -18,15 +18,17 @@
 // Forward Declarations
 //*************************************************************************************
 
-void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad);
-UINT DisplayMainScreenActiveFeatures ();
+void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad, PAD_STATUS_COLORS reverse_pad);
+void HideHeadArrayStatusIcons (void);
+void HideDriverControlStatusIcons(void);
+UINT DisplayMainScreenActiveFeatures (void);
 
 //*************************************************************************************
 // This function initializes the information used to display the information on
 // the main user screen.
 //*************************************************************************************
 
-VOID Initialize_MainScreenInfo()
+VOID Initialize_MainScreenInfo(void)
 {
     // Populate the screen stuff.
     // "DRIVE" information and description
@@ -51,6 +53,17 @@ VOID Initialize_MainScreenInfo()
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_SmallDescriptionID = GX_STRING_ID_POWER_ONOFF;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_SmallIcon = GX_PIXELMAP_ID_POWERICON_30X30_ORANGE;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_LargeIcon = GX_PIXELMAP_ID_POWERICON_LARGE_ORANGE;
+
+    // Switch Driver Control, SWITCH_DRV_CTRL_FEATURE_ID
+    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_HB_ID = SWITCH_DRIVER_FEATURE_HB_ID;
+    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_Enabled = true;
+    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_Available = true;
+    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_Location = 2;
+    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_LargeDescriptionID = GX_STRING_ID_SWITCH_DRV_CTRL;
+    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_SmallDescriptionID = GX_STRING_ID_SWITCH_DRV_CTRL;
+    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_SWITCHDRIVE_30X30_GRAY;
+    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_LargeIcon = GX_PIXELMAP_ID_SWITCHDRIVE_70X70_GRAY;
+    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_FontColorID = GX_COLOR_ID_WHITE;
 
     // "Bluetooth" information and description
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_HB_ID = BLUETOOTH_FEATURE_HB_ID;
@@ -166,8 +179,10 @@ void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode)
 //*************************************************************************************
 // Displays the Pad Status based upon the passed parameters
 //*************************************************************************************
-void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad)
+void HideHeadArrayStatusIcons (void)
 {
+    // first hide all of the Green, Orange and White icons, we'll turn on the appropriate
+    // icon later in this function.
     gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
     gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
     gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
@@ -177,65 +192,120 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
     gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
     gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
     gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
+}
 
-    switch (center_pad)
+//*************************************************************************************
+void HideDriverControlStatusIcons(void)
+{
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverControl_FWD_Green);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverControl_LEFT_Green);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverControl_RIGHT_Green);
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverControl_REV_Green);
+}
+
+//*************************************************************************************
+// Displays the Pad Status based upon the passed parameters
+//*************************************************************************************
+void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad, PAD_STATUS_COLORS reverse_pad)
+{
+    // Show or Hide the Sip-N-Puff icon
+    if (g_ActiveDriverControl == SIP_N_PUFF_DEVICE_IDX)
     {
-    case PAD_OFF:
-        break;
-    case PAD_GREEN:     // Only the Proximity Sensor is active.
-        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
-        break;
-    case PAD_ORANGE:    // Only paint orange if its set to Proportional and both
-                        // .. the Proximity, Digital sensor and the Pressure
-                        // .. sensor are active.
-        if (g_PadSettings[CENTER_PAD].m_PadType == DIGITAL_PADTYPE)
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_SipNPuff_Icon);
+        gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_SipNPuff_Icon, GX_PIXELMAP_ID_SIPNPUFF, GX_PIXELMAP_ID_SIPNPUFF);
+    }
+//    else if (gp_ActiveDriverControl->m_DriverConfiguration == SNP_HEAD_ARRAY_DEVICE_IDX)
+//    {
+//        gx_widget_show((GX_WIDGET*)&MainUserScreen.MainUserScreen_SipNPuff_Icon);
+//        gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_SipNPuff_Icon, GX_PIXELMAP_ID_SIPNPUFF_HEADARRAY, GX_PIXELMAP_ID_SIPNPUFF_HEADARRAY);
+//    }
+    else
+    {
+        gx_widget_hide((GX_WIDGET*)&MainUserScreen.MainUserScreen_SipNPuff_Icon);
+    }
+
+    // Show the Active Pads.
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverStatus);  // Hide the 4-quadrant icon.
+    HideDriverControlStatusIcons();
+    gx_widget_hide ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HA_Status);
+    HideHeadArrayStatusIcons();
+
+    if (g_ShowPadsOnMainScreen == false)    // We are NOT showing the pad status.
+    {
+        return;
+    }
+
+    if (g_ActiveDriverControl == HEAD_ARRY_DEVICE_IDX)
+    //if (gp_ActiveDriverControl->m_DriverQuadrantSetting == DRIVER_3_QUADRANT)
+    {
+        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HA_Status);
+
+        switch (center_pad)
+        {
+        case PAD_OFF:
+            break;
+        case PAD_GREEN:
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Green);
-        else
+            break;
+        case PAD_ORANGE:
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_Orange);
-        break;
-    case PAD_WHITE: // If it's only the Pressure Sensor, then paint White only
-                    // .. if the PAD TYPE is set to Proportional
-        if (g_PadSettings[CENTER_PAD].m_PadType == PROPORTIONAL_PADTYPE)
+            break;
+        case PAD_WHITE:
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_CenterPad_White);
-        break;
-    }
+            break;
+        }
 
-    switch (left_pad)
-    {
-    case PAD_OFF:
-        break;
-    case PAD_GREEN:
-        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
-        break;
-    case PAD_ORANGE:    // Only paint orange if its set to Proportional
-        if (g_PadSettings[LEFT_PAD].m_PadType == DIGITAL_PADTYPE)
+        switch (left_pad)
+        {
+        case PAD_OFF:
+            break;
+        case PAD_GREEN:
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Green);
-        else
+            break;
+        case PAD_ORANGE:
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_Orange);
-        break;
-    case PAD_WHITE:
-        if (g_PadSettings[LEFT_PAD].m_PadType == PROPORTIONAL_PADTYPE)
+            break;
+        case PAD_WHITE:
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_LeftPad_White);
-        break;
-    }
+            break;
+        }
 
-    switch (right_pad)
-    {
-    case PAD_OFF:
-        break;
-    case PAD_GREEN:
-        gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
-        break;
-    case PAD_ORANGE:    // Only paint orange if its set to Proportional
-        if (g_PadSettings[RIGHT_PAD].m_PadType == DIGITAL_PADTYPE)
+        switch (right_pad)
+        {
+        case PAD_OFF:
+            break;
+        case PAD_GREEN:
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Green);
-        else
+            break;
+        case PAD_ORANGE:
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_Orange);
-        break;
-    case PAD_WHITE:
-        if (g_PadSettings[RIGHT_PAD].m_PadType == PROPORTIONAL_PADTYPE)
+            break;
+        case PAD_WHITE:
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HAStatus_RightPad_White);
-        break;
+            break;
+        }
+    } // end of if 3quadrant
+    else // Must be 4 quadrant OR Sip-N-Puff
+    {
+        //if (gp_ActiveDriverControl->m_DriverQuadrantSetting == DRIVER_4_QUADRANT)
+        {
+            gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_DriverStatus, GX_PIXELMAP_ID_MAINSCREEN_4QUADRANTSTATUS, GX_PIXELMAP_ID_MAINSCREEN_4QUADRANTSTATUS);
+        }
+        //else
+        //{
+        //    gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_DriverStatus, GX_PIXELMAP_ID_MAINSCREEN_2QUADRANTSTATUS, GX_PIXELMAP_ID_MAINSCREEN_2QUADRANTSTATUS);
+        //}
+        gx_widget_show((GX_WIDGET*)&MainUserScreen.MainUserScreen_DriverStatus);    // show the 4-quadrant icon.
+
+
+        if (center_pad == PAD_GREEN)
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverControl_FWD_Green);
+        if (left_pad == PAD_GREEN)
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverControl_LEFT_Green);
+        if (right_pad == PAD_GREEN)
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverControl_RIGHT_Green);
+        if (reverse_pad == PAD_GREEN)
+            gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverControl_REV_Green);
     }
 }
 
@@ -377,7 +447,7 @@ UINT DisplayMainScreenActiveFeatures ()
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HA_Status);
 
         // Display the Pad Status based upon info from the ASL110 Heartbeat message
-        DisplayPadStatus (g_PadSettings[CENTER_PAD].m_PadSensorStatus, g_PadSettings[RIGHT_PAD].m_PadSensorStatus, g_PadSettings[LEFT_PAD].m_PadSensorStatus);
+        DisplayPadStatus (g_PadSettings[CENTER_PAD].m_PadSensorStatus, g_PadSettings[RIGHT_PAD].m_PadSensorStatus, g_PadSettings[LEFT_PAD].m_PadSensorStatus, g_PadSettings[REVERSE_PAD].m_PadSensorStatus);
     }
     else
     {

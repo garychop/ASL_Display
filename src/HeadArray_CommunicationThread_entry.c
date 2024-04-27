@@ -67,7 +67,7 @@ uint8_t SendAttendantData (void);
 uint8_t g_HeartBeatCounter = 0;
 uint8_t g_GetAllPadData = false;
 uint8_t g_GetDataActive = 0;
-PHYSICAL_PAD_ENUM g_ActivePadID = INVALID_PAD;
+PHYSICAL_PAD_ENUM g_ActivePadID = END_OF_PAD_ENUM;
 // The following are used with then Attendant Screen is active.
 uint8_t g_AttendantActive = 0;
 int8_t g_AttendantSpeedDemand = 0;
@@ -420,6 +420,7 @@ uint8_t ExecuteHeartBeat(void)
         HB_Response[4] = 0; // Since this is older ASL110 firmware, clear the Sensor Status since it's garbage and causing excessive delays.
     HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus = HB_Response[4];   // Transfer the Sensor Status's.
     HeadArrayMsg.HeartBeatMsg.m_SubIndex = HB_Response[5];          // Transfer the Sub-Index
+    HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl = HB_Response[6]; // Active Driver Control enum
 
     HeadArrayMsg.m_MsgType = HHP_HA_HEART_BEAT;
     if (msgStatus == MSG_OK)
@@ -513,7 +514,7 @@ uint8_t GetPadData(void)
     if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad.
     {
         ++g_ActivePadID;
-        if (g_ActivePadID == INVALID_PAD)
+        if (g_ActivePadID == END_OF_PAD_ENUM)
             g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;  // Roll over beethoven.
     }
 
@@ -658,7 +659,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
         case HHP_HA_PAD_DATA_GET:
             g_ActivePadID = GUI_Msg.GetDataMsg.m_PadID;     // Start with the Left Pad
             g_GetDataActive = GUI_Msg.GetDataMsg.m_Start;   // non0 = Start getting data, 0 = Stop getting data.
-            if (g_ActivePadID == INVALID_PAD)               // If INVALID_PAD, then we are doing diagnostics and we want to get data from all of the pads.
+            if (g_ActivePadID == END_OF_PAD_ENUM)               // If INVALID_PAD, then we are doing diagnostics and we want to get data from all of the pads.
             {
                 g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;
                 g_GetAllPadData = true;
@@ -1098,6 +1099,8 @@ void ProcessCommunicationMsgs ()
                 g_PadSettings[CENTER_PAD].m_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus & 0x03;     // Only store D0 and D1
                 g_PadSettings[RIGHT_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 2) & 0x03; // store only d2 and d3
                 g_PadSettings[LEFT_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 4) & 0x03; // store only d4 and d5
+                g_PadSettings[REVERSE_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 6) & 0x03; // store only D6 and D7
+                g_ActiveDriverControl = HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl;
 
                 if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
                 {
@@ -1269,7 +1272,7 @@ void ProcessCommunicationMsgs ()
 
         case HHP_HA_PAD_ASSIGMENT_GET:  // Yes, the COMM task is responding with a "set" command.
             myPad = HeadArrayMsg.PadAssignmentResponseMsg.m_PhysicalPadNumber;
-            if (myPad != INVALID_PAD)
+            if (myPad != END_OF_PAD_ENUM)
             {
                 g_PadSettings[myPad].m_PadDirection = HeadArrayMsg.PadAssignmentResponseMsg.m_LogicalDirection;
                 g_PadSettings[myPad].m_PadType = HeadArrayMsg.PadAssignmentResponseMsg.m_PadType;
@@ -1299,7 +1302,7 @@ void ProcessCommunicationMsgs ()
 
         case HHP_HA_PAD_DATA_GET:
             myPad = HeadArrayMsg.GetDataMsg.m_PadID;        // Get Physical Pad ID
-            if (myPad < INVALID_PAD)
+            if (myPad < END_OF_PAD_ENUM)
             {
                 g_PadSettings[myPad].m_Proportional_RawValue = HeadArrayMsg.GetDataMsg.m_RawData;
                 g_PadSettings[myPad].m_Proportional_DriveDemand = HeadArrayMsg.GetDataMsg.m_DriveDemand;
@@ -1314,7 +1317,7 @@ void ProcessCommunicationMsgs ()
 
         case HHP_HA_CALIBRATE_RANGE_GET:
             myPad = HeadArrayMsg.GetDataMsg.m_PadID;        // Get Physical Pad ID
-            if (myPad < INVALID_PAD)
+            if (myPad < END_OF_PAD_ENUM)
             {
                 g_PadSettings[myPad].m_Minimum_ADC_Threshold = HeadArrayMsg.CalibrationDataResponse.m_MinADC;
                 g_PadSettings[myPad].m_Maximum_ADC_Threshold = HeadArrayMsg.CalibrationDataResponse.m_MaxADC;
@@ -1463,7 +1466,7 @@ void HeadArray_CommunicationThread_entry(void)
                 // Determine next pad data to get.
                 if (g_GetAllPadData)    // If the GUI requested All Pads, then advance to the next pad, Diagnostics vs Calibration
                 {
-                    if (g_ActivePadID >= INVALID_PAD)
+                    if (g_ActivePadID >= END_OF_PAD_ENUM)
                     {
                         g_ActivePadID = (PHYSICAL_PAD_ENUM) 0;  // Roll over beethoven.
                     }

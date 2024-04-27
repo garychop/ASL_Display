@@ -40,7 +40,7 @@
 
 PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad)
 {
-    PHYSICAL_PAD_ENUM myPad = INVALID_PAD;
+    PHYSICAL_PAD_ENUM myPad = END_OF_PAD_ENUM;
 
     switch (pad)
     {
@@ -72,7 +72,10 @@ char TranslatePad_EnumToChar (PHYSICAL_PAD_ENUM pad)
         case CENTER_PAD:
             myPad = 'C';
             break;
-        case INVALID_PAD:
+        case REVERSE_PAD:
+            myPad = 'B';
+            break;
+        case END_OF_PAD_ENUM:
         default:
             myPad = '?';
             break;
@@ -98,9 +101,9 @@ PAD_DIRECTION_ENUM TranslatePadDirection_CharToEnum (char padDirection)
         case 'F':
             myDir = FORWARD_DIRECTION;
             break;
-//        case 'B':
-//            myDir = REVERSE_DIRECTION;
-//            break;
+        case 'B':
+            myDir = REVERSE_DIRECTION;
+            break;
         case 'O':
             myDir = OFF_DIRECTION;
             break;
@@ -236,7 +239,7 @@ void SendGetDataCommand (uint8_t start, PHYSICAL_PAD_ENUM pad)
 
     msg.m_MsgType = HHP_HA_PAD_DATA_GET;
     msg.GetDataMsg.m_Start = start;   // non0 = Start getting data, 0 = Stop getting data.
-    msg.GetDataMsg.m_PadID = pad;             // specific pad or INVALID_PAD for "all".
+    msg.GetDataMsg.m_PadID = pad;             // specific pad or END_OF_PAD_ENUM for "all".
 
     tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }

@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 10. 4.2024   Time (hh:mm): 11:58                        */
+/*  Date (dd.mm.yyyy): 27. 4.2024   Time (hh:mm): 07:43                        */
 /*******************************************************************************/
 
 
@@ -3283,7 +3283,7 @@ GX_PIXELMAP_BUTTON_PROPERTIES DiagnosticScreen_CenterPadDigital_Button_propertie
 };
 GX_PROMPT_PROPERTIES DiagnosticScreen_InstructionsText_properties =
 {
-    GX_STRING_ID_ACTIVATE_PAD,               /* string id                      */
+    GX_STRING_ID_SWITCH_DRV_CTRL,            /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
     GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
     GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
@@ -5720,6 +5720,36 @@ GX_ICON_PROPERTIES MainUserScreen_HAStatus_RightPad_White_properties =
     GX_PIXELMAP_ID_HEADARRAY_STATUS_SIDEPAD_WHITE, /* normal pixelmap id       */
     0                                        /* selected pixelmap id           */
 };
+GX_ICON_PROPERTIES MainUserScreen_SipNPuff_Icon_properties =
+{
+    GX_PIXELMAP_ID_SIPNPUFF,                 /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_DriverStatus_properties =
+{
+    GX_PIXELMAP_ID_MAINSCREEN_4QUADRANTSTATUS, /* normal pixelmap id           */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_DriverControl_FWD_Green_properties =
+{
+    GX_PIXELMAP_ID_MAINSCREEN_4Q_DIGITALSTATUS, /* normal pixelmap id          */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_DriverControl_LEFT_Green_properties =
+{
+    GX_PIXELMAP_ID_MAINSCREEN_4Q_DIGITALSTATUS, /* normal pixelmap id          */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_DriverControl_RIGHT_Green_properties =
+{
+    GX_PIXELMAP_ID_MAINSCREEN_4Q_DIGITALSTATUS, /* normal pixelmap id          */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES MainUserScreen_DriverControl_REV_Green_properties =
+{
+    GX_PIXELMAP_ID_MAINSCREEN_4Q_DIGITALSTATUS, /* normal pixelmap id          */
+    0                                        /* selected pixelmap id           */
+};
 
 GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_RightPad_White_define =
 {
@@ -5928,6 +5958,144 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_HAStatus_LeftPad_Green_define =
     (void *) &MainUserScreen_HAStatus_LeftPad_Green_properties /* extended properties */
 };
 
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_DriverControl_REV_Green_define =
+{
+    "DriverControl_REV_Green",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {274, 215, 283, 224},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_DriverControl_REV_Green), /* control block */
+    (void *) &MainUserScreen_DriverControl_REV_Green_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_DriverControl_RIGHT_Green_define =
+{
+    "DriverControl_RIGHT_Green",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {284, 209, 293, 218},                    /* widget size                    */
+    &MainUserScreen_DriverControl_REV_Green_define, /* next widget definition  */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_DriverControl_RIGHT_Green), /* control block */
+    (void *) &MainUserScreen_DriverControl_RIGHT_Green_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_DriverControl_LEFT_Green_define =
+{
+    "DriverControl_LEFT_Green",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {262, 209, 271, 218},                    /* widget size                    */
+    &MainUserScreen_DriverControl_RIGHT_Green_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_DriverControl_LEFT_Green), /* control block */
+    (void *) &MainUserScreen_DriverControl_LEFT_Green_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_DriverControl_FWD_Green_define =
+{
+    "DriverControl_FWD_Green",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {274, 203, 283, 212},                    /* widget size                    */
+    &MainUserScreen_DriverControl_LEFT_Green_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_DriverControl_FWD_Green), /* control block */
+    (void *) &MainUserScreen_DriverControl_FWD_Green_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_DriverStatus_define =
+{
+    "DriverStatus",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {262, 202, 294, 226},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    &MainUserScreen_DriverControl_FWD_Green_define, /* child widget definition */
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_DriverStatus), /* control block */
+    (void *) &MainUserScreen_DriverStatus_properties /* extended properties    */
+};
+
+GX_CONST GX_STUDIO_WIDGET MainUserScreen_SipNPuff_Icon_define =
+{
+    "SipNPuff_Icon",
+    GX_TYPE_ICON,                            /* widget type                    */
+    SIP_N_PUFF_ICON,                         /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {257, 154, 301, 193},                    /* widget size                    */
+    &MainUserScreen_DriverStatus_define,     /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_SipNPuff_Icon), /* control block */
+    (void *) &MainUserScreen_SipNPuff_Icon_properties /* extended properties   */
+};
+
 GX_CONST GX_STUDIO_WIDGET MainUserScreen_HA_Status_define =
 {
     "HA_Status",
@@ -5945,7 +6113,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_HA_Status_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {262, 202, 294, 226},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &MainUserScreen_SipNPuff_Icon_define,    /* next widget definition         */
     &MainUserScreen_HAStatus_LeftPad_Green_define, /* child widget definition  */
     offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_HA_Status), /* control block */
     (void *) &MainUserScreen_HA_Status_properties /* extended properties       */
@@ -5967,7 +6135,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_Attendant_Button_define =
     gx_studio_icon_button_create,            /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {236, 110, 315, 189},                    /* widget size                    */
+    {236, 73, 315, 152},                     /* widget size                    */
     &MainUserScreen_HA_Status_define,        /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(MAINUSERSCREEN_CONTROL_BLOCK, MainUserScreen_Attendant_Button), /* control block */

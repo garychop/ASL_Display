@@ -20,10 +20,6 @@
 // Typedefs
 //*************************************************************************
 
-//typedef enum PHYSICAL_PAD {LEFT_PAD, RIGHT_PAD, CENTER_PAD, INVALID_PAD} PHYSICAL_PAD_ENUM;
-//typedef enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, INVALID_DIRECTION} PAD_DIRECTION_ENUM;
-//typedef enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE, INVALID_PAD_TYPE} PAD_TYPE_ENUM;
-////typedef enum FEATURE_ID {POWER_ONOFF_ID, BLUETOOTH_ID, NEXT_FUNCTION_OR_TOGGLE_ID, NEXT_PROFILE_OR_USER_MENU_ID, RNET_ID, NUM_FEATURES} FEATURE_ID_ENUM; // "invalid" must be last enum
 typedef enum SEND_DATA_BOOL {STOP_SENDING_DATA = 0, START_SENDING_DATA} SEND_DATA_ENUM;
 
 typedef enum HHP_HA_MESSAGES_E
@@ -180,6 +176,7 @@ typedef struct HHP_HA_MSG_S
                                         // Bit4 = Left Pad Proximity Sensor Active
                                         // Bit5 = Left Pad Pressure Sensor Active
             uint8_t m_SubIndex;     // Used to clarify / Expand Active Mode.
+            DEVICE_NUMBER_ENUM m_ActiveDriverControl;
         } HeartBeatMsg;
         struct          // Supports the HHP_HA_PAD_ASSIGMENT_GET_RESPONSE message from the Head Array
         {
