@@ -46,13 +46,13 @@ void InitializeBluetoothDeviceInformation(void)
 	BT_SetDeviceColor (0, BT_GREEN);
 	BT_SetDeviceStatus (0, BT_PAIRED);
 
-	BT_SetDeviceTypeInformation (1, BT_LEGACY_TYPE);
+	BT_SetDeviceTypeInformation (1, BT_3_SWITCH_TYPE);
 	BT_SetDeviceColor (1, BT_BLUE);
 	BT_SetDeviceStatus (1, BT_PAIRED);
 
-	BT_SetDeviceTypeInformation (2, BT_FEEDER_TYPE);
-	BT_SetDeviceColor (2, BT_YELLOW);
-	BT_SetDeviceStatus (2, BT_PAIRED);
+	BT_SetDeviceTypeInformation (2, BT_NOT_DEFINED);
+	BT_SetDeviceColor (2, BT_WHITE);
+	BT_SetDeviceStatus (2, BT_NOT_CONFIGURED);
 
 	BT_SetDeviceTypeInformation (3, BT_NOT_DEFINED);
 	BT_SetDeviceColor (3, BT_WHITE);
