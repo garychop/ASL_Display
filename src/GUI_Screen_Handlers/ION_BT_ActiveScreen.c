@@ -46,9 +46,13 @@ UINT ION_BT_ActiveScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
 		break;
 
     case GX_SIGNAL (BT_SUBMENU_CHANGED_ID, GX_EVENT_CLICKED): // This event is triggered by a change in the Bluetooth SubIndex message from ION Hub
-        if ((g_BluetoothSubIndex & 0x01) == 0x00)  // Did we stop processing the Device?
+        if ((g_BluetoothSubIndex & 0x01) == 0x01)  // Did we stop processing the Device?
         {
             screen_toggle((GX_WINDOW *)&ION_BT_UserSelectionScreen, window);
+        }
+        else if ((g_BluetoothSubIndex & 0x02) == 0x02)
+        {
+            gx_prompt_text_id_set ((GX_PROMPT*) &windowPtr->ION_BT_ActiveScreen_ActiveStatusPrompt, GX_STRING_ID_OK_TO_USE);
         }
         break;
 
