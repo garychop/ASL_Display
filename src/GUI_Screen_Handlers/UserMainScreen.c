@@ -22,6 +22,9 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
 void HideHeadArrayStatusIcons (void);
 void HideDriverControlStatusIcons(void);
 UINT DisplayMainScreenActiveFeatures (void);
+void SetMenuLocations (int zeroIdx);
+void AdvanceToNextFeature(void);
+void AdvanceToPreviousFeature(void);
 
 //*************************************************************************************
 // This function initializes the information used to display the information on
@@ -150,7 +153,7 @@ void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode)
     // Locate the Feature Information and set an Index to point to it.
     for (featureCount = 0; featureCount < NUM_FEATURES; ++featureCount)
     {
-        if (g_MainScreenFeatureInfo[featureCount].m_HB_ID == newMode)
+        if (g_MainScreenFeatureInfo[featureCount].m_HB_ID == (FEATURE_ID_ENUM) newMode)
         {
             featureIdx = featureCount;
             break;
@@ -306,6 +309,117 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverControl_RIGHT_Green);
         if (reverse_pad == PAD_GREEN)
             gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_DriverControl_REV_Green);
+    }
+}
+
+//*************************************************************************************
+// This function sets the location of each enabled menu item.
+//*************************************************************************************
+
+void SetMenuLocations (int zeroIdx)
+{
+    int featureCount, index;
+    int linenum;
+
+    linenum = 0;
+    index = zeroIdx;
+    for (featureCount = 0; featureCount < NUM_FEATURES; ++featureCount)
+    {
+        if (index == PAD_SENSOR_DISPLAY_FEATURE_ID)
+        {
+            g_MainScreenFeatureInfo[index].m_Location = -1;
+        }
+        else
+        {
+            if ((g_MainScreenFeatureInfo[index].m_Available) && (g_MainScreenFeatureInfo[index].m_Enabled == true))
+            {
+                g_MainScreenFeatureInfo[index].m_Location = linenum;
+                ++linenum;
+            }
+        }
+        ++index;
+        if (index >= NUM_FEATURES)
+            index = 0;
+    }
+}
+
+//*************************************************************************************
+// This function sets the next feature.
+//*************************************************************************************
+
+void AdvanceToNextFeature(void)
+{
+    int activeCount, featureIdx;
+    int feature1Idx;
+
+    // Count the number of active features to set a limit on location
+    activeCount = 0;
+    feature1Idx = 0;
+    for (featureIdx = 0; featureIdx < NUM_FEATURES; ++featureIdx)
+    {
+        // Don't process the PAD SENSOR setting
+        if (featureIdx == PAD_SENSOR_DISPLAY_FEATURE_ID)
+            continue;
+
+        if ((g_MainScreenFeatureInfo[featureIdx].m_Enabled) && (g_MainScreenFeatureInfo[featureIdx].m_Available))
+            ++activeCount;
+        // We're looking for the next feature which is in location "1"
+        if (g_MainScreenFeatureInfo[featureIdx].m_Location == 1)
+            feature1Idx = featureIdx;
+    }
+
+    if (activeCount > 0)
+    {
+        g_MainScreenFeatureInfo[feature1Idx].m_Location = 0;
+    }
+    SendModeChangeCommand (g_MainScreenFeatureInfo[feature1Idx].m_HB_ID);        // Send this to the Head Array
+    SetMenuLocations(feature1Idx);
+
+}
+
+//*************************************************************************************
+// This functions selects the Previous Menu item.
+//*************************************************************************************
+
+void AdvanceToPreviousFeature()
+{
+    int activeCount, featureIdx;
+
+    // Count the number of active features to set a limit on location
+    activeCount = 0;
+    for (featureIdx = 0; featureIdx < NUM_FEATURES; ++featureIdx)
+    {
+        // Don't process the PAD SENSOR setting
+        if (featureIdx == PAD_SENSOR_DISPLAY_FEATURE_ID)
+            continue;
+
+        if ((g_MainScreenFeatureInfo[featureIdx].m_Enabled) && (g_MainScreenFeatureInfo[featureIdx].m_Available))
+            ++activeCount;
+    }
+
+    // Now adjust the feature items.
+    --activeCount; // This just makes things work.
+    if (activeCount > 0)
+    {
+        for (featureIdx = 0; featureIdx < NUM_FEATURES; ++featureIdx)
+        {
+            // Don't process the PAD SENSOR setting
+            if (featureIdx == PAD_SENSOR_DISPLAY_FEATURE_ID)
+                continue;
+
+            if ((g_MainScreenFeatureInfo[featureIdx].m_Enabled) && (g_MainScreenFeatureInfo[featureIdx].m_Available))
+            {
+                if (g_MainScreenFeatureInfo[featureIdx].m_Location == activeCount)
+                {
+                    g_MainScreenFeatureInfo[featureIdx].m_Location = 0;
+                    SendModeChangeCommand (g_MainScreenFeatureInfo[featureIdx].m_HB_ID);        // Send this to the Head Array
+                }
+                else
+                {
+                    ++g_MainScreenFeatureInfo[featureIdx].m_Location;
+                }
+            }
+        }
     }
 }
 
@@ -518,35 +632,7 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             g_ChangeScreen_WIP = false;
             break;
         }
-        // Count the number of active features to set a limit on location
-        activeCount = 0;
-        for (feature = 0; feature < NUM_FEATURES; ++feature)
-        {
-            if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
-                ++activeCount;
-        }
-        // Move Top Feature to Bottom and move Bottom upward.
-        for (feature = 0; feature < NUM_FEATURES; ++feature)
-        {
-            if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
-            {
-                if (g_MainScreenFeatureInfo[feature].m_Location == 0)
-                    g_MainScreenFeatureInfo[feature].m_Location = activeCount-1;
-                else if (g_MainScreenFeatureInfo[feature].m_Location == 1)
-                {
-                    g_MainScreenFeatureInfo[feature].m_Location = 0;
-                    SendModeChangeCommand (feature);        // Send this to the Head Array
-                }
-                else if (g_MainScreenFeatureInfo[feature].m_Location == 2)
-                    g_MainScreenFeatureInfo[feature].m_Location = min (1, activeCount-1);
-                else if (g_MainScreenFeatureInfo[feature].m_Location == 3)
-                    g_MainScreenFeatureInfo[feature].m_Location = min (2, activeCount-1);
-                else if (g_MainScreenFeatureInfo[feature].m_Location == 4)
-                    g_MainScreenFeatureInfo[feature].m_Location = min (3, activeCount-1);
-                else if (g_MainScreenFeatureInfo[feature].m_Location == 5)
-                    g_MainScreenFeatureInfo[feature].m_Location = min (4, activeCount-1);
-            }
-        }
+        AdvanceToNextFeature();
         DisplayMainScreenActiveFeatures();
         break;
 
@@ -557,37 +643,7 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             g_ChangeScreen_WIP = false;
             break;
         }
-        // Count the number of active features to set a limit on location
-        activeCount = 0;
-        for (feature = 0; feature < NUM_FEATURES; ++feature)
-        {
-            if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
-                ++activeCount;
-        }
-        --activeCount;  // Translate the Number of items to Based Zero line number.
-
-        // Move the features downward, limiting the movement by the number of Active Features.
-        for (feature = 0; feature < NUM_FEATURES; ++feature)
-        {
-            if ((g_MainScreenFeatureInfo[feature].m_Enabled) && (g_MainScreenFeatureInfo[feature].m_Available))
-            {
-                if (g_MainScreenFeatureInfo[feature].m_Location == activeCount)
-                {
-                    g_MainScreenFeatureInfo[feature].m_Location = 0;
-                    SendModeChangeCommand (feature);        // Send this to the Head Array
-                }
-                else if (g_MainScreenFeatureInfo[feature].m_Location == 0)
-                    g_MainScreenFeatureInfo[feature].m_Location = min (1, activeCount);
-                else if (g_MainScreenFeatureInfo[feature].m_Location == 1)
-                    g_MainScreenFeatureInfo[feature].m_Location = min (2, activeCount);
-                else if (g_MainScreenFeatureInfo[feature].m_Location == 2)
-                    g_MainScreenFeatureInfo[feature].m_Location = min (3, activeCount);
-                else if (g_MainScreenFeatureInfo[feature].m_Location == 3)
-                    g_MainScreenFeatureInfo[feature].m_Location = min (4, activeCount);
-                else if (g_MainScreenFeatureInfo[feature].m_Location == 4)
-                    g_MainScreenFeatureInfo[feature].m_Location = min (5, activeCount);
-            }
-        }
+        AdvanceToPreviousFeature ();
         DisplayMainScreenActiveFeatures();
         break;
 

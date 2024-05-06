@@ -42,7 +42,7 @@ typedef struct myColorS
     };
 } RGB16_Struct;
 
-typedef enum {DRIVE_FEATURE_ID, POWER_ONOFF_ID, SWITCH_DRV_CTRL_FEATURE_ID, BLUETOOTH_FEATURE_ID, NEXT_FUNCTION_OR_TOGGLE_ID, NEXT_PROFILE_OR_USER_MENU_ID, RNET_SEATING_ID, RNET_SLEEP_FEATURE_ID, NUM_FEATURES} FEATURE_ID_ENUM; // "invalid" must be last enum
+typedef enum {DRIVE_FEATURE_ID, POWER_ONOFF_ID, SWITCH_DRV_CTRL_FEATURE_ID, BLUETOOTH_FEATURE_ID, NEXT_FUNCTION_OR_TOGGLE_ID, NEXT_PROFILE_OR_USER_MENU_ID, RNET_SEATING_ID, RNET_SLEEP_FEATURE_ID, PAD_SENSOR_DISPLAY_FEATURE_ID, NUM_FEATURES} FEATURE_ID_ENUM; // "invalid" must be last enum
 typedef enum {INVALID_FEATURE_HB_ID,
     POWERONOFF_FEATURE_HB_ID = 1,
     BLUETOOTH_FEATURE_HB_ID = 2,
@@ -92,7 +92,7 @@ typedef enum PAD_STATUS_COLORS_ENUM {PAD_OFF, PAD_GREEN, PAD_WHITE, PAD_ORANGE} 
 
 typedef struct MAIN_SCREEN_FEATURE_STRUCT
 {
-    int m_HB_ID;    // This establishes the connection between the ION Hub / Fusion and this feature.
+    FEATURE_ID_ENUM m_HB_ID;    // This establishes the connection between the ION Hub / Fusion and this feature.
     int m_Location;     // This indicates the Main Screen location, 0=Top most, 3=bottom most
 	int /*bool*/ m_Available;	// This is true if this feature should be displayed for Enabling/Disabling. Typically based upon RNet setting.
     int /*bool*/ m_Enabled;      // Indicates if this feature is active.
