@@ -1,14 +1,16 @@
-  AppVersion = 65601
+  AppVersion = 79607
   FileVersion = 2
 [GENERAL]
+  aATEModuleSel[24] = 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
   ConnectMode = 0
-  CurrentFile = "C:\asl\ASL_Display\Release\ASL_Display_V1.14.3.srec"
+  CurrentFile = "C:\asl\ASL_Display\Release\ASL_Display_HUB_V1.1C.srec"
   DataFileSAddr = 0x00000000
   GUIMode = 0
   HostName = ""
   TargetIF = 1
   USBPort = 0
   USBSerialNo = 0x00000000
+  UseATEModuleSelection = 0
 [JTAG]
   IRLen = 0
   MultipleTargets = 0
@@ -29,7 +31,6 @@
   NumExitSteps = 0
   UseScriptFile = 0
   ScriptFile = ""
-  UseRAM = 1
   RAMAddr = 0x1FFE0000
   RAMSize = 0x000A0000
   CheckCoreID = 1
@@ -42,29 +43,29 @@
 [FLASH]
   NumBanks = 4
 [FLASH0]
-  aRangeSel[1] = 0-133
-  BankName = "Internal program flash"
-  BankSelMode = 1
-  BaseAddr = 0x00000000
-[FLASH1]
-  aRangeSel[1] = 0-255
-  BankName = "Internal data flash"
-  BankSelMode = 1
-  BaseAddr = 0x40100000
-[FLASH2]
   aRangeSel[1] = 0
   BankName = "Internal option-setting memory"
   BankSelMode = 1
   BaseAddr = 0x40120040
+[FLASH1]
+  aRangeSel[1] = 0-133
+  BankName = "Internal program flash"
+  BankSelMode = 1
+  BaseAddr = 0x00000000
+[FLASH2]
+  aRangeSel[1] = 0-255
+  BankName = "Internal data flash"
+  BankSelMode = 1
+  BaseAddr = 0x40100000
 [FLASH3]
   BankName = "External QSPI flash"
   BaseAddr = 0x60000000
 [PRODUCTION]
+  AutoPerformsDisconnect = 0
   AutoPerformsErase = 1
   AutoPerformsProgram = 1
   AutoPerformsSecure = 0
   AutoPerformsStartApp = 0
-  AutoPerformsUnsecure = 0
   AutoPerformsVerify = 1
   EnableFixedVTref = 0
   EnableTargetPower = 0

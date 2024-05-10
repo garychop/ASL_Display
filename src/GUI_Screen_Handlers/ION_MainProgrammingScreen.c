@@ -161,54 +161,54 @@ UINT ION_MainProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *event
 	case GX_SIGNAL(DRIVER_SELECT_BTN, GX_EVENT_CLICKED):
 		//SetProgrammingDriverControl (&g_DeviceSettings[HEAD_ARRY_DEVICE_IDX]);
 		//CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
-		PushWindow (window);
-		//--------        screen_toggle((GX_WINDOW *)&ION_DriverSelectScreen, window);
+		//PushWindow (window);
+		//screen_toggle((GX_WINDOW *)&ION_DriverSelectScreen, window);
 		break;
 
 		// Do the HUB Port Setup stuff
 	case GX_SIGNAL (HUB_BTN, GX_EVENT_CLICKED):
 		//CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
-		PushWindow (window);
-		//--------        screen_toggle((GX_WINDOW *)&ION_HUB_Setup_Screen, window);
+		//PushWindow (window);
+		//screen_toggle((GX_WINDOW *)&ION_HUB_Setup_Screen, window);
 		break;
 
 	// Do Attendant Setup stuff
 	case GX_SIGNAL (ATTENDANT_BTN, GX_EVENT_CLICKED):
 //		CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
-		PushWindow (window);
-		//--------        screen_toggle((GX_WINDOW *)&ION_AttendantSetup_Screen, window);
+		//PushWindow (window);
+		//screen_toggle((GX_WINDOW *)&ION_AttendantSetup_Screen, window);
 		break;
 
 		
 	// Do Auditory (Sound) Setup stuff
 	case GX_SIGNAL(SOUND_BTN, GX_EVENT_CLICKED):
 //		CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
-		PushWindow(window);
-		//--------		screen_toggle((GX_WINDOW*)&ION_AuditorySettingsScreen, window);
+		//PushWindow(window);
+		//screen_toggle((GX_WINDOW*)&ION_AuditorySettingsScreen, window);
 		break;
 
 	case GX_SIGNAL (USER_SETTINGS_BTN, GX_EVENT_CLICKED):
 //		CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
-		PushWindow (window);
-		//--------        screen_toggle((GX_WINDOW *)&UserSettingsScreen, window);
+		//PushWindow (window);
+		//screen_toggle((GX_WINDOW *)&UserSettingsScreen, window);
 		break;
 
 	case GX_SIGNAL (FEATURE_LIST_BTN, GX_EVENT_CLICKED):
 //		CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
-		PushWindow (window);
-		//--------        screen_toggle((GX_WINDOW *)&FeatureSettingsScreen, window);
+		//PushWindow (window);
+		//screen_toggle((GX_WINDOW *)&FeatureSettingsScreen, window);
 		break;
 
 	case GX_SIGNAL(STANDBY_SELECT_BTN, GX_EVENT_CLICKED):
 //		CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
-		PushWindow(window);
-		//--------		screen_toggle((GX_WINDOW*)&StandbySelectSettings_Screen, window);
+		//PushWindow(window);
+		//screen_toggle((GX_WINDOW*)&StandbySelectSettings_Screen, window);
 		break;
 
 	case GX_SIGNAL (RESET_BTN, GX_EVENT_CLICKED):
 //		CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
-		PushWindow (window);
-		//--------screen_toggle((GX_WINDOW *)&ResetScreen, window);
+		//PushWindow (window);
+		//screen_toggle((GX_WINDOW *)&ResetScreen, window);
 		break;
 
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
