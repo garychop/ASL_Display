@@ -229,22 +229,16 @@ UINT ION_BT_UserSelectionScreen_event_handler (GX_WINDOW *window, GX_EVENT *even
 
     case GX_SIGNAL (DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):
 		// Select the next item, rolling to the first item.
-		++g_Selected_Button_Index;
-		if (g_Selected_Button_Index >= g_NumberOfPairedDevices)
-			g_Selected_Button_Index = 0;
-		UpdateBTUserSelection();
-		gx_vertical_list_selected_set (&UserBluetoothWindowPtr->ION_BT_UserSelectionScreen_BluetoothDeviceListBox, g_Selected_Button_Index);
+//		++g_Selected_Button_Index;
+//		if (g_Selected_Button_Index >= g_NumberOfPairedDevices)
+//			g_Selected_Button_Index = 0;
+//		UpdateBTUserSelection();
+//		gx_vertical_list_selected_set (&UserBluetoothWindowPtr->ION_BT_UserSelectionScreen_BluetoothDeviceListBox, g_Selected_Button_Index);
         break;
 
     case GX_SIGNAL(UP_ARROW_BTN_ID, GX_EVENT_CLICKED):
 		// Select the Previous Item, rolling to the last item in the list.
-		if (g_Selected_Button_Index == 0)
-			g_Selected_Button_Index = g_NumberOfPairedDevices - 1; // "-1" makes it an Array Index
-		else
-			--g_Selected_Button_Index;
-		UpdateBTUserSelection();
-		gx_vertical_list_selected_set (&UserBluetoothWindowPtr->ION_BT_UserSelectionScreen_BluetoothDeviceListBox, g_Selected_Button_Index);
-		break;
+ 		break;
 
 //	case GX_EVENT_PEN_DOWN:	// We are going to determine if the Up or Down arrow buttons have been held for a
 //							// ... long time (2 seconds) and goto advancing the next item in the User's Bluetooth List.
