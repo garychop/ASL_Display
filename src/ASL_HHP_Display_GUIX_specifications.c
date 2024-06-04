@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 27. 4.2024   Time (hh:mm): 07:43                        */
+/*  Date (dd.mm.yyyy):  4. 6.2024   Time (hh:mm): 10:57                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+ION_DRIVERSELECTSCREEN_CONTROL_BLOCK ION_DriverSelectScreen;
 ION_MAINPROGRAMMINGSCREEN_CONTROL_BLOCK ION_MainProgrammingScreen;
 ION_BT_SETUPSCREEN_CONTROL_BLOCK ION_BT_SetupScreen;
 ION_BT_ACTIVESCREEN_CONTROL_BLOCK ION_BT_ActiveScreen;
@@ -307,6 +308,160 @@ UINT gx_studio_vertical_scrollbar_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WID
     status = gx_vertical_scrollbar_create(scroll, info->widget_name, parent, appearance, info->style);
     return status;
 }
+GX_WINDOW_PROPERTIES ION_DriverSelectScreen_properties =
+{
+    GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
+};
+GX_VERTICAL_LIST_PROPERTIES ION_DriverSelectScreen_ListBox_properties =
+{
+    0,                                       /* wallpaper id                   */
+    FeatureList_callback,                    /* callback function              */
+    20                                       /* total rows                     */
+};
+GX_SCROLLBAR_APPEARANCE  ION_DriverSelectScreen_FeatureList_vertical_scroll_properties =
+{
+    14,                                      /* scroll width                   */
+    6,                                       /* thumb width                    */
+    0,                                       /* thumb travel min               */
+    0,                                       /* thumb travel max               */
+    4,                                       /* thumb border style             */
+    0,                                       /* scroll fill pixelmap           */
+    0,                                       /* scroll thumb pixelmap          */
+    0,                                       /* scroll up pixelmap             */
+    0,                                       /* scroll down pixelmap           */
+    GX_COLOR_ID_SHINE,                       /* scroll thumb color             */
+    GX_COLOR_ID_SHINE,                       /* scroll thumb border color      */
+    GX_COLOR_ID_WINDOW_BORDER,               /* scroll button color            */
+};
+GX_TEXT_BUTTON_PROPERTIES ION_DriverSelectScreen_OK_Button_properties =
+{
+    GX_STRING_ID_OK,                         /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_PROMPT_PROPERTIES ION_DriverSelectScreen_SetOrChangedDevice_Prompt_properties =
+{
+    GX_STRING_ID_SELECT_DRIVER_CONTROL,      /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_DriverSelectScreen_FeatureList_vertical_scroll_define =
+{
+    "FeatureList_vertical_scroll",
+    GX_TYPE_VERTICAL_SCROLL,                 /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_TRANSPARENT|GX_SCROLLBAR_RELATIVE_THUMB|GX_SCROLLBAR_VERTICAL,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_SCROLLBAR),                    /* control block size             */
+    GX_COLOR_ID_BLACK,                       /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_vertical_scrollbar_create,     /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {208, 32, 221, 227},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DRIVERSELECTSCREEN_CONTROL_BLOCK, ION_DriverSelectScreen_FeatureList_vertical_scroll), /* control block */
+    (void *) &ION_DriverSelectScreen_FeatureList_vertical_scroll_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_DriverSelectScreen_SetOrChangedDevice_Prompt_define =
+{
+    "SetOrChangedDevice_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {4, 5, 313, 28},                         /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DRIVERSELECTSCREEN_CONTROL_BLOCK, ION_DriverSelectScreen_SetOrChangedDevice_Prompt), /* control block */
+    (void *) &ION_DriverSelectScreen_SetOrChangedDevice_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_DriverSelectScreen_OK_Button_define =
+{
+    "OK_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    OK_BTN_ID,                               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {230, 165, 309, 228},                    /* widget size                    */
+    &ION_DriverSelectScreen_SetOrChangedDevice_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DRIVERSELECTSCREEN_CONTROL_BLOCK, ION_DriverSelectScreen_OK_Button), /* control block */
+    (void *) &ION_DriverSelectScreen_OK_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_DriverSelectScreen_ListBox_define =
+{
+    "ListBox",
+    GX_TYPE_VERTICAL_LIST,                   /* widget type                    */
+    BLUETOOTH_DEVICE_LIST_BOX_ID,            /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_VERTICAL_LIST),                /* control block size             */
+    GX_COLOR_ID_BLACK,                       /* normal color id                */
+    GX_COLOR_ID_BLACK,                       /* selected color id              */
+    gx_studio_vertical_list_create,          /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {16, 32, 221, 227},                      /* widget size                    */
+    &ION_DriverSelectScreen_OK_Button_define, /* next widget definition        */
+    &ION_DriverSelectScreen_FeatureList_vertical_scroll_define, /* child widget definition */
+    offsetof(ION_DRIVERSELECTSCREEN_CONTROL_BLOCK, ION_DriverSelectScreen_ListBox), /* control block */
+    (void *) &ION_DriverSelectScreen_ListBox_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_DriverSelectScreen_define =
+{
+    "ION_DriverSelectScreen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    ION_DRIVER_SELECT_SCREEN_ID,             /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT,   /* style flags                */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(ION_DRIVERSELECTSCREEN_CONTROL_BLOCK), /* control block size        */
+    GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
+    GX_COLOR_ID_SCROLL_BUTTON,               /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) ION_DriverSelectScreen_event_process, /* event function override */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &ION_DriverSelectScreen_ListBox_define,  /* child widget                   */
+    0,                                       /* control block                  */
+    (void *) &ION_DriverSelectScreen_properties /* extended properties         */
+};
 GX_WINDOW_PROPERTIES ION_MainProgrammingScreen_properties =
 {
     GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
@@ -910,7 +1065,7 @@ GX_TEXT_BUTTON_PROPERTIES ION_BT_DeviceSelectionScreen_OK_Button_properties =
     GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
-GX_PROMPT_PROPERTIES ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt_properties =
+GX_PROMPT_PROPERTIES ION_BT_DeviceSelectionScreen_SelectBTDeviceToChange_Prompt_properties =
 {
     GX_STRING_ID_SELECT_BT_DEVICE,           /* string id                      */
     GX_FONT_ID_PROMPT,                       /* font id                        */
@@ -941,9 +1096,9 @@ GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_FeatureList_vertical_scro
     (void *) &ION_BT_DeviceSelectionScreen_FeatureList_vertical_scroll_properties /* extended properties */
 };
 
-GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt_define =
+GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_SelectBTDeviceToChange_Prompt_define =
 {
-    "SetOrChangedDevice_Prompt",
+    "SelectBTDeviceToChange_Prompt",
     GX_TYPE_PROMPT,                          /* widget type                    */
     GX_ID_NONE,                              /* widget id                      */
     #if defined(GX_WIDGET_USER_DATA)
@@ -960,8 +1115,8 @@ GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt
     {4, 5, 313, 28},                         /* widget size                    */
     GX_NULL,                                 /* no next widget                 */
     GX_NULL,                                 /* no child widgets               */ 
-    offsetof(ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK, ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt), /* control block */
-    (void *) &ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt_properties /* extended properties */
+    offsetof(ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK, ION_BT_DeviceSelectionScreen_SelectBTDeviceToChange_Prompt), /* control block */
+    (void *) &ION_BT_DeviceSelectionScreen_SelectBTDeviceToChange_Prompt_properties /* extended properties */
 };
 
 GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_OK_Button_define =
@@ -981,7 +1136,7 @@ GX_CONST GX_STUDIO_WIDGET ION_BT_DeviceSelectionScreen_OK_Button_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {230, 165, 309, 228},                    /* widget size                    */
-    &ION_BT_DeviceSelectionScreen_SetOrChangedDevice_Prompt_define, /* next widget definition */
+    &ION_BT_DeviceSelectionScreen_SelectBTDeviceToChange_Prompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(ION_BT_DEVICESELECTIONSCREEN_CONTROL_BLOCK, ION_BT_DeviceSelectionScreen_OK_Button), /* control block */
     (void *) &ION_BT_DeviceSelectionScreen_OK_Button_properties /* extended properties */
@@ -6442,6 +6597,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
+    { &ION_DriverSelectScreen_define, (GX_WIDGET *) &ION_DriverSelectScreen },
     { &ION_MainProgrammingScreen_define, (GX_WIDGET *) &ION_MainProgrammingScreen },
     { &ION_BT_SetupScreen_define, (GX_WIDGET *) &ION_BT_SetupScreen },
     { &ION_BT_ActiveScreen_define, (GX_WIDGET *) &ION_BT_ActiveScreen },

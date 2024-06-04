@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 27. 4.2024   Time (hh:mm): 07:43                        */
+/*  Date (dd.mm.yyyy):  4. 6.2024   Time (hh:mm): 10:57                        */
 /*******************************************************************************/
 
 
@@ -47782,10 +47782,12 @@ GX_CONST GX_UBYTE main_display_STRING_3_English[] = "#1";
 GX_CONST GX_UBYTE main_display_SELECT_TYPE_AND_COLOR_English[] = "Select TYPE and COLOR then PAIR";
 GX_CONST GX_UBYTE main_display_BT_AVAILABLE_English[] = "<AVAILABLE>";
 GX_CONST GX_UBYTE main_display_SELECT_FEATURE_TO_CHANGE_English[] = "SELECT FEATURE TO CHANGE";
+GX_CONST GX_UBYTE main_display_SELECT_DRIVER_CONTROL_English[] = "SELECT DRIVER CONTROL TO CHANGE";
+GX_CONST GX_UBYTE main_display_TWO_SWITCH_English[] = "2-SWITCH";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[137] =
+GX_CONST GX_UBYTE *main_display_English_string_table[139] =
 {
     GX_NULL,
     main_display_SWITCH_DRV_CTRL_English,
@@ -47923,7 +47925,9 @@ GX_CONST GX_UBYTE *main_display_English_string_table[137] =
     main_display_STRING_3_English,
     main_display_SELECT_TYPE_AND_COLOR_English,
     main_display_BT_AVAILABLE_English,
-    main_display_SELECT_FEATURE_TO_CHANGE_English
+    main_display_SELECT_FEATURE_TO_CHANGE_English,
+    main_display_SELECT_DRIVER_CONTROL_English,
+    main_display_TWO_SWITCH_English
 
 };
 

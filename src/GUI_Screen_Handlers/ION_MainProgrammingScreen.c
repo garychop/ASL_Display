@@ -132,10 +132,10 @@ VOID ION_MainProgrammingList_callback(GX_VERTICAL_LIST *list, GX_WIDGET *widget,
 
         //gx_utility_rectangle_define(&childsize, 0, 2, feature->m_ItemWidget.gx_widget_size.gx_rectangle_right - 14, 62);
 		//ASFOUND gx_utility_rectangle_define(&childsize, feature->m_ItemWidget.gx_widget_size.gx_rectangle_left + 2, 4, feature->m_ItemWidget.gx_widget_size.gx_rectangle_right - 14, 56);
-		gx_utility_rectangle_define(&childsize, feature->m_ItemWidget.gx_widget_size.gx_rectangle_left + 2, 2, feature->m_ItemWidget.gx_widget_size.gx_rectangle_right - 14, 62);
+		gx_utility_rectangle_define(&childsize, (GX_VALUE) (feature->m_ItemWidget.gx_widget_size.gx_rectangle_left + 2), 2, (GX_VALUE) (feature->m_ItemWidget.gx_widget_size.gx_rectangle_right - 14), 62);
 
 		// Create a button and set colors
-		gx_text_button_create (&feature->m_ButtonWidget, "MYBUTTON", &feature->m_ItemWidget, feature->m_LargeDescriptionID, GX_STYLE_BORDER_THIN | GX_STYLE_ENABLED, DRIVER_SELECT_BTN + index, &childsize);
+		gx_text_button_create (&feature->m_ButtonWidget, "MYBUTTON", &feature->m_ItemWidget, feature->m_LargeDescriptionID, GX_STYLE_BORDER_THIN | GX_STYLE_ENABLED, (USHORT) (DRIVER_SELECT_BTN + index), &childsize);
 		feature->m_ButtonWidget.gx_widget_disabled_fill_color = GX_COLOR_ID_DISABLED_TEXT;
 		feature->m_ButtonWidget.gx_widget_normal_fill_color = GX_COLOR_ID_TEXT_INPUT_FILL;
 		feature->m_ButtonWidget.gx_widget_selected_fill_color = GX_COLOR_ID_TEXT_INPUT_TEXT;
@@ -161,8 +161,8 @@ UINT ION_MainProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *event
 	case GX_SIGNAL(DRIVER_SELECT_BTN, GX_EVENT_CLICKED):
 		//SetProgrammingDriverControl (&g_DeviceSettings[HEAD_ARRY_DEVICE_IDX]);
 		//CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
-		//PushWindow (window);
-		//screen_toggle((GX_WINDOW *)&ION_DriverSelectScreen, window);
+		PushWindow (window);
+		screen_toggle((GX_WINDOW *)&ION_DriverSelectScreen, window);
 		break;
 
 		// Do the HUB Port Setup stuff

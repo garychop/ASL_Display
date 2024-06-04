@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 27. 4.2024   Time (hh:mm): 07:43                        */
+/*  Date (dd.mm.yyyy):  4. 6.2024   Time (hh:mm): 10:57                        */
 /*******************************************************************************/
 
 
@@ -338,6 +338,8 @@
 #define GX_STRING_ID_SELECT_TYPE_AND_COLOR 134
 #define GX_STRING_ID_BT_AVAILABLE 135
 #define GX_STRING_ID_SELECT_FEATURE_TO_CHANGE 136
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 137
+#define GX_STRING_ID_SELECT_DRIVER_CONTROL 137
+#define GX_STRING_ID_TWO_SWITCH 138
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 139
 
 #endif                                       /* sentry                         */
