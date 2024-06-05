@@ -179,6 +179,41 @@ FEATURE_ID_ENUM TranslateFeature_CharToEnum (char feature)
 }
 
 /******************************************************************************
+ * Get Driver Control Enable functions.
+ */
+void RequestDriverEnableStatus (DEVICE_NUMBER_ENUM deviceIdx)
+{
+    GUI_MSG_STRUCT msg;
+
+    msg.m_MsgType = HHP_HA_GET_DRIVER_CONTROL_ENABLE;
+    msg.DriverControlEnable.m_DeviceID = deviceIdx;
+    tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+void SendDriverEnableToGUI (DEVICE_NUMBER_ENUM deviceIdx, ENABLE_STATUS_ENUM enableSetting)
+{
+    HHP_HA_MSG_STRUCT HHP_Msg;
+
+    HHP_Msg.m_MsgType = HHP_HA_GET_DRIVER_CONTROL_ENABLE;
+    HHP_Msg.DriverControlEnable.m_DeviceID = deviceIdx;
+    HHP_Msg.DriverControlEnable.m_Enabled = enableSetting;
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+/******************************************************************************
+ * Send Driver Control Enable to HUB
+ */
+void SendDriverEnable (DEVICE_NUMBER_ENUM deviceIdx, ENABLE_STATUS_ENUM enableSetting)
+{
+    GUI_MSG_STRUCT msg;
+
+    msg.m_MsgType = HHP_HA_SET_DRIVER_CONTROL_ENABLE;
+    msg.DriverControlEnable.m_DeviceID = deviceIdx;
+    msg.DriverControlEnable.m_Enabled = enableSetting;
+    tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+/******************************************************************************
  * This function sends the "Who Am I" request command to the Slave Device (ASL110 or ION)
  */
 void SendWhoAmiCommand (void)
@@ -186,7 +221,6 @@ void SendWhoAmiCommand (void)
     GUI_MSG_STRUCT msg;
 
     msg.m_MsgType = HHP_HA_WHO_ARE_YOU_CMD;
-
     tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 
@@ -211,7 +245,6 @@ void SendGetVersionCommand (void)
     GUI_MSG_STRUCT msg;
 
     msg.m_MsgType = HHP_HA_VERSION_GET;
-
     tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 

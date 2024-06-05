@@ -10,6 +10,7 @@
 
 #include "ASL165_System.h"
 #include "ScreenSupport.h"
+#include "QueueDefinition.h"
 
 //*************************************************************************************
 // Defines, Macros

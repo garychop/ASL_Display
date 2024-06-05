@@ -78,6 +78,7 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                 }
                 else if (g_StartupDelayCounter == 14)
                 {
+                    InitializeDriverControls ();    // This sends requests to the HUB to get drive control enabled status.
                     SendGetPadAssignmentMsg (LEFT_PAD);
                     SendGetPadAssignmentMsg (RIGHT_PAD);
                     SendGetPadAssignmentMsg (CENTER_PAD);

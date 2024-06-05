@@ -116,7 +116,6 @@ void my_gui_thread_entry(void)
 
     Initialize_MainScreenInfo();
     InitializeBluetoothDeviceInformation();
-    InitializeDriverControls ();
 
     /* Create the widgets we have defined with the GUIX data structures and resources. */
     GX_WIDGET * p_first_screen = NULL;

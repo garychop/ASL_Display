@@ -10,6 +10,7 @@
 
 #include "ASL165_System.h"
 #include "ScreenSupport.h"
+#include "QueueDefinition.h"
 
 //*************************************************************************************
 
@@ -252,6 +253,7 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 			gp_ProgrammingDevice->m_Enabled = ENABLED;
 		else
 			gp_ProgrammingDevice->m_Enabled = DISABLED;
+	    SendDriverEnable (gp_ProgrammingDevice->m_DriverConfiguration, gp_ProgrammingDevice->m_Enabled);    // Send to HUB
 		CleanupInfoStruct(&ION_Device_ProgramSettings_ScreenInfo[0], &ION_DriverControlProgrammingScreen.ION_DriverControlProgrammingScreen_ListBox, ION_DEVICE_PROGRAMMING_ITEMS_MAX);
         screen_toggle(PopPushedWindow(), window);
 		break;

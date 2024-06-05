@@ -1019,7 +1019,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
         case HHP_HA_GET_DRIVER_CONTROL_ENABLE:
             HA_Msg[0] = 0x04;     // msg length
             HA_Msg[1] = HHP_HA_GET_DRIVER_CONTROL_ENABLE;
-            HA_Msg[2] = GUI_Msg.GetSetDriverControlEnable.m_DeviceID;
+            HA_Msg[2] = GUI_Msg.DriverControlEnable.m_DeviceID;
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
@@ -1028,7 +1028,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = Read_I2C_Package(HB_Response);
                 if (msgStatus == MSG_OK)
                 {
-                    g_DeviceSettings[GUI_Msg.GetSetDriverControlEnable.m_DeviceID].m_Enabled = HB_Response[1];
+                    SendDriverEnableToGUI (HB_Response[1], HB_Response[2]);
                 }
             }
             break;
@@ -1039,8 +1039,8 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
         case HHP_HA_SET_DRIVER_CONTROL_ENABLE:
             HA_Msg[0] = 0x05;     // msg length
             HA_Msg[1] = HHP_HA_SET_DRIVER_CONTROL_ENABLE;
-            HA_Msg[2] = GUI_Msg.GetSetDriverControlEnable.m_DeviceID;
-            HA_Msg[3] = GUI_Msg.GetSetDriverControlEnable.m_Status;
+            HA_Msg[2] = GUI_Msg.DriverControlEnable.m_DeviceID;
+            HA_Msg[3] = GUI_Msg.DriverControlEnable.m_Enabled;
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
@@ -1453,6 +1453,12 @@ void ProcessCommunicationMsgs ()
             BT_Process_HUB_DeviceDefintion (HeadArrayMsg.BT_DeviceDefinition.m_SlotNumber, HeadArrayMsg.BT_DeviceDefinition.m_DeviceIdenfication,
                                             HeadArrayMsg.BT_DeviceDefinition.m_Color, HeadArrayMsg.BT_DeviceDefinition.m_Status);
             break;
+
+        case HHP_HA_GET_DRIVER_CONTROL_ENABLE:
+            // Store the Enabled Status in the Device's Settings Structure.
+            g_DeviceSettings[HeadArrayMsg.DriverControlEnable.m_DeviceID].m_Enabled = HeadArrayMsg.DriverControlEnable.m_Enabled;
+            break;
+
 //        case HHP_HA_ATTENDANT_SETTINGS_GET:
 //            g_AttendantSettings = HeadArrayMsg.AttendantSettings_Get_Response.m_AttendantSettings;
 //            g_AttendantTimeout = HeadArrayMsg.AttendantSettings_Get_Response.m_AttendantTimeout;

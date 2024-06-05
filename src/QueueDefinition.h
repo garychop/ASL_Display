@@ -119,8 +119,8 @@ typedef struct GUI_MSG_S
         struct
         {
             DEVICE_NUMBER_ENUM m_DeviceID;
-            ENABLE_STATUS_ENUM m_Status; // only used when "setting" enable.
-        } GetSetDriverControlEnable;
+            ENABLE_STATUS_ENUM m_Enabled; // only used when "setting" enable.
+        } DriverControlEnable;
         struct
         {   // used with HHP_HA_BLUETOOTH_SETUP_GET_CMD and SET CMD
             uint8_t m_SlotNumber;   // Used in GET and SETcommand
@@ -157,6 +157,8 @@ extern void SendAttendantControl_toHeadArray (uint8_t active, int8_t speed, int8
 extern void SendAttendantSettingsGet_toHeadArray (void);
 extern void SendAttendantSettingsSet_toHeadArray (uint8_t attendantSettings, uint8_t attendantTimeout);
 extern void SendWhoAmiCommand (void);
+extern void RequestDriverEnableStatus (DEVICE_NUMBER_ENUM deviceIdx);
+extern void SendDriverEnable (DEVICE_NUMBER_ENUM, ENABLE_STATUS_ENUM);
 extern void Send_Get_BT_DeviceDefinitions (uint8_t slotNumber);
 extern void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
 
@@ -240,6 +242,11 @@ typedef struct HHP_HA_MSG_S
             uint8_t m_AttendantTimeout;
         } AttendantSettings_Get_Response;
         struct
+        {   // Used with HHP_HA_GET_DRIVER_CONTROL_ENABLE
+            DEVICE_NUMBER_ENUM m_DeviceID;
+            ENABLE_STATUS_ENUM m_Enabled;
+        } DriverControlEnable;
+        struct
         {   // Used with HHP_HA_WHO_ARE_YOU_CMD command
             uint8_t m_WhoAmi;
         } WhoAmI_Response;
@@ -264,6 +271,7 @@ extern void SendCalDataResponse (PHYSICAL_PAD_ENUM physicalPad, uint16_t minADC,
 extern void SendFeatureGet (uint8_t featureSet, uint8_t timeout, uint8_t featureSet2);
 extern void SendDriveOffsetGetResponse (uint8_t, uint8_t, uint8_t);
 extern void SendAttendantSettingsGet (uint8_t attendantSettings, uint8_t attendantTimeout);
+extern void SendDriverEnableToGUI (DEVICE_NUMBER_ENUM, ENABLE_STATUS_ENUM);
 extern void SendWhoAmItoGUI (uint8_t whoami);
 extern void Send_Get_BT_DeviceDefinitions_Response (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
 

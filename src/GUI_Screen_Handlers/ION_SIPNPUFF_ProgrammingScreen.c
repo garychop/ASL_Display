@@ -11,6 +11,7 @@
 #include "ASL165_System.h"
 #include "DeviceInfo.h"
 #include "ScreenSupport.h"
+#include "QueueDefinition.h"
 
 //*************************************************************************************
 //	- Sip-N-Puff
@@ -184,6 +185,7 @@ UINT ION_SIPNPUFF_ProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *
 			gp_ProgrammingDevice->m_Enabled = ENABLED;
 		else
 			gp_ProgrammingDevice->m_Enabled = DISABLED;
+	    SendDriverEnable (gp_ProgrammingDevice->m_DriverConfiguration, gp_ProgrammingDevice->m_Enabled);    // Send to HUB
 		screen_toggle(PopPushedWindow(), window);
 		break;
 	}

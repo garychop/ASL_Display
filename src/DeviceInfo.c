@@ -10,6 +10,7 @@
 
 #include "ASL165_System.h"
 #include "DeviceInfo.h"
+#include "QueueDefinition.h"
 
 //*************************************************************************************
 
@@ -116,6 +117,11 @@ VOID Initialize_HeadArray_Settings()
 	g_DeviceSettings[HEAD_ARRY_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_PadMinimumCalibrationValue = 2;
 	g_DeviceSettings[HEAD_ARRY_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_PadMaximumCalibrationValue = 30;
 	g_DeviceSettings[HEAD_ARRY_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_SNP_Threshold = -60; // hard sip
+
+	/*
+     * Get Enabled setting from ION Hub
+     */
+    RequestDriverEnableStatus (HEAD_ARRY_DEVICE_IDX);
 }
 
 //*************************************************************************************
@@ -168,6 +174,11 @@ VOID Initialize_Driver4Quad_Settings()
 	g_DeviceSettings[DRIVER_4_QUAD_IDX].m_PadInfo[REVERSE_PAD].m_PadMinimumCalibrationValue = 2;
 	g_DeviceSettings[DRIVER_4_QUAD_IDX].m_PadInfo[REVERSE_PAD].m_PadMaximumCalibrationValue = 30;
 	g_DeviceSettings[DRIVER_4_QUAD_IDX].m_PadInfo[REVERSE_PAD].m_SNP_Threshold = -60; // hard sip
+
+	/*
+     * Get Enabled setting from ION Hub
+     */
+    RequestDriverEnableStatus (DRIVER_4_QUAD_IDX);
 }
 
 //*************************************************************************************
@@ -220,6 +231,11 @@ VOID Initialize_SipNPUff_Settings()
 	g_DeviceSettings[SIP_N_PUFF_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_PadMinimumCalibrationValue = 2;
 	g_DeviceSettings[SIP_N_PUFF_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_PadMaximumCalibrationValue = 30;
 	g_DeviceSettings[SIP_N_PUFF_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_SNP_Threshold = -60; // hard sip
+
+	/*
+	 * Get Enabled setting from ION Hub
+	 */
+	RequestDriverEnableStatus (SIP_N_PUFF_DEVICE_IDX);
 }
 
 //*************************************************************************************
@@ -272,6 +288,11 @@ VOID Initialize_2_Switch_Settings()
 	g_DeviceSettings[TWO_SWITCH_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_PadMinimumCalibrationValue = 2;
 	g_DeviceSettings[TWO_SWITCH_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_PadMaximumCalibrationValue = 30;
 	g_DeviceSettings[TWO_SWITCH_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_SNP_Threshold = -60; // hard sip
+
+    /*
+     * Get Enabled setting from ION Hub
+     */
+    RequestDriverEnableStatus (TWO_SWITCH_DEVICE_IDX);
 }
 
 //*************************************************************************************
@@ -324,6 +345,11 @@ VOID Initialize_SNP_HeadArray_Settings()
 	g_DeviceSettings[SNP_HEAD_ARRAY_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_PadMinimumCalibrationValue = 2;
 	g_DeviceSettings[SNP_HEAD_ARRAY_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_PadMaximumCalibrationValue = 30;
 	g_DeviceSettings[SNP_HEAD_ARRAY_DEVICE_IDX].m_PadInfo[REVERSE_PAD].m_SNP_Threshold = -30; // hard sip
+
+    /*
+     * Get Enabled setting from ION Hub
+     */
+    RequestDriverEnableStatus (SNP_HEAD_ARRAY_DEVICE_IDX);
 }
 
 //*************************************************************************************
