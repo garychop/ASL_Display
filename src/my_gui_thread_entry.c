@@ -116,6 +116,7 @@ void my_gui_thread_entry(void)
 
     Initialize_MainScreenInfo();
     InitializeBluetoothDeviceInformation();
+    InitializeDriverControls ();
 
     /* Create the widgets we have defined with the GUIX data structures and resources. */
     GX_WIDGET * p_first_screen = NULL;
@@ -131,7 +132,9 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("ION_BT_SetupScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_BT_UserSelectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_DriverSelectScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ION_DriverControlProgrammingScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_MainProgrammingScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ION_SIPnPuffProgrammingScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("MainUserScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
     gx_studio_named_widget_create("MinimumDriveScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("MoreSelectionScreen", GX_NULL, GX_NULL);
@@ -361,7 +364,7 @@ void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures, uint8_t *ActiveFeatur
 //    if (g_RNet_Sleep_Feature)           // Add RNet Sleep feature setting.
     if ((g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled) && (g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available))
         *ActiveFeatures_Byte2 |= FUNC_FEATURE2_RNET_SLEEP_BIT_MASK;
-    if (g_Mode_Switch_Schema == MODE_SWITCH_REVERSE)    // Add Mode Switch schema setting
+    if (g_Mode_Switch_Schema == HUB_MODE_SWITCH_REVERSE)    // Add Mode Switch schema setting
         *ActiveFeatures_Byte2 |= FUNC_FEATURE2_MODE_REVERSE_BIT_MASK;
     if (g_ShowPadsOnMainScreen)
         *ActiveFeatures_Byte2 |= FUNC_FEATURE2_SHOW_PADS_BIT_MASK;

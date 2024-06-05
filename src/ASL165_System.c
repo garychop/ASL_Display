@@ -17,7 +17,7 @@
 
 uint8_t g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build, g_HA_EEPROM_Version;
 MAIN_SCREEN_FEATURE g_MainScreenFeatureInfo[NUM_FEATURES];
-PAD_INFO g_PadSettings[END_OF_PAD_ENUM];
+PAD_INFO_STRUCT g_PadSettings[END_OF_PAD_ENUM];
 
 DEVICE_NUMBER_ENUM g_ActiveDriverControl;
 
@@ -26,7 +26,7 @@ bool g_PowerUpInIdle = false;
 bool g_RNet_Active = false;
 int8_t g_BluetoothSubIndex = 0x00;
 bool g_ShowPadsOnMainScreen = false;
-MODE_SWITCH_SCHEMA_ENUM g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
+HUB_PORT_SCHEMA_ENUM g_Mode_Switch_Schema = DRV_MODE_SWITCH_PIN5;
 
 int g_SettingsChanged;
 int8_t g_StartupDelayCounter = 0;

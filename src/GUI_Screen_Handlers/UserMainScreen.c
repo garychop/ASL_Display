@@ -12,13 +12,13 @@
 #include "ASL165_System.h"
 #include "UserMainScreen.h"
 #include "QueueDefinition.h"
-
+#include "DeviceInfo.h"
 
 //*************************************************************************************
 // Forward Declarations
 //*************************************************************************************
 
-void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad, PAD_STATUS_COLORS reverse_pad);
+void DisplayPadStatus (PAD_STATUS_COLORS_ENUM center_pad, PAD_STATUS_COLORS_ENUM right_pad, PAD_STATUS_COLORS_ENUM left_pad, PAD_STATUS_COLORS_ENUM reverse_pad);
 void HideHeadArrayStatusIcons (void);
 void HideDriverControlStatusIcons(void);
 UINT DisplayMainScreenActiveFeatures (void);
@@ -209,10 +209,10 @@ void HideDriverControlStatusIcons(void)
 //*************************************************************************************
 // Displays the Pad Status based upon the passed parameters
 //*************************************************************************************
-void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad, PAD_STATUS_COLORS left_pad, PAD_STATUS_COLORS reverse_pad)
+void DisplayPadStatus (PAD_STATUS_COLORS_ENUM center_pad, PAD_STATUS_COLORS_ENUM right_pad, PAD_STATUS_COLORS_ENUM left_pad, PAD_STATUS_COLORS_ENUM reverse_pad)
 {
     // Show or Hide the Sip-N-Puff icon
-    if (g_ActiveDriverControl == SIP_N_PUFF_DEVICE_IDX)
+    if (g_ActiveDriverControlIdx == SIP_N_PUFF_DEVICE_IDX)
     {
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_SipNPuff_Icon);
         gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_SipNPuff_Icon, GX_PIXELMAP_ID_SIPNPUFF, GX_PIXELMAP_ID_SIPNPUFF);
@@ -238,7 +238,7 @@ void DisplayPadStatus (PAD_STATUS_COLORS center_pad, PAD_STATUS_COLORS right_pad
         return;
     }
 
-    if (g_ActiveDriverControl == HEAD_ARRY_DEVICE_IDX)
+    if (g_ActiveDriverControlIdx == HEAD_ARRY_DEVICE_IDX)
     //if (gp_ActiveDriverControl->m_DriverQuadrantSetting == DRIVER_3_QUADRANT)
     {
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_HA_Status);

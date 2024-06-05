@@ -1013,6 +1013,47 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             }
             break;
 
+        /*----------------------------------
+         * Request Drive Control Enable / Disable msg
+         */
+        case HHP_HA_GET_DRIVER_CONTROL_ENABLE:
+            HA_Msg[0] = 0x04;     // msg length
+            HA_Msg[1] = HHP_HA_GET_DRIVER_CONTROL_ENABLE;
+            HA_Msg[2] = GUI_Msg.GetSetDriverControlEnable.m_DeviceID;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    g_DeviceSettings[GUI_Msg.GetSetDriverControlEnable.m_DeviceID].m_Enabled = HB_Response[1];
+                }
+            }
+            break;
+
+        /*----------------------------------
+         * Send Drive Control Enable / Disable msg
+         */
+        case HHP_HA_SET_DRIVER_CONTROL_ENABLE:
+            HA_Msg[0] = 0x05;     // msg length
+            HA_Msg[1] = HHP_HA_SET_DRIVER_CONTROL_ENABLE;
+            HA_Msg[2] = GUI_Msg.GetSetDriverControlEnable.m_DeviceID;
+            HA_Msg[3] = GUI_Msg.GetSetDriverControlEnable.m_Status;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    ;
+                }
+            }
+            break;
+
         case HHP_HA_BLUETOOTH_SETUP_GET_CMD:
             HA_Msg[0] = 0x04;     // msg length
             HA_Msg[1] = HHP_HA_BLUETOOTH_SETUP_GET_CMD;
@@ -1151,9 +1192,9 @@ void ProcessCommunicationMsgs ()
                             gx_system_event_send(&gxe);
                         }
                         // Determine if the Driver Control has changed. If so, redraw the User Main Screen.
-                        else if (g_ActiveDriverControl != HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl)
+                        else if (g_ActiveDriverControlIdx != HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl)
                         {
-                            g_ActiveDriverControl = HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl;
+                            g_ActiveDriverControlIdx = HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl;
                             gxe.gx_event_type = GX_EVENT_REDRAW;
                             gxe.gx_event_sender = GX_ID_NONE;
                             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
@@ -1350,12 +1391,12 @@ void ProcessCommunicationMsgs ()
             if (g_HA_EEPROM_Version >= 6)
             {
                 g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_RNET_SLEEP_BIT_MASK ? true : false);
-                g_Mode_Switch_Schema = ((HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_MODE_REVERSE_BIT_MASK) ? MODE_SWITCH_REVERSE : MODE_SWITCH_PIN5);
+                g_Mode_Switch_Schema = ((HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_MODE_REVERSE_BIT_MASK) ? HUB_MODE_SWITCH_REVERSE : HUB_MODE_SWITCH_PIN5);
             }
             else
             {
                 g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = false;
-                g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
+                g_Mode_Switch_Schema = HUB_MODE_SWITCH_PIN5;
             }
 
             // EEPROM Version 7

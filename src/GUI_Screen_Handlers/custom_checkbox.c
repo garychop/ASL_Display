@@ -10,6 +10,7 @@
 //
 //*****************************************************************************
 
+#include "ASL165_System.h"
 #include "custom_checkbox.h"
 
 #define CUSTOM_CHECKBOX_TIMER 2
@@ -18,7 +19,21 @@ VOID custom_checkbox_draw(CUSTOM_CHECKBOX *checkbox);
 UINT custom_checkbox_event_process(CUSTOM_CHECKBOX *checkbox, GX_EVENT *event_ptr);
 VOID custom_checkbox_select(GX_CHECKBOX *checkbox);
 
+//*****************************************************************************
+// This is used to create Checkbox sliders.
+
+CUSTOM_CHECKBOX_INFO DefaultCheckboxInfo =
+{
+    TOGGLE_BUTTON_ID,
+    GX_PIXELMAP_ID_SWITCH_BG,
+    GX_PIXELMAP_ID_SWITCH_ACTIVE,
+    GX_PIXELMAP_ID_SWITCH_DISACTIVE,
+    4, // this parameter locates the Black and Green buttons in the background
+    24 // 24... This item does change anything
+};
+
 /*************************************************************************************/
+
 VOID custom_checkbox_create(CUSTOM_CHECKBOX *checkbox, GX_WIDGET *parent, CUSTOM_CHECKBOX_INFO *info, GX_RECTANGLE *size, int enabled)
 {
     gx_checkbox_create((GX_CHECKBOX *)checkbox, "", parent, GX_NULL, GX_STYLE_ENABLED | GX_STYLE_TRANSPARENT, (USHORT) info->widget_id, size);

@@ -48,6 +48,8 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_ATTENDANT_SETTINGS_SET = 0x43,
     HHP_HA_ATTENDANT_CONTROLS_CMD = 0x44,
     HHP_HA_WHO_ARE_YOU_CMD = 0x46,
+    HHP_HA_GET_DRIVER_CONTROL_ENABLE = 0x47,
+    HHP_HA_SET_DRIVER_CONTROL_ENABLE = 0x48,
     HHP_HA_BLUETOOTH_SETUP_GET_CMD = 0x4b,
     HHP_HA_BLUETOOTH_SETUP_SET_CMD = 0x4c
 } HHP_HA_MESSAGES_ENUM;
@@ -114,6 +116,11 @@ typedef struct GUI_MSG_S
             uint8_t m_AttendantSettings;
             uint8_t m_AttendantTimeout;
         } SendAttendantSettings;
+        struct
+        {
+            DEVICE_NUMBER_ENUM m_DeviceID;
+            ENABLE_STATUS_ENUM m_Status; // only used when "setting" enable.
+        } GetSetDriverControlEnable;
         struct
         {   // used with HHP_HA_BLUETOOTH_SETUP_GET_CMD and SET CMD
             uint8_t m_SlotNumber;   // Used in GET and SETcommand

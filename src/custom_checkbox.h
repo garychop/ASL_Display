@@ -36,6 +36,8 @@ typedef struct CUSTOM_CHECKBOX_INFO_STRUCT{
     INT end_offset;
 }CUSTOM_CHECKBOX_INFO;
 
+extern CUSTOM_CHECKBOX_INFO DefaultCheckboxInfo;
+
 VOID custom_checkbox_create(CUSTOM_CHECKBOX *button, GX_WIDGET *parent, CUSTOM_CHECKBOX_INFO *info, GX_RECTANGLE *size, int enabled);
 
 #endif // CUSTOM_CHECKBOX_H

@@ -39,7 +39,7 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
             gx_button_select ((GX_BUTTON*) &UserSettingsScreen.UserSettingsScreen_RNET_ToggleBtn);
 
         // Mode switch schema. Either PIN5 operation or Toggle F/R.
-        if (g_Mode_Switch_Schema == MODE_SWITCH_REVERSE)
+        if (g_Mode_Switch_Schema == HUB_MODE_SWITCH_REVERSE)
             gx_button_select ((GX_BUTTON*) &UserSettingsScreen.UserSettingsScreen_ModeReverse_ToggleBtn);
 
         // Populate the Timeout button with the current setting or "OFF".
@@ -94,10 +94,10 @@ UINT UserSettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     //----------------------------------------------------------
     // MODE (Reverse) toggle button
     case GX_SIGNAL(MODE_REVERSE_TOGGLE_BTN, GX_EVENT_TOGGLE_ON):
-        g_Mode_Switch_Schema = MODE_SWITCH_REVERSE;
+        g_Mode_Switch_Schema = HUB_MODE_SWITCH_REVERSE;
         break;
     case GX_SIGNAL(MODE_REVERSE_TOGGLE_BTN, GX_EVENT_TOGGLE_OFF):
-        g_Mode_Switch_Schema = MODE_SWITCH_PIN5;
+        g_Mode_Switch_Schema = HUB_MODE_SWITCH_PIN5;
         break;
 
     case GX_SIGNAL(TIMEOUT_BTN_ID, GX_EVENT_CLICKED):

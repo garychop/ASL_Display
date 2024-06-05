@@ -9,7 +9,7 @@
 //*****************************************************************************
 
 #include "ASL165_System.h"
-//#include "ScreenSupport.h"
+#include "ScreenSupport.h"
 
 //*************************************************************************************
 // Defines, Macros
@@ -130,42 +130,42 @@ UINT ION_DriverSelectScreen_event_process(GX_WINDOW *window, GX_EVENT *event_ptr
 
 	// Process the Head Array.
 	case GX_SIGNAL(QUAD3_BTN, GX_EVENT_CLICKED):
-//		SetProgrammingDriverControl (&g_DeviceSettings[HEAD_ARRY_DEVICE_IDX]);
+		SetProgrammingDriverControl (&g_DeviceSettings[HEAD_ARRY_DEVICE_IDX]);
 //		CleanupInfoStruct(&ION_DriverSelect_ScreenInfo[0], &ION_DriverSelectScreen.ION_DriverSelectScreen_ListBox, ION_DRIVER_CONTROL_MAX);
-//		PushWindow (window);
-//        screen_toggle((GX_WINDOW *)&ION_DriverControlProgrammingScreen, window);
+		PushWindow (window);
+        screen_toggle((GX_WINDOW *)&ION_DriverControlProgrammingScreen, window);
 		break;
 
 	// Process the 4-Quadrant Drive Control
 	case GX_SIGNAL(QUAD_4_BTN, GX_EVENT_CLICKED):
-//		SetProgrammingDriverControl (&g_DeviceSettings[DRIVER_4_QUAD_IDX]);
+		SetProgrammingDriverControl (&g_DeviceSettings[DRIVER_4_QUAD_IDX]);
 //		CleanupInfoStruct(&ION_DriverSelect_ScreenInfo[0], &ION_DriverSelectScreen.ION_DriverSelectScreen_ListBox, ION_DRIVER_CONTROL_MAX);
-//		PushWindow (window);
-//        screen_toggle((GX_WINDOW *)&ION_DriverControlProgrammingScreen, window);
+		PushWindow (window);
+        screen_toggle((GX_WINDOW *)&ION_DriverControlProgrammingScreen, window);
 		break;
 
 	// Process the Sip-N-Puff button
 	case GX_SIGNAL(SIP_N_PUFF_BTN, GX_EVENT_CLICKED):
-//		SetProgrammingDriverControl (&g_DeviceSettings[SIP_N_PUFF_DEVICE_IDX]);
+		SetProgrammingDriverControl (&g_DeviceSettings[SIP_N_PUFF_DEVICE_IDX]);
 //		CleanupInfoStruct(&ION_DriverSelect_ScreenInfo[0], &ION_DriverSelectScreen.ION_DriverSelectScreen_ListBox, ION_DRIVER_CONTROL_MAX);
-//		PushWindow (window);
-//        screen_toggle((GX_WINDOW *)&ION_SIPnPuffProgrammingScreen, window);
+		PushWindow (window);
+        screen_toggle((GX_WINDOW *)&ION_SIPnPuffProgrammingScreen, window);
 		break;
 
 		// Process the 2-Switch button
 	case GX_SIGNAL(TWO_SWITCH_BTN, GX_EVENT_CLICKED):
-//		SetProgrammingDriverControl(&g_DeviceSettings[TWO_SWITCH_IDX]);
+		SetProgrammingDriverControl(&g_DeviceSettings[TWO_SWITCH_IDX]);
 //		CleanupInfoStruct(&ION_DriverSelect_ScreenInfo[0], &ION_DriverSelectScreen.ION_DriverSelectScreen_ListBox, ION_DRIVER_CONTROL_MAX);
-//		PushWindow(window);
-//		screen_toggle((GX_WINDOW*)&ION_DriverControlProgrammingScreen, window);
+		PushWindow(window);
+		screen_toggle((GX_WINDOW*)&ION_DriverControlProgrammingScreen, window);
 		break;
 
 		// Process the SNP Head Array button
 	case GX_SIGNAL(SNP_HEAD_ARRAY_BTN, GX_EVENT_CLICKED):
 //		SetProgrammingDriverControl(&g_DeviceSettings[SNP_HEAD_ARRAY_IDX]);
 //		CleanupInfoStruct(&ION_DriverSelect_ScreenInfo[0], &ION_DriverSelectScreen.ION_DriverSelectScreen_ListBox, ION_DRIVER_CONTROL_MAX);
-//		PushWindow(window);
-//		screen_toggle((GX_WINDOW*)&ION_SIPnPuffProgrammingScreen, window);
+		PushWindow(window);
+		screen_toggle((GX_WINDOW*)&ION_SIPnPuffProgrammingScreen, window);
 		break;
 
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
