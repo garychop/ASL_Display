@@ -1195,6 +1195,7 @@ void ProcessCommunicationMsgs ()
                         else if (g_ActiveDriverControlIdx != HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl)
                         {
                             g_ActiveDriverControlIdx = HeadArrayMsg.HeartBeatMsg.m_ActiveDriverControl;
+                            gp_ActiveDriverControl = &g_DeviceSettings[g_ActiveDriverControlIdx];
                             gxe.gx_event_type = GX_EVENT_REDRAW;
                             gxe.gx_event_sender = GX_ID_NONE;
                             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */

@@ -290,14 +290,14 @@ void DisplayPadStatus (PAD_STATUS_COLORS_ENUM center_pad, PAD_STATUS_COLORS_ENUM
     } // end of if 3quadrant
     else // Must be 4 quadrant OR Sip-N-Puff
     {
-        //if (gp_ActiveDriverControl->m_DriverQuadrantSetting == DRIVER_4_QUADRANT)
+        if (gp_ActiveDriverControl->m_DriverQuadrantSetting == DRIVER_4_QUADRANT)
         {
             gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_DriverStatus, GX_PIXELMAP_ID_MAINSCREEN_4QUADRANTSTATUS, GX_PIXELMAP_ID_MAINSCREEN_4QUADRANTSTATUS);
         }
-        //else
-        //{
-        //    gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_DriverStatus, GX_PIXELMAP_ID_MAINSCREEN_2QUADRANTSTATUS, GX_PIXELMAP_ID_MAINSCREEN_2QUADRANTSTATUS);
-        //}
+        else
+        {
+            gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_DriverStatus, GX_PIXELMAP_ID_MAINSCREEN_2QUADRANTSTATUS, GX_PIXELMAP_ID_MAINSCREEN_2QUADRANTSTATUS);
+        }
         gx_widget_show((GX_WIDGET*)&MainUserScreen.MainUserScreen_DriverStatus);    // show the 4-quadrant icon.
 
 
