@@ -223,11 +223,12 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 			gx_widget_hide ((GX_WIDGET*) &windowPtr->ION_DriverControlProgrammingScreen_Vertical_scroll);
 		// Populate the Mode Button verbiage
 		setModeButtonString (&ION_Device_ProgramSettings_ScreenInfo[2].m_MultiLineButtonWidget, gp_ProgrammingDevice->m_Mode_Switch_Schema);
+		SendDriverControlPadAssignmentRequest (gp_ProgrammingDevice->m_DriverConfiguration);    // This will get the PAD Assignments.
 		break;
 
 	case GX_SIGNAL(PAD_DIRECTION_BTN_ID, GX_EVENT_CLICKED):	// This is PAD DIRECTION.
-//		PushWindow (window);
-//        screen_toggle((GX_WINDOW *)&ION_PadDirectionScreen, window);
+		PushWindow (window);
+        screen_toggle((GX_WINDOW *)&ION_PadDirectionScreen, window);
 		break;
 
 	case GX_SIGNAL(DRV_MODE_BTN_ID, GX_EVENT_CLICKED):	// This is USER PORT button

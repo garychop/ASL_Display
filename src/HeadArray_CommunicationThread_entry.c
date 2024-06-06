@@ -21,6 +21,7 @@
 #include "HeadArray_CommunicationThread.h"
 #include "QueueDefinition.h"
 #include "ASL165_System.h"
+#include "DeviceInfo.h"
 
 //#define FORCE_OK_FOR_GUI_DEBUGGING      // comment this out to run "non-debug" code.
 
@@ -42,9 +43,12 @@
 //******************************************************************************
 // Defines and Macros
 //******************************************************************************
+
+#define NACK_RESPONSE 0x15          // NACK response
 #define MSG_OK  0                   // Indicates message as processed OK.
 #define MSG_STATUS_TIMEOUT 1        // indicates message processing failed to receive proper status, i.e. NO I/O Line or CS
 #define MSG_INVALID_FORMAT 2        // Indicates message was formatted improperly or invalid data.
+#define MSG_NAK 3                   // Indicates that the Head Array did not like the message
 
 //******************************************************************************
 // Forward Declarations
@@ -372,6 +376,8 @@ static uint8_t Read_I2C_Package(uint8_t *responseMsg)
     if (myCS != responseMsg[msgLength-1])
         return MSG_INVALID_FORMAT;
 
+    if (responseMsg[1] == NACK_RESPONSE)
+        return MSG_NAK;
     return MSG_OK;
 }
 
@@ -1054,6 +1060,51 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             }
             break;
 
+        /*-----------------------------------------
+         * Get ION Driver Control 4 Pad Assignments.
+         */
+        case HHP_HA_GET_DRIVER_CONTROL_INPUT_ASSIGNMENT:
+            HA_Msg[0] = 0x04;     // msg length
+            HA_Msg[1] = HHP_HA_GET_DRIVER_CONTROL_INPUT_ASSIGNMENT;
+            HA_Msg[2] = GUI_Msg.ION_GetPadAssignment.m_DeviceID;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    ProcessDriveControlPadAssignemnt_Response (HB_Response[1], HB_Response[2], HB_Response[3], HB_Response[4], HB_Response[5]);
+                }
+//                else // debugging
+//                {
+//                    ProcessDriveControlPadAssignemnt_Response (TWO_SWITCH_DEVICE_IDX, PAD_DIRECTION_LEFT, PAD_DIRECTION_OFF, PAD_DIRECTION_REVERSE, PAD_DIRECTION_OFF);
+//                }
+            }
+            break;
+
+        case HHP_HA_SET_DRIVER_CONTROL_INPUT_ASSIGNMENT:
+            HA_Msg[0] = 0x08;     // msg length
+            HA_Msg[1] = HHP_HA_SET_DRIVER_CONTROL_INPUT_ASSIGNMENT;
+            HA_Msg[2] = GUI_Msg.ION_SetPadAssignment.m_DeviceID;
+            HA_Msg[3] = GUI_Msg.ION_SetPadAssignment.m_ForwardPadAssignment;
+            HA_Msg[4] = GUI_Msg.ION_SetPadAssignment.m_LeftPadAssignemnt;
+            HA_Msg[5] = GUI_Msg.ION_SetPadAssignment.m_RightPadAssignment;
+            HA_Msg[6] = GUI_Msg.ION_SetPadAssignment.m_ReversePadAssignment;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    ;
+                }
+            }
+            break;
+
         case HHP_HA_BLUETOOTH_SETUP_GET_CMD:
             HA_Msg[0] = 0x04;     // msg length
             HA_Msg[1] = HHP_HA_BLUETOOTH_SETUP_GET_CMD;
@@ -1447,6 +1498,16 @@ void ProcessCommunicationMsgs ()
             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
             gxe.gx_event_display_handle = 0;
             gx_system_event_send(&gxe);
+            break;
+
+        case HHP_HA_GET_DRIVER_CONTROL_INPUT_ASSIGNMENT:
+            if (HeadArrayMsg.DriverControlPadAssignemt.m_DeviceID < ENDOF_DEVICES_IDX)
+            {
+                g_DeviceSettings[HeadArrayMsg.DriverControlPadAssignemt.m_DeviceID].m_PadInfo[LEFT_PAD].m_PadDirection = HeadArrayMsg.DriverControlPadAssignemt.m_LeftPad;
+                g_DeviceSettings[HeadArrayMsg.DriverControlPadAssignemt.m_DeviceID].m_PadInfo[RIGHT_PAD].m_PadDirection = HeadArrayMsg.DriverControlPadAssignemt.m_RightPad;
+                g_DeviceSettings[HeadArrayMsg.DriverControlPadAssignemt.m_DeviceID].m_PadInfo[CENTER_PAD].m_PadDirection = HeadArrayMsg.DriverControlPadAssignemt.m_FowardPad;
+                g_DeviceSettings[HeadArrayMsg.DriverControlPadAssignemt.m_DeviceID].m_PadInfo[REVERSE_PAD].m_PadDirection = HeadArrayMsg.DriverControlPadAssignemt.m_ReversePad;
+            }
             break;
 
         case HHP_HA_BLUETOOTH_SETUP_GET_CMD:

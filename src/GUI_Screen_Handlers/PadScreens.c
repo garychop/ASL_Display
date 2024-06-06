@@ -287,8 +287,8 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
     // Process LEFT button pushes
     case GX_SIGNAL(LEFT_PAD_BTN_ID, GX_EVENT_CLICKED):
         ++g_PadSettings[LEFT_PAD].m_PadDirection;
-        if (g_PadSettings[LEFT_PAD].m_PadDirection >= INVALID_DIRECTION)
-            g_PadSettings[LEFT_PAD].m_PadDirection = OFF_DIRECTION;
+        if (g_PadSettings[LEFT_PAD].m_PadDirection >= PAD_DIRECTION_INVALID)
+            g_PadSettings[LEFT_PAD].m_PadDirection = PAD_DIRECTION_OFF;
         SendSetPadAssignmentCommand (LEFT_PAD, g_PadSettings[LEFT_PAD].m_PadDirection, g_PadSettings[LEFT_PAD].m_PadType);
         SendGetPadAssignmentMsg (LEFT_PAD);
         break;
@@ -296,8 +296,8 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
     // Process RIGHT button pushes
     case GX_SIGNAL(RIGHT_PAD_BTN_ID, GX_EVENT_CLICKED):
         ++g_PadSettings[RIGHT_PAD].m_PadDirection;
-        if (g_PadSettings[RIGHT_PAD].m_PadDirection >= INVALID_DIRECTION)
-            g_PadSettings[RIGHT_PAD].m_PadDirection = OFF_DIRECTION;
+        if (g_PadSettings[RIGHT_PAD].m_PadDirection >= PAD_DIRECTION_INVALID)
+            g_PadSettings[RIGHT_PAD].m_PadDirection = PAD_DIRECTION_OFF;
         SendSetPadAssignmentCommand (RIGHT_PAD, g_PadSettings[RIGHT_PAD].m_PadDirection, g_PadSettings[RIGHT_PAD].m_PadType);
         SendGetPadAssignmentMsg (RIGHT_PAD);
         break;
@@ -305,8 +305,8 @@ UINT SetPadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr
     // Process CENTER PAD button pushes
     case GX_SIGNAL(CENTER_PAD_BTN_ID, GX_EVENT_CLICKED):
         ++g_PadSettings[CENTER_PAD].m_PadDirection;
-        if (g_PadSettings[CENTER_PAD].m_PadDirection >= INVALID_DIRECTION)
-            g_PadSettings[CENTER_PAD].m_PadDirection = OFF_DIRECTION;
+        if (g_PadSettings[CENTER_PAD].m_PadDirection >= PAD_DIRECTION_INVALID)
+            g_PadSettings[CENTER_PAD].m_PadDirection = PAD_DIRECTION_OFF;
         SendSetPadAssignmentCommand (CENTER_PAD, g_PadSettings[CENTER_PAD].m_PadDirection, g_PadSettings[CENTER_PAD].m_PadType);
         SendGetPadAssignmentMsg (CENTER_PAD);
         break;

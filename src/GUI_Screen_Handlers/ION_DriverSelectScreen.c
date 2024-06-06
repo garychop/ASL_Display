@@ -163,7 +163,7 @@ UINT ION_DriverSelectScreen_event_process(GX_WINDOW *window, GX_EVENT *event_ptr
 
 		// Process the SNP Head Array button
 	case GX_SIGNAL(SNP_HEAD_ARRAY_BTN, GX_EVENT_CLICKED):
-//		SetProgrammingDriverControl(&g_DeviceSettings[SNP_HEAD_ARRAY_IDX]);
+		SetProgrammingDriverControl(&g_DeviceSettings[SNP_HEAD_ARRAY_IDX]);
 //		CleanupInfoStruct(&ION_DriverSelect_ScreenInfo[0], &ION_DriverSelectScreen.ION_DriverSelectScreen_ListBox, ION_DRIVER_CONTROL_MAX);
 		PushWindow(window);
 		screen_toggle((GX_WINDOW*)&ION_SIPnPuffProgrammingScreen, window);

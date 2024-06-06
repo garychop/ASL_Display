@@ -133,6 +133,7 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("ION_DriverSelectScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_DriverControlProgrammingScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_MainProgrammingScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ION_PadDirectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_SIPnPuffProgrammingScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("MainUserScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
     gx_studio_named_widget_create("MinimumDriveScreen", GX_NULL, GX_NULL);
@@ -194,7 +195,7 @@ void my_gui_thread_entry(void)
     ILI9341V_Init();
 
     // Populate the default Left Pad settings.
-    g_PadSettings[LEFT_PAD].m_PadDirection = LEFT_DIRECTION;
+    g_PadSettings[LEFT_PAD].m_PadDirection = PAD_DIRECTION_LEFT;
     g_PadSettings[LEFT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[LEFT_PAD].m_PadStatus = PAD_STATUS_OK;
     g_PadSettings[LEFT_PAD].m_PadSensorStatus = PAD_OFF;
@@ -216,7 +217,7 @@ void my_gui_thread_entry(void)
     strcpy (g_PadSettings[LEFT_PAD].m_DriveDemandString, "");
 
     // Populate the Right Pad default settings.
-    g_PadSettings[RIGHT_PAD].m_PadDirection = RIGHT_DIRECTION;
+    g_PadSettings[RIGHT_PAD].m_PadDirection = PAD_DIRECTION_RIGHT;
     g_PadSettings[RIGHT_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[RIGHT_PAD].m_PadStatus = PAD_STATUS_OK;
     g_PadSettings[RIGHT_PAD].m_PadSensorStatus = PAD_OFF;
@@ -238,7 +239,7 @@ void my_gui_thread_entry(void)
     strcpy (g_PadSettings[RIGHT_PAD].m_DriveDemandString, "");
 
     // Populate the Center Pad default settings.
-    g_PadSettings[CENTER_PAD].m_PadDirection = FORWARD_DIRECTION;
+    g_PadSettings[CENTER_PAD].m_PadDirection = PAD_DIRECTION_FORWARD;
     g_PadSettings[CENTER_PAD].m_PadType = PROPORTIONAL_PADTYPE;
     g_PadSettings[CENTER_PAD].m_PadStatus = PAD_STATUS_OK;
     g_PadSettings[CENTER_PAD].m_PadSensorStatus = PAD_OFF;

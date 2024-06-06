@@ -88,24 +88,24 @@ char TranslatePad_EnumToChar (PHYSICAL_PAD_ENUM pad)
 
 PAD_DIRECTION_ENUM TranslatePadDirection_CharToEnum (char padDirection)
 {
-    PAD_DIRECTION_ENUM myDir = INVALID_DIRECTION;
+    PAD_DIRECTION_ENUM myDir = 0; // INVALID_DIRECTION;
 
     switch (padDirection)
     {
         case 'L':
-            myDir = LEFT_DIRECTION;
+            myDir = PAD_DIRECTION_LEFT;
             break;
         case 'R':
-            myDir = RIGHT_DIRECTION;
+            myDir = PAD_DIRECTION_RIGHT;
             break;
         case 'F':
-            myDir = FORWARD_DIRECTION;
+            myDir = PAD_DIRECTION_FORWARD;
             break;
         case 'B':
-            myDir = REVERSE_DIRECTION;
+            myDir = PAD_DIRECTION_REVERSE;
             break;
         case 'O':
-            myDir = OFF_DIRECTION;
+            myDir = PAD_DIRECTION_OFF;
             break;
     }
     return myDir;
@@ -117,22 +117,22 @@ char TranslatePadDirection_EnumToChar (PAD_DIRECTION_ENUM padDirection)
 
     switch (padDirection)
     {
-        case LEFT_DIRECTION:
+        case PAD_DIRECTION_LEFT:
             myDir = 'L';
             break;
-        case RIGHT_DIRECTION:
+        case PAD_DIRECTION_RIGHT:
             myDir = 'R';
             break;
-        case FORWARD_DIRECTION:
+        case PAD_DIRECTION_FORWARD:
             myDir = 'F';
             break;
 //        case 'B':
 //            myDir = REVERSE_DIRECTION;
 //            break;
-        case OFF_DIRECTION:
+        case PAD_DIRECTION_OFF:
             myDir = 'O';
             break;
-        case INVALID_DIRECTION:
+        case PAD_DIRECTION_INVALID:
         default:
             myDir = '?';
             break;
@@ -210,6 +210,29 @@ void SendDriverEnable (DEVICE_NUMBER_ENUM deviceIdx, ENABLE_STATUS_ENUM enableSe
     msg.m_MsgType = HHP_HA_SET_DRIVER_CONTROL_ENABLE;
     msg.DriverControlEnable.m_DeviceID = deviceIdx;
     msg.DriverControlEnable.m_Enabled = enableSetting;
+    tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+void SendDriverControlPadAssignmentRequest (DEVICE_NUMBER_ENUM driverControlIdx)
+{
+    GUI_MSG_STRUCT msg;
+
+    msg.m_MsgType = HHP_HA_GET_DRIVER_CONTROL_INPUT_ASSIGNMENT;
+    msg.ION_GetPadAssignment.m_DeviceID = driverControlIdx;
+    tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+void SendDriverControlPadAssigments (DEVICE_NUMBER_ENUM driverControlIdx,
+        PAD_DIRECTION_ENUM forwardPad, PAD_DIRECTION_ENUM leftPad, PAD_DIRECTION_ENUM rightPad, PAD_DIRECTION_ENUM reversePad)
+{
+    GUI_MSG_STRUCT msg;
+
+    msg.m_MsgType = HHP_HA_SET_DRIVER_CONTROL_INPUT_ASSIGNMENT;
+    msg.ION_SetPadAssignment.m_DeviceID = driverControlIdx;
+    msg.ION_SetPadAssignment.m_ForwardPadAssignment = forwardPad;
+    msg.ION_SetPadAssignment.m_LeftPadAssignemnt = leftPad;
+    msg.ION_SetPadAssignment.m_RightPadAssignment = rightPad;
+    msg.ION_SetPadAssignment.m_ReversePadAssignment = reversePad;
     tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 
@@ -655,4 +678,21 @@ void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT
     tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 
+/*
+ * This is called to send the ION Driver Control Pad Assignment message to the GUI via the queue.
+ */
+void ProcessDriveControlPadAssignemnt_Response (DEVICE_NUMBER_ENUM deviceIdx,
+        PAD_DIRECTION_ENUM forwardPad, PAD_DIRECTION_ENUM leftPad, PAD_DIRECTION_ENUM rightPad, PAD_DIRECTION_ENUM reversePad)
+{
+    HHP_HA_MSG_STRUCT HHP_Msg;
+
+    HHP_Msg.m_MsgType = HHP_HA_GET_DRIVER_CONTROL_INPUT_ASSIGNMENT;
+    HHP_Msg.DriverControlPadAssignemt.m_DeviceID = deviceIdx;
+    HHP_Msg.DriverControlPadAssignemt.m_FowardPad = forwardPad;
+    HHP_Msg.DriverControlPadAssignemt.m_LeftPad = leftPad;
+    HHP_Msg.DriverControlPadAssignemt.m_RightPad = rightPad;
+    HHP_Msg.DriverControlPadAssignemt.m_ReversePad = reversePad;
+
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
 

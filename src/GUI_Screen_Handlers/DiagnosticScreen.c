@@ -33,7 +33,7 @@ VOID DiagnosticScreen_draw_event (GX_WINDOW *window)
         gx_prompt_text_set (g_PadSettings[pad].m_AdjustedValuePrompt, g_PadSettings[pad].m_DriveDemandString);
         sprintf (g_PadSettings[pad].m_RawValueString, "%3d", g_PadSettings[pad].m_Proportional_RawValue);
         gx_prompt_text_set (g_PadSettings[pad].m_RawValuePrompt, g_PadSettings[pad].m_RawValueString);
-        if (g_PadSettings[pad].m_PadDirection == OFF_DIRECTION)
+        if (g_PadSettings[pad].m_PadDirection == PAD_DIRECTION_OFF)
         {
             gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticOff_Widget , &g_PadSettings[pad].m_DiagnosticWidigetLocation);
             gx_widget_resize ((GX_WIDGET*)g_PadSettings[pad].m_DiagnosticProportional_Widget , &g_HiddenRectangle);
@@ -87,7 +87,7 @@ UINT DiagnosticScreen_event_handler(GX_WINDOW *window, GX_EVENT *event_ptr)
             {
                 gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DiagnosticDigital_Widget, &g_HiddenRectangle);
                 gx_widget_resize ((GX_WIDGET*) g_PadSettings[pads].m_DiagnosticProportional_Widget, &g_HiddenRectangle);
-                if (g_PadSettings[pads].m_PadDirection == OFF_DIRECTION)
+                if (g_PadSettings[pads].m_PadDirection == PAD_DIRECTION_OFF)
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pads].m_DiagnosticOff_Widget, &g_PadSettings[pads].m_DiagnosticWidigetLocation);
                 else
                     gx_widget_resize ((GX_WIDGET*)g_PadSettings[pads].m_DiagnosticOff_Widget, &g_HiddenRectangle);

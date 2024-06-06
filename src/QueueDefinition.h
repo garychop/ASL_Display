@@ -50,6 +50,8 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_WHO_ARE_YOU_CMD = 0x46,
     HHP_HA_GET_DRIVER_CONTROL_ENABLE = 0x47,
     HHP_HA_SET_DRIVER_CONTROL_ENABLE = 0x48,
+    HHP_HA_GET_DRIVER_CONTROL_INPUT_ASSIGNMENT = 0x49,
+    HHP_HA_SET_DRIVER_CONTROL_INPUT_ASSIGNMENT = 0x4a,
     HHP_HA_BLUETOOTH_SETUP_GET_CMD = 0x4b,
     HHP_HA_BLUETOOTH_SETUP_SET_CMD = 0x4c
 } HHP_HA_MESSAGES_ENUM;
@@ -129,6 +131,18 @@ typedef struct GUI_MSG_S
             BT_STATUS_ENUM m_Status; // Used in SET command only
         } Send_BT_DeviceDefinition;
         struct
+        {   // Used with HHP_HA_GET_DRIVER_CONTROL_INPUT_ASSIGNMENT
+            DEVICE_NUMBER_ENUM m_DeviceID;
+        } ION_GetPadAssignment;
+        struct
+        {   // Used with HHP_HA_SET_DRIVER_CONTROL_INPUT_ASSIGNMENT
+            DEVICE_NUMBER_ENUM m_DeviceID;
+            PAD_DIRECTION_ENUM m_ForwardPadAssignment;
+            PAD_DIRECTION_ENUM m_LeftPadAssignemnt;
+            PAD_DIRECTION_ENUM m_RightPadAssignment;
+            PAD_DIRECTION_ENUM m_ReversePadAssignment;
+        } ION_SetPadAssignment;
+        struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
@@ -159,6 +173,8 @@ extern void SendAttendantSettingsSet_toHeadArray (uint8_t attendantSettings, uin
 extern void SendWhoAmiCommand (void);
 extern void RequestDriverEnableStatus (DEVICE_NUMBER_ENUM deviceIdx);
 extern void SendDriverEnable (DEVICE_NUMBER_ENUM, ENABLE_STATUS_ENUM);
+extern void SendDriverControlPadAssignmentRequest (DEVICE_NUMBER_ENUM);
+extern void SendDriverControlPadAssigments (DEVICE_NUMBER_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM);
 extern void Send_Get_BT_DeviceDefinitions (uint8_t slotNumber);
 extern void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
 
@@ -251,6 +267,14 @@ typedef struct HHP_HA_MSG_S
             uint8_t m_WhoAmi;
         } WhoAmI_Response;
         struct
+        {   // Used with HHP_HA_GET_DRIVER_CONTROL_INPUT_ASSIGNMENT
+            DEVICE_NUMBER_ENUM m_DeviceID;
+            PAD_DIRECTION_ENUM m_FowardPad;
+            PAD_DIRECTION_ENUM m_LeftPad;
+            PAD_DIRECTION_ENUM m_RightPad;
+            PAD_DIRECTION_ENUM m_ReversePad;
+        } DriverControlPadAssignemt;
+        struct
         {   // used with HHP_HA_BLUETOOTH_SETUP_GET_CMD and SET CMD
             uint8_t m_SlotNumber;   // Used in GET and SETcommand
             BT_DEVICE_TYPE m_DeviceIdenfication; // Used in SET command only
@@ -274,6 +298,7 @@ extern void SendAttendantSettingsGet (uint8_t attendantSettings, uint8_t attenda
 extern void SendDriverEnableToGUI (DEVICE_NUMBER_ENUM, ENABLE_STATUS_ENUM);
 extern void SendWhoAmItoGUI (uint8_t whoami);
 extern void Send_Get_BT_DeviceDefinitions_Response (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
+extern void ProcessDriveControlPadAssignemnt_Response (uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
 
 // Helper functions
 extern PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad);

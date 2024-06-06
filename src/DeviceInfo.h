@@ -27,7 +27,7 @@ typedef enum {HEAD_ARRY_DEVICE_IDX, DRIVER_4_QUAD_IDX, SIP_N_PUFF_DEVICE_IDX, TW
 #define MAX_NUM_OF_PADS (4)
 
 typedef enum PHYSICAL_PAD {LEFT_PAD, RIGHT_PAD, CENTER_PAD, REVERSE_PAD, END_OF_PAD_ENUM} PHYSICAL_PAD_ENUM;
-typedef enum PAD_DIRECTION {OFF_DIRECTION = 0, LEFT_DIRECTION, FORWARD_DIRECTION, RIGHT_DIRECTION, REVERSE_DIRECTION, MODE_DIRECTION, INVALID_DIRECTION} PAD_DIRECTION_ENUM;
+typedef enum PAD_DIRECTION {PAD_DIRECTION_OFF = 0, PAD_DIRECTION_LEFT, PAD_DIRECTION_FORWARD, PAD_DIRECTION_RIGHT, PAD_DIRECTION_REVERSE, PAD_DIRECTION_MODE, PAD_DIRECTION_INVALID} PAD_DIRECTION_ENUM;
 typedef enum PAD_TYPE {PROPORTIONAL_PADTYPE, DIGITAL_PADTYPE, INVALID_PAD_TYPE} PAD_TYPE_ENUM;
 // The positions in the following enum relate the 2 status bits for each pad where:
 // ... D0 = Digital Sensor Active and D1 = Pressure Sensor is active therefore
@@ -64,11 +64,6 @@ typedef struct
     DRIVER_CONTROL_MODE_SWITCH_SCHEMA_ENUM m_Mode_Switch_Schema;
 } DEVICE_INFO_STRUCT;
 
-//extern DEVICE_TYPE_STRUCT g_DeviceSettings[MAX_DEVICES];// This describes all driver controls.
-//extern DEVICE_TYPE_STRUCT *gp_ProgrammingDevice;        // This points to the Device Structure of the device currently being setup/programmed.
-//
-//extern DEVICE_NUMBER_ENUM g_ActiveDriverControlIdx;     // This contains the idx to the currently active Driver Control.
-//extern DEVICE_TYPE_STRUCT* gp_ActiveDriverControl;      // This points to the currently Active Driver Control struture.
 typedef enum {PAD_STATUS_OK, PAD_STATUS_ERROR} PAD_STATUS_ENUM;
 
 typedef struct PadInfoStruct

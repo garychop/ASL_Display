@@ -167,8 +167,8 @@ UINT ION_SIPNPUFF_ProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *
 		break;
 
 	case GX_SIGNAL(ION_SIPNPUFF_PROGRAMMING_BUTTON_ID_BASE + DIRECTIONS_BTN, GX_EVENT_CLICKED):
-//		PushWindow (window);
-//        screen_toggle((GX_WINDOW *)&ION_PadDirectionScreen, window);
+		PushWindow (window);
+        screen_toggle((GX_WINDOW *)&ION_PadDirectionScreen, window);
 		break;
 
 	case GX_SIGNAL (ION_SIPNPUFF_PROGRAMMING_BUTTON_ID_BASE + DIAGNOSTIC_BTN, GX_EVENT_CLICKED):

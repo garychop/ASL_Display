@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  5. 6.2024   Time (hh:mm): 09:37                        */
+/*  Date (dd.mm.yyyy):  5. 6.2024   Time (hh:mm): 17:23                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+ION_PADDIRECTIONSCREEN_CONTROL_BLOCK ION_PadDirectionScreen;
 ION_SIPNPUFFPROGRAMMINGSCREEN_CONTROL_BLOCK ION_SIPnPuffProgrammingScreen;
 ION_DRIVERCONTROLPROGRAMMINGSCREEN_CONTROL_BLOCK ION_DriverControlProgrammingScreen;
 ION_DRIVERSELECTSCREEN_CONTROL_BLOCK ION_DriverSelectScreen;
@@ -310,6 +311,209 @@ UINT gx_studio_vertical_scrollbar_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WID
     status = gx_vertical_scrollbar_create(scroll, info->widget_name, parent, appearance, info->style);
     return status;
 }
+GX_WINDOW_PROPERTIES ION_PadDirectionScreen_properties =
+{
+    GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES ION_PadDirectionScreen_CenterPad_Button_properties =
+{
+    GX_PIXELMAP_ID_UPWHITEARROW,             /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES ION_PadDirectionScreen_LeftPad_Button_properties =
+{
+    GX_PIXELMAP_ID_LEFTWHITEARROW,           /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_TEXT_BUTTON_PROPERTIES ION_PadDirectionScreen_OK_Button_properties =
+{
+    GX_STRING_ID_OK,                         /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES ION_PadDirectionScreen_RightPad_Button_properties =
+{
+    GX_PIXELMAP_ID_RIGHTWHITEARROW,          /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+GX_PROMPT_PROPERTIES ION_PadDirectionScreen_SettingPadPrompt_properties =
+{
+    GX_STRING_ID_CHANGE_PAD_DIRECTION,       /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_PIXELMAP_BUTTON_PROPERTIES ION_PadDirectionScreen_ReversePad_Button_properties =
+{
+    GX_PIXELMAP_ID_ARROWDOWN_88X70,          /* normal pixelmap id             */
+    0,                                       /* selected pixelmap id           */
+    0                                        /* disabled pixelmap id           */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_PadDirectionScreen_ReversePad_Button_define =
+{
+    "ReversePad_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    REVERSE_PAD_BTN_ID,                      /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {116, 50, 203, 119},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_PADDIRECTIONSCREEN_CONTROL_BLOCK, ION_PadDirectionScreen_ReversePad_Button), /* control block */
+    (void *) &ION_PadDirectionScreen_ReversePad_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_PadDirectionScreen_SettingPadPrompt_define =
+{
+    "SettingPadPrompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    SETTING_PROMPT_ID,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {2, 2, 317, 25},                         /* widget size                    */
+    &ION_PadDirectionScreen_ReversePad_Button_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_PADDIRECTIONSCREEN_CONTROL_BLOCK, ION_PadDirectionScreen_SettingPadPrompt), /* control block */
+    (void *) &ION_PadDirectionScreen_SettingPadPrompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_PadDirectionScreen_RightPad_Button_define =
+{
+    "RightPad_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    RIGHT_PAD_BTN_ID,                        /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THICK|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {205, 55, 292, 124},                     /* widget size                    */
+    &ION_PadDirectionScreen_SettingPadPrompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_PADDIRECTIONSCREEN_CONTROL_BLOCK, ION_PadDirectionScreen_RightPad_Button), /* control block */
+    (void *) &ION_PadDirectionScreen_RightPad_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_PadDirectionScreen_OK_Button_define =
+{
+    "OK_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    OK_BTN_ID,                               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {230, 164, 309, 227},                    /* widget size                    */
+    &ION_PadDirectionScreen_RightPad_Button_define, /* next widget definition  */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_PADDIRECTIONSCREEN_CONTROL_BLOCK, ION_PadDirectionScreen_OK_Button), /* control block */
+    (void *) &ION_PadDirectionScreen_OK_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_PadDirectionScreen_LeftPad_Button_define =
+{
+    "LeftPad_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    LEFT_PAD_BTN_ID,                         /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {28, 55, 115, 124},                      /* widget size                    */
+    &ION_PadDirectionScreen_OK_Button_define, /* next widget definition        */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_PADDIRECTIONSCREEN_CONTROL_BLOCK, ION_PadDirectionScreen_LeftPad_Button), /* control block */
+    (void *) &ION_PadDirectionScreen_LeftPad_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_PadDirectionScreen_CenterPad_Button_define =
+{
+    "CenterPad_Button",
+    GX_TYPE_PIXELMAP_BUTTON,                 /* widget type                    */
+    CENTER_PAD_BTN_ID,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_BUTTON),              /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_pixelmap_button_create,        /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {116, 150, 203, 219},                    /* widget size                    */
+    &ION_PadDirectionScreen_LeftPad_Button_define, /* next widget definition   */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_PADDIRECTIONSCREEN_CONTROL_BLOCK, ION_PadDirectionScreen_CenterPad_Button), /* control block */
+    (void *) &ION_PadDirectionScreen_CenterPad_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_PadDirectionScreen_define =
+{
+    "ION_PadDirectionScreen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    ION_PAD_DIRECTION_SCREEN_ID,             /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT,   /* style flags                */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(ION_PADDIRECTIONSCREEN_CONTROL_BLOCK), /* control block size        */
+    GX_COLOR_ID_SCROLL_BUTTON,               /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) ION_PadDirectionScreen_event_process, /* event function override */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &ION_PadDirectionScreen_CenterPad_Button_define, /* child widget           */
+    0,                                       /* control block                  */
+    (void *) &ION_PadDirectionScreen_properties /* extended properties         */
+};
 GX_WINDOW_PROPERTIES ION_SIPnPuffProgrammingScreen_properties =
 {
     GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
@@ -6907,6 +7111,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
+    { &ION_PadDirectionScreen_define, (GX_WIDGET *) &ION_PadDirectionScreen },
     { &ION_SIPnPuffProgrammingScreen_define, (GX_WIDGET *) &ION_SIPnPuffProgrammingScreen },
     { &ION_DriverControlProgrammingScreen_define, (GX_WIDGET *) &ION_DriverControlProgrammingScreen },
     { &ION_DriverSelectScreen_define, (GX_WIDGET *) &ION_DriverSelectScreen },
