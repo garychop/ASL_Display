@@ -180,7 +180,6 @@ UINT ION_MainProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *event
 		//screen_toggle((GX_WINDOW *)&ION_AttendantSetup_Screen, window);
 		break;
 
-		
 	// Do Auditory (Sound) Setup stuff
 	case GX_SIGNAL(SOUND_BTN, GX_EVENT_CLICKED):
 //		CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
@@ -208,8 +207,8 @@ UINT ION_MainProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *event
 
 	case GX_SIGNAL (RESET_BTN, GX_EVENT_CLICKED):
 //		CleanupInfoStruct(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, ION_PROGRAMMING_MAX);
-		//PushWindow (window);
-		//screen_toggle((GX_WINDOW *)&ResetScreen, window);
+		PushWindow (window);
+		screen_toggle((GX_WINDOW *)&ResetScreen, window);
 		break;
 
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
