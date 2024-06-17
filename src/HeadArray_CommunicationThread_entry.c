@@ -376,8 +376,13 @@ static uint8_t Read_I2C_Package(uint8_t *responseMsg)
     if (myCS != responseMsg[msgLength-1])
         return MSG_INVALID_FORMAT;
 
+    // Check for NACK response.
     if (responseMsg[1] == NACK_RESPONSE)
-        return MSG_NAK;
+    {
+        if (responseMsg[0] == 3)    // Check to ensure it's just the NAK response and not a valid response
+            return MSG_NAK;
+    }
+
     return MSG_OK;
 }
 
