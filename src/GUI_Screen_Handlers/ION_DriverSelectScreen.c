@@ -127,6 +127,11 @@ UINT ION_DriverSelectScreen_event_process(GX_WINDOW *window, GX_EVENT *event_ptr
 	case GX_EVENT_SHOW:
 		PopulateIONDriverSelectInfo();
 		Create_ION_DriverSelectWidgets(&ION_DriverSelectScreen.ION_DriverSelectScreen_ListBox);
+        SendDriverControlPadAssignmentRequest (HEAD_ARRY_DEVICE_IDX);    // This will get the PAD Assignments.
+        SendDriverControlPadAssignmentRequest (DRIVER_4_QUAD_IDX);    // This will get the PAD Assignments.
+        SendDriverControlPadAssignmentRequest (SIP_N_PUFF_DEVICE_IDX);    // This will get the PAD Assignments.
+        SendDriverControlPadAssignmentRequest (TWO_SWITCH_DEVICE_IDX);    // This will get the PAD Assignments.
+        SendDriverControlPadAssignmentRequest (SNP_HEAD_ARRAY_DEVICE_IDX);    // This will get the PAD Assignments.
 		break;
 
 	// Process the Head Array.

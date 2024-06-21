@@ -29,6 +29,7 @@ PROGRAMMING_SCREEN_INFO ION_Device_ProgramSettings_ScreenInfo[ION_DEVICE_PROGRAM
 //*************************************************************************************
 
 static char g_ModeSettingStr[32] = "MODE";
+static bool g_ModeSwitchChanged = false;
 
 //*************************************************************************************
 // Forward declarations
@@ -208,6 +209,7 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 {
 	UINT myErr = GX_SUCCESS;
 	ION_DRIVERCONTROLPROGRAMMINGSCREEN_CONTROL_BLOCK *windowPtr = (ION_DRIVERCONTROLPROGRAMMINGSCREEN_CONTROL_BLOCK*) window;
+	ENABLE_STATUS_ENUM enableStatus;
 
 	switch (event_ptr->gx_event_type)
 	{
@@ -223,7 +225,7 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 			gx_widget_hide ((GX_WIDGET*) &windowPtr->ION_DriverControlProgrammingScreen_Vertical_scroll);
 		// Populate the Mode Button verbiage
 		setModeButtonString (&ION_Device_ProgramSettings_ScreenInfo[2].m_MultiLineButtonWidget, gp_ProgrammingDevice->m_Mode_Switch_Schema);
-		SendDriverControlPadAssignmentRequest (gp_ProgrammingDevice->m_DriverConfiguration);    // This will get the PAD Assignments.
+		g_ModeSwitchChanged = false;
 		break;
 
 	case GX_SIGNAL(PAD_DIRECTION_BTN_ID, GX_EVENT_CLICKED):	// This is PAD DIRECTION.
@@ -237,6 +239,8 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 			gp_ProgrammingDevice->m_Mode_Switch_Schema = (DRIVER_CONTROL_MODE_SWITCH_SCHEMA_ENUM) 0;
 
 		setModeButtonString (&ION_Device_ProgramSettings_ScreenInfo[2].m_MultiLineButtonWidget, gp_ProgrammingDevice->m_Mode_Switch_Schema);
+
+		g_ModeSwitchChanged = true; // To make sure we send updated info to the HUB.
 		break;
 
 	case GX_SIGNAL (DIAGNOSTIC_BTN_ID, GX_EVENT_CLICKED):
@@ -247,14 +251,27 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 //			screen_toggle((GX_WINDOW*)&Diag_4Quad_Screen, window);
 //		else
 //			screen_toggle((GX_WINDOW *)&DiagnosticScreen, window);
-		break;
+	    break;
 
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
 		if (ION_Device_ProgramSettings_ScreenInfo[0].m_Checkbox.gx_widget_style & GX_STYLE_BUTTON_PUSHED)
-			gp_ProgrammingDevice->m_Enabled = ENABLED;
+		    enableStatus = ENABLED;
 		else
-			gp_ProgrammingDevice->m_Enabled = DISABLED;
-	    SendDriverEnable (gp_ProgrammingDevice->m_DriverConfiguration, gp_ProgrammingDevice->m_Enabled);    // Send to HUB
+		    enableStatus = DISABLED;
+	    if (enableStatus != gp_ProgrammingDevice->m_Enabled)
+	    {
+			gp_ProgrammingDevice->m_Enabled = enableStatus;
+	        SendDriverEnable (gp_ProgrammingDevice->m_DriverConfiguration, gp_ProgrammingDevice->m_Enabled);    // Send to HUB
+	    }
+        if (g_ModeSwitchChanged)
+        {
+            SendDriverControlPadAssigments (gp_ProgrammingDevice->m_DriverConfiguration,
+                                            gp_ProgrammingDevice->m_PadInfo[CENTER_PAD].m_PadDirection,
+                                            gp_ProgrammingDevice->m_PadInfo[LEFT_PAD].m_PadDirection,
+                                            gp_ProgrammingDevice->m_PadInfo[RIGHT_PAD].m_PadDirection,
+                                            gp_ProgrammingDevice->m_PadInfo[REVERSE_PAD].m_PadDirection,
+                                            gp_ProgrammingDevice->m_Mode_Switch_Schema);
+        }
 		CleanupInfoStruct(&ION_Device_ProgramSettings_ScreenInfo[0], &ION_DriverControlProgrammingScreen.ION_DriverControlProgrammingScreen_ListBox, ION_DEVICE_PROGRAMMING_ITEMS_MAX);
         screen_toggle(PopPushedWindow(), window);
 		break;

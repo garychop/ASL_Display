@@ -147,7 +147,8 @@ UINT ION_PadDirectionScreen_event_process (GX_WINDOW *window, GX_EVENT *event_pt
 	                                        gp_ProgrammingDevice->m_PadInfo[CENTER_PAD].m_PadDirection,
                                             gp_ProgrammingDevice->m_PadInfo[LEFT_PAD].m_PadDirection,
                                             gp_ProgrammingDevice->m_PadInfo[RIGHT_PAD].m_PadDirection,
-                                            gp_ProgrammingDevice->m_PadInfo[REVERSE_PAD].m_PadDirection);
+                                            gp_ProgrammingDevice->m_PadInfo[REVERSE_PAD].m_PadDirection,
+                                            gp_ProgrammingDevice->m_Mode_Switch_Schema);
 	    }
 	    screen_toggle(PopPushedWindow(), window);
 		break;

@@ -223,7 +223,8 @@ void SendDriverControlPadAssignmentRequest (DEVICE_NUMBER_ENUM driverControlIdx)
 }
 
 void SendDriverControlPadAssigments (DEVICE_NUMBER_ENUM driverControlIdx,
-        PAD_DIRECTION_ENUM forwardPad, PAD_DIRECTION_ENUM leftPad, PAD_DIRECTION_ENUM rightPad, PAD_DIRECTION_ENUM reversePad)
+        PAD_DIRECTION_ENUM forwardPad, PAD_DIRECTION_ENUM leftPad, PAD_DIRECTION_ENUM rightPad, PAD_DIRECTION_ENUM reversePad,
+        DRIVER_CONTROL_MODE_SWITCH_SCHEMA_ENUM modeSwitchSchema)
 {
     GUI_MSG_STRUCT msg;
 
@@ -233,6 +234,7 @@ void SendDriverControlPadAssigments (DEVICE_NUMBER_ENUM driverControlIdx,
     msg.ION_SetPadAssignment.m_LeftPadAssignemnt = leftPad;
     msg.ION_SetPadAssignment.m_RightPadAssignment = rightPad;
     msg.ION_SetPadAssignment.m_ReversePadAssignment = reversePad;
+    msg.ION_SetPadAssignment.m_ModeSwitchSchema = modeSwitchSchema;
     tx_queue_send(&g_GUI_to_COMM_queue, &msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 
@@ -682,7 +684,8 @@ void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT
  * This is called to send the ION Driver Control Pad Assignment message to the GUI via the queue.
  */
 void ProcessDriveControlPadAssignemnt_Response (DEVICE_NUMBER_ENUM deviceIdx,
-        PAD_DIRECTION_ENUM forwardPad, PAD_DIRECTION_ENUM leftPad, PAD_DIRECTION_ENUM rightPad, PAD_DIRECTION_ENUM reversePad)
+        PAD_DIRECTION_ENUM forwardPad, PAD_DIRECTION_ENUM leftPad, PAD_DIRECTION_ENUM rightPad, PAD_DIRECTION_ENUM reversePad,
+        DRIVER_CONTROL_MODE_SWITCH_SCHEMA_ENUM modeSwitchSchema)
 {
     HHP_HA_MSG_STRUCT HHP_Msg;
 
@@ -692,6 +695,7 @@ void ProcessDriveControlPadAssignemnt_Response (DEVICE_NUMBER_ENUM deviceIdx,
     HHP_Msg.DriverControlPadAssignemt.m_LeftPad = leftPad;
     HHP_Msg.DriverControlPadAssignemt.m_RightPad = rightPad;
     HHP_Msg.DriverControlPadAssignemt.m_ReversePad = reversePad;
+    HHP_Msg.DriverControlPadAssignemt.m_ModeSwitchSchema = modeSwitchSchema;
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }

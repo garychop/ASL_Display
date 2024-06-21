@@ -141,6 +141,7 @@ typedef struct GUI_MSG_S
             PAD_DIRECTION_ENUM m_LeftPadAssignemnt;
             PAD_DIRECTION_ENUM m_RightPadAssignment;
             PAD_DIRECTION_ENUM m_ReversePadAssignment;
+            DRIVER_CONTROL_MODE_SWITCH_SCHEMA_ENUM m_ModeSwitchSchema;
         } ION_SetPadAssignment;
         struct
         {
@@ -174,7 +175,7 @@ extern void SendWhoAmiCommand (void);
 extern void RequestDriverEnableStatus (DEVICE_NUMBER_ENUM deviceIdx);
 extern void SendDriverEnable (DEVICE_NUMBER_ENUM, ENABLE_STATUS_ENUM);
 extern void SendDriverControlPadAssignmentRequest (DEVICE_NUMBER_ENUM);
-extern void SendDriverControlPadAssigments (DEVICE_NUMBER_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM);
+extern void SendDriverControlPadAssigments (DEVICE_NUMBER_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM, DRIVER_CONTROL_MODE_SWITCH_SCHEMA_ENUM);
 extern void Send_Get_BT_DeviceDefinitions (uint8_t slotNumber);
 extern void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
 
@@ -273,6 +274,7 @@ typedef struct HHP_HA_MSG_S
             PAD_DIRECTION_ENUM m_LeftPad;
             PAD_DIRECTION_ENUM m_RightPad;
             PAD_DIRECTION_ENUM m_ReversePad;
+            DRIVER_CONTROL_MODE_SWITCH_SCHEMA_ENUM m_ModeSwitchSchema;
         } DriverControlPadAssignemt;
         struct
         {   // used with HHP_HA_BLUETOOTH_SETUP_GET_CMD and SET CMD
@@ -298,7 +300,7 @@ extern void SendAttendantSettingsGet (uint8_t attendantSettings, uint8_t attenda
 extern void SendDriverEnableToGUI (DEVICE_NUMBER_ENUM, ENABLE_STATUS_ENUM);
 extern void SendWhoAmItoGUI (uint8_t whoami);
 extern void Send_Get_BT_DeviceDefinitions_Response (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
-extern void ProcessDriveControlPadAssignemnt_Response (uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
+extern void ProcessDriveControlPadAssignemnt_Response (uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
 
 // Helper functions
 extern PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad);

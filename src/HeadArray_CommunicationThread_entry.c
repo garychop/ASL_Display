@@ -1080,7 +1080,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = Read_I2C_Package(HB_Response);
                 if (msgStatus == MSG_OK)
                 {
-                    ProcessDriveControlPadAssignemnt_Response (HB_Response[1], HB_Response[2], HB_Response[3], HB_Response[4], HB_Response[5]);
+                    ProcessDriveControlPadAssignemnt_Response (HB_Response[1], HB_Response[2], HB_Response[3], HB_Response[4], HB_Response[5], HB_Response[6]);
                 }
 //                else // debugging
 //                {
@@ -1090,13 +1090,14 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             break;
 
         case HHP_HA_SET_DRIVER_CONTROL_INPUT_ASSIGNMENT:
-            HA_Msg[0] = 0x08;     // msg length
+            HA_Msg[0] = 0x09;     // msg length
             HA_Msg[1] = HHP_HA_SET_DRIVER_CONTROL_INPUT_ASSIGNMENT;
             HA_Msg[2] = GUI_Msg.ION_SetPadAssignment.m_DeviceID;
             HA_Msg[3] = GUI_Msg.ION_SetPadAssignment.m_ForwardPadAssignment;
             HA_Msg[4] = GUI_Msg.ION_SetPadAssignment.m_LeftPadAssignemnt;
             HA_Msg[5] = GUI_Msg.ION_SetPadAssignment.m_RightPadAssignment;
             HA_Msg[6] = GUI_Msg.ION_SetPadAssignment.m_ReversePadAssignment;
+            HA_Msg[7] = GUI_Msg.ION_SetPadAssignment.m_ModeSwitchSchema;
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
@@ -1512,6 +1513,7 @@ void ProcessCommunicationMsgs ()
                 g_DeviceSettings[HeadArrayMsg.DriverControlPadAssignemt.m_DeviceID].m_PadInfo[RIGHT_PAD].m_PadDirection = HeadArrayMsg.DriverControlPadAssignemt.m_RightPad;
                 g_DeviceSettings[HeadArrayMsg.DriverControlPadAssignemt.m_DeviceID].m_PadInfo[CENTER_PAD].m_PadDirection = HeadArrayMsg.DriverControlPadAssignemt.m_FowardPad;
                 g_DeviceSettings[HeadArrayMsg.DriverControlPadAssignemt.m_DeviceID].m_PadInfo[REVERSE_PAD].m_PadDirection = HeadArrayMsg.DriverControlPadAssignemt.m_ReversePad;
+                g_DeviceSettings[HeadArrayMsg.DriverControlPadAssignemt.m_DeviceID].m_Mode_Switch_Schema = HeadArrayMsg.DriverControlPadAssignemt.m_ModeSwitchSchema;
             }
             break;
 
