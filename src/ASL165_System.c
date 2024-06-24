@@ -35,7 +35,6 @@ int g_ChangeScreen_WIP;
 // These are received from the Head Array in the Heart Beat Message
 HEARTBEAT_FEATURE_ID_ENUM g_ActiveFeature = POWER_ONOFF_ID;     // this indicates the active feature.
 uint8_t g_HeadArrayStatus1 = 0x00;
-uint8_t g_HeadArrayStatus2 = 0x00;
 
 GX_WIDGET *g_ActiveScreen = GX_NULL;
 int16_t g_NeutralDAC_Constant = 2048;

@@ -133,7 +133,7 @@ extern int16_t g_NeutralDAC_Constant;
 extern int16_t g_NeutralDAC_Setting;
 extern int16_t g_NeutralDAC_Range;
 extern bool g_WaitingForVeerResponse;
-extern uint8_t g_HeadArrayStatus1, g_HeadArrayStatus2;
+extern uint8_t g_HeadArrayStatus1;
 extern GX_RECTANGLE g_HiddenRectangle;
 
 // Added in Version 1.9.x
@@ -153,7 +153,6 @@ void PushWindow (GX_WINDOW* window);
 GX_WINDOW *PopPushedWindow();
 
 void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode);
-void SaveSystemStatus (uint8_t Status1, uint8_t Status2);
 void ProcessCommunicationMsgs ();
 void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures, uint8_t *features2);
 

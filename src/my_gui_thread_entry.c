@@ -132,6 +132,7 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("ION_BT_UserSelectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_DriverSelectScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_DriverControlProgrammingScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ION_HeadArray_DiagnosticScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_MainProgrammingScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_PadDirectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_SIPnPuffProgrammingScreen", GX_NULL, GX_NULL);
@@ -304,14 +305,6 @@ void my_gui_thread_entry(void)
     //Open WDT; 4.46s; PCLKB 30MHz
  	//  g_wdt.p_api->open(g_wdt.p_ctrl, g_wdt.p_cfg);
  	//  g_wdt.p_api->refresh(g_wdt.p_ctrl);     //Start the WDT by refreshing it
-}
-
-//*************************************************************************************
-
-void SaveSystemStatus (uint8_t status1, uint8_t status2)
-{
-    g_HeadArrayStatus1 = status1;
-    g_HeadArrayStatus2 = status2;
 }
 
 //*************************************************************************************

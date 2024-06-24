@@ -700,3 +700,18 @@ void ProcessDriveControlPadAssignemnt_Response (DEVICE_NUMBER_ENUM deviceIdx,
     tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 
+/******************************************************************************
+ * Send a Message to start or stop the Diagnostic Scheme which allows or
+ * prevents commands to the Wheelchair.
+ * @param enable = 0 = OK to send to WC, non0 = Inhibit WC demands.
+ */
+void Send_DiagnosticCommand (uint8_t enable)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_DIAGNOSTIC_CMD;
+    q_Msg.DriverControlEnable.m_Enabled = enable;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+

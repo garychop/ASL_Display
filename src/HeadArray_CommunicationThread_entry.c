@@ -1149,6 +1149,24 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             }
             break;
 
+        case HHP_HA_DIAGNOSTIC_CMD:
+            HA_Msg[0] = 0x05;     // msg length
+            HA_Msg[1] = HHP_HA_DIAGNOSTIC_CMD;
+            HA_Msg[2] = 0;
+            HA_Msg[3] = GUI_Msg.DriverControlEnable.m_Enabled;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    ; // Process response and do what?!
+                }
+            }
+            break;
+
         default:
             msgSent = false;
             break;
@@ -1199,6 +1217,19 @@ void ProcessCommunicationMsgs ()
                 g_PadSettings[LEFT_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 4) & 0x03; // store only d4 and d5
                 g_PadSettings[REVERSE_PAD].m_PadSensorStatus = (HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus >> 6) & 0x03; // store only D6 and D7
 
+                // This will update the screen's depiction of the Driver Control.
+                if ((g_PadSensorStatus != HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus)
+                    || (g_HeadArrayStatus1 != HeadArrayMsg.HeartBeatMsg.m_HA_Status))
+                {
+                    g_HeadArrayStatus1 = HeadArrayMsg.HeartBeatMsg.m_HA_Status;
+                    g_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus;
+                    gxe.gx_event_type = GX_EVENT_REDRAW;
+                    gxe.gx_event_sender = GX_ID_NONE;
+                    gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                    gxe.gx_event_display_handle = 0;
+                    gx_system_event_send(&gxe);
+                }
+
                 if (g_ActiveScreen->gx_widget_id == STARTUP_SPLASH_SCREEN_ID)
                 {
                     AdjustActiveFeaturePositions ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
@@ -1232,16 +1263,6 @@ void ProcessCommunicationMsgs ()
                         else if (g_ActiveFeature != HeadArrayMsg.HeartBeatMsg.m_ActiveMode)
                         {
                             AdjustActiveFeaturePositions ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
-                            gxe.gx_event_type = GX_EVENT_REDRAW;
-                            gxe.gx_event_sender = GX_ID_NONE;
-                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
-                            gxe.gx_event_display_handle = 0;
-                            gx_system_event_send(&gxe);
-                        }
-                        // Determine the Pad Status (Digital Proximity Sensor or the Pressure Sensor has changed status.
-                        else if (g_PadSensorStatus != HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus)
-                        {
-                            g_PadSensorStatus = HeadArrayMsg.HeartBeatMsg.m_HA_SensorStatus;
                             gxe.gx_event_type = GX_EVENT_REDRAW;
                             gxe.gx_event_sender = GX_ID_NONE;
                             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
@@ -1353,7 +1374,6 @@ void ProcessCommunicationMsgs ()
 
                     }
                 }
-                SaveSystemStatus (HeadArrayMsg.HeartBeatMsg.m_HA_Status, 0);
             }
             else    // Failed Heart Beat
             {
@@ -1366,16 +1386,6 @@ void ProcessCommunicationMsgs ()
                     gx_system_event_send(&gxe);
                 }
             }
-    //            if (HeadArrayMsg.HeartBeatMsg.HB_Count == 25)
-    //            {
-    //                gxe.gx_event_type = GX_EVENT_REDRAW;
-    //                gxe.gx_event_sender = GX_ID_NONE;
-    //                gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
-    //                gxe.gx_event_display_handle = 0;
-    //                gx_system_event_send(&gxe);
-    //                g_UseNewPrompt = true;
-    //            }
-
             break;
 
         case HHP_HA_PAD_ASSIGMENT_GET:  // Yes, the COMM task is responding with a "set" command.

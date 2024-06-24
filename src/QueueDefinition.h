@@ -53,7 +53,8 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_GET_DRIVER_CONTROL_INPUT_ASSIGNMENT = 0x49,
     HHP_HA_SET_DRIVER_CONTROL_INPUT_ASSIGNMENT = 0x4a,
     HHP_HA_BLUETOOTH_SETUP_GET_CMD = 0x4b,
-    HHP_HA_BLUETOOTH_SETUP_SET_CMD = 0x4c
+    HHP_HA_BLUETOOTH_SETUP_SET_CMD = 0x4c,
+    HHP_HA_DIAGNOSTIC_CMD = 0x4e
 } HHP_HA_MESSAGES_ENUM;
 
 // This structure is used to send messages from the GUI to the Head Array Communication Task
@@ -178,6 +179,7 @@ extern void SendDriverControlPadAssignmentRequest (DEVICE_NUMBER_ENUM);
 extern void SendDriverControlPadAssigments (DEVICE_NUMBER_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM, PAD_DIRECTION_ENUM, DRIVER_CONTROL_MODE_SWITCH_SCHEMA_ENUM);
 extern void Send_Get_BT_DeviceDefinitions (uint8_t slotNumber);
 extern void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
+extern void Send_DiagnosticCommand (uint8_t enable);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
