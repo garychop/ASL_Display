@@ -5,9 +5,6 @@
 #include "bsp_api.h"
 #include "sf_message.h"
 #include "sf_message_payloads.h"
-
-#include "r_jpeg_decode.h"
-#include "sf_jpeg_decode.h"
 #include "r_glcd.h"
 #include "r_display_api.h"
 #include "sf_el_gx.h"
@@ -29,13 +26,6 @@ extern void g_message_init(void);
 extern const sf_message_instance_t g_sf_message0;
 void g_sf_message0_err_callback(void *p_instance, void *p_data);
 void sf_message_init0(void);
-
-extern const jpeg_decode_instance_t g_jpeg_decode0;
-extern const jpeg_decode_cfg_t g_jpeg_decode0_cfg;
-#ifndef NULL
-void NULL(jpeg_decode_callback_args_t *p_args);
-#endif
-extern const sf_jpeg_decode_instance_t g_sf_jpeg_decode0;
 /* Display on GLCD Instance. */
 extern const display_instance_t g_display0;
 extern display_runtime_cfg_t g_display0_runtime_cfg_fg;

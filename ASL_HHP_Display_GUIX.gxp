@@ -14,7 +14,7 @@
 <target_tools>2</target_tools>
 <big_endian>FALSE</big_endian>
 <dave2d_graph_accelerator>TRUE</dave2d_graph_accelerator>
-<renesas_jpeg_decoder>2</renesas_jpeg_decoder>
+<renesas_jpeg_decoder>0</renesas_jpeg_decoder>
 <renesas_png_decoder>0</renesas_png_decoder>
 <grid_enabled>FALSE</grid_enabled>
 <snap_enabled>FALSE</snap_enabled>
@@ -4520,6 +4520,15 @@
 <enabled>TRUE</enabled>
 <compress>FALSE</compress>
 <folder_id>STRING_GROUP</folder_id>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
 <resource>
 <name>Add New String</name>
 <pathinfo>

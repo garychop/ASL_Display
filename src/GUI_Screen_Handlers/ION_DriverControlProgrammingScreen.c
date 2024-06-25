@@ -20,10 +20,6 @@
 
 typedef enum {ENABLE_BTN_ID = 120, PAD_DIRECTION_BTN_ID, DRV_MODE_BTN_ID, DIAGNOSTIC_BTN_ID} BTN_ENUM;
 
-#define ION_DEVICE_PROGRAMMING_ITEMS_MAX (8)	// Max number of items in the ION Main Programming List
-
-PROGRAMMING_SCREEN_INFO ION_Device_ProgramSettings_ScreenInfo[ION_DEVICE_PROGRAMMING_ITEMS_MAX];
-
 //*************************************************************************************
 // Local file variables
 //*************************************************************************************
@@ -46,26 +42,20 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 
 void PopulateION_Device_ProgrammingInfo (void)
 {
-	int i;
-
-	for (i=0; i < ION_DEVICE_PROGRAMMING_ITEMS_MAX; ++i)
-	{
-		ION_Device_ProgramSettings_ScreenInfo[i].m_Enabled = false;
-		ION_Device_ProgramSettings_ScreenInfo[i].m_LargeDescriptionID = GX_STRING_ID_BLANK;
-	}
+	CleanupInfoStruct (g_ProgrammingScreenInfoStruct, &ION_DriverControlProgrammingScreen.ION_DriverControlProgrammingScreen_ListBox);
 
 	// Enable button
-	ION_Device_ProgramSettings_ScreenInfo[0].m_Enabled = true;
-	ION_Device_ProgramSettings_ScreenInfo[0].m_LargeDescriptionID = GX_STRING_ID_ENABLE;
+	g_ProgrammingScreenInfoStruct[0].m_Enabled = true;
+	g_ProgrammingScreenInfoStruct[0].m_LargeDescriptionID = GX_STRING_ID_ENABLE;
 	// DIRECTIONS
-	ION_Device_ProgramSettings_ScreenInfo[1].m_Enabled = true;
-	ION_Device_ProgramSettings_ScreenInfo[1].m_LargeDescriptionID = GX_STRING_ID_SET_DIRECTION;
+	g_ProgrammingScreenInfoStruct[1].m_Enabled = true;
+	g_ProgrammingScreenInfoStruct[1].m_LargeDescriptionID = GX_STRING_ID_SET_DIRECTION;
 	// MODE
-	ION_Device_ProgramSettings_ScreenInfo[2].m_Enabled = true;
-	ION_Device_ProgramSettings_ScreenInfo[2].m_LargeDescriptionID = GX_STRING_ID_BLANK;
+	g_ProgrammingScreenInfoStruct[2].m_Enabled = true;
+	g_ProgrammingScreenInfoStruct[2].m_LargeDescriptionID = GX_STRING_ID_BLANK;
 	// DIAGNOSTICS
-	ION_Device_ProgramSettings_ScreenInfo[3].m_Enabled = true;
-	ION_Device_ProgramSettings_ScreenInfo[3].m_LargeDescriptionID = GX_STRING_ID_DIAGNOSTICS;
+	g_ProgrammingScreenInfoStruct[3].m_Enabled = true;
+	g_ProgrammingScreenInfoStruct[3].m_LargeDescriptionID = GX_STRING_ID_DIAGNOSTICS;
 }
 
 //*************************************************************************************
@@ -78,11 +68,11 @@ void Create_ION_Device_ProgrammingWidgets (GX_VERTICAL_LIST *list)
 	int activeFeatureCount;
 
 	activeFeatureCount = 0;
-	for (index = 0; index < ION_DEVICE_PROGRAMMING_ITEMS_MAX; ++index)
+	for (index = 0; index < MAX_PROGRAMMING_SCREEN_STRUCTURES; ++index)
 	{
-		if (ION_Device_ProgramSettings_ScreenInfo[index].m_Enabled)
+		if (g_ProgrammingScreenInfoStruct[index].m_Enabled)
 		{
-			ION_Device_ProgrammingList_callback (list, (GX_WIDGET*) &ION_Device_ProgramSettings_ScreenInfo[index], index);
+			ION_Device_ProgrammingList_callback (list, (GX_WIDGET*) &g_ProgrammingScreenInfoStruct[index], index);
 			++activeFeatureCount;
 		}
 	}
@@ -216,7 +206,7 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 	case GX_EVENT_SHOW:
 		// Display the Device's Name
 		gx_prompt_text_id_set (&windowPtr->ION_DriverControlProgrammingScreen_DriverName_Prompt, gp_ProgrammingDevice->m_DeviceNameStringID);
-        CleanupInfoStruct(&ION_Device_ProgramSettings_ScreenInfo[0], &ION_DriverControlProgrammingScreen.ION_DriverControlProgrammingScreen_ListBox, ION_DEVICE_PROGRAMMING_ITEMS_MAX);
+        CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_DriverControlProgrammingScreen.ION_DriverControlProgrammingScreen_ListBox);
 		// Set up the Buttons.
 		PopulateION_Device_ProgrammingInfo();
 		Create_ION_Device_ProgrammingWidgets(&ION_DriverControlProgrammingScreen.ION_DriverControlProgrammingScreen_ListBox);
@@ -224,7 +214,7 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 		if (windowPtr->ION_DriverControlProgrammingScreen_ListBox.gx_vertical_list_total_rows <= 3)
 			gx_widget_hide ((GX_WIDGET*) &windowPtr->ION_DriverControlProgrammingScreen_Vertical_scroll);
 		// Populate the Mode Button verbiage
-		setModeButtonString (&ION_Device_ProgramSettings_ScreenInfo[2].m_MultiLineButtonWidget, gp_ProgrammingDevice->m_Mode_Switch_Schema);
+		setModeButtonString (&g_ProgrammingScreenInfoStruct[2].m_MultiLineButtonWidget, gp_ProgrammingDevice->m_Mode_Switch_Schema);
 		g_ModeSwitchChanged = false;
 		break;
 
@@ -238,7 +228,7 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 		if (gp_ProgrammingDevice->m_Mode_Switch_Schema >= DRV_MODE_SWITCH_END)
 			gp_ProgrammingDevice->m_Mode_Switch_Schema = (DRIVER_CONTROL_MODE_SWITCH_SCHEMA_ENUM) 0;
 
-		setModeButtonString (&ION_Device_ProgramSettings_ScreenInfo[2].m_MultiLineButtonWidget, gp_ProgrammingDevice->m_Mode_Switch_Schema);
+		setModeButtonString (&g_ProgrammingScreenInfoStruct[2].m_MultiLineButtonWidget, gp_ProgrammingDevice->m_Mode_Switch_Schema);
 
 		g_ModeSwitchChanged = true; // To make sure we send updated info to the HUB.
 		break;
@@ -254,7 +244,7 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 	    break;
 
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-		if (ION_Device_ProgramSettings_ScreenInfo[0].m_Checkbox.gx_widget_style & GX_STYLE_BUTTON_PUSHED)
+		if (g_ProgrammingScreenInfoStruct[0].m_Checkbox.gx_widget_style & GX_STYLE_BUTTON_PUSHED)
 		    enableStatus = ENABLED;
 		else
 		    enableStatus = DISABLED;
@@ -272,7 +262,7 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
                                             gp_ProgrammingDevice->m_PadInfo[REVERSE_PAD].m_PadDirection,
                                             gp_ProgrammingDevice->m_Mode_Switch_Schema);
         }
-		CleanupInfoStruct(&ION_Device_ProgramSettings_ScreenInfo[0], &ION_DriverControlProgrammingScreen.ION_DriverControlProgrammingScreen_ListBox, ION_DEVICE_PROGRAMMING_ITEMS_MAX);
+		CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_DriverControlProgrammingScreen.ION_DriverControlProgrammingScreen_ListBox);
         screen_toggle(PopPushedWindow(), window);
 		break;
 	}

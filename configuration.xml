@@ -120,10 +120,6 @@
       <description>Framework External IRQ: Provides=[Framework External IRQ] , Requires=[External IRQ ,ThreadX]</description>
       <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
-    <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_jpeg_decode" variant="" vendor="Renesas" version="1.7.5">
-      <description>Framework JPEG Decode: Provides=[SF JPEG Decode] , Requires=[ThreadX ,JPEG Decode]</description>
-      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
-    </component>
     <component apiversion="" class="Framework Services" condition="" group="all" subgroup="sf_message" variant="" vendor="Renesas" version="1.7.5">
       <description>Messaging Framework: Provides=[Message] , Requires=[ThreadX]</description>
       <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
@@ -174,14 +170,6 @@
     </component>
     <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_ioport" variant="" vendor="Renesas" version="1.7.5">
       <description>I/O Port: Provides=[IO Port]</description>
-      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_jpeg_common" variant="" vendor="Renesas" version="1.7.5">
-      <description>JPEG Common</description>
-      <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
-    </component>
-    <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_jpeg_decode" variant="" vendor="Renesas" version="1.7.5">
-      <description>JPEG Decode: Provides=[JPEG Decode]</description>
       <originalPack>Renesas.Synergy.1.7.5.pack</originalPack>
     </component>
     <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_riic" variant="" vendor="Renesas" version="1.7.5">
@@ -243,7 +231,7 @@
       <property id="module.framework.sf_el_gx.p_callback" value="NULL"/>
       <property id="module.framework.sf_el_gx.rotation_angle" value="module.framework.sf_el_gx.rotation_angle.angle_90"/>
       <property id="module.framework.sf_el_gx.p_canvas.used" value="module.framework.sf_el_gx.p_canvas.used.true"/>
-      <property id="module.framework.sf_el_gx.jpegbuffer_size" value="20480"/>
+      <property id="module.framework.sf_el_gx.jpegbuffer_size" value="4096"/>
       <property id="module.framework.sf_el_gx.canvas_section" value="bss"/>
       <property id="module.framework.sf_el_gx.jpegWB_section" value="bss"/>
       <property id="module.framework.sf_el_gx.dave2d_buffer_cache" value="module.framework.sf_el_gx.dave2d_buffer_cache.enable"/>
@@ -432,22 +420,6 @@
       <property id="module.driver.display.line_detect_ipl" value="board.icu.common.irq.priority3"/>
       <property id="module.driver.display.underflow_1_ipl" value="board.icu.common.irq.priority3"/>
       <property id="module.driver.display.underflow_2_ipl" value="board.icu.common.irq.priority3"/>
-    </module>
-    <module id="module.framework.sf_jpeg_decode.1783883532">
-      <property id="module.framework.sf_jpeg_decode.name" value="g_sf_jpeg_decode0"/>
-    </module>
-    <module id="module.driver.jpeg_decode.1988581180">
-      <property id="module.driver.jpeg_decode.name" value="g_jpeg_decode0"/>
-      <property id="module.driver.jpeg_decode.input_data_format" value="module.driver.jpeg_decode.input_data_format.normal"/>
-      <property id="module.driver.jpeg_decode.output_data_format" value="module.driver.jpeg_decode.output_data_format.normal"/>
-      <property id="module.driver.jpeg_decode.pixel_format" value="module.driver.jpeg_decode.pixel_format.rgb565"/>
-      <property id="module.driver.jpeg_decode.alpha_value" value="255"/>
-      <property id="module.driver.jpeg_decode.p_callback" value="NULL"/>
-      <property id="module.driver.jpeg_decode.jedi_ipl" value="board.icu.common.irq.priority3"/>
-      <property id="module.driver.jpeg_decode.jdti_ipl" value="board.icu.common.irq.priority3"/>
-    </module>
-    <module id="module.driver.jpeg_common.105956859">
-      <property id="module.driver.jpeg_common.name" value="g_jpeg_common0"/>
     </module>
     <module id="module.framework.tes.dave2d.1072544433"/>
     <module id="module.framework.sf_tes_2d_drw.11037421"/>
@@ -809,11 +781,6 @@
       <stack module="module.el.gx.841395795">
         <stack module="module.framework.sf_el_gx.982981904" requires="module.el.gx.requires.sf_el_gx">
           <stack module="module.driver.display_on_glcd.1729015777" requires="module.framework.sf_el_gx.requires.display"/>
-          <stack module="module.framework.sf_jpeg_decode.1783883532" requires="module.framework.sf_el_gx.requires.sf_jpeg_decode">
-            <stack module="module.driver.jpeg_decode.1988581180" requires="module.framework.sf_jpeg_decode.requires.jpeg_decode">
-              <stack module="module.driver.jpeg_common.105956859" requires="module.driver.jpeg_decode_on_jpeg_decode.requires.jpeg_common"/>
-            </stack>
-          </stack>
           <stack module="module.framework.tes.dave2d.1072544433" requires="module.framework.sf_el_gx.requires.tes.dave2d">
             <stack module="module.framework.sf_tes_2d_drw.11037421" requires="module.framework.tes.dave2d.requires.sf_tes_2d_drw"/>
           </stack>
@@ -877,9 +844,6 @@
         <property id="rtos.threadx.object.queue.queue_size" value="320"/>
       </object>
     </context>
-    <config id="config.driver.jpeg_decode">
-      <property id="config.driver.jpeg_decode.param_checking_enable" value="config.driver.jpeg_decode.param_checking_enable.enabled"/>
-    </config>
     <config id="config.driver.wdt">
       <property id="config.driver.wdt.param_checking_enable" value="config.driver.wdt.param_checking_enable.enabled"/>
     </config>
@@ -924,7 +888,7 @@
     </config>
     <config id="config.el.gx">
       <property id="config.el.gx.enable_synergy_drw" value="config.el.gx.enable_synergy_drw.yes"/>
-      <property id="config.el.gx.enable_synergy_jpeg" value="config.el.gx.enable_synergy_jpeg.yes"/>
+      <property id="config.el.gx.enable_synergy_jpeg" value="config.el.gx.enable_synergy_jpeg.no"/>
       <property id="config.el.gx.enable_gui_legacy_api" value="config.el.gx.enable_gui_legacy_api.yes"/>
     </config>
     <config id="config.framework.sf_tes_2d_drw">
@@ -936,9 +900,6 @@
     </config>
     <config id="config.framework.sf_external_irq">
       <property id="config.framework.sf_external_irq.param_checking_enable" value="config.framework.sf_external_irq.param_checking_enable.enabled"/>
-    </config>
-    <config id="config.framework.sf_jpeg_decode">
-      <property id="config.framework.sf_jpeg_decode.param_checking_enable" value="config.framework.sf_jpeg_decode.param_checking_enable.enabled"/>
     </config>
     <config id="config.driver.sci_spi">
       <property id="config.driver.sci_spi.param_checking_enable" value="config.driver.sci_spi.param_checking_enable.enabled"/>

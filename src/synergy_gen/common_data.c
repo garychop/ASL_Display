@@ -62,27 +62,6 @@ void sf_message_init0(void)
 SSP_VECTOR_DEFINE(drw_int_isr, DRW, INT);
 #endif
 #endif
-SSP_VECTOR_DEFINE( jpeg_jdti_isr, JPEG, JDTI);
-SSP_VECTOR_DEFINE( jpeg_jedi_isr, JPEG, JEDI);
-static jpeg_decode_instance_ctrl_t g_jpeg_decode0_ctrl;
-const jpeg_decode_cfg_t g_jpeg_decode0_cfg =
-{ .input_data_format = JPEG_DECODE_DATA_FORMAT_NORMAL,
-  .output_data_format = JPEG_DECODE_DATA_FORMAT_NORMAL,
-  .pixel_format = JPEG_DECODE_PIXEL_FORMAT_RGB565,
-  .alpha_value = 255,
-  .p_callback = NULL,
-  .jedi_ipl = (3),
-  .jdti_ipl = (3), };
-const jpeg_decode_instance_t g_jpeg_decode0 =
-{ .p_api = (jpeg_decode_api_t const *) &g_jpeg_decode_on_jpeg_decode, .p_ctrl = &g_jpeg_decode0_ctrl, .p_cfg =
-          &g_jpeg_decode0_cfg };
-static sf_jpeg_decode_instance_ctrl_t g_sf_jpeg_decode0_ctrl;
-
-static const sf_jpeg_decode_cfg_t g_sf_jpeg_decode0_cfg =
-{ .p_lower_lvl_jpeg_decode = (jpeg_decode_instance_t const *) &g_jpeg_decode0 };
-const sf_jpeg_decode_instance_t g_sf_jpeg_decode0 =
-{ .p_api = &g_sf_jpeg_decode_on_sf_jpeg_decode, .p_ctrl = &g_sf_jpeg_decode0_ctrl, .p_cfg =
-          (sf_jpeg_decode_cfg_t const *) &g_sf_jpeg_decode0_cfg };
 #if (3) != BSP_IRQ_DISABLED
 #if !defined(SSP_SUPPRESS_ISR_g_display0) && !defined(SSP_SUPPRESS_ISR_GLCD)
 SSP_VECTOR_DEFINE( glcdc_line_detect_isr, GLCDC, LINE_DETECT);
@@ -357,8 +336,8 @@ uint8_t g_sf_el_gx0_canvas[sizeof(g_display0_fb_foreground[0])] BSP_ALIGN_VARIAB
 
 /** JPEG Work Buffer */
 #if GX_USE_SYNERGY_JPEG
-#if (20480)
-uint8_t g_sf_el_gx0_jpegbuffer[20480] BSP_ALIGN_VARIABLE_V2(64) BSP_PLACE_IN_SECTION_V2(".bss");
+#if (4096)
+uint8_t g_sf_el_gx0_jpegbuffer[4096] BSP_ALIGN_VARIABLE_V2(64) BSP_PLACE_IN_SECTION_V2(".bss");
 #endif
 #endif
 
@@ -415,8 +394,8 @@ static const sf_el_gx_cfg_t g_sf_el_gx0_cfg =
   /* JPEG Work Buffer Configuration */
 #if GX_USE_SYNERGY_JPEG
   .p_jpegbuffer = g_sf_el_gx0_jpegbuffer,
-  .jpegbuffer_size = 20480,
-  .p_sf_jpeg_decode_instance = (void *)&g_sf_jpeg_decode0,
+  .jpegbuffer_size = 4096,
+  .p_sf_jpeg_decode_instance = (void *)&SYNERGY_NOT_DEFINED,
 #else
   .p_jpegbuffer = NULL,
   .jpegbuffer_size = 0, .p_sf_jpeg_decode_instance = NULL,

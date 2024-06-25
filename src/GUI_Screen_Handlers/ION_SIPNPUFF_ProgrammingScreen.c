@@ -27,10 +27,6 @@
 #define ION_SIPNPUFF_PROGRAMMING_BUTTON_ID_BASE (100)
 typedef enum {ENABLE_BTN, CALIBRATE_BTN, DIRECTIONS_BTN, DIAGNOSTIC_BTN, INVALID_BTN} SNP_BUTTON_ENUM;
 
-#define ION_SIPNPUFF_PROGRAMMING_MAX (8)	// Max number of items in the ION Main Programming List
-
-PROGRAMMING_SCREEN_INFO ION_SIPNPUFF_ProgramSettings_ScreenInfo[ION_SIPNPUFF_PROGRAMMING_MAX];
-
 //*************************************************************************************
 // Forward declarations
 //*************************************************************************************
@@ -45,26 +41,19 @@ VOID ION_SIPNPUFF_ProgrammingList_callback(GX_VERTICAL_LIST *list, GX_WIDGET *wi
 
 void PopulateION_SIPNPUFF_ProgrammingInfo (void)
 {
-	int i;
-
-	for (i=0; i < ION_SIPNPUFF_PROGRAMMING_MAX; ++i)
-	{
-		ION_SIPNPUFF_ProgramSettings_ScreenInfo[i].m_Enabled = false;
-		ION_SIPNPUFF_ProgramSettings_ScreenInfo[i].m_LargeDescriptionID = GX_STRING_ID_BLANK;
-	}
-
+    CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_SIPnPuffProgrammingScreen.ION_SIPnPuffProgrammingScreen_ListBox);
 	// Enable button
-	ION_SIPNPUFF_ProgramSettings_ScreenInfo[ENABLE_BTN].m_Enabled = true;
-	ION_SIPNPUFF_ProgramSettings_ScreenInfo[ENABLE_BTN].m_LargeDescriptionID = GX_STRING_ID_ENABLE;
+	g_ProgrammingScreenInfoStruct[ENABLE_BTN].m_Enabled = true;
+	g_ProgrammingScreenInfoStruct[ENABLE_BTN].m_LargeDescriptionID = GX_STRING_ID_ENABLE;
 	// CALIBRATE
-	ION_SIPNPUFF_ProgramSettings_ScreenInfo[CALIBRATE_BTN].m_Enabled = true;
-	ION_SIPNPUFF_ProgramSettings_ScreenInfo[CALIBRATE_BTN].m_LargeDescriptionID = GX_STRING_ID_CALIBRATE;
+	g_ProgrammingScreenInfoStruct[CALIBRATE_BTN].m_Enabled = true;
+	g_ProgrammingScreenInfoStruct[CALIBRATE_BTN].m_LargeDescriptionID = GX_STRING_ID_CALIBRATE;
 	// DIRECTIONS
-	ION_SIPNPUFF_ProgramSettings_ScreenInfo[DIRECTIONS_BTN].m_Enabled = true;
-	ION_SIPNPUFF_ProgramSettings_ScreenInfo[DIRECTIONS_BTN].m_LargeDescriptionID = GX_STRING_ID_SET_DIRECTION;
+	g_ProgrammingScreenInfoStruct[DIRECTIONS_BTN].m_Enabled = true;
+	g_ProgrammingScreenInfoStruct[DIRECTIONS_BTN].m_LargeDescriptionID = GX_STRING_ID_SET_DIRECTION;
 	// DIAGNOSTICS
-	ION_SIPNPUFF_ProgramSettings_ScreenInfo[DIAGNOSTIC_BTN].m_Enabled = true;
-	ION_SIPNPUFF_ProgramSettings_ScreenInfo[DIAGNOSTIC_BTN].m_LargeDescriptionID = GX_STRING_ID_DIAGNOSTICS;
+	g_ProgrammingScreenInfoStruct[DIAGNOSTIC_BTN].m_Enabled = true;
+	g_ProgrammingScreenInfoStruct[DIAGNOSTIC_BTN].m_LargeDescriptionID = GX_STRING_ID_DIAGNOSTICS;
 }
 
 //*************************************************************************************
@@ -77,11 +66,11 @@ void Create_ION_SIPNPUFF_ProgramminghWidgets (GX_VERTICAL_LIST *list)
 	int activeFeatureCount;
 
 	activeFeatureCount = 0;
-	for (index = 0; index < ION_SIPNPUFF_PROGRAMMING_MAX; ++index)
+	for (index = 0; index < MAX_PROGRAMMING_SCREEN_STRUCTURES; ++index)
 	{
-		if (ION_SIPNPUFF_ProgramSettings_ScreenInfo[index].m_Enabled)
+		if (g_ProgrammingScreenInfoStruct[index].m_Enabled)
 		{
-			ION_SIPNPUFF_ProgrammingList_callback (list, (GX_WIDGET*) &ION_SIPNPUFF_ProgramSettings_ScreenInfo[index], index);
+			ION_SIPNPUFF_ProgrammingList_callback (list, (GX_WIDGET*) &g_ProgrammingScreenInfoStruct[index], index);
 			++activeFeatureCount;
 		}
 	}
@@ -180,8 +169,8 @@ UINT ION_SIPNPUFF_ProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *
 		break;
 
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-//		CleanupInfoStruct(&ION_SIPNPUFF_ProgramSettings_ScreenInfo[0], &SNP_Window->ION_SIPnPuffProgrammingScreen_ListBox, ION_SIPNPUFF_PROGRAMMING_MAX);
-		if (ION_SIPNPUFF_ProgramSettings_ScreenInfo[0].m_Checkbox.gx_widget_style & GX_STYLE_BUTTON_PUSHED)
+		CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &SNP_Window->ION_SIPnPuffProgrammingScreen_ListBox);
+		if (g_ProgrammingScreenInfoStruct[0].m_Checkbox.gx_widget_style & GX_STYLE_BUTTON_PUSHED)
 			gp_ProgrammingDevice->m_Enabled = ENABLED;
 		else
 			gp_ProgrammingDevice->m_Enabled = DISABLED;

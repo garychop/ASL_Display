@@ -11,25 +11,15 @@
 #include "ASL165_System.h"
 #include "ScreenSupport.h"
 
-// This structure is used by each screen.
-//typedef struct
-//{
-//	int m_Enabled;
-//	GX_RESOURCE_ID m_LargeDescriptionID;
-//	GX_WIDGET m_ItemWidget;
-//	GX_PROMPT m_PromptWidget;
-//	GX_TEXT_BUTTON m_ButtonWidget;
-//	GX_MULTI_LINE_TEXT_BUTTON m_MultiLineButtonWidget;
-//	CUSTOM_CHECKBOX m_Checkbox;
-//} PROGRAMMING_SCREEN_INFO;
+PROGRAMMING_SCREEN_INFO g_ProgrammingScreenInfoStruct[MAX_PROGRAMMING_SCREEN_STRUCTURES];
 
 //*****************************************************************************
 
-void InitializeScreenInfoStruct(PROGRAMMING_SCREEN_INFO* info, int depth)
+void InitializeScreenInfoStruct(PROGRAMMING_SCREEN_INFO* info)
 {
 	int idx;
 
-	for (idx = 0; idx < depth; ++idx)
+	for (idx = 0; idx < MAX_PROGRAMMING_SCREEN_STRUCTURES; ++idx)
 	{
 		//info->m_ButtonWidget;	//  = NULL;
 		//info->m_Checkbox;		//  = NULL;
@@ -45,12 +35,12 @@ void InitializeScreenInfoStruct(PROGRAMMING_SCREEN_INFO* info, int depth)
 
 //*****************************************************************************
 
-void CleanupInfoStruct(PROGRAMMING_SCREEN_INFO *info, GX_VERTICAL_LIST* list, int depth)
+void CleanupInfoStruct(PROGRAMMING_SCREEN_INFO *info, GX_VERTICAL_LIST* list)
 {
 	int idx;
 	GX_BOOL result;
 
-	for (idx = 0; idx < depth; ++idx)
+	for (idx = 0; idx < MAX_PROGRAMMING_SCREEN_STRUCTURES; ++idx)
 	{
 		gx_widget_created_test(&info->m_ButtonWidget, &result);
 		if (result == GX_TRUE)

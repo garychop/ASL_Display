@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 24. 6.2024   Time (hh:mm): 10:04                        */
+/*  Date (dd.mm.yyyy): 24. 6.2024   Time (hh:mm): 16:40                        */
 /*******************************************************************************/
 
 
@@ -7777,7 +7777,6 @@ UINT _gx_synergy_display_driver_setup(GX_DISPLAY *display)
     display -> gx_display_driver_anti_aliased_wide_arc_draw    = _gx_dave2d_aliased_arc_draw;
     display -> gx_display_driver_wide_arc_draw                 = _gx_dave2d_arc_draw;
     #endif
-    display -> gx_display_driver_jpeg_draw                     = _gx_synergy_jpeg_draw;
     return GX_SUCCESS;
 }
 #endif

@@ -13,6 +13,8 @@
 
 #include "custom_checkbox.h"
 
+#define MAX_PROGRAMMING_SCREEN_STRUCTURES (8)
+
 // This structure is used by each screen.
 typedef struct
 {
@@ -25,8 +27,10 @@ typedef struct
 	CUSTOM_CHECKBOX m_Checkbox;
 } PROGRAMMING_SCREEN_INFO;
 
-void InitializeScreenInfoStruct(PROGRAMMING_SCREEN_INFO* info, int depth);
-void CleanupInfoStruct(PROGRAMMING_SCREEN_INFO* info, GX_VERTICAL_LIST* list, int depth);
+extern PROGRAMMING_SCREEN_INFO g_ProgrammingScreenInfoStruct[MAX_PROGRAMMING_SCREEN_STRUCTURES];
+
+void InitializeScreenInfoStruct(PROGRAMMING_SCREEN_INFO* info);
+void CleanupInfoStruct(PROGRAMMING_SCREEN_INFO* info, GX_VERTICAL_LIST* list);
 
 
 #endif // SCREEN_SUPPORT_H

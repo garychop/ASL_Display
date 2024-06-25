@@ -234,13 +234,6 @@ Synergy Configuration
   Module "Display Driver on r_glcd"
     Parameter Checking: Enabled
     
-  Module "JPEG Decode Framework on sf_jpeg_decode"
-    Parameter Checking: Enabled
-    
-  Module "JPEG Decode Driver on r_jpeg_decode"
-    Parameter Checking: Enabled
-    
-  Module "JPEG Common"
   Module "D/AVE 2D Driver on dave2d"
   Module "D/AVE 2D Port on sf_tes_2d_drw"
     Work memory size for display lists in bytes: 12288
@@ -248,7 +241,7 @@ Synergy Configuration
     
   Module "GUIX on gx"
     Enable Synergy 2D Drawing Engine Support: Yes(default)
-    Enable Synergy JPEG Support: Yes(default)
+    Enable Synergy JPEG Support: No
     Enable GUI Legacy API Support: Yes(default)
     
   Module "Touch Panel Framework on sf_touch_panel_i2c"
@@ -313,7 +306,7 @@ Synergy Configuration
         Name of User Callback function: NULL
         Screen Rotation Angle(Clockwise): 90
         GUIX Canvas Buffer (required if rotation angle is not zero): Used
-        Size of JPEG Work Buffer (valid if JPEG hardware acceleration enabled): 20480
+        Size of JPEG Work Buffer (valid if JPEG hardware acceleration enabled): 4096
         Memory section for GUIX Canvas Buffer: bss
         Memory section for JPEG Work Buffer: bss
         D/AVE 2D Frame Buffer Cache(Valid if D/AVE 2D Drawing Engine is enabled): Enable (Default)
@@ -503,22 +496,6 @@ Synergy Configuration
           Underflow 1 Interrupt Priority: Priority 3
           Underflow 2 Interrupt Priority: Priority 3
           
-        Instance "g_sf_jpeg_decode0 JPEG Decode Framework on sf_jpeg_decode"
-          Name: g_sf_jpeg_decode0
-          
-          Instance "g_jpeg_decode0 JPEG Decode Driver on r_jpeg_decode"
-            Name: g_jpeg_decode0
-            Byte Order for Input Data Format: Normal byte order (1)(2)(3)(4)(5)(6)(7)(8)
-            Byte Order for Output Data Format: Normal byte order (1)(2)(3)(4)(5)(6)(7)(8)
-            Output Data Color Format: Pixel Data RGB565 format
-            Alpha value to be applied to decoded pixel data(only valid for ARGB8888 format): 255
-            Name of user callback function: NULL
-            Decompression Interrupt Priority: Priority 3
-            Data Transfer Interrupt Priority: Priority 3
-            
-            Instance "g_jpeg_common0 JPEG Common"
-              Name: g_jpeg_common0
-              
         Instance "D/AVE 2D Driver on dave2d"
           Instance "D/AVE 2D Port on sf_tes_2d_drw"
     Instance "g_sf_touch_panel_i2c0 Touch Panel Framework on sf_touch_panel_i2c"
