@@ -654,7 +654,11 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
         case HHP_HA_ACTIVE_FEATURE_SET:
             HA_Msg[0] = 0x04;     // msg length
             HA_Msg[1] = HHP_HA_ACTIVE_FEATURE_SET;
+#ifdef FUSION
             HA_Msg[2] = (uint8_t) TranslateFeature_EnumToChar (GUI_Msg.ModeChangeMsg.m_Mode);
+#else
+            HA_Msg[2] = (uint8_t) (GUI_Msg.ModeChangeMsg.m_Mode);
+#endif
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[3] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);

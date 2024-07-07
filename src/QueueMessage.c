@@ -352,7 +352,7 @@ void SendPadGetResponse (PHYSICAL_PAD_ENUM physicalPad, PAD_DIRECTION_ENUM assig
 //  This message is to Change the Mode.
 //****************************************************************************
 
-void SendModeChangeCommand (FEATURE_ID_ENUM newMode)
+void SendModeChangeCommand (HEARTBEAT_FEATURE_ID_ENUM newMode)
 {
     GUI_MSG_STRUCT q_Msg;
 

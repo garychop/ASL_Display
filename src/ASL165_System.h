@@ -79,7 +79,7 @@ typedef enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PA
 
 typedef struct MAIN_SCREEN_FEATURE_STRUCT
 {
-    FEATURE_ID_ENUM m_HB_ID;    // This establishes the connection between the ION Hub / Fusion and this feature.
+    HEARTBEAT_FEATURE_ID_ENUM m_HB_ID;    // This establishes the connection between the ION Hub / Fusion and this feature.
     int m_Location;     // This indicates the Main Screen location, 0=Top most, 3=bottom most
 	int /*bool*/ m_Available;	// This is true if this feature should be displayed for Enabling/Disabling. Typically based upon RNet setting.
     int /*bool*/ m_Enabled;      // Indicates if this feature is active.
