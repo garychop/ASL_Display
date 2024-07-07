@@ -118,11 +118,14 @@ UINT ION_DriverSelectScreen_event_process(GX_WINDOW *window, GX_EVENT *event_ptr
 	case GX_EVENT_SHOW:
 		PopulateIONDriverSelectInfo();
 		Create_ION_DriverSelectWidgets(&ION_DriverSelectScreen.ION_DriverSelectScreen_ListBox);
+		// The following gets the information from the HUB for all devices. Put here so we have it all.
         SendDriverControlPadAssignmentRequest (HEAD_ARRY_DEVICE_IDX);    // This will get the PAD Assignments.
         SendDriverControlPadAssignmentRequest (DRIVER_4_QUAD_IDX);    // This will get the PAD Assignments.
         SendDriverControlPadAssignmentRequest (SIP_N_PUFF_DEVICE_IDX);    // This will get the PAD Assignments.
         SendDriverControlPadAssignmentRequest (TWO_SWITCH_DEVICE_IDX);    // This will get the PAD Assignments.
         SendDriverControlPadAssignmentRequest (SNP_HEAD_ARRAY_DEVICE_IDX);    // This will get the PAD Assignments.
+        SendSNPThresholdGet (SIP_N_PUFF_DEVICE_IDX);
+        SendSNPThresholdGet (SNP_HEAD_ARRAY_DEVICE_IDX);
 		break;
 
 	// Process the Head Array.

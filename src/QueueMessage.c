@@ -715,3 +715,31 @@ void Send_DiagnosticCommand (uint8_t enable)
     tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
 
+/******************************************************************************
+ * This function start the process to retrieve or send the thresholds from/to ION HUB
+ * @param DEVICE_NUMBER_ENUM such as SIP_N_PUFF_DEVICE_IDX
+ */
+void SendSNPThresholdGet (DEVICE_NUMBER_ENUM device)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_SNP_THRESHOLDS_GET;
+    q_Msg.ION_SNP_Calibration_CMD_s.m_DeviceID = device;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+
+void SendSNPThresholdSet (DEVICE_NUMBER_ENUM device, int8_t soft_sip, int8_t hard_sip, int8_t soft_puff, int8_t hard_puff)
+{
+    GUI_MSG_STRUCT q_Msg;
+
+    q_Msg.m_MsgType = HHP_HA_SNP_THRESHOLDS_SET;
+    q_Msg.ION_SNP_Calibration_CMD_s.m_DeviceID = device;
+    q_Msg.ION_SNP_Calibration_CMD_s.m_SoftSip = soft_sip;
+    q_Msg.ION_SNP_Calibration_CMD_s.m_HardSip = hard_sip;
+    q_Msg.ION_SNP_Calibration_CMD_s.m_SoftPuff = soft_puff;
+    q_Msg.ION_SNP_Calibration_CMD_s.m_HardPuff = hard_puff;
+
+    tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
+}
+

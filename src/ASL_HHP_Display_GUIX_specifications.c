@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 24. 6.2024   Time (hh:mm): 16:40                        */
+/*  Date (dd.mm.yyyy):  7. 7.2024   Time (hh:mm): 08:46                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,8 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK ION_Diag_4Quad_Screen;
+ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK ION_SNP_Calibrate_Screen;
 ION_HEADARRAY_DIAGNOSTICSCREEN_CONTROL_BLOCK ION_HeadArray_DiagnosticScreen;
 ION_PADDIRECTIONSCREEN_CONTROL_BLOCK ION_PadDirectionScreen;
 ION_SIPNPUFFPROGRAMMINGSCREEN_CONTROL_BLOCK ION_SIPnPuffProgrammingScreen;
@@ -312,6 +314,671 @@ UINT gx_studio_vertical_scrollbar_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WID
     status = gx_vertical_scrollbar_create(scroll, info->widget_name, parent, appearance, info->style);
     return status;
 }
+GX_WINDOW_PROPERTIES ION_Diag_4Quad_Screen_properties =
+{
+    GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
+};
+GX_ICON_PROPERTIES ION_Diag_4Quad_Screen_Diag_FWD_properties =
+{
+    GX_PIXELMAP_ID_DIAG4QUAD_VERTICALOFF,    /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES ION_Diag_4Quad_Screen_Diag_LEFT_properties =
+{
+    GX_PIXELMAP_ID_DIAG4QUAD_HORIZOFF,       /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES ION_Diag_4Quad_Screen_Diag_REV_properties =
+{
+    GX_PIXELMAP_ID_DIAG4QUAD_VERTICALOFF,    /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES ION_Diag_4Quad_Screen_Diag_RIGHT_properties =
+{
+    GX_PIXELMAP_ID_DIAG4QUAD_HORIZOFF,       /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_PROMPT_PROPERTIES ION_Diag_4Quad_Screen_InstructionsText_properties =
+{
+    GX_STRING_ID_DEFLECT_4QUAD,              /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* normal text color              */
+    GX_COLOR_ID_TEXT_INPUT_TEXT              /* selected text color            */
+};
+GX_ICON_BUTTON_PROPERTIES ION_Diag_4Quad_Screen_ModePort_IconButton_properties =
+{
+    GX_PIXELMAP_ID_RADIOBUTTON_OFF           /* pixelmap id                    */
+};
+GX_PROMPT_PROPERTIES ION_Diag_4Quad_Screen_ModePort_Prompt_properties =
+{
+    GX_STRING_ID_MODE_PORT,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+GX_ICON_BUTTON_PROPERTIES ION_Diag_4Quad_Screen_UserPort_IconButton_properties =
+{
+    GX_PIXELMAP_ID_RADIOBUTTON_OFF           /* pixelmap id                    */
+};
+GX_PROMPT_PROPERTIES ION_Diag_4Quad_Screen_UserPort_Prompt_properties =
+{
+    GX_STRING_ID_USER_PORT,                  /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+GX_TEXT_BUTTON_PROPERTIES ION_Diag_4Quad_Screen_OK_Button_properties =
+{
+    GX_STRING_ID_OK,                         /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_ModePort_Prompt_define =
+{
+    "ModePort_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    Mode_PORT_PROMPT_DIAG_ID,                /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_BLACK,                       /* normal color id                */
+    GX_COLOR_ID_WHITE,                       /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {91, 206, 188, 229},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK, ION_Diag_4Quad_Screen_ModePort_Prompt), /* control block */
+    (void *) &ION_Diag_4Quad_Screen_ModePort_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_UserPort_Prompt_define =
+{
+    "UserPort_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    USER_PORT_PROMPT_DIAG_ID,                /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_LEFT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_BLACK,                       /* normal color id                */
+    GX_COLOR_ID_WHITE,                       /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {91, 184, 188, 207},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK, ION_Diag_4Quad_Screen_UserPort_Prompt), /* control block */
+    (void *) &ION_Diag_4Quad_Screen_UserPort_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_OK_Button_define =
+{
+    "OK_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    OK_BTN_ID,                               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {230, 165, 309, 228},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK, ION_Diag_4Quad_Screen_OK_Button), /* control block */
+    (void *) &ION_Diag_4Quad_Screen_OK_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_UserPort_IconButton_define =
+{
+    "UserPort_IconButton",
+    GX_TYPE_ICON_BUTTON,                     /* widget type                    */
+    USER_PORT_BUTTON,                        /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_icon_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {68, 180, 217, 207},                     /* widget size                    */
+    &ION_Diag_4Quad_Screen_OK_Button_define, /* next widget definition         */
+    &ION_Diag_4Quad_Screen_UserPort_Prompt_define, /* child widget definition  */
+    offsetof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK, ION_Diag_4Quad_Screen_UserPort_IconButton), /* control block */
+    (void *) &ION_Diag_4Quad_Screen_UserPort_IconButton_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_ModePort_IconButton_define =
+{
+    "ModePort_IconButton",
+    GX_TYPE_ICON_BUTTON,                     /* widget type                    */
+    MODE_PORT_BUTTON,                        /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_icon_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {68, 202, 217, 229},                     /* widget size                    */
+    &ION_Diag_4Quad_Screen_UserPort_IconButton_define, /* next widget definition */
+    &ION_Diag_4Quad_Screen_ModePort_Prompt_define, /* child widget definition  */
+    offsetof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK, ION_Diag_4Quad_Screen_ModePort_IconButton), /* control block */
+    (void *) &ION_Diag_4Quad_Screen_ModePort_IconButton_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_InstructionsText_define =
+{
+    "InstructionsText",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    INSTRUCT_PROMPT_ID,                      /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {5, 3, 314, 32},                         /* widget size                    */
+    &ION_Diag_4Quad_Screen_ModePort_IconButton_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK, ION_Diag_4Quad_Screen_InstructionsText), /* control block */
+    (void *) &ION_Diag_4Quad_Screen_InstructionsText_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_Diag_RIGHT_define =
+{
+    "Diag_RIGHT",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {180, 84, 243, 120},                     /* widget size                    */
+    &ION_Diag_4Quad_Screen_InstructionsText_define, /* next widget definition  */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK, ION_Diag_4Quad_Screen_Diag_RIGHT), /* control block */
+    (void *) &ION_Diag_4Quad_Screen_Diag_RIGHT_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_Diag_REV_define =
+{
+    "Diag_REV",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {134, 110, 170, 173},                    /* widget size                    */
+    &ION_Diag_4Quad_Screen_Diag_RIGHT_define, /* next widget definition        */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK, ION_Diag_4Quad_Screen_Diag_REV), /* control block */
+    (void *) &ION_Diag_4Quad_Screen_Diag_REV_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_Diag_LEFT_define =
+{
+    "Diag_LEFT",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {60, 84, 123, 120},                      /* widget size                    */
+    &ION_Diag_4Quad_Screen_Diag_REV_define,  /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK, ION_Diag_4Quad_Screen_Diag_LEFT), /* control block */
+    (void *) &ION_Diag_4Quad_Screen_Diag_LEFT_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_Diag_FWD_define =
+{
+    "Diag_FWD",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {134, 30, 170, 93},                      /* widget size                    */
+    &ION_Diag_4Quad_Screen_Diag_LEFT_define, /* next widget definition         */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK, ION_Diag_4Quad_Screen_Diag_FWD), /* control block */
+    (void *) &ION_Diag_4Quad_Screen_Diag_FWD_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_define =
+{
+    "ION_Diag_4Quad_Screen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    ION_DIAG_4QUAD_SCREEN_ID,                /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED,   /* style flags                    */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(ION_DIAG_4QUAD_SCREEN_CONTROL_BLOCK), /* control block size         */
+    GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) ION_Diag_4Quad_Screen_event_handler, /* event function override */
+    {0, 0, 319, 255},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &ION_Diag_4Quad_Screen_Diag_FWD_define,  /* child widget                   */
+    0,                                       /* control block                  */
+    (void *) &ION_Diag_4Quad_Screen_properties /* extended properties          */
+};
+GX_WINDOW_PROPERTIES ION_SNP_Calibrate_Screen_properties =
+{
+    GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
+};
+GX_ICON_BUTTON_PROPERTIES ION_SNP_Calibrate_Screen_Plus_Button_properties =
+{
+    GX_PIXELMAP_ID_PLUSSIGN                  /* pixelmap id                    */
+};
+GX_ICON_BUTTON_PROPERTIES ION_SNP_Calibrate_Screen_Minus_Button_properties =
+{
+    GX_PIXELMAP_ID_MINUSSIGN                 /* pixelmap id                    */
+};
+GX_TEXT_BUTTON_PROPERTIES ION_SNP_Calibrate_Screen_OK_Button_properties =
+{
+    GX_STRING_ID_OK,                         /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_PROMPT_PROPERTIES ION_SNP_Calibrate_Screen_SNP_Value_Prompt_properties =
+{
+    GX_STRING_ID_NUMBER_20,                  /* string id                      */
+    GX_FONT_ID_LARGESIZE,                    /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_PIXELMAP_SLIDER_PROPERTIES ION_SNP_Calibrate_Screen_SNP_Calibrate_Slider_properties =
+{
+    -100,                                    /* minimum value                  */
+    100,                                     /* maximum value                  */
+    0,                                       /* current value                  */
+    1,                                       /* increment                      */
+    12,                                      /* minimum travel                 */
+    12,                                      /* maximum travel                 */
+    44,                                      /* needle width                   */
+    24,                                      /* needle height                  */
+    5,                                       /* needle inset                   */
+    12,                                      /* needle hotspot                 */
+    GX_PIXELMAP_ID_SNP_CALIBRATE_SLIDERA,    /* lower pixelmap id              */
+    GX_PIXELMAP_ID_SNP_CALIBRATE_SLIDERA,    /* upper pixelmap id              */
+    GX_PIXELMAP_ID_SNP_SLIDER_NUB            /* needle pixelmap id             */
+};
+GX_PROMPT_PROPERTIES ION_SNP_Calibrate_Screen_SNP_Calibrate_Value_Prompt_properties =
+{
+    GX_STRING_ID_NUMBER_100,                 /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_ICON_PROPERTIES ION_SNP_Calibrate_Screen_SNP_HardPuff_Icon_properties =
+{
+    GX_PIXELMAP_ID_SNP_HARDPUFF_POINTER,     /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES ION_SNP_Calibrate_Screen_SNP_HardSip_Icon_properties =
+{
+    GX_PIXELMAP_ID_SNP_HARDSIP_POINTER,      /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES ION_SNP_Calibrate_Screen_SNP_SoftSip_Icon_properties =
+{
+    GX_PIXELMAP_ID_SNP_SOFTSIP_POINTER,      /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_ICON_PROPERTIES ION_SNP_Calibrate_Screen_SNP_SoftPuff_Icon_properties =
+{
+    GX_PIXELMAP_ID_SNP_SOFTPUFF_POINTER,     /* normal pixelmap id             */
+    0                                        /* selected pixelmap id           */
+};
+GX_PROMPT_PROPERTIES ION_SNP_Calibrate_Screen_SNP_Calibration_Prompt_properties =
+{
+    GX_STRING_ID_SIP_N_PUFF,                 /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_SNP_Calibrate_Value_Prompt_define =
+{
+    "SNP_Calibrate_Value_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    SNP_CAL_VALUE_PROMPT,                    /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {81, 120, 132, 143},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_SNP_Calibrate_Value_Prompt), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_SNP_Calibrate_Value_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_SNP_Calibration_Prompt_define =
+{
+    "SNP_Calibration_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    SNP_CALIBRATION_PROMPT_ID,               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {10, 4, 307, 27},                        /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_SNP_Calibration_Prompt), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_SNP_Calibration_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_SNP_SoftPuff_Icon_define =
+{
+    "SNP_SoftPuff_Icon",
+    GX_TYPE_ICON,                            /* widget type                    */
+    SNP_SOFT_PUFF_ICON,                      /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {20, 93, 77, 107},                       /* widget size                    */
+    &ION_SNP_Calibrate_Screen_SNP_Calibration_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_SNP_SoftPuff_Icon), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_SNP_SoftPuff_Icon_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_SNP_SoftSip_Icon_define =
+{
+    "SNP_SoftSip_Icon",
+    GX_TYPE_ICON,                            /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {20, 154, 77, 168},                      /* widget size                    */
+    &ION_SNP_Calibrate_Screen_SNP_SoftPuff_Icon_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_SNP_SoftSip_Icon), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_SNP_SoftSip_Icon_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_SNP_HardSip_Icon_define =
+{
+    "SNP_HardSip_Icon",
+    GX_TYPE_ICON,                            /* widget type                    */
+    SNP_HARD_SIP_ICON,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {10, 184, 67, 198},                      /* widget size                    */
+    &ION_SNP_Calibrate_Screen_SNP_SoftSip_Icon_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_SNP_HardSip_Icon), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_SNP_HardSip_Icon_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_SNP_HardPuff_Icon_define =
+{
+    "SNP_HardPuff_Icon",
+    GX_TYPE_ICON,                            /* widget type                    */
+    SNP_HARD_PUFF_ICON,                      /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_ENABLED|GX_STYLE_HALIGN_LEFT|GX_STYLE_VALIGN_TOP,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON),                         /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_icon_create,                   /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {10, 49, 67, 63},                        /* widget size                    */
+    &ION_SNP_Calibrate_Screen_SNP_HardSip_Icon_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_SNP_HardPuff_Icon), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_SNP_HardPuff_Icon_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_SNP_Calibrate_Slider_define =
+{
+    "SNP_Calibrate_Slider",
+    GX_TYPE_PIXELMAP_SLIDER,                 /* widget type                    */
+    SNP_CAL_SLIDER_ID,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_SLIDER_VERTICAL|GX_STYLE_TILE_BACKGROUND,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PIXELMAP_SLIDER),              /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WIDGET_FILL,                 /* selected color id              */
+    gx_studio_pixelmap_slider_create,        /* create function                */
+    (VOID (*)(GX_WIDGET *)) SNP_Calibrate_Slider_Draw_Function, /* drawing function override */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) SNP_Calibrate_Slider_event_function, /* event function override */
+    {80, 30, 133, 229},                      /* widget size                    */
+    &ION_SNP_Calibrate_Screen_SNP_HardPuff_Icon_define, /* next widget definition */
+    &ION_SNP_Calibrate_Screen_SNP_Calibrate_Value_Prompt_define, /* child widget definition */
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_SNP_Calibrate_Slider), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_SNP_Calibrate_Slider_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_SNP_Value_Prompt_define =
+{
+    "SNP_Value_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    SNP_VALUE_PROMPT_ID,                     /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {189, 33, 262, 56},                      /* widget size                    */
+    &ION_SNP_Calibrate_Screen_SNP_Calibrate_Slider_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_SNP_Value_Prompt), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_SNP_Value_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_OK_Button_define =
+{
+    "OK_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    OK_BTN_ID,                               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {230, 165, 309, 228},                    /* widget size                    */
+    &ION_SNP_Calibrate_Screen_SNP_Value_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_OK_Button), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_OK_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_Minus_Button_define =
+{
+    "Minus_Button",
+    GX_TYPE_ICON_BUTTON,                     /* widget type                    */
+    MINUS_BTN_ID,                            /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_icon_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {142, 72, 221, 135},                     /* widget size                    */
+    &ION_SNP_Calibrate_Screen_OK_Button_define, /* next widget definition      */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_Minus_Button), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_Minus_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_Plus_Button_define =
+{
+    "Plus_Button",
+    GX_TYPE_ICON_BUTTON,                     /* widget type                    */
+    PLUS_BTN_ID,                             /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_HALIGN_CENTER|GX_STYLE_VALIGN_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_ICON_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_icon_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {231, 72, 310, 135},                     /* widget size                    */
+    &ION_SNP_Calibrate_Screen_Minus_Button_define, /* next widget definition   */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK, ION_SNP_Calibrate_Screen_Plus_Button), /* control block */
+    (void *) &ION_SNP_Calibrate_Screen_Plus_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_SNP_Calibrate_Screen_define =
+{
+    "ION_SNP_Calibrate_Screen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    ION_SNP_CAL_SCREEN_ID,                   /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT,   /* style flags                */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(ION_SNP_CALIBRATE_SCREEN_CONTROL_BLOCK), /* control block size      */
+    GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) ION_SNP_Calibrate_Screen_event_process, /* event function override */
+    {0, 0, 319, 239},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &ION_SNP_Calibrate_Screen_Plus_Button_define, /* child widget              */
+    0,                                       /* control block                  */
+    (void *) &ION_SNP_Calibrate_Screen_properties /* extended properties       */
+};
 GX_WINDOW_PROPERTIES ION_HeadArray_DiagnosticScreen_properties =
 {
     GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
@@ -7487,6 +8154,8 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
+    { &ION_Diag_4Quad_Screen_define, (GX_WIDGET *) &ION_Diag_4Quad_Screen },
+    { &ION_SNP_Calibrate_Screen_define, (GX_WIDGET *) &ION_SNP_Calibrate_Screen },
     { &ION_HeadArray_DiagnosticScreen_define, (GX_WIDGET *) &ION_HeadArray_DiagnosticScreen },
     { &ION_PadDirectionScreen_define, (GX_WIDGET *) &ION_PadDirectionScreen },
     { &ION_SIPnPuffProgrammingScreen_define, (GX_WIDGET *) &ION_SIPnPuffProgrammingScreen },

@@ -54,7 +54,13 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_SET_DRIVER_CONTROL_INPUT_ASSIGNMENT = 0x4a,
     HHP_HA_BLUETOOTH_SETUP_GET_CMD = 0x4b,
     HHP_HA_BLUETOOTH_SETUP_SET_CMD = 0x4c,
-    HHP_HA_DIAGNOSTIC_CMD = 0x4e
+    HHP_HA_DIAGNOSTIC_CMD = 0x4e,
+    HHP_HA_SNP_CALIBRATION_CMD = 0x4f,
+    HHP_HA_SNP_THRESHOLDS_GET = 0x50,
+    HHP_HA_SNP_THRESHOLDS_SET = 0x51,
+    HHP_HA_SNP_GET_RAWDATA_CMD = 0x52,
+    HHP_HA_STANDBY_SELECT_GET_CMD,
+    HHP_HA_STANDBY_SELECT_SET_CMD
 } HHP_HA_MESSAGES_ENUM;
 
 // This structure is used to send messages from the GUI to the Head Array Communication Task
@@ -145,6 +151,14 @@ typedef struct GUI_MSG_S
             DRIVER_CONTROL_MODE_SWITCH_SCHEMA_ENUM m_ModeSwitchSchema;
         } ION_SetPadAssignment;
         struct
+        {   // Used with HHP_HA_SNP_THRESHOLDS_GET and SET
+            DEVICE_NUMBER_ENUM m_DeviceID;
+            int8_t m_SoftSip;
+            int8_t m_HardSip;
+            int8_t m_SoftPuff;
+            int8_t m_HardPuff;
+        } ION_SNP_Calibration_CMD_s;
+        struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
@@ -180,6 +194,8 @@ extern void SendDriverControlPadAssigments (DEVICE_NUMBER_ENUM, PAD_DIRECTION_EN
 extern void Send_Get_BT_DeviceDefinitions (uint8_t slotNumber);
 extern void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
 extern void Send_DiagnosticCommand (uint8_t enable);
+extern void SendSNPThresholdGet (DEVICE_NUMBER_ENUM device);
+extern void SendSNPThresholdSet (DEVICE_NUMBER_ENUM device, int8_t soft_sip, int8_t hard_sip, int8_t soft_puff, int8_t hard_puff);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S

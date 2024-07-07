@@ -63,6 +63,7 @@ uint8_t CalculateChecksum (uint8_t *, uint8_t);
 uint32_t Process_GUI_Messages (GUI_MSG_STRUCT);
 uint8_t GetPadData(void);
 uint8_t SendAttendantData (void);
+uint32_t Request_SNP_Data(void);
 
 //******************************************************************************
 // Global Variables
@@ -71,6 +72,7 @@ uint8_t SendAttendantData (void);
 uint8_t g_HeartBeatCounter = 0;
 uint8_t g_GetAllPadData = false;
 uint8_t g_GetDataActive = 0;
+bool g_SNP_CalibrationIsActive = false;
 PHYSICAL_PAD_ENUM g_ActivePadID = END_OF_PAD_ENUM;
 // The following are used with then Attendant Screen is active.
 uint8_t g_AttendantActive = 0;
@@ -97,7 +99,7 @@ uint8_t g_ActiveFeatureSet = 0x1f;    // "1f" is all features active plus Clicks
 const int16_t gDEBUG_NeutralDAC_Constant = 2048;
 int16_t gDEBUG_NeutralDAC_Value = 2020;
 const int16_t gDEBUG_RangeValue = 410;
-
+extern int8_t g_SNP_Nozzle_Value;
 
 //******************************************************************************
 // Function:CalculateChecksum
@@ -559,6 +561,44 @@ uint8_t SendAttendantData (void)
         status = Read_I2C_Package(HB_Response);
     }
     return status;
+}
+
+/******************************************************************************
+ * This function gets the SNP data from the ION HUB and stores it in a global var.
+ * @param GUI_Msg
+ * @return
+ */
+uint32_t Request_SNP_Data(void)
+{
+    uint8_t HA_Msg[16];
+    uint8_t cs;
+    uint8_t msgStatus;
+    uint8_t HB_Response[16];
+    HHP_HA_MSG_STRUCT HeadArrayMsg;
+
+    HA_Msg[0] = 0x03;     // msg length
+    HA_Msg[1] = HHP_HA_SNP_GET_RAWDATA_CMD;
+    cs = CalculateChecksum(HA_Msg, (uint8_t) (HA_Msg[0]-1));
+    HA_Msg[HA_Msg[0]-1] = cs;
+    msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+
+    if (msgStatus == MSG_OK)
+    {
+        msgStatus = Read_I2C_Package(HB_Response);
+        if (msgStatus == MSG_OK)
+        {
+            g_SNP_Nozzle_Value = (int8_t) HB_Response[2];
+        }
+    }
+
+
+    // Prepare and send the Pad Data message to the GUI via the queue. We do this because it's the process that is
+    // handling the Screen Updates.
+    HeadArrayMsg.m_MsgType = HHP_HA_SNP_GET_RAWDATA_CMD;
+
+    tx_queue_send(&q_COMM_to_GUI_Queue, &HeadArrayMsg, TX_NO_WAIT);
+
+    return msgStatus;
 }
 
 //******************************************************************************
@@ -1167,6 +1207,48 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             }
             break;
 
+        case HHP_HA_SNP_THRESHOLDS_GET:
+            HA_Msg[0] = 0x04;     // msg length
+            HA_Msg[1] = HHP_HA_SNP_THRESHOLDS_GET;
+            HA_Msg[2] = GUI_Msg.ION_SNP_Calibration_CMD_s.m_DeviceID;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    // Save the Thresholds in the Device Settings.
+                    g_DeviceSettings[HA_Msg[2]].m_PadInfo[RIGHT_PAD].m_SNP_Threshold = (int8_t) HB_Response[1];
+                    g_DeviceSettings[HA_Msg[2]].m_PadInfo[REVERSE_PAD].m_SNP_Threshold = (int8_t) HB_Response[2];
+                    g_DeviceSettings[HA_Msg[2]].m_PadInfo[LEFT_PAD].m_SNP_Threshold = (int8_t) HB_Response[3];
+                    g_DeviceSettings[HA_Msg[2]].m_PadInfo[CENTER_PAD].m_SNP_Threshold = (int8_t) HB_Response[4];
+                }
+            }
+            break;
+
+        case HHP_HA_SNP_THRESHOLDS_SET:
+            HA_Msg[0] = 0x08;     // msg length from LENGTH to CHECKSUM, inclusive
+            HA_Msg[1] = HHP_HA_SNP_THRESHOLDS_SET;
+            HA_Msg[2] = GUI_Msg.ION_SNP_Calibration_CMD_s.m_DeviceID;
+            HA_Msg[3] = (uint8_t) GUI_Msg.ION_SNP_Calibration_CMD_s.m_SoftSip;
+            HA_Msg[4] = (uint8_t) GUI_Msg.ION_SNP_Calibration_CMD_s.m_HardSip;
+            HA_Msg[5] = (uint8_t) GUI_Msg.ION_SNP_Calibration_CMD_s.m_SoftPuff;
+            HA_Msg[6] = (uint8_t) GUI_Msg.ION_SNP_Calibration_CMD_s.m_HardPuff;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    ;
+                }
+            }
+            break;
+
         default:
             msgSent = false;
             break;
@@ -1549,6 +1631,16 @@ void ProcessCommunicationMsgs ()
 //            gx_system_event_send(&gxe);
 //            break;
 
+        // Process the SNP Get Data by updating the current display.
+        case HHP_HA_SNP_GET_RAWDATA_CMD:
+            // Redraw the current window.
+            gxe.gx_event_type = GX_EVENT_REDRAW;
+            gxe.gx_event_sender = GX_ID_NONE;
+            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+            gxe.gx_event_display_handle = 0;
+            gx_system_event_send(&gxe);
+            break;
+
         default:
             break;
     } // end switch
@@ -1614,6 +1706,14 @@ void HeadArray_CommunicationThread_entry(void)
                 else
                 {
                     msgSent = GetPadData();
+                }
+            }
+            else if (g_SNP_CalibrationIsActive)
+            {
+                if (++msgCounter > 2)
+                {
+                    Request_SNP_Data();
+                    msgCounter = 0;
                 }
             }
         }

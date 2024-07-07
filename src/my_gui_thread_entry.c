@@ -136,6 +136,7 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("ION_MainProgrammingScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_PadDirectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_SIPnPuffProgrammingScreen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ION_SNP_Calibrate_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("MainUserScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
     gx_studio_named_widget_create("MinimumDriveScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("MoreSelectionScreen", GX_NULL, GX_NULL);

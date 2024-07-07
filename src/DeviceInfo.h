@@ -58,7 +58,7 @@ typedef struct PAD_INFO_STRUCT_NAME
     char m_MinimuDriveString[8];
     int m_PadMinimumCalibrationValue;
     int m_PadMaximumCalibrationValue;
-    int m_SNP_Threshold;
+    int8_t m_SNP_Threshold;
     GX_PIXELMAP_BUTTON *m_DirectionIcon;
 } ION_PAD_INFO_STRUCT;
 
