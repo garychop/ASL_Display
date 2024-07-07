@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  7. 7.2024   Time (hh:mm): 08:46                        */
+/*  Date (dd.mm.yyyy):  7. 7.2024   Time (hh:mm): 09:00                        */
 /*******************************************************************************/
 
 
@@ -849,6 +849,7 @@ VOID _gx_dave2d_ellipse_fill(GX_DRAW_CONTEXT *context, INT xcenter, INT ycenter,
 /* Declare event process functions, draw functions, and callback functions     */
 
 UINT ION_Diag_4Quad_Screen_event_handler(GX_WINDOW *widget, GX_EVENT *event_ptr);
+VOID ION_Diag_4Quad_Screen_draw_event(GX_WINDOW *widget);
 UINT ION_SNP_Calibrate_Screen_event_process(GX_WINDOW *widget, GX_EVENT *event_ptr);
 UINT SNP_Calibrate_Slider_event_function(GX_PIXELMAP_SLIDER *widget, GX_EVENT *event_ptr);
 VOID SNP_Calibrate_Slider_Draw_Function(GX_PIXELMAP_SLIDER *widget);

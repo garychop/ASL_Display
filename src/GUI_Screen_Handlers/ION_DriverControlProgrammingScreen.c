@@ -235,11 +235,11 @@ UINT ION_DriverControlProgrammingScreen_event_process (GX_WINDOW *window, GX_EVE
 
 	case GX_SIGNAL (DIAGNOSTIC_BTN_ID, GX_EVENT_CLICKED):
 		PushWindow (window);
-//		if (gp_ProgrammingDevice->m_DriverQuadrantSetting == DRIVER_2_QUADRANT)
-//			screen_toggle((GX_WINDOW *)&Diag_4Quad_Screen, window);
-//		else if (gp_ProgrammingDevice->m_DriverQuadrantSetting == DRIVER_4_QUADRANT)
-//			screen_toggle((GX_WINDOW*)&Diag_4Quad_Screen, window);
-//		else    // Must be the Head Array.
+		if (gp_ProgrammingDevice->m_DriverQuadrantSetting == DRIVER_2_QUADRANT)
+			screen_toggle((GX_WINDOW *)&ION_Diag_4Quad_Screen, window);
+		else if (gp_ProgrammingDevice->m_DriverQuadrantSetting == DRIVER_4_QUADRANT)
+			screen_toggle((GX_WINDOW*)&ION_Diag_4Quad_Screen, window);
+		else    // Must be the Head Array.
 			screen_toggle((GX_WINDOW *)&ION_HeadArray_DiagnosticScreen, window);
 	    break;
 

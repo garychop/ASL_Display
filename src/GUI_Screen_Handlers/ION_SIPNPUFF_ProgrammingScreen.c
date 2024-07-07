@@ -161,11 +161,11 @@ UINT ION_SIPNPUFF_ProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *
 		break;
 
 	case GX_SIGNAL (ION_SIPNPUFF_PROGRAMMING_BUTTON_ID_BASE + DIAGNOSTIC_BTN, GX_EVENT_CLICKED):
-//		PushWindow (window);
-//		if (gp_ProgrammingDevice->m_DriverQuadrantSetting == DRIVER_4_QUADRANT)
-//			screen_toggle((GX_WINDOW *)&Diag_4Quad_Screen, window);
+		PushWindow (window);
+		if (gp_ProgrammingDevice->m_DriverQuadrantSetting == DRIVER_4_QUADRANT)
+			screen_toggle((GX_WINDOW *)&ION_Diag_4Quad_Screen, window);
 //		else
-//			screen_toggle((GX_WINDOW *)&DiagnosticScreen, window);
+//			screen_toggle((GX_WINDOW *)&ION_DiagnosticScreen, window);
 		break;
 
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):

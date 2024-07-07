@@ -5543,6 +5543,7 @@
 <selected_fill_color>WINDOW_FILL</selected_fill_color>
 <disabled_fill_color>DISABLED_FILL</disabled_fill_color>
 <event_handler>ION_Diag_4Quad_Screen_event_handler</event_handler>
+<draw_func>ION_Diag_4Quad_Screen_draw_event</draw_func>
 <id_name>ION_DIAG_4QUAD_SCREEN_ID</id_name>
 <template>FALSE</template>
 <visible_at_startup>FALSE</visible_at_startup>

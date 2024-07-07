@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  7. 7.2024   Time (hh:mm): 08:46                        */
+/*  Date (dd.mm.yyyy):  7. 7.2024   Time (hh:mm): 09:00                        */
 /*******************************************************************************/
 
 
@@ -619,7 +619,7 @@ GX_CONST GX_STUDIO_WIDGET ION_Diag_4Quad_Screen_define =
     GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
     GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
     gx_studio_window_create,                 /* create function                */
-    GX_NULL,                                 /* drawing function override      */
+    (VOID (*)(GX_WIDGET *)) ION_Diag_4Quad_Screen_draw_event, /* drawing function override */
     (UINT (*)(GX_WIDGET *, GX_EVENT *)) ION_Diag_4Quad_Screen_event_handler, /* event function override */
     {0, 0, 319, 255},                        /* widget size                    */
     GX_NULL,                                 /* next widget                    */
