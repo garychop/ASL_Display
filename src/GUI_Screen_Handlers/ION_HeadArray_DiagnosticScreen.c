@@ -20,9 +20,13 @@
 
 VOID ION_HeadArray_DiagnosticScreen_draw_event (GX_WINDOW *window)
 {
+    bool sensorActive = false;
+    ULONG style;
+
     // Show the status of each of the 3 pads.
     if (g_PadSettings[CENTER_PAD].m_PadSensorStatus)
     {
+        sensorActive = true;
         gx_widget_show (&ION_HeadArray_DiagnosticScreen.ION_HeadArray_DiagnosticScreen_CenterPadDigital_Button);
         gx_widget_hide (&ION_HeadArray_DiagnosticScreen.ION_HeadArray_DiagnosticScreen_CenterPadOff_Button);
     }
@@ -33,6 +37,7 @@ VOID ION_HeadArray_DiagnosticScreen_draw_event (GX_WINDOW *window)
     }
     if (g_PadSettings[RIGHT_PAD].m_PadSensorStatus)
     {
+        sensorActive = true;
         gx_widget_show (&ION_HeadArray_DiagnosticScreen.ION_HeadArray_DiagnosticScreen_RightPadDigital_Button);
         gx_widget_hide (&ION_HeadArray_DiagnosticScreen.ION_HeadArray_DiagnosticScreen_RightPadOff_Button);
     }
@@ -43,6 +48,7 @@ VOID ION_HeadArray_DiagnosticScreen_draw_event (GX_WINDOW *window)
     }
     if (g_PadSettings[LEFT_PAD].m_PadSensorStatus)
     {
+        sensorActive = true;
         gx_widget_show (&ION_HeadArray_DiagnosticScreen.ION_HeadArray_DiagnosticScreen_LeftPadDigital_Button);
         gx_widget_hide (&ION_HeadArray_DiagnosticScreen.ION_HeadArray_DiagnosticScreen_LeftPadOff_Button);
     }
@@ -63,6 +69,17 @@ VOID ION_HeadArray_DiagnosticScreen_draw_event (GX_WINDOW *window)
         gx_icon_button_pixelmap_set (&ION_HeadArray_DiagnosticScreen.ION_HeadArray_DiagnosticScreen_ModePort_IconButton, GX_PIXELMAP_ID_RADIOBUTTON_ON);
     else
         gx_icon_button_pixelmap_set (&ION_HeadArray_DiagnosticScreen.ION_HeadArray_DiagnosticScreen_ModePort_IconButton, GX_PIXELMAP_ID_RADIOBUTTON_OFF);
+
+    gx_widget_style_get(&ION_HeadArray_DiagnosticScreen.ION_HeadArray_DiagnosticScreen_OK_Button, &style);
+    if (sensorActive)
+    {
+        style &= !GX_STYLE_ENABLED;
+    }
+    else
+    {
+        style |= GX_STYLE_ENABLED;
+    }
+    gx_widget_style_set(&ION_HeadArray_DiagnosticScreen.ION_HeadArray_DiagnosticScreen_OK_Button, style);
 
     gx_window_draw(window);
 }

@@ -54,27 +54,42 @@ void DisplayDirectionCapabilities()
 
 void ION_Diag_4Quad_Screen_draw_event(GX_WINDOW *window)
 {
+    bool sensorActive = false;
+    ULONG style;
+
     // If we doing a 4-Quadrant device (SNP or 4-Switch), then show the FORWARD and REVERSE pad status
     if (gp_ProgrammingDevice->m_DriverQuadrantSetting == DRIVER_4_QUADRANT)
 	{
 		if (g_PadSettings[CENTER_PAD].m_PadSensorStatus)
-			gx_icon_pixelmap_set(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_Diag_FWD, GX_PIXELMAP_ID_DIAG4QUAD_VERTICALON, GX_PIXELMAP_ID_DIAG4QUAD_VERTICALON);
+		{
+		    sensorActive = true;
+		    gx_icon_pixelmap_set(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_Diag_FWD, GX_PIXELMAP_ID_DIAG4QUAD_VERTICALON, GX_PIXELMAP_ID_DIAG4QUAD_VERTICALON);
+		}
 		else
 			gx_icon_pixelmap_set(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_Diag_FWD, GX_PIXELMAP_ID_DIAG4QUAD_VERTICALOFF, GX_PIXELMAP_ID_DIAG4QUAD_VERTICALOFF);
 
 		if (g_PadSettings[REVERSE_PAD].m_PadSensorStatus)
+		{
+		    sensorActive = true;
 			gx_icon_pixelmap_set(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_Diag_REV, GX_PIXELMAP_ID_DIAG4QUAD_VERTICALON, GX_PIXELMAP_ID_DIAG4QUAD_VERTICALON);
+        }
 		else
 			gx_icon_pixelmap_set(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_Diag_REV, GX_PIXELMAP_ID_DIAG4QUAD_VERTICALOFF, GX_PIXELMAP_ID_DIAG4QUAD_VERTICALOFF);
 	}
 
 	if (g_PadSettings[RIGHT_PAD].m_PadSensorStatus)
+	{
+        sensorActive = true;
 		gx_icon_pixelmap_set(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_Diag_RIGHT, GX_PIXELMAP_ID_DIAG4QUAD_HORIZON, GX_PIXELMAP_ID_DIAG4QUAD_HORIZON);
+	}
 	else
 		gx_icon_pixelmap_set(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_Diag_RIGHT, GX_PIXELMAP_ID_DIAG4QUAD_HORIZOFF, GX_PIXELMAP_ID_DIAG4QUAD_HORIZOFF);
 
 	if (g_PadSettings[LEFT_PAD].m_PadSensorStatus)
+	{
+        sensorActive = true;
 		gx_icon_pixelmap_set(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_Diag_LEFT, GX_PIXELMAP_ID_DIAG4QUAD_HORIZON, GX_PIXELMAP_ID_DIAG4QUAD_HORIZON);
+	}
 	else
 		gx_icon_pixelmap_set(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_Diag_LEFT, GX_PIXELMAP_ID_DIAG4QUAD_HORIZOFF, GX_PIXELMAP_ID_DIAG4QUAD_HORIZOFF);
 
@@ -89,6 +104,17 @@ void ION_Diag_4Quad_Screen_draw_event(GX_WINDOW *window)
         gx_icon_button_pixelmap_set (&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_ModePort_IconButton, GX_PIXELMAP_ID_RADIOBUTTON_ON);
     else
         gx_icon_button_pixelmap_set (&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_ModePort_IconButton, GX_PIXELMAP_ID_RADIOBUTTON_OFF);
+
+    gx_widget_style_get(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_OK_Button, &style);
+    if (sensorActive)
+    {
+        style &= !GX_STYLE_ENABLED;
+    }
+    else
+    {
+        style |= GX_STYLE_ENABLED;
+    }
+    gx_widget_style_set(&ION_Diag_4Quad_Screen.ION_Diag_4Quad_Screen_OK_Button, style);
 
     gx_window_draw(window);
 

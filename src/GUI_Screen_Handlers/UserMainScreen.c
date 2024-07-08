@@ -153,7 +153,7 @@ void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode)
     // Locate the Feature Information and set an Index to point to it.
     for (featureCount = 0; featureCount < NUM_FEATURES; ++featureCount)
     {
-        if (g_MainScreenFeatureInfo[featureCount].m_HB_ID == (FEATURE_ID_ENUM) newMode)
+        if (g_MainScreenFeatureInfo[featureCount].m_HB_ID == (HEARTBEAT_FEATURE_ID_ENUM) newMode)
         {
             featureIdx = featureCount;
             break;
@@ -217,11 +217,11 @@ void DisplayPadStatus (PAD_STATUS_COLORS_ENUM center_pad, PAD_STATUS_COLORS_ENUM
         gx_widget_show ((GX_WIDGET*) &MainUserScreen.MainUserScreen_SipNPuff_Icon);
         gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_SipNPuff_Icon, GX_PIXELMAP_ID_SIPNPUFF, GX_PIXELMAP_ID_SIPNPUFF);
     }
-//    else if (gp_ActiveDriverControl->m_DriverConfiguration == SNP_HEAD_ARRAY_DEVICE_IDX)
-//    {
-//        gx_widget_show((GX_WIDGET*)&MainUserScreen.MainUserScreen_SipNPuff_Icon);
-//        gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_SipNPuff_Icon, GX_PIXELMAP_ID_SIPNPUFF_HEADARRAY, GX_PIXELMAP_ID_SIPNPUFF_HEADARRAY);
-//    }
+    else if (gp_ActiveDriverControl->m_DriverConfiguration == SNP_HEAD_ARRAY_DEVICE_IDX)
+    {
+        gx_widget_show((GX_WIDGET*)&MainUserScreen.MainUserScreen_SipNPuff_Icon);
+        gx_icon_pixelmap_set(&MainUserScreen.MainUserScreen_SipNPuff_Icon, GX_PIXELMAP_ID_SIPNPUFF_HEADARRAY, GX_PIXELMAP_ID_SIPNPUFF_HEADARRAY);
+    }
     else
     {
         gx_widget_hide((GX_WIDGET*)&MainUserScreen.MainUserScreen_SipNPuff_Icon);
