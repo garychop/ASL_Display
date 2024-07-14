@@ -10,6 +10,7 @@
 
 #include "ASL165_System.h"
 #include "ScreenSupport.h"
+#include "QueueDefinition.h"
 
 //*************************************************************************************
 // Defines, Macros
@@ -146,6 +147,7 @@ UINT ION_MainProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *event
 	{
 	case GX_EVENT_SHOW:
 		PopulateIONProgrammingInfo();
+		SendAuditorySettingGetCommand_toHub (); // Request the Auditory Settings, we need them before we display the Auditory Programming Screen.
 		Create_ION_ProgramminghWidgets(&windowPtr->ION_MainProgrammingScreen_ION_MainProgrammingListBox);
 		break;
 
@@ -173,9 +175,9 @@ UINT ION_MainProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *event
 
 	// Do Auditory (Sound) Setup stuff
 	case GX_SIGNAL(SOUND_BTN, GX_EVENT_CLICKED):
-        //CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
-		//PushWindow(window);
-		//screen_toggle((GX_WINDOW*)&ION_AuditorySettingsScreen, window);
+        CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
+		PushWindow(window);
+		screen_toggle((GX_WINDOW*)&ION_AuditorySettingsScreen, window);
 		break;
 
 	case GX_SIGNAL (USER_SETTINGS_BTN, GX_EVENT_CLICKED):

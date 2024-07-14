@@ -153,7 +153,7 @@ void PushWindow (GX_WINDOW* window);
 GX_WINDOW *PopPushedWindow();
 
 void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode);
-void ProcessCommunicationMsgs ();
+void ProcessIncomingMessages ();
 void CreateEnabledFeatureStatus(uint8_t *myActiveFeatures, uint8_t *features2);
 
 //extern void CleanupInfoStruct(PROGRAMMING_SCREEN_INFO* info, GX_VERTICAL_LIST* list, int depth);

@@ -35,14 +35,11 @@ synergy/ssp/src/driver/r_glcd \
 synergy/ssp/src/driver/r_gpt \
 synergy/ssp/src/driver/r_icu \
 synergy/ssp/src/driver/r_ioport \
-synergy/ssp/src/driver/r_jpeg_common \
-synergy/ssp/src/driver/r_jpeg_decode \
 synergy/ssp/src/driver/r_riic \
 synergy/ssp/src/driver/r_sci_spi \
 synergy/ssp/src/driver/r_wdt \
 synergy/ssp/src/framework/sf_el_gx \
 synergy/ssp/src/framework/sf_external_irq \
-synergy/ssp/src/framework/sf_jpeg_decode \
 synergy/ssp/src/framework/sf_message \
 synergy/ssp/src/framework/sf_tes_2d_drw \
 synergy/ssp/src/framework/sf_touch_panel_i2c \

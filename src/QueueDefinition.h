@@ -59,6 +59,8 @@ typedef enum HHP_HA_MESSAGES_E
     HHP_HA_SNP_THRESHOLDS_GET = 0x50,
     HHP_HA_SNP_THRESHOLDS_SET = 0x51,
     HHP_HA_SNP_GET_RAWDATA_CMD = 0x52,
+    HHP_HA_AUDITORY_SETTINGS_GET_CMD = 0x53,
+    HHP_HA_AUDITORY_SETTINGS_SET_CMD = 0x54,
     HHP_HA_STANDBY_SELECT_GET_CMD,
     HHP_HA_STANDBY_SELECT_SET_CMD
 } HHP_HA_MESSAGES_ENUM;
@@ -159,6 +161,11 @@ typedef struct GUI_MSG_S
             int8_t m_HardPuff;
         } ION_SNP_Calibration_CMD_s;
         struct
+        {   // Used with HHP_HA_AUDITORY_SETTINGS_GET_CMD
+            uint8_t m_AuditorySetting;
+            uint8_t m_Volume;
+        } ION_Auditory_Struct;
+        struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
@@ -196,6 +203,8 @@ extern void Send_Set_BT_DeviceDefinitions (uint8_t slotNumber, BT_DEVICE_TYPE de
 extern void Send_DiagnosticCommand (uint8_t enable);
 extern void SendSNPThresholdGet (DEVICE_NUMBER_ENUM device);
 extern void SendSNPThresholdSet (DEVICE_NUMBER_ENUM device, int8_t soft_sip, int8_t hard_sip, int8_t soft_puff, int8_t hard_puff);
+extern void SendAuditorySettingGetCommand_toHub (void);
+extern void SendAuditorySettingSetCommand_toHub (uint8_t, uint8_t);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -302,6 +311,11 @@ typedef struct HHP_HA_MSG_S
             BT_STATUS_ENUM m_Status; // Used in SET command only
         } BT_DeviceDefinition;
         struct
+        {   // Used with HHP_HA_AUDITORY_SETTINGS_SET_CMD
+            uint8_t m_AuditorySetting;
+            uint8_t m_Volume;
+        } ION_Auditory_Struct;
+        struct
         {
             uint32_t m_MsgArray[15];
         } WholeMsg;
@@ -316,9 +330,9 @@ extern void SendFeatureGet (uint8_t featureSet, uint8_t timeout, uint8_t feature
 extern void SendDriveOffsetGetResponse (uint8_t, uint8_t, uint8_t);
 extern void SendAttendantSettingsGet (uint8_t attendantSettings, uint8_t attendantTimeout);
 extern void SendDriverEnableToGUI (DEVICE_NUMBER_ENUM, ENABLE_STATUS_ENUM);
-extern void SendWhoAmItoGUI (uint8_t whoami);
 extern void Send_Get_BT_DeviceDefinitions_Response (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
 extern void ProcessDriveControlPadAssignemnt_Response (uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
+extern void Send_Auditory_Setting_ToGUI (uint8_t, uint8_t);
 
 // Helper functions
 extern PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad);

@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  7. 7.2024   Time (hh:mm): 09:00                        */
+/*  Date (dd.mm.yyyy): 10. 7.2024   Time (hh:mm): 11:59                        */
 /*******************************************************************************/
 
 
@@ -358,6 +358,12 @@
 #define GX_STRING_ID_SNP_SET_PUFF 139
 #define GX_STRING_ID_SNP_SET_SIP 140
 #define GX_STRING_ID_DEFLECT_4QUAD 141
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 142
+#define GX_STRING_ID_STRING_4 142
+#define GX_STRING_ID_VOICD_PROMPTS 143
+#define GX_STRING_ID_VOLUME_DOWN 144
+#define GX_STRING_ID_VOLUME_UP 145
+#define GX_STRING_ID_PAD_CLICKS 146
+#define GX_STRING_ID_TONE_PROMPTS 147
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 148
 
 #endif                                       /* sentry                         */

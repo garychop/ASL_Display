@@ -1,9 +1,9 @@
-  AppVersion = 79607
+  AppVersion = 79610
   FileVersion = 2
 [GENERAL]
   aATEModuleSel[24] = 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
   ConnectMode = 0
-  CurrentFile = "C:\asl\ASL_Display\Release\ASL_Display_HUB_V1.1C.srec"
+  CurrentFile = "C:\asl\ASL_Display\Debug\ASL_Display_V0.3.1.srec"
   DataFileSAddr = 0x00000000
   GUIMode = 0
   HostName = ""

@@ -126,6 +126,7 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("Error_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ION_AuditorySettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_BT_ActiveScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_BT_DeviceSelectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_BT_SetupScreen", GX_NULL, GX_NULL);
@@ -299,7 +300,7 @@ void my_gui_thread_entry(void)
     {
         Process_Touches();          // Process the GUI touches and the Front Panel Arrows Pushes.
 
-        ProcessCommunicationMsgs ();    // Process any messages from the Head Array Comm process.
+        ProcessIncomingMessages ();    // Process any messages from the Head Array Comm process.
 
         tx_thread_sleep (1);
     }

@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy):  7. 7.2024   Time (hh:mm): 09:00                        */
+/*  Date (dd.mm.yyyy): 10. 7.2024   Time (hh:mm): 11:59                        */
 /*******************************************************************************/
 
 
@@ -49867,10 +49867,16 @@ GX_CONST GX_UBYTE main_display_TWO_SWITCH_English[] = "2-SWITCH";
 GX_CONST GX_UBYTE main_display_SNP_SET_PUFF_English[] = "SNP - Set PUFF";
 GX_CONST GX_UBYTE main_display_SNP_SET_SIP_English[] = "SNP - Set SIP";
 GX_CONST GX_UBYTE main_display_DEFLECT_4QUAD_English[] = "ACTIVATE DEMAND";
+GX_CONST GX_UBYTE main_display_STRING_4_English[] = "multi\rline\rbutton";
+GX_CONST GX_UBYTE main_display_VOICD_PROMPTS_English[] = "VOICE PROMPTS";
+GX_CONST GX_UBYTE main_display_VOLUME_DOWN_English[] = "VOLUME\rDOWN";
+GX_CONST GX_UBYTE main_display_VOLUME_UP_English[] = "VOLUME\rUP";
+GX_CONST GX_UBYTE main_display_PAD_CLICKS_English[] = "PAD CLICKS";
+GX_CONST GX_UBYTE main_display_TONE_PROMPTS_English[] = "TONE PROMPTS";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[142] =
+GX_CONST GX_UBYTE *main_display_English_string_table[148] =
 {
     GX_NULL,
     main_display_SWITCH_DRV_CTRL_English,
@@ -50013,7 +50019,13 @@ GX_CONST GX_UBYTE *main_display_English_string_table[142] =
     main_display_TWO_SWITCH_English,
     main_display_SNP_SET_PUFF_English,
     main_display_SNP_SET_SIP_English,
-    main_display_DEFLECT_4QUAD_English
+    main_display_DEFLECT_4QUAD_English,
+    main_display_STRING_4_English,
+    main_display_VOICD_PROMPTS_English,
+    main_display_VOLUME_DOWN_English,
+    main_display_VOLUME_UP_English,
+    main_display_PAD_CLICKS_English,
+    main_display_TONE_PROMPTS_English
 
 };
 

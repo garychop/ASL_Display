@@ -101,6 +101,8 @@ int16_t gDEBUG_NeutralDAC_Value = 2020;
 const int16_t gDEBUG_RangeValue = 410;
 extern int8_t g_SNP_Nozzle_Value;
 
+extern void StoreAuditorySettings (uint8_t, uint8_t);
+
 //******************************************************************************
 // Function:CalculateChecksum
 // Description: Calculates the checks and populates the array.
@@ -1253,6 +1255,40 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             }
             break;
 
+        case HHP_HA_AUDITORY_SETTINGS_GET_CMD:
+            HA_Msg[0] = 0x03;     // msg length from LENGTH to CHECKSUM, inclusive
+            HA_Msg[1] = HHP_HA_AUDITORY_SETTINGS_GET_CMD;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    Send_Auditory_Setting_ToGUI (HB_Response[1], HB_Response[2]);
+                }
+            }
+            break;
+
+        case HHP_HA_AUDITORY_SETTINGS_SET_CMD:
+            HA_Msg[0] = 0x05;     // msg length from LENGTH to CHECKSUM, inclusive
+            HA_Msg[1] = HHP_HA_AUDITORY_SETTINGS_SET_CMD;
+            HA_Msg[2] = GUI_Msg.ION_Auditory_Struct.m_AuditorySetting;
+            HA_Msg[3] = GUI_Msg.ION_Auditory_Struct.m_Volume;
+            cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
+            HA_Msg[HA_Msg[0]-1] = cs;
+            msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
+            if (msgStatus == MSG_OK)
+            {
+                msgStatus = Read_I2C_Package(HB_Response);
+                if (msgStatus == MSG_OK)
+                {
+                    ;
+                }
+            }
+            break;
+
         default:
             msgSent = false;
             break;
@@ -1266,7 +1302,7 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
 //
 //*************************************************************************************
 
-void ProcessCommunicationMsgs ()
+void ProcessIncomingMessages ()
 {
     GX_EVENT gxe;
     uint32_t qStatus;
@@ -1643,6 +1679,10 @@ void ProcessCommunicationMsgs ()
             gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
             gxe.gx_event_display_handle = 0;
             gx_system_event_send(&gxe);
+            break;
+
+        case HHP_HA_AUDITORY_SETTINGS_GET_CMD:
+            StoreAuditorySettings (HeadArrayMsg.ION_Auditory_Struct.m_AuditorySetting, HeadArrayMsg.ION_Auditory_Struct.m_Volume);
             break;
 
         default:
