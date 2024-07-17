@@ -150,6 +150,7 @@ void AdjustActiveFeaturePositions (FEATURE_ID_ENUM newMode)
         return;
 
     g_ActiveFeature = newMode;          // Store the active feature in global var.
+    featureIdx = 0;
     // Locate the Feature Information and set an Index to point to it.
     for (featureCount = 0; featureCount < NUM_FEATURES; ++featureCount)
     {
