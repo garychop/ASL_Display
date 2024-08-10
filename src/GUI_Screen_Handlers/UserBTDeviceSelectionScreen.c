@@ -151,18 +151,18 @@ VOID UserBluetoothList_callback(GX_VERTICAL_LIST *list, GX_WIDGET *widget, INT i
 		        /*GX_STYLE_BORDER_THIN | */GX_STYLE_ENABLED | GX_STYLE_TEXT_LEFT, (USHORT) (BUTTON_ID_BASE + index), &childsize);
 
 		gx_prompt_font_set ((GX_PROMPT*) &feature->m_PixelPromptWidget, GX_FONT_ID_ASC24PT);
-		// Put the text into the button and into the screen structure.
-		if (index == 0)
-		{
-			gx_prompt_text_id_set ((GX_PROMPT *) &feature->m_PixelPromptWidget, GX_STRING_ID_BACK);
-			gx_pixelmap_prompt_pixelmap_set (&feature->m_PixelPromptWidget, GX_ID_NONE, GX_ID_NONE, GX_PIXELMAP_ID_DEG_ARROW090_30X30, GX_ID_NONE, GX_ID_NONE, GX_ID_NONE);
-		}
-		else
-		{
-			gx_prompt_text_id_set ((GX_PROMPT *) &feature->m_PixelPromptWidget, g_BT_ScreenInfo[index].m_DeviceSettings->m_DescriptionID);
-			gx_pixelmap_prompt_pixelmap_set (&feature->m_PixelPromptWidget, GX_ID_NONE, GX_ID_NONE, g_BT_ScreenInfo[index].m_DeviceSettings->m_BT_Icon_Selected, GX_ID_NONE, GX_ID_NONE, GX_ID_NONE);
-		}
 	}
+
+    if (index == 0)
+    {
+        gx_prompt_text_id_set ((GX_PROMPT *) &feature->m_PixelPromptWidget, GX_STRING_ID_BACK);
+        gx_pixelmap_prompt_pixelmap_set (&feature->m_PixelPromptWidget, GX_ID_NONE, GX_ID_NONE, GX_PIXELMAP_ID_DEG_ARROW090_30X30, GX_ID_NONE, GX_ID_NONE, GX_ID_NONE);
+    }
+    else
+    {
+        gx_prompt_text_id_set ((GX_PROMPT *) &feature->m_PixelPromptWidget, g_BT_ScreenInfo[index].m_DeviceSettings->m_DescriptionID);
+        gx_pixelmap_prompt_pixelmap_set (&feature->m_PixelPromptWidget, GX_ID_NONE, GX_ID_NONE, g_BT_ScreenInfo[index].m_DeviceSettings->m_BT_Icon_Selected, GX_ID_NONE, GX_ID_NONE, GX_ID_NONE);
+    }
 
 }
 
