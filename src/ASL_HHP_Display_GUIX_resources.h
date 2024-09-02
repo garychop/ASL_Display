@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 10. 7.2024   Time (hh:mm): 11:59                        */
+/*  Date (dd.mm.yyyy): 25. 8.2024   Time (hh:mm): 10:34                        */
 /*******************************************************************************/
 
 
@@ -364,6 +364,17 @@
 #define GX_STRING_ID_VOLUME_UP 145
 #define GX_STRING_ID_PAD_CLICKS 146
 #define GX_STRING_ID_TONE_PROMPTS 147
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 148
+#define GX_STRING_ID_AUDIO_AAC_DEVICE 148
+#define GX_STRING_ID_AUDIO_BATHROOM 149
+#define GX_STRING_ID_AUDIO_BROKEN 150
+#define GX_STRING_ID_AUDIO_EXCUSE_ME 151
+#define GX_STRING_ID_AUDIO_HELLO 152
+#define GX_STRING_ID_AUDIO_HOW_ARE_YOU 153
+#define GX_STRING_ID_AUDIO_HELP_ME 154
+#define GX_STRING_ID_AUDIO_IM_THIRSTY 155
+#define GX_STRING_ID_AUDIO_OPEN_DOOR 156
+#define GX_STRING_ID_AUDIO_SOMETHING_HURTS 157
+#define GX_STRING_ID_TALK 158
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 159
 
 #endif                                       /* sentry                         */

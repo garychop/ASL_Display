@@ -1,4 +1,11 @@
 //*****************************************************************************
+//
+// (c) COPYRIGHT, 2024 Adaptive Switch Technologies (ASL)
+//
+// All rights reserved. This file is the intellectual property of ASL and it may
+// not be disclosed to others or used for any purposes without the written consent of ASL.
+//
+//*****************************************************************************
 // Filename: ION_MainProgrammingScreen.cpp
 // Description: This file supports the ION Programming Main Screen.
 //
@@ -16,8 +23,10 @@
 // Defines, Macros
 //*************************************************************************************
 
-typedef enum ION_PROG_INDEX {DRIVER_SELECT_BTN = 20, HUB_BTN, ATTENDANT_BTN, SOUND_BTN, USER_SETTINGS_BTN, FEATURE_LIST_BTN, STANDBY_SELECT_BTN, RESET_BTN, INVALID_BTN} MAIN_PROGRAMMING_IDX;
-typedef enum {DRIVER_SELECT_IDX, HUB_IDX, ATTENDANT_IDX, SOUND_IDX, USER_SETTINGS_IDX, FEATURE_LIST_IDX, STANDBY_SELECT_IDX, RESET_IDX, INVALID_IDX} PROGRAMMING_DEVICE_INDEX;
+typedef enum ION_PROG_INDEX {DRIVER_SELECT_BTN = 20, HUB_BTN, ATTENDANT_BTN, SOUND_BTN, AUDIO_PHRASE_BTN, USER_SETTINGS_BTN, FEATURE_LIST_BTN, STANDBY_SELECT_BTN, RESET_BTN, INVALID_BTN} MAIN_PROGRAMMING_IDX;
+typedef enum {DRIVER_SELECT_IDX, HUB_IDX, ATTENDANT_IDX, SOUND_IDX, AUDIO_PHRASE_IDX, USER_SETTINGS_IDX, FEATURE_LIST_IDX, STANDBY_SELECT_IDX, RESET_IDX, INVALID_IDX} PROGRAMMING_DEVICE_INDEX;
+
+BUTTON_WIDGET_SCREEN_INFO ION_ProgramSettings_ScreenInfo[INVALID_IDX+1];
 
 //*************************************************************************************
 // Forward Declarations
@@ -31,56 +40,36 @@ static void Create_ION_ProgramminghWidgets (GX_VERTICAL_LIST *list);
 
 static void PopulateIONProgrammingInfo (void)
 {
-    CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_DriverSelectScreen.ION_DriverSelectScreen_ListBox);
+    DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
 
 	// Driver Control Select Button
-    g_ProgrammingScreenInfoStruct[DRIVER_SELECT_IDX].m_Enabled = true;
-    g_ProgrammingScreenInfoStruct[DRIVER_SELECT_IDX].m_LargeDescriptionID = GX_STRING_ID_DRIVER_CONTROL;
+    ION_ProgramSettings_ScreenInfo[DRIVER_SELECT_IDX].m_Enabled = true;
+    ION_ProgramSettings_ScreenInfo[DRIVER_SELECT_IDX].m_LargeDescriptionID = GX_STRING_ID_DRIVER_CONTROL;
 	// Hub Ports
-    g_ProgrammingScreenInfoStruct[HUB_IDX].m_Enabled = true;
-    g_ProgrammingScreenInfoStruct[HUB_IDX].m_LargeDescriptionID = GX_STRING_ID_HUB;
+    ION_ProgramSettings_ScreenInfo[HUB_IDX].m_Enabled = true;
+    ION_ProgramSettings_ScreenInfo[HUB_IDX].m_LargeDescriptionID = GX_STRING_ID_HUB;
 	// Attendant Settings
-    g_ProgrammingScreenInfoStruct[ATTENDANT_IDX].m_Enabled = true;
-    g_ProgrammingScreenInfoStruct[ATTENDANT_IDX].m_LargeDescriptionID = GX_STRING_ID_ATTENDANT_SETTING;
+    ION_ProgramSettings_ScreenInfo[ATTENDANT_IDX].m_Enabled = true;
+    ION_ProgramSettings_ScreenInfo[ATTENDANT_IDX].m_LargeDescriptionID = GX_STRING_ID_ATTENDANT_SETTING;
 	// Auditory Cues
-    g_ProgrammingScreenInfoStruct[SOUND_IDX].m_Enabled = true;
-    g_ProgrammingScreenInfoStruct[SOUND_IDX].m_LargeDescriptionID = GX_STRING_ID_AUDITORY_CUES;
+    ION_ProgramSettings_ScreenInfo[SOUND_IDX].m_Enabled = true;
+    ION_ProgramSettings_ScreenInfo[SOUND_IDX].m_LargeDescriptionID = GX_STRING_ID_AUDITORY_CUES;
+    // Audio Phrase
+    ION_ProgramSettings_ScreenInfo[AUDIO_PHRASE_IDX].m_Enabled = true;
+    ION_ProgramSettings_ScreenInfo[AUDIO_PHRASE_IDX].m_LargeDescriptionID = GX_STRING_ID_TALK;
 	// User Settings
-    g_ProgrammingScreenInfoStruct[USER_SETTINGS_IDX].m_Enabled = true;
-    g_ProgrammingScreenInfoStruct[USER_SETTINGS_IDX].m_LargeDescriptionID = GX_STRING_ID_USER_SETTINGS;
+    ION_ProgramSettings_ScreenInfo[USER_SETTINGS_IDX].m_Enabled = true;
+    ION_ProgramSettings_ScreenInfo[USER_SETTINGS_IDX].m_LargeDescriptionID = GX_STRING_ID_USER_SETTINGS;
 	// Standby Select Settings
-    g_ProgrammingScreenInfoStruct[STANDBY_SELECT_IDX].m_Enabled = true;
-    g_ProgrammingScreenInfoStruct[STANDBY_SELECT_IDX].m_LargeDescriptionID = GX_STRING_ID_STANDBY_SELECT;
+    ION_ProgramSettings_ScreenInfo[STANDBY_SELECT_IDX].m_Enabled = true;
+    ION_ProgramSettings_ScreenInfo[STANDBY_SELECT_IDX].m_LargeDescriptionID = GX_STRING_ID_STANDBY_SELECT;
 	// Feature Settings
-    g_ProgrammingScreenInfoStruct[FEATURE_LIST_IDX].m_Enabled = true;
-    g_ProgrammingScreenInfoStruct[FEATURE_LIST_IDX].m_LargeDescriptionID = GX_STRING_ID_FEATURE_LIST;
+    ION_ProgramSettings_ScreenInfo[FEATURE_LIST_IDX].m_Enabled = true;
+    ION_ProgramSettings_ScreenInfo[FEATURE_LIST_IDX].m_LargeDescriptionID = GX_STRING_ID_FEATURE_LIST;
 	// Reset Settings
-    g_ProgrammingScreenInfoStruct[RESET_IDX].m_Enabled = true;
-    g_ProgrammingScreenInfoStruct[RESET_IDX].m_LargeDescriptionID = GX_STRING_ID_RESET_SETTINGS;
+    ION_ProgramSettings_ScreenInfo[RESET_IDX].m_Enabled = true;
+    ION_ProgramSettings_ScreenInfo[RESET_IDX].m_LargeDescriptionID = GX_STRING_ID_RESET_SETTINGS;
 }
-
-//*************************************************************************************
-// Clean up created widgets
-//*************************************************************************************
-#ifdef USING_OLD_CLEANUP_CODE
-static void CleanUpWidgets()
-{
-	int i;
-    GX_BOOL result;
-
-	for (i=0; i < ION_PROGRAMMING_MAX; ++i)
-	{
-		gx_widget_created_test(&ION_ProgramSettings_ScreenInfo[i].m_ButtonWidget, &result);
-		if (result == GX_TRUE)
-			gx_widget_delete ((GX_WIDGET*) &ION_ProgramSettings_ScreenInfo[i].m_ButtonWidget);
-
-		gx_widget_created_test(&ION_ProgramSettings_ScreenInfo[i].m_ItemWidget, &result);
-		if (result == GX_TRUE)
-			gx_widget_delete ((GX_WIDGET*) &ION_ProgramSettings_ScreenInfo[i].m_ItemWidget);
-	}
-	ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox.gx_vertical_list_child_count = 0;
-}
-#endif
 
 //*************************************************************************************
 // This function creates and populates the ION Main Programming List.
@@ -94,9 +83,9 @@ static void Create_ION_ProgramminghWidgets (GX_VERTICAL_LIST *list)
 	activeFeatureCount = 0;
 	for (index = 0; index < MAX_PROGRAMMING_SCREEN_STRUCTURES; ++index)
 	{
-		if (g_ProgrammingScreenInfoStruct[index].m_Enabled)
+		if (ION_ProgramSettings_ScreenInfo[index].m_Enabled)
 		{
-			ION_MainProgrammingList_callback (list, (GX_WIDGET*) &g_ProgrammingScreenInfoStruct[index], index);
+			ION_MainProgrammingList_callback (list, (GX_WIDGET*) &ION_ProgramSettings_ScreenInfo[index], index);
 			++activeFeatureCount;
 		}
 	}
@@ -113,7 +102,7 @@ static void Create_ION_ProgramminghWidgets (GX_VERTICAL_LIST *list)
 VOID ION_MainProgrammingList_callback(GX_VERTICAL_LIST *list, GX_WIDGET *widget, INT index)
 {
     GX_RECTANGLE childsize;
-	PROGRAMMING_SCREEN_INFO*feature = (PROGRAMMING_SCREEN_INFO*)widget;
+    BUTTON_WIDGET_SCREEN_INFO*feature = (BUTTON_WIDGET_SCREEN_INFO*)widget;
     GX_BOOL result;
 
 	gx_widget_created_test(&feature->m_ItemWidget, &result);
@@ -153,59 +142,66 @@ UINT ION_MainProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *event
 
 	// Process the Head Array.
 	case GX_SIGNAL(DRIVER_SELECT_BTN, GX_EVENT_CLICKED):
-		//SetProgrammingDriverControl (&g_DeviceSettings[HEAD_ARRY_DEVICE_IDX]);
-		CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
+        DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
 		PushWindow (window);
 		screen_toggle((GX_WINDOW *)&ION_DriverSelectScreen, window);
 		break;
 
 		// Do the HUB Port Setup stuff
 	case GX_SIGNAL (HUB_BTN, GX_EVENT_CLICKED):
-        //CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
+        DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
 		//PushWindow (window);
 		//screen_toggle((GX_WINDOW *)&ION_HUB_Setup_Screen, window);
 		break;
 
 	// Do Attendant Setup stuff
 	case GX_SIGNAL (ATTENDANT_BTN, GX_EVENT_CLICKED):
-        //CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
+        //DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
 		//PushWindow (window);
 		//screen_toggle((GX_WINDOW *)&ION_AttendantSetup_Screen, window);
 		break;
 
 	// Do Auditory (Sound) Setup stuff
 	case GX_SIGNAL(SOUND_BTN, GX_EVENT_CLICKED):
-        CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
+        DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
 		PushWindow(window);
 		screen_toggle((GX_WINDOW*)&ION_AuditorySettingsScreen, window);
 		break;
 
+    // Do "Say Something" Audio Phrase setup
+    case GX_SIGNAL(AUDIO_PHRASE_BTN, GX_EVENT_CLICKED):
+        DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
+        PushWindow(window);
+        screen_toggle((GX_WINDOW*)&ION_AudibleString_Settings_Screen, window);
+        break;
+
 	case GX_SIGNAL (USER_SETTINGS_BTN, GX_EVENT_CLICKED):
-        //CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
+        //DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
 		//PushWindow (window);
 		//screen_toggle((GX_WINDOW *)&UserSettingsScreen, window);
 		break;
 
 	case GX_SIGNAL (FEATURE_LIST_BTN, GX_EVENT_CLICKED):
-        //CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
+        //DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
 		//PushWindow (window);
 		//screen_toggle((GX_WINDOW *)&FeatureSettingsScreen, window);
 		break;
 
 	case GX_SIGNAL(STANDBY_SELECT_BTN, GX_EVENT_CLICKED):
+        //DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
         //CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
 		//PushWindow(window);
 		//screen_toggle((GX_WINDOW*)&StandbySelectSettings_Screen, window);
 		break;
 
 	case GX_SIGNAL (RESET_BTN, GX_EVENT_CLICKED):
-        CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
+        DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
 		PushWindow (window);
 		screen_toggle((GX_WINDOW *)&ResetScreen, window);
 		break;
 
 	case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-        CleanupInfoStruct(&g_ProgrammingScreenInfoStruct[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox);
+	    DeleteButtonScreenWidgets(&ION_ProgramSettings_ScreenInfo[0], &ION_MainProgrammingScreen.ION_MainProgrammingScreen_ION_MainProgrammingListBox, INVALID_IDX);
 		screen_toggle(PopPushedWindow(), window);
 		break;
 	}

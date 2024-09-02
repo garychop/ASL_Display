@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 10. 7.2024   Time (hh:mm): 11:59                        */
+/*  Date (dd.mm.yyyy): 25. 8.2024   Time (hh:mm): 10:34                        */
 /*******************************************************************************/
 
 
@@ -49873,10 +49873,21 @@ GX_CONST GX_UBYTE main_display_VOLUME_DOWN_English[] = "VOLUME\rDOWN";
 GX_CONST GX_UBYTE main_display_VOLUME_UP_English[] = "VOLUME\rUP";
 GX_CONST GX_UBYTE main_display_PAD_CLICKS_English[] = "PAD CLICKS";
 GX_CONST GX_UBYTE main_display_TONE_PROMPTS_English[] = "TONE PROMPTS";
+GX_CONST GX_UBYTE main_display_AUDIO_AAC_DEVICE_English[] = "GET MY DEVICE";
+GX_CONST GX_UBYTE main_display_AUDIO_BATHROOM_English[] = "BATHROOM";
+GX_CONST GX_UBYTE main_display_AUDIO_BROKEN_English[] = "BROKEN";
+GX_CONST GX_UBYTE main_display_AUDIO_EXCUSE_ME_English[] = "EXCUSE ME";
+GX_CONST GX_UBYTE main_display_AUDIO_HELLO_English[] = "HELLO";
+GX_CONST GX_UBYTE main_display_AUDIO_HOW_ARE_YOU_English[] = "HOW ARE YOU";
+GX_CONST GX_UBYTE main_display_AUDIO_HELP_ME_English[] = "HELP ME";
+GX_CONST GX_UBYTE main_display_AUDIO_IM_THIRSTY_English[] = "I\'M THIRSTY";
+GX_CONST GX_UBYTE main_display_AUDIO_OPEN_DOOR_English[] = "OPEN THE DOOR";
+GX_CONST GX_UBYTE main_display_AUDIO_SOMETHING_HURTS_English[] = "SOMETHING HURTS";
+GX_CONST GX_UBYTE main_display_TALK_English[] = "SAY SOMETHING";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[148] =
+GX_CONST GX_UBYTE *main_display_English_string_table[159] =
 {
     GX_NULL,
     main_display_SWITCH_DRV_CTRL_English,
@@ -50025,7 +50036,18 @@ GX_CONST GX_UBYTE *main_display_English_string_table[148] =
     main_display_VOLUME_DOWN_English,
     main_display_VOLUME_UP_English,
     main_display_PAD_CLICKS_English,
-    main_display_TONE_PROMPTS_English
+    main_display_TONE_PROMPTS_English,
+    main_display_AUDIO_AAC_DEVICE_English,
+    main_display_AUDIO_BATHROOM_English,
+    main_display_AUDIO_BROKEN_English,
+    main_display_AUDIO_EXCUSE_ME_English,
+    main_display_AUDIO_HELLO_English,
+    main_display_AUDIO_HOW_ARE_YOU_English,
+    main_display_AUDIO_HELP_ME_English,
+    main_display_AUDIO_IM_THIRSTY_English,
+    main_display_AUDIO_OPEN_DOOR_English,
+    main_display_AUDIO_SOMETHING_HURTS_English,
+    main_display_TALK_English
 
 };
 

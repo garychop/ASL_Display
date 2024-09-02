@@ -1,4 +1,11 @@
 //*****************************************************************************
+//
+// (c) COPYRIGHT, 2024 Adaptive Switch Technologies (ASL)
+//
+// All rights reserved. This file is the intellectual property of ASL and it may
+// not be disclosed to others or used for any purposes without the written consent of ASL.
+//
+//*****************************************************************************
 // Filename: ASL165_System.h
 // Description: This file declares function, typedefs and macros to the 
 //		system wide usage.
@@ -94,17 +101,17 @@ typedef struct MAIN_SCREEN_FEATURE_STRUCT
     CUSTOM_CHECKBOX m_Checkbox;
 } MAIN_SCREEN_FEATURE;
 
-//// This structure is used by each screen.
-//typedef struct
-//{
-//    int m_Enabled;
-//    GX_RESOURCE_ID m_LargeDescriptionID;
-//    GX_WIDGET m_ItemWidget;
-//    GX_PROMPT m_PromptWidget;
-//    GX_TEXT_BUTTON m_ButtonWidget;
-//    GX_MULTI_LINE_TEXT_BUTTON m_MultiLineButtonWidget;
-//    CUSTOM_CHECKBOX m_Checkbox;
-//} PROGRAMMING_SCREEN_INFO;
+typedef enum {SILENCE_AUDIBLE = 0, TONES_AUDIBLE, MALE_VOICE_AUDIBLE, FEMALE_VOICE_AUDIBLE, CHILDS_VOICE_AUDIBLE, AUDIBLE_TYPE_END} AUDIBLE_TYPE_ENUM;
+typedef enum {AV_AAC_DEVICE, AV_HELP, AV_HELLO, AV_HOWAREYOU, AV_IM_THIRSTY, AV_SOMETHING_HURTS, AV_EXCUSE_ME, AV_OPEN_DOOR, AV_BROKEN, AV_BATHROOM, AV_LIST_END} AUDIO_STRING_ID_ENUM;
+
+// This holds the Audio Phrase information.
+#define AUDIO_PHRASE_MAX_NUMBER (32)
+typedef struct
+{
+    unsigned char m_Enabled;
+    GX_RESOURCE_ID m_Description;   // Contains the GUIX String Description
+} AUDIO_SETTINGS_STRUCT;
+extern AUDIO_SETTINGS_STRUCT g_AudioPhraseSettings[AUDIO_PHRASE_MAX_NUMBER];
 
 
 //*****************************************************************************

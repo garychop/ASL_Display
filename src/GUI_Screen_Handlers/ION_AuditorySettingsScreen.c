@@ -1,11 +1,18 @@
-//*****************************************************************************
-// Filename: ION_AuditorSettingsScreen.cpp
-//
-// Date: Feb 11, 2024
-//
-// Author: G. Chopcinski, Kg Solutions, LLC
-// 
-//*****************************************************************************
+/******************************************************************************
+ *
+ * (c) COPYRIGHT, 2024 Adaptive Switch Technologies (ASL)
+ *
+ * All rights reserved. This file is the intellectual property of ASL and it may
+ * not be disclosed to others or used for any purposes without the written consent of ASL.
+ *
+*******************************************************************************
+ * Filename: ION_AuditorSettingsScreen.cpp
+ *
+ * Date: Feb 11, 2024
+ *
+ * Author: G. Chopcinski, Kg Solutions, LLC
+ *
+*****************************************************************************/
 
 #include "ASL165_System.h"
 #include "QueueDefinition.h"

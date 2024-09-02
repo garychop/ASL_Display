@@ -1,3 +1,10 @@
+//*****************************************************************************
+//
+// (c) COPYRIGHT, 2024 Adaptive Switch Technologies (ASL)
+//
+// All rights reserved. This file is the intellectual property of ASL and it may
+// not be disclosed to others or used for any purposes without the written consent of ASL.
+//
 //*************************************************************************
 // QueueDefinition.h
 //

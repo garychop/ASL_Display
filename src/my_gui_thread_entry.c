@@ -116,6 +116,7 @@ void my_gui_thread_entry(void)
 
     Initialize_MainScreenInfo();
     InitializeBluetoothDeviceInformation();
+    InitializeAudioPhraseSettings();
 
     /* Create the widgets we have defined with the GUIX data structures and resources. */
     GX_WIDGET * p_first_screen = NULL;
@@ -126,6 +127,7 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("Error_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("FeatureSettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("HHP_Start_Screen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ION_AudibleString_Settings_Screen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_AuditorySettingsScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_BT_ActiveScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_BT_DeviceSelectionScreen", GX_NULL, GX_NULL);
