@@ -73,6 +73,8 @@ UINT CalibrationScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr);
 // External function declarations
 //-------------------------------------------------------------------------
 
+extern void InitializeAudioPhraseSettings();
+
 
 //-------------------------------------------------------------------------
 /* Gui Test App Thread entry function */
