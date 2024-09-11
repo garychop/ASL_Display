@@ -28,6 +28,11 @@ int8_t g_BluetoothSubIndex = 0x00;
 bool g_ShowPadsOnMainScreen = false;
 HUB_PORT_SCHEMA_ENUM g_Mode_Switch_Schema = DRV_MODE_SWITCH_PIN5;
 
+AUDIBLE_TYPE_ENUM g_Audible_Setting = SILENCE_AUDIBLE;
+uint8_t g_AuditoryVolumeLevel = 20;
+bool g_ION_ClicksActive = false;
+uint8_t g_AP1 = 0xff, g_AP2 = 0xff, g_AP3 = 0x0, g_AP4 = 0x0;
+
 int g_SettingsChanged;
 int8_t g_StartupDelayCounter = 0;
 int g_ChangeScreen_WIP;

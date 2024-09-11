@@ -21,15 +21,8 @@
 * Local/Global variables
 */
 
-bool g_AuditoryTonesActive = false;
-bool g_AuditoryVoiceActive = false;
-uint8_t g_AuditoryVolumeLevel = 20;
-bool g_ION_ClicksActive = false;
-
-
-uint8_t g_OriginalVolumeLeve;
-bool g_OriginalAuditoryTonesActive = false;
-bool g_OriginalAuditoryVoiceActive = false;
+uint8_t g_OriginalVolumeLevel = 0;
+uint8_t g_OriginalAuditoryVoiceActive = 0;
 bool g_OriginalION_ClicksActive = false;
 
 char g_VolumeLevelStr[8];
@@ -37,7 +30,7 @@ char g_VolumeLevelStr[8];
 /*************************************************************************************
 * Forward Declarations
 */
-void StoreAuditorySettings (uint8_t setting, uint8_t volume);
+void StoreAuditorySettings (uint8_t *data);
 void SendAuditorySettings ();
 
 /*************************************************************************************
@@ -45,14 +38,15 @@ void SendAuditorySettings ();
  * @param setting
  * @param volume
  */
-void StoreAuditorySettings (uint8_t setting, uint8_t volume)
+void StoreAuditorySettings (uint8_t *data)
 {
-    g_ION_ClicksActive = (setting & 0x01) ? true : false;
-    g_AuditoryTonesActive = (setting & 0x02) ? true : false;
-    g_AuditoryVoiceActive = (setting & 0x04) ? true : false;
-
-    g_AuditoryVolumeLevel = volume;
-
+    g_ION_ClicksActive = (data[0] & 0x01) ? true : false;
+    g_Audible_Setting = (data[0] >> 4);
+    g_AuditoryVolumeLevel = data[1];
+    g_AP1 = data[2];
+    g_AP2 = data[3];
+    g_AP3 = data[4];
+    g_AP4 = data[5];
 }
 
 /*************************************************************************************
@@ -62,19 +56,18 @@ void StoreAuditorySettings (uint8_t setting, uint8_t volume)
  */
 void SendAuditorySettings ()
 {
-    uint8_t setting, volume;
+    uint8_t settings[6];
 
-    setting = 0x00;
+    settings[0] = 0x0;
     if (g_ION_ClicksActive)
-        setting = 0x01;
-    if (g_AuditoryTonesActive)
-        setting |= 0x02;
-    if (g_AuditoryVoiceActive)
-        setting |= 0x04;
-
-    volume = g_AuditoryVolumeLevel;
-
-    SendAuditorySettingSetCommand_toHub (setting, volume);
+        settings[0] = 0x01;
+    settings[0] |= (uint8_t) (g_Audible_Setting << 4); // put into upper nibble
+    settings[1]= g_AuditoryVolumeLevel;
+    settings[2] = g_AP1;
+    settings[3] = g_AP2;
+    settings[4] = g_AP3;
+    settings[5] = g_AP4;
+    SendAuditorySettingSetCommand_toHub (settings);
 }
 
 
@@ -98,16 +91,27 @@ VOID ION_AuditorySettingsScreen_draw_function(GX_WINDOW* window)
         gx_button_deselect((GX_BUTTON*)&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_PadClicksToggleBtn, true);
 
     // Set "Tone" Clicks
-    if (g_AuditoryTonesActive)
-        gx_button_select ((GX_BUTTON*) &ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_ToneToggleBtn);
-    else
-        gx_button_deselect((GX_BUTTON*)&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_ToneToggleBtn, true);
+    switch (g_Audible_Setting)
+    {
+    case TONES_AUDIBLE:
+        gx_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_TONES);
+        break;
+    case MALE_VOICE_AUDIBLE:
+        gx_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_MALE_VOICE);
+        break;
+    case FEMALE_VOICE_AUDIBLE:
+        gx_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_FEMALE_VOICE);
+        break;
+    case CHILDS_VOICE_AUDIBLE:
+        gx_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_CHILDS_VOICE);
+        break;
+    case AUDIBLE_TYPE_END:
+    case SILENCE_AUDIBLE:
+    default:
+        gx_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_NONE);
+        break;
+    } // end switch
 
-    // Set "Voice" toggle button
-    if (g_AuditoryVoiceActive)
-        gx_button_select((GX_BUTTON*)&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_VoiceToggleBtn);
-    else
-        gx_button_deselect((GX_BUTTON*)&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_VoiceToggleBtn, true);
 
     gx_window_draw(window);
 }
@@ -120,12 +124,11 @@ UINT ION_AuditorySettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *even
 {
 	switch (event_ptr->gx_event_type)
 	{
-		case GX_EVENT_SHOW:
-		    g_OriginalVolumeLeve = g_AuditoryVolumeLevel;
-		    g_OriginalAuditoryTonesActive = g_AuditoryTonesActive;
-		    g_OriginalAuditoryVoiceActive = g_AuditoryVoiceActive;
+	    case GX_EVENT_SHOW:
+		    g_OriginalVolumeLevel = g_AuditoryVolumeLevel;
+		    g_OriginalAuditoryVoiceActive = g_Audible_Setting;
 		    g_OriginalION_ClicksActive = g_ION_ClicksActive;
-		break;
+		    break;
 
 		// Adjust Volume
 		case GX_SIGNAL(AUDITORY_VOLUMEUP_BTN, GX_EVENT_CLICKED):
@@ -151,30 +154,17 @@ UINT ION_AuditorySettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *even
             g_ION_ClicksActive = false;
 			break;
 
-		// Tone toggle button processing
-		case GX_SIGNAL(TONE_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_ON):
-		    gx_system_dirty_mark ((GX_WIDGET*) window);
-		    g_AuditoryTonesActive = true;
-		    g_AuditoryVoiceActive = false;     // Turn off voice setting.
-			break;
-		case GX_SIGNAL(TONE_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_OFF):
-            g_AuditoryTonesActive = false;
-			break;
-
 		// Enhanced toggle button processing
-		case GX_SIGNAL(VOICE_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_ON):
+		case GX_SIGNAL(AUDIBLE_SELECTION_BTN, GX_EVENT_CLICKED):
+            ++g_Audible_Setting;
+            if (AUDIBLE_TYPE_END == g_Audible_Setting)
+                g_Audible_Setting = (AUDIBLE_TYPE_ENUM)0;
 		    gx_system_dirty_mark ((GX_WIDGET*) window);
-		    g_AuditoryVoiceActive = true;
-			g_AuditoryTonesActive = false; // Turn off TONE setting
-			break;
-		case GX_SIGNAL(VOICE_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_OFF):
-            g_AuditoryVoiceActive = false;
 			break;
 
 		case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
-            if ((g_OriginalVolumeLeve != g_AuditoryVolumeLevel)
-             || (g_OriginalAuditoryTonesActive != g_AuditoryTonesActive)
-             || (g_OriginalAuditoryVoiceActive != g_AuditoryVoiceActive)
+            if ((g_OriginalVolumeLevel != g_AuditoryVolumeLevel)
+             || (g_OriginalAuditoryVoiceActive != g_Audible_Setting)
              || (g_OriginalION_ClicksActive != g_ION_ClicksActive))
              {
                 SendAuditorySettings();

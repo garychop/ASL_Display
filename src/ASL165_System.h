@@ -66,6 +66,7 @@ typedef enum {INVALID_FEATURE_HB_ID,
 } HEARTBEAT_FEATURE_ID_ENUM;
 
 typedef enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PAD_ACTIVE_TIMER_ID} ENUM_TIMER_IDS_ENUM;
+typedef enum {SILENCE_AUDIBLE = 0, TONES_AUDIBLE, MALE_VOICE_AUDIBLE, FEMALE_VOICE_AUDIBLE, CHILDS_VOICE_AUDIBLE, AUDIBLE_TYPE_END} AUDIBLE_TYPE_ENUM;
 
 // Bit masks pertaining to the REQUEST FEATURE SETTNG CMD HA<->HHP comms command.
 #define FUNC_FEATURE_POWER_ON_OFF_BIT_MASK              (0x01)
@@ -101,7 +102,6 @@ typedef struct MAIN_SCREEN_FEATURE_STRUCT
     CUSTOM_CHECKBOX m_Checkbox;
 } MAIN_SCREEN_FEATURE;
 
-typedef enum {SILENCE_AUDIBLE = 0, TONES_AUDIBLE, MALE_VOICE_AUDIBLE, FEMALE_VOICE_AUDIBLE, CHILDS_VOICE_AUDIBLE, AUDIBLE_TYPE_END} AUDIBLE_TYPE_ENUM;
 typedef enum {AV_AAC_DEVICE, AV_HELP, AV_HELLO, AV_HOWAREYOU, AV_IM_THIRSTY, AV_SOMETHING_HURTS, AV_EXCUSE_ME, AV_OPEN_DOOR, AV_BROKEN, AV_BATHROOM, AV_LIST_END} AUDIO_STRING_ID_ENUM;
 
 // This holds the Audio Phrase information.
@@ -130,6 +130,11 @@ extern bool g_ShowPadsOnMainScreen;
 extern HUB_PORT_SCHEMA_ENUM g_Mode_Switch_Schema;
 extern HEARTBEAT_FEATURE_ID_ENUM g_ActiveFeature;     // this indicates the active feature.
 extern GX_WIDGET *g_ActiveScreen;
+
+extern AUDIBLE_TYPE_ENUM g_Audible_Setting;
+extern uint8_t g_AuditoryVolumeLevel;
+extern bool g_ION_ClicksActive;
+extern uint8_t g_AP1, g_AP2, g_AP3, g_AP4;      // 32 Audio Phrases for SAY SOMETHING feature
 
 extern MAIN_SCREEN_FEATURE g_MainScreenFeatureInfo[];
 extern PAD_INFO_STRUCT g_PadSettings[];

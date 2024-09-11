@@ -101,7 +101,7 @@ int16_t gDEBUG_NeutralDAC_Value = 2020;
 const int16_t gDEBUG_RangeValue = 410;
 extern int8_t g_SNP_Nozzle_Value;
 
-extern void StoreAuditorySettings (uint8_t, uint8_t);
+extern void StoreAuditorySettings (uint8_t*);
 
 //******************************************************************************
 // Function:CalculateChecksum
@@ -1266,16 +1266,20 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
                 msgStatus = Read_I2C_Package(HB_Response);
                 if (msgStatus == MSG_OK)
                 {
-                    Send_Auditory_Setting_ToGUI (HB_Response[1], HB_Response[2]);
+                    Send_Auditory_Setting_ToGUI (&HB_Response[1]);
                 }
             }
             break;
 
         case HHP_HA_AUDITORY_SETTINGS_SET_CMD:
-            HA_Msg[0] = 0x05;     // msg length from LENGTH to CHECKSUM, inclusive
+            HA_Msg[0] = 0x09;     // msg length from LENGTH to CHECKSUM, inclusive
             HA_Msg[1] = HHP_HA_AUDITORY_SETTINGS_SET_CMD;
             HA_Msg[2] = GUI_Msg.ION_Auditory_Struct.m_AuditorySetting;
             HA_Msg[3] = GUI_Msg.ION_Auditory_Struct.m_Volume;
+            HA_Msg[4] = GUI_Msg.ION_Auditory_Struct.m_AP1;
+            HA_Msg[5] = GUI_Msg.ION_Auditory_Struct.m_AP2;
+            HA_Msg[6] = GUI_Msg.ION_Auditory_Struct.m_AP3;
+            HA_Msg[7] = GUI_Msg.ION_Auditory_Struct.m_AP4;
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);
@@ -1682,7 +1686,7 @@ void ProcessIncomingMessages ()
             break;
 
         case HHP_HA_AUDITORY_SETTINGS_GET_CMD:
-            StoreAuditorySettings (HeadArrayMsg.ION_Auditory_Struct.m_AuditorySetting, HeadArrayMsg.ION_Auditory_Struct.m_Volume);
+            StoreAuditorySettings ((uint8_t*) &HeadArrayMsg.WholeMsg.m_MsgArray);
             break;
 
         default:

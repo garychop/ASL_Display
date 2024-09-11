@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 25. 8.2024   Time (hh:mm): 10:34                        */
+/*  Date (dd.mm.yyyy): 10. 9.2024   Time (hh:mm): 14:20                        */
 /*******************************************************************************/
 
 
@@ -49884,10 +49884,14 @@ GX_CONST GX_UBYTE main_display_AUDIO_IM_THIRSTY_English[] = "I\'M THIRSTY";
 GX_CONST GX_UBYTE main_display_AUDIO_OPEN_DOOR_English[] = "OPEN THE DOOR";
 GX_CONST GX_UBYTE main_display_AUDIO_SOMETHING_HURTS_English[] = "SOMETHING HURTS";
 GX_CONST GX_UBYTE main_display_TALK_English[] = "SAY SOMETHING";
+GX_CONST GX_UBYTE main_display_CHILDS_VOICE_English[] = "CHILD VOICE";
+GX_CONST GX_UBYTE main_display_FEMALE_VOICE_English[] = "FEMALE VOICE";
+GX_CONST GX_UBYTE main_display_MALE_VOICE_English[] = "MALE VOICE";
+GX_CONST GX_UBYTE main_display_TONES_English[] = "TONES";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[159] =
+GX_CONST GX_UBYTE *main_display_English_string_table[163] =
 {
     GX_NULL,
     main_display_SWITCH_DRV_CTRL_English,
@@ -50047,7 +50051,11 @@ GX_CONST GX_UBYTE *main_display_English_string_table[159] =
     main_display_AUDIO_IM_THIRSTY_English,
     main_display_AUDIO_OPEN_DOOR_English,
     main_display_AUDIO_SOMETHING_HURTS_English,
-    main_display_TALK_English
+    main_display_TALK_English,
+    main_display_CHILDS_VOICE_English,
+    main_display_FEMALE_VOICE_English,
+    main_display_MALE_VOICE_English,
+    main_display_TONES_English
 
 };
 

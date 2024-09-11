@@ -171,6 +171,10 @@ typedef struct GUI_MSG_S
         {   // Used with HHP_HA_AUDITORY_SETTINGS_GET_CMD
             uint8_t m_AuditorySetting;
             uint8_t m_Volume;
+            uint8_t m_AP1;
+            uint8_t m_AP2;
+            uint8_t m_AP3;
+            uint8_t m_AP4;
         } ION_Auditory_Struct;
         struct
         {
@@ -211,7 +215,7 @@ extern void Send_DiagnosticCommand (uint8_t enable);
 extern void SendSNPThresholdGet (DEVICE_NUMBER_ENUM device);
 extern void SendSNPThresholdSet (DEVICE_NUMBER_ENUM device, int8_t soft_sip, int8_t hard_sip, int8_t soft_puff, int8_t hard_puff);
 extern void SendAuditorySettingGetCommand_toHub (void);
-extern void SendAuditorySettingSetCommand_toHub (uint8_t, uint8_t);
+extern void SendAuditorySettingSetCommand_toHub (uint8_t*);
 
 // This structure is used to send information from the Head Array Communication Task to the GUI task.
 typedef struct HHP_HA_MSG_S
@@ -321,6 +325,10 @@ typedef struct HHP_HA_MSG_S
         {   // Used with HHP_HA_AUDITORY_SETTINGS_SET_CMD
             uint8_t m_AuditorySetting;
             uint8_t m_Volume;
+            uint8_t m_AP1;
+            uint8_t m_AP2;
+            uint8_t m_AP3;
+            uint8_t m_AP4;
         } ION_Auditory_Struct;
         struct
         {
@@ -339,7 +347,7 @@ extern void SendAttendantSettingsGet (uint8_t attendantSettings, uint8_t attenda
 extern void SendDriverEnableToGUI (DEVICE_NUMBER_ENUM, ENABLE_STATUS_ENUM);
 extern void Send_Get_BT_DeviceDefinitions_Response (uint8_t slotNumber, BT_DEVICE_TYPE devID, BT_COLOR color, BT_STATUS_ENUM bt_status);
 extern void ProcessDriveControlPadAssignemnt_Response (uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
-extern void Send_Auditory_Setting_ToGUI (uint8_t, uint8_t);
+extern void Send_Auditory_Setting_ToGUI (uint8_t*);
 
 // Helper functions
 extern PHYSICAL_PAD_ENUM TranslatePad_CharToEnum (char pad);
