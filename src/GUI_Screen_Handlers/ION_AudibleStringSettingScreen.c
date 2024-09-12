@@ -20,9 +20,42 @@
 //*************************************************************************************
 // Local/Global variables
 //*************************************************************************************
-//typedef enum { AV_AAC_DEVICE, AV_HELP, AV_HELLO, AV_HOWAREYOU, AV_IM_THIRSTY, AV_SOMETHING_HURTS, AV_EXCUSE_ME, AV_OPEN_DOOR, AV_BROKEN, AV_BATHROOM, AV_LIST_END };
 
-AUDIO_SETTINGS_STRUCT g_AudioPhraseSettings[AUDIO_PHRASE_MAX_NUMBER];
+AUDIO_SETTINGS_STRUCT g_AudioPhraseSettings[AUDIO_PHRASE_MAX_NUMBER] =
+{
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_ENABLE_CUES},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_HELP_ME},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_HELLO},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_HI},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_EXCUSE_ME},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_OPEN_DOOR},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_AAC_DEVICE},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_THING_NOT_WORKING},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_GET_AIDE},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_GET_PACK},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_HOW_ARE_YOU},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_THANKS},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_MAKE_CALL},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_IM_THIRSTY},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_IM_HUNGRY},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_IM_IN_PAIN},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_CALL_FOR_HELP},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_BATHROOM},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_CHAIR_BROKEN},
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_LETS_PLAY },
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_GET_TEACHER },
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_IM_STUCK },
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_CAN_I_TRY },
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_MY_TURN },
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_HELP_ME_PLAY },
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_WHICH_WAY },
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_DONT_PET_DOG },
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_YES },
+ { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_NO },
+ { .m_Enabled = false, .m_Description = GX_STRING_ID_NONE },
+ { .m_Enabled = false, .m_Description = GX_STRING_ID_NONE },
+ { .m_Enabled = false, .m_Description = GX_STRING_ID_NONE }
+};
 
 typedef struct
 {
@@ -38,7 +71,7 @@ AV_SCREEN_INFO g_AudibleStringsScreenInfo[AUDIO_PHRASE_MAX_NUMBER];
 /******************************************************************************
 * Forward Declarations
 */
-void InitializeAudioPhraseSettings();
+void SetupAudioPhraseSettings();
 VOID InitializeAudioStringSettingsScreenInfo();
 void CreateAudibleStringWidgets(GX_VERTICAL_LIST* list);
 VOID AudibleStringList_callback(GX_VERTICAL_LIST *list, GX_WIDGET *widget, INT index);
@@ -48,7 +81,7 @@ void UpdateAudibleStringFeatureSettings ();
 * Get Audio Phrase information from ION HUB
 */
 
-void InitializeAudioPhraseSettings()
+void SetupAudioPhraseSettings()
 {
 	int idx;
 
@@ -56,23 +89,26 @@ void InitializeAudioPhraseSettings()
 	{
 		g_AudioPhraseSettings[idx].m_Enabled = false;
 	}
-	g_AudioPhraseSettings[0].m_Enabled = true;
-	g_AudioPhraseSettings[0].m_Description = GX_STRING_ID_AUDIO_AAC_DEVICE;	// "GET DEVICE"
-	g_AudioPhraseSettings[1].m_Enabled = true;
-	g_AudioPhraseSettings[1].m_Description = GX_STRING_ID_AUDIO_HELP_ME;	// "HELP"
-	g_AudioPhraseSettings[2].m_Enabled = true;
-	g_AudioPhraseSettings[2].m_Description = GX_STRING_ID_AUDIO_HELLO;	// "HELLO"
-	g_AudioPhraseSettings[3].m_Enabled = true;
-	g_AudioPhraseSettings[3].m_Description = GX_STRING_ID_AUDIO_HOW_ARE_YOU;	// "HOW ARE YOU"
-	g_AudioPhraseSettings[4].m_Enabled = true;
-	g_AudioPhraseSettings[4].m_Description = GX_STRING_ID_AUDIO_IM_THIRSTY;	// "I'M THIRSTY"
-	g_AudioPhraseSettings[5].m_Enabled = true;
-	g_AudioPhraseSettings[5].m_Description = GX_STRING_ID_AUDIO_SOMETHING_HURTS;	// "I'M IN PAIN"
-	g_AudioPhraseSettings[6].m_Enabled = true;
-	g_AudioPhraseSettings[6].m_Description = GX_STRING_ID_AUDIO_EXCUSE_ME;	// "EXCUSE ME"
-	g_AudioPhraseSettings[7].m_Description = GX_STRING_ID_AUDIO_OPEN_DOOR;	// "OPEN DOOR"
-	g_AudioPhraseSettings[8].m_Description = GX_STRING_ID_AUDIO_BROKEN;	// "BROKEN"
-	g_AudioPhraseSettings[9].m_Description = GX_STRING_ID_AUDIO_BATHROOM;	// "BATHROOM"
+    for (idx = 0; idx < 8; ++idx)
+    {
+        if ((g_AP1 >> idx) & 0x01)
+            g_AudioPhraseSettings[idx].m_Enabled = true;
+    }
+    for (idx = 0; idx < 8; ++idx)
+    {
+        if ((g_AP2 >> idx) & 0x01)
+            g_AudioPhraseSettings[idx+8].m_Enabled = true;
+    }
+    for (idx = 0; idx < 8; ++idx)
+    {
+        if ((g_AP3 >> idx) & 0x01)
+            g_AudioPhraseSettings[idx+16].m_Enabled = true;
+    }
+    for (idx = 0; idx < 8; ++idx)
+    {
+        if ((g_AP4 >> idx) & 0x01)
+            g_AudioPhraseSettings[idx+24].m_Enabled = true;
+    }
 }
 
 /******************************************************************************

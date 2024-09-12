@@ -4843,6 +4843,312 @@
 <enabled>TRUE</enabled>
 <compress>FALSE</compress>
 </resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
+<resource>
+<name>Add New String</name>
+<pathinfo>
+<pathtype>project_relative</pathtype>
+</pathinfo>
+<is_default>FALSE</is_default>
+<enabled>TRUE</enabled>
+<compress>FALSE</compress>
+</resource>
 </resource>
 <vscroll_appearance>
 <scroll_width>20</scroll_width>
@@ -4871,7 +5177,7 @@
 <English>TRUE</English>
 <string_table>
 <sort_column>0</sort_column>
-<num_strings>163</num_strings>
+<num_strings>184</num_strings>
 <num_languages>1</num_languages>
 <string_record>
 <id>SWITCH_DRV_CTRL</id>
@@ -5682,6 +5988,111 @@
 <id>TONES</id>
 <font>0</font>
 <val>TONES</val>
+</string_record>
+<string_record>
+<id>AUDIO_CALL_FOR_HELP</id>
+<font>0</font>
+<val>CALL FOR HELP</val>
+</string_record>
+<string_record>
+<id>AUDIO_CAN_I_TRY</id>
+<font>0</font>
+<val>CAN I TRY</val>
+</string_record>
+<string_record>
+<id>AUDIO_CHAIR_BROKEN</id>
+<font>0</font>
+<val>MY CHAIR BROKE</val>
+</string_record>
+<string_record>
+<id>AUDIO_DONT_PET_DOG</id>
+<font>0</font>
+<val>DON&apos;T PET DOG</val>
+</string_record>
+<string_record>
+<id>AUDIO_ENABLE_CUES</id>
+<font>0</font>
+<val>ENABLE CUES</val>
+</string_record>
+<string_record>
+<id>AUDIO_GET_AIDE</id>
+<font>0</font>
+<val>GET MY AIDE</val>
+</string_record>
+<string_record>
+<id>AUDIO_GET_PACK</id>
+<font>0</font>
+<val>GET MY BACKPACK</val>
+</string_record>
+<string_record>
+<id>AUDIO_GET_TEACHER</id>
+<font>0</font>
+<val>GET TEACHER</val>
+</string_record>
+<string_record>
+<id>AUDIO_HELP_ME_PLAY</id>
+<font>0</font>
+<val>HELP ME PLAY</val>
+</string_record>
+<string_record>
+<id>AUDIO_HI</id>
+<font>0</font>
+<val>HI</val>
+</string_record>
+<string_record>
+<id>AUDIO_IM_HUNGRY</id>
+<font>0</font>
+<val>I&apos;M HUNGRY</val>
+</string_record>
+<string_record>
+<id>AUDIO_IM_IN_PAIN</id>
+<font>0</font>
+<val>I&apos;M IN PAIN</val>
+</string_record>
+<string_record>
+<id>AUDIO_IM_STUCK</id>
+<font>0</font>
+<val>I&apos;M STUCK</val>
+</string_record>
+<string_record>
+<id>AUDIO_LETS_PLAY</id>
+<font>0</font>
+<val>LET&apos;S PLAY</val>
+</string_record>
+<string_record>
+<id>AUDIO_MAKE_CALL</id>
+<font>0</font>
+<val>MAKE PHONE CALL</val>
+</string_record>
+<string_record>
+<id>AUDIO_MY_TURN</id>
+<font>0</font>
+<val>MAY I HAVE A TURN</val>
+</string_record>
+<string_record>
+<id>AUDIO_NO</id>
+<font>0</font>
+<val>NO</val>
+</string_record>
+<string_record>
+<id>AUDIO_THANKS</id>
+<font>0</font>
+<val>THANK YOU</val>
+</string_record>
+<string_record>
+<id>AUDIO_THING_NOT_WORKING</id>
+<font>0</font>
+<val>SOMETHING IS NOT WORKING</val>
+</string_record>
+<string_record>
+<id>AUDIO_WHICH_WAY</id>
+<font>0</font>
+<val>WHICH WAY</val>
+</string_record>
+<string_record>
+<id>AUDIO_YES</id>
+<font>0</font>
+<val>YES</val>
 </string_record>
 </string_table>
 <widget_folder>

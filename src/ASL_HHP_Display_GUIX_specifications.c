@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 10. 9.2024   Time (hh:mm): 14:20                        */
+/*  Date (dd.mm.yyyy): 11. 9.2024   Time (hh:mm): 15:31                        */
 /*******************************************************************************/
 
 

@@ -28,10 +28,11 @@ bool g_OriginalION_ClicksActive = false;
 char g_VolumeLevelStr[8];
 
 /*************************************************************************************
-* Forward Declarations
+* Forward and extern Declarations
 */
 void StoreAuditorySettings (uint8_t *data);
 void SendAuditorySettings ();
+extern void SetupAudioPhraseSettings();
 
 /*************************************************************************************
  * This function stores the values (presumably from the HUB) for use by the Screen.
@@ -47,6 +48,7 @@ void StoreAuditorySettings (uint8_t *data)
     g_AP2 = data[3];
     g_AP3 = data[4];
     g_AP4 = data[5];
+    SetupAudioPhraseSettings();
 }
 
 /*************************************************************************************

@@ -136,7 +136,6 @@ UINT ION_MainProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *event
 	{
 	case GX_EVENT_SHOW:
 		PopulateIONProgrammingInfo();
-		SendAuditorySettingGetCommand_toHub (); // Request the Auditory Settings, we need them before we display the Auditory Programming Screen.
 		Create_ION_ProgramminghWidgets(&windowPtr->ION_MainProgrammingScreen_ION_MainProgrammingListBox);
 		break;
 

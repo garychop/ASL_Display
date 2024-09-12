@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 10. 9.2024   Time (hh:mm): 14:20                        */
+/*  Date (dd.mm.yyyy): 11. 9.2024   Time (hh:mm): 15:31                        */
 /*******************************************************************************/
 
 
@@ -379,6 +379,27 @@
 #define GX_STRING_ID_FEMALE_VOICE 160
 #define GX_STRING_ID_MALE_VOICE 161
 #define GX_STRING_ID_TONES 162
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 163
+#define GX_STRING_ID_AUDIO_CALL_FOR_HELP 163
+#define GX_STRING_ID_AUDIO_CAN_I_TRY 164
+#define GX_STRING_ID_AUDIO_CHAIR_BROKEN 165
+#define GX_STRING_ID_AUDIO_DONT_PET_DOG 166
+#define GX_STRING_ID_AUDIO_ENABLE_CUES 167
+#define GX_STRING_ID_AUDIO_GET_AIDE 168
+#define GX_STRING_ID_AUDIO_GET_PACK 169
+#define GX_STRING_ID_AUDIO_GET_TEACHER 170
+#define GX_STRING_ID_AUDIO_HELP_ME_PLAY 171
+#define GX_STRING_ID_AUDIO_HI 172
+#define GX_STRING_ID_AUDIO_IM_HUNGRY 173
+#define GX_STRING_ID_AUDIO_IM_IN_PAIN 174
+#define GX_STRING_ID_AUDIO_IM_STUCK 175
+#define GX_STRING_ID_AUDIO_LETS_PLAY 176
+#define GX_STRING_ID_AUDIO_MAKE_CALL 177
+#define GX_STRING_ID_AUDIO_MY_TURN 178
+#define GX_STRING_ID_AUDIO_NO 179
+#define GX_STRING_ID_AUDIO_THANKS 180
+#define GX_STRING_ID_AUDIO_THING_NOT_WORKING 181
+#define GX_STRING_ID_AUDIO_WHICH_WAY 182
+#define GX_STRING_ID_AUDIO_YES 183
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 184
 
 #endif                                       /* sentry                         */

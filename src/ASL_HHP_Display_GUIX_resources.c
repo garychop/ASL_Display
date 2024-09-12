@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 10. 9.2024   Time (hh:mm): 14:20                        */
+/*  Date (dd.mm.yyyy): 11. 9.2024   Time (hh:mm): 15:31                        */
 /*******************************************************************************/
 
 
@@ -49888,10 +49888,31 @@ GX_CONST GX_UBYTE main_display_CHILDS_VOICE_English[] = "CHILD VOICE";
 GX_CONST GX_UBYTE main_display_FEMALE_VOICE_English[] = "FEMALE VOICE";
 GX_CONST GX_UBYTE main_display_MALE_VOICE_English[] = "MALE VOICE";
 GX_CONST GX_UBYTE main_display_TONES_English[] = "TONES";
+GX_CONST GX_UBYTE main_display_AUDIO_CALL_FOR_HELP_English[] = "CALL FOR HELP";
+GX_CONST GX_UBYTE main_display_AUDIO_CAN_I_TRY_English[] = "CAN I TRY";
+GX_CONST GX_UBYTE main_display_AUDIO_CHAIR_BROKEN_English[] = "MY CHAIR BROKE";
+GX_CONST GX_UBYTE main_display_AUDIO_DONT_PET_DOG_English[] = "DON\'T PET DOG";
+GX_CONST GX_UBYTE main_display_AUDIO_ENABLE_CUES_English[] = "ENABLE CUES";
+GX_CONST GX_UBYTE main_display_AUDIO_GET_AIDE_English[] = "GET MY AIDE";
+GX_CONST GX_UBYTE main_display_AUDIO_GET_PACK_English[] = "GET MY BACKPACK";
+GX_CONST GX_UBYTE main_display_AUDIO_GET_TEACHER_English[] = "GET TEACHER";
+GX_CONST GX_UBYTE main_display_AUDIO_HELP_ME_PLAY_English[] = "HELP ME PLAY";
+GX_CONST GX_UBYTE main_display_AUDIO_HI_English[] = "HI";
+GX_CONST GX_UBYTE main_display_AUDIO_IM_HUNGRY_English[] = "I\'M HUNGRY";
+GX_CONST GX_UBYTE main_display_AUDIO_IM_IN_PAIN_English[] = "I\'M IN PAIN";
+GX_CONST GX_UBYTE main_display_AUDIO_IM_STUCK_English[] = "I\'M STUCK";
+GX_CONST GX_UBYTE main_display_AUDIO_LETS_PLAY_English[] = "LET\'S PLAY";
+GX_CONST GX_UBYTE main_display_AUDIO_MAKE_CALL_English[] = "MAKE PHONE CALL";
+GX_CONST GX_UBYTE main_display_AUDIO_MY_TURN_English[] = "MAY I HAVE A TURN";
+GX_CONST GX_UBYTE main_display_AUDIO_NO_English[] = "NO";
+GX_CONST GX_UBYTE main_display_AUDIO_THANKS_English[] = "THANK YOU";
+GX_CONST GX_UBYTE main_display_AUDIO_THING_NOT_WORKING_English[] = "SOMETHING IS NOT WORKING";
+GX_CONST GX_UBYTE main_display_AUDIO_WHICH_WAY_English[] = "WHICH WAY";
+GX_CONST GX_UBYTE main_display_AUDIO_YES_English[] = "YES";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[163] =
+GX_CONST GX_UBYTE *main_display_English_string_table[184] =
 {
     GX_NULL,
     main_display_SWITCH_DRV_CTRL_English,
@@ -50055,7 +50076,28 @@ GX_CONST GX_UBYTE *main_display_English_string_table[163] =
     main_display_CHILDS_VOICE_English,
     main_display_FEMALE_VOICE_English,
     main_display_MALE_VOICE_English,
-    main_display_TONES_English
+    main_display_TONES_English,
+    main_display_AUDIO_CALL_FOR_HELP_English,
+    main_display_AUDIO_CAN_I_TRY_English,
+    main_display_AUDIO_CHAIR_BROKEN_English,
+    main_display_AUDIO_DONT_PET_DOG_English,
+    main_display_AUDIO_ENABLE_CUES_English,
+    main_display_AUDIO_GET_AIDE_English,
+    main_display_AUDIO_GET_PACK_English,
+    main_display_AUDIO_GET_TEACHER_English,
+    main_display_AUDIO_HELP_ME_PLAY_English,
+    main_display_AUDIO_HI_English,
+    main_display_AUDIO_IM_HUNGRY_English,
+    main_display_AUDIO_IM_IN_PAIN_English,
+    main_display_AUDIO_IM_STUCK_English,
+    main_display_AUDIO_LETS_PLAY_English,
+    main_display_AUDIO_MAKE_CALL_English,
+    main_display_AUDIO_MY_TURN_English,
+    main_display_AUDIO_NO_English,
+    main_display_AUDIO_THANKS_English,
+    main_display_AUDIO_THING_NOT_WORKING_English,
+    main_display_AUDIO_WHICH_WAY_English,
+    main_display_AUDIO_YES_English
 
 };
 

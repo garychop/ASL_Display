@@ -83,6 +83,10 @@ UINT StartupSplashScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
                     SendGetPadAssignmentMsg (RIGHT_PAD);
                     SendGetPadAssignmentMsg (CENTER_PAD);
                 }
+                else if (g_StartupDelayCounter == 15)
+                {
+                    SendAuditorySettingGetCommand_toHub (); // Request the Auditory Settings, we need them before we display the Auditory Programming Screen.
+                }
                 else if (g_StartupDelayCounter == 16)
                 {
                     for (counter = 0; counter < MAX_BLUETOOTH_DEVICES; ++counter)
