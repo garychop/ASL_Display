@@ -42,6 +42,8 @@ extern void SetupAudioPhraseSettings();
 void StoreAuditorySettings (uint8_t *data)
 {
     g_ION_ClicksActive = (data[0] & 0x01) ? true : false;
+    g_CuesActive = (data[0] & 0x02) ? true : false;
+    g_TonesActive = (data[0] & 0x04) ? true : false;
     g_Audible_Setting = (data[0] >> 4);
     g_AuditoryVolumeLevel = data[1];
     g_AP1 = data[2];
@@ -53,8 +55,6 @@ void StoreAuditorySettings (uint8_t *data)
 
 /*************************************************************************************
  * This function retrieves the values to send to the HUB.
- * @param setting
- * @param volume
  */
 void SendAuditorySettings ()
 {
@@ -63,6 +63,10 @@ void SendAuditorySettings ()
     settings[0] = 0x0;
     if (g_ION_ClicksActive)
         settings[0] = 0x01;
+    if (g_CuesActive)
+        settings[0] = 0x02;
+    if (g_TonesActive)
+        settings[0] = 0x04;
     settings[0] |= (uint8_t) (g_Audible_Setting << 4); // put into upper nibble
     settings[1]= g_AuditoryVolumeLevel;
     settings[2] = g_AP1;
@@ -95,25 +99,27 @@ VOID ION_AuditorySettingsScreen_draw_function(GX_WINDOW* window)
     // Set "Tone" Clicks
     switch (g_Audible_Setting)
     {
-    case TONES_AUDIBLE:
-        gx_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_TONES);
-        break;
     case MALE_VOICE_AUDIBLE:
-        gx_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_MALE_VOICE);
+        gx_multi_line_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_AUDIO_MALE_VOICE);
         break;
     case FEMALE_VOICE_AUDIBLE:
-        gx_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_FEMALE_VOICE);
+        gx_multi_line_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_AUDIO_FEMALE_VOICE);
         break;
     case CHILDS_VOICE_AUDIBLE:
-        gx_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_CHILDS_VOICE);
+        gx_multi_line_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_AUDIO_CHILDS_VOICE);
         break;
     case AUDIBLE_TYPE_END:
     case SILENCE_AUDIBLE:
     default:
-        gx_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_NONE);
+        gx_multi_line_text_button_text_id_set(&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_Audible_Selection_Button, GX_STRING_ID_AUDIO_VOICE_OFF);
         break;
     } // end switch
 
+    // Set Tones button
+    if (g_TonesActive)
+        gx_button_select((GX_BUTTON*)&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_TonesToggleBtn);
+    else
+        gx_button_deselect((GX_BUTTON*)&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_TonesToggleBtn, true);
 
     gx_window_draw(window);
 }
@@ -148,13 +154,21 @@ UINT ION_AuditorySettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *even
 		    gx_system_dirty_mark ((GX_WIDGET*) window);
 			break;
 
-		// Clicks toggle button processing
+		// Pad Clicks toggle button processing
 		case GX_SIGNAL(PAD_CLICKS_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_ON):
             g_ION_ClicksActive = true;
 			break;
 		case GX_SIGNAL(PAD_CLICKS_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_OFF):
             g_ION_ClicksActive = false;
 			break;
+
+        // TONES toggle button processing
+        case GX_SIGNAL(TONES_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_ON):
+            g_TonesActive = true;
+            break;
+        case GX_SIGNAL(TONES_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_OFF):
+            g_TonesActive = false;
+            break;
 
 		// Enhanced toggle button processing
 		case GX_SIGNAL(AUDIBLE_SELECTION_BTN, GX_EVENT_CLICKED):

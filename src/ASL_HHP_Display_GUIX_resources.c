@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 11. 9.2024   Time (hh:mm): 15:31                        */
+/*  Date (dd.mm.yyyy): 21. 9.2024   Time (hh:mm): 09:31                        */
 /*******************************************************************************/
 
 
@@ -49884,10 +49884,9 @@ GX_CONST GX_UBYTE main_display_AUDIO_IM_THIRSTY_English[] = "I\'M THIRSTY";
 GX_CONST GX_UBYTE main_display_AUDIO_OPEN_DOOR_English[] = "OPEN THE DOOR";
 GX_CONST GX_UBYTE main_display_AUDIO_SOMETHING_HURTS_English[] = "SOMETHING HURTS";
 GX_CONST GX_UBYTE main_display_TALK_English[] = "SAY SOMETHING";
-GX_CONST GX_UBYTE main_display_CHILDS_VOICE_English[] = "CHILD VOICE";
-GX_CONST GX_UBYTE main_display_FEMALE_VOICE_English[] = "FEMALE VOICE";
-GX_CONST GX_UBYTE main_display_MALE_VOICE_English[] = "MALE VOICE";
-GX_CONST GX_UBYTE main_display_TONES_English[] = "TONES";
+GX_CONST GX_UBYTE main_display_AUDIO_CHILDS_VOICE_English[] = "CHILD";
+GX_CONST GX_UBYTE main_display_AUDIO_FEMALE_VOICE_English[] = "FEMALE";
+GX_CONST GX_UBYTE main_display_AUDIO_MALE_VOICE_English[] = "MALE";
 GX_CONST GX_UBYTE main_display_AUDIO_CALL_FOR_HELP_English[] = "CALL FOR HELP";
 GX_CONST GX_UBYTE main_display_AUDIO_CAN_I_TRY_English[] = "CAN I TRY";
 GX_CONST GX_UBYTE main_display_AUDIO_CHAIR_BROKEN_English[] = "MY CHAIR BROKE";
@@ -49909,10 +49908,12 @@ GX_CONST GX_UBYTE main_display_AUDIO_THANKS_English[] = "THANK YOU";
 GX_CONST GX_UBYTE main_display_AUDIO_THING_NOT_WORKING_English[] = "SOMETHING IS NOT WORKING";
 GX_CONST GX_UBYTE main_display_AUDIO_WHICH_WAY_English[] = "WHICH WAY";
 GX_CONST GX_UBYTE main_display_AUDIO_YES_English[] = "YES";
+GX_CONST GX_UBYTE main_display_AUDIO_TONES_English[] = "TONES";
+GX_CONST GX_UBYTE main_display_AUDIO_VOICE_OFF_English[] = "VOICE\rOFF";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[184] =
+GX_CONST GX_UBYTE *main_display_English_string_table[185] =
 {
     GX_NULL,
     main_display_SWITCH_DRV_CTRL_English,
@@ -50073,10 +50074,9 @@ GX_CONST GX_UBYTE *main_display_English_string_table[184] =
     main_display_AUDIO_OPEN_DOOR_English,
     main_display_AUDIO_SOMETHING_HURTS_English,
     main_display_TALK_English,
-    main_display_CHILDS_VOICE_English,
-    main_display_FEMALE_VOICE_English,
-    main_display_MALE_VOICE_English,
-    main_display_TONES_English,
+    main_display_AUDIO_CHILDS_VOICE_English,
+    main_display_AUDIO_FEMALE_VOICE_English,
+    main_display_AUDIO_MALE_VOICE_English,
     main_display_AUDIO_CALL_FOR_HELP_English,
     main_display_AUDIO_CAN_I_TRY_English,
     main_display_AUDIO_CHAIR_BROKEN_English,
@@ -50097,7 +50097,9 @@ GX_CONST GX_UBYTE *main_display_English_string_table[184] =
     main_display_AUDIO_THANKS_English,
     main_display_AUDIO_THING_NOT_WORKING_English,
     main_display_AUDIO_WHICH_WAY_English,
-    main_display_AUDIO_YES_English
+    main_display_AUDIO_YES_English,
+    main_display_AUDIO_TONES_English,
+    main_display_AUDIO_VOICE_OFF_English
 
 };
 

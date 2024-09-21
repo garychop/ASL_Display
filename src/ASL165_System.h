@@ -66,7 +66,7 @@ typedef enum {INVALID_FEATURE_HB_ID,
 } HEARTBEAT_FEATURE_ID_ENUM;
 
 typedef enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PAD_ACTIVE_TIMER_ID} ENUM_TIMER_IDS_ENUM;
-typedef enum {SILENCE_AUDIBLE = 0, TONES_AUDIBLE, MALE_VOICE_AUDIBLE, FEMALE_VOICE_AUDIBLE, CHILDS_VOICE_AUDIBLE, AUDIBLE_TYPE_END} AUDIBLE_TYPE_ENUM;
+typedef enum {SILENCE_AUDIBLE = 0, MALE_VOICE_AUDIBLE, FEMALE_VOICE_AUDIBLE, CHILDS_VOICE_AUDIBLE, AUDIBLE_TYPE_END} AUDIBLE_TYPE_ENUM;
 
 // Bit masks pertaining to the REQUEST FEATURE SETTNG CMD HA<->HHP comms command.
 #define FUNC_FEATURE_POWER_ON_OFF_BIT_MASK              (0x01)
@@ -133,6 +133,8 @@ extern GX_WIDGET *g_ActiveScreen;
 
 extern AUDIBLE_TYPE_ENUM g_Audible_Setting;
 extern uint8_t g_AuditoryVolumeLevel;
+extern bool g_TonesActive;
+extern bool g_CuesActive;
 extern bool g_ION_ClicksActive;
 extern uint8_t g_AP1, g_AP2, g_AP3, g_AP4;      // 32 Audio Phrases for SAY SOMETHING feature
 
