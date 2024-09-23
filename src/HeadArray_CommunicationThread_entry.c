@@ -1606,6 +1606,8 @@ void ProcessIncomingMessages ()
 
             // Add Driving Mode
             g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_Enabled = ((HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_DRIVING_MODE_BIT_MASK) ? true : false);
+            // Add SAY SOMETHING mode
+            g_MainScreenFeatureInfo[AUDIBLE_PHRASE_ID].m_Enabled = (HeadArrayMsg.GetFeatureResponse.m_FeatureSet2 & FUNC_FEATURE2_SAY_SOMETHING_BIT_MASK ? true : false); // Next Profile
 
             AdjustActiveFeaturePositions (g_ActiveFeature);   // This function also store "g_ActiveFeature" if appropriate.
 

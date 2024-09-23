@@ -47,6 +47,17 @@ VOID Initialize_MainScreenInfo(void)
     g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_LargeIcon = GX_PIXELMAP_ID_DRIVEFEATUREICON_LARGE_GREEN;
     g_MainScreenFeatureInfo[DRIVE_FEATURE_ID].m_FontColorID = GX_COLOR_ID_WHITE;
 
+    // "Audible Phrase" information and description
+    g_MainScreenFeatureInfo[AUDIBLE_PHRASE_ID].m_HB_ID = AUDIO_PHRASES_HB_ID;
+    g_MainScreenFeatureInfo[AUDIBLE_PHRASE_ID].m_Enabled = false;
+    g_MainScreenFeatureInfo[AUDIBLE_PHRASE_ID].m_Available = true;
+    g_MainScreenFeatureInfo[AUDIBLE_PHRASE_ID].m_Location = 0;
+    g_MainScreenFeatureInfo[AUDIBLE_PHRASE_ID].m_LargeDescriptionID = GX_STRING_ID_TALK;
+    g_MainScreenFeatureInfo[AUDIBLE_PHRASE_ID].m_SmallDescriptionID = GX_STRING_ID_TALK;
+    g_MainScreenFeatureInfo[AUDIBLE_PHRASE_ID].m_SmallIcon = GX_PIXELMAP_ID_TALK_30X30;
+    g_MainScreenFeatureInfo[AUDIBLE_PHRASE_ID].m_LargeIcon = GX_PIXELMAP_ID_TALK_70X70;
+    g_MainScreenFeatureInfo[AUDIBLE_PHRASE_ID].m_FontColorID = GX_COLOR_ID_WHITE;
+
     // "Power ON/OFF" information and description
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_HB_ID = POWERONOFF_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[POWER_ONOFF_ID].m_Enabled = false;
@@ -61,7 +72,7 @@ VOID Initialize_MainScreenInfo(void)
     g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_HB_ID = SWITCH_DRIVER_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_Enabled = true;
     g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_Available = true;
-    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_Location = 2;
+    g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_Location = 0;
     g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_LargeDescriptionID = GX_STRING_ID_SWITCH_DRV_CTRL;
     g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_SmallDescriptionID = GX_STRING_ID_SWITCH_DRV_CTRL;
     g_MainScreenFeatureInfo[SWITCH_DRV_CTRL_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_SWITCHDRIVE_30X30_GRAY;
@@ -72,7 +83,7 @@ VOID Initialize_MainScreenInfo(void)
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_HB_ID = BLUETOOTH_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Available = true;
-    g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Location = 1;
+    g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_Location = 0;
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_LargeDescriptionID = GX_STRING_ID_BLUETOOTH;
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_SmallDescriptionID = GX_STRING_ID_BLUETOOTH;
     g_MainScreenFeatureInfo[BLUETOOTH_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_BLUETOOTH_30X30_ALLBLUE;
@@ -82,7 +93,7 @@ VOID Initialize_MainScreenInfo(void)
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_HB_ID = NEXT_FUNCTION_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Available = true;
-    g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Location = 2;
+    g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_Location = 0;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_LargeDescriptionID = GX_STRING_ID_NEXT_FUNCTION; // "NEXT FUNCTION")
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_SmallDescriptionID = GX_STRING_ID_NEXT_FUNCTION;
     g_MainScreenFeatureInfo[NEXT_FUNCTION_OR_TOGGLE_ID].m_SmallIcon = GX_PIXELMAP_ID_FUNCTIONNEXT_30X30_YELLOW;
@@ -92,7 +103,7 @@ VOID Initialize_MainScreenInfo(void)
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_HB_ID = NEXT_PROFILE_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Available = true;
-    g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Location = 3;
+    g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_Location = 0;
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_LargeDescriptionID = GX_STRING_ID_NEXT_PROFILE; // "NEXT PROFILE"
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_SmallDescriptionID = GX_STRING_ID_NEXT_PROFILE;
     g_MainScreenFeatureInfo[NEXT_PROFILE_OR_USER_MENU_ID].m_SmallIcon = GX_PIXELMAP_ID_PROFILE_30X30_K;
@@ -102,7 +113,7 @@ VOID Initialize_MainScreenInfo(void)
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_HB_ID = RNET_MENU_SEATING_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Available = true;
-    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Location = 4;
+    g_MainScreenFeatureInfo[RNET_SEATING_ID].m_Location = 0;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_LargeDescriptionID = GX_STRING_ID_RNET_SEATING;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_SmallDescriptionID = GX_STRING_ID_RNET_SEATING;
     g_MainScreenFeatureInfo[RNET_SEATING_ID].m_SmallIcon = GX_PIXELMAP_ID_RNET_SEATINGB_30X30;
@@ -112,7 +123,7 @@ VOID Initialize_MainScreenInfo(void)
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_HB_ID = RNET_SLEEP_FEATURE_HB_ID;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Enabled = false;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Available = true;
-    g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Location = 5;
+    g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_Location = 0;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_LargeDescriptionID = GX_STRING_ID_RNET_SLEEP;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_SmallDescriptionID = GX_STRING_ID_RNET_SLEEP;
     g_MainScreenFeatureInfo[RNET_SLEEP_FEATURE_ID].m_SmallIcon = GX_PIXELMAP_ID_RNET_SLEEPB_30X30;

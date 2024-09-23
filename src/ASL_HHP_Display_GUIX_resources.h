@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 21. 9.2024   Time (hh:mm): 10:51                        */
+/*  Date (dd.mm.yyyy): 23. 9.2024   Time (hh:mm): 14:11                        */
 /*******************************************************************************/
 
 
@@ -207,13 +207,15 @@
 #define GX_PIXELMAP_ID_SWITCH_ACTIVE 116
 #define GX_PIXELMAP_ID_SWITCH_BG 117
 #define GX_PIXELMAP_ID_SWITCH_DISACTIVE 118
-#define GX_PIXELMAP_ID_TOGGLE_GRAY 119
-#define GX_PIXELMAP_ID_TOGGLE_GREEN 120
-#define GX_PIXELMAP_ID_UPARROW 121
-#define GX_PIXELMAP_ID_UPWHITEARROW 122
-#define GX_PIXELMAP_ID_WARNINGICON 123
-#define GX_PIXELMAP_ID_YELLOWQUESTION 124
-#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 125
+#define GX_PIXELMAP_ID_TALK_30X30 119
+#define GX_PIXELMAP_ID_TALK_70X70 120
+#define GX_PIXELMAP_ID_TOGGLE_GRAY 121
+#define GX_PIXELMAP_ID_TOGGLE_GREEN 122
+#define GX_PIXELMAP_ID_UPARROW 123
+#define GX_PIXELMAP_ID_UPWHITEARROW 124
+#define GX_PIXELMAP_ID_WARNINGICON 125
+#define GX_PIXELMAP_ID_YELLOWQUESTION 126
+#define MAIN_DISPLAY_PIXELMAP_TABLE_SIZE 127
 
 /* String Ids                                                                  */
 
