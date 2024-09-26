@@ -139,6 +139,7 @@ extern bool g_TonesActive;
 extern bool g_CuesActive;
 extern bool g_ION_ClicksActive;
 extern uint8_t g_AP1, g_AP2, g_AP3, g_AP4;      // 32 Audio Phrases for SAY SOMETHING feature
+extern int8_t g_SaySomething_HHP_Index;
 
 extern MAIN_SCREEN_FEATURE g_MainScreenFeatureInfo[];
 extern PAD_INFO_STRUCT g_PadSettings[];

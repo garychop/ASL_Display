@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 23. 9.2024   Time (hh:mm): 14:11                        */
+/*  Date (dd.mm.yyyy): 26. 9.2024   Time (hh:mm): 12:03                        */
 /*******************************************************************************/
 
 
@@ -50166,7 +50166,7 @@ GX_CONST GX_UBYTE main_display_AUDIO_CALL_FOR_HELP_English[] = "CALL FOR HELP";
 GX_CONST GX_UBYTE main_display_AUDIO_CAN_I_TRY_English[] = "CAN I TRY";
 GX_CONST GX_UBYTE main_display_AUDIO_CHAIR_BROKEN_English[] = "MY CHAIR BROKE";
 GX_CONST GX_UBYTE main_display_AUDIO_DONT_PET_DOG_English[] = "DON\'T PET DOG";
-GX_CONST GX_UBYTE main_display_AUDIO_ENABLE_CUES_English[] = "ENABLE CUES";
+GX_CONST GX_UBYTE main_display_AUDIO_ENABLE_CUES_English[] = "CUES";
 GX_CONST GX_UBYTE main_display_AUDIO_GET_AIDE_English[] = "GET MY AIDE";
 GX_CONST GX_UBYTE main_display_AUDIO_GET_PACK_English[] = "GET MY BACKPACK";
 GX_CONST GX_UBYTE main_display_AUDIO_GET_TEACHER_English[] = "GET TEACHER";

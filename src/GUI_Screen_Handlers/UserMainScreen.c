@@ -684,6 +684,10 @@ UINT MainUserScreen_event_process (GX_WINDOW *window, GX_EVENT *event_ptr)
     case GX_SIGNAL (GOTO_BT_SUBMENU_ID, GX_EVENT_CLICKED):
         screen_toggle((GX_WINDOW *)&ION_BT_UserSelectionScreen, window);
         break;
+
+    case GX_SIGNAL (SAY_SOMETHING_BTN, GX_EVENT_CLICKED):
+        screen_toggle((GX_WINDOW *)&ION_AudibleStringSelectionScreen, window);
+        break;
 	} // end switch
 
     myErr = gx_window_event_process(window, event_ptr);

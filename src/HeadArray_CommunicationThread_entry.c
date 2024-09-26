@@ -1420,6 +1420,20 @@ void ProcessIncomingMessages ()
                                 gx_system_event_send(&gxe);
                             }
                         }
+                        // Let's see if the SAY SOMETHING Feature is selected in the User Main Menu
+                        // ... and a submenu is requested.
+                        if (g_ActiveFeature == AUDIO_PHRASES_HB_ID)
+                        {
+                            if (g_SaySomething_HHP_Index != HeadArrayMsg.HeartBeatMsg.m_SubIndex)
+                            {
+                                g_SaySomething_HHP_Index = (int8_t) HeadArrayMsg.HeartBeatMsg.m_SubIndex;
+                                gxe.gx_event_type = GX_SIGNAL (SAY_SOMETHING_BTN, GX_EVENT_CLICKED);
+                                gxe.gx_event_sender = GX_ID_NONE;
+                                gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                                gxe.gx_event_display_handle = 0;
+                                gx_system_event_send(&gxe);
+                            }
+                        }
                     }
                     else if ((HeadArrayMsg.HeartBeatMsg.m_HA_Status & 0x01) == 0x00)// Bit 0 = 0; means Head Array in Power Off, Idle Mode, we are recommending to change screens.
                     {
@@ -1498,6 +1512,19 @@ void ProcessIncomingMessages ()
                             gx_system_event_send(&gxe);
                         }
 
+                    }
+                    else if (g_ActiveScreen->gx_widget_id == ION_AUDIBLE_STRING_SELECT_SCREEN_ID)
+                    {
+                        if (g_SaySomething_HHP_Index != (int8_t) HeadArrayMsg.HeartBeatMsg.m_SubIndex)
+                        {
+                            //AdjustActiveFeaturePositions ((FEATURE_ID_ENUM)(HeadArrayMsg.HeartBeatMsg.m_ActiveMode));   // This function also store "g_ActiveFeature" if appropriate.
+                            g_SaySomething_HHP_Index = (int8_t) HeadArrayMsg.HeartBeatMsg.m_SubIndex;
+                            gxe.gx_event_type = GX_SIGNAL (BT_SUBMENU_CHANGED_ID, GX_EVENT_CLICKED);;
+                            gxe.gx_event_sender = GX_ID_NONE;
+                            gxe.gx_event_target = 0;  /* the event to be routed to the widget that has input focus */
+                            gxe.gx_event_display_handle = 0;
+                            gx_system_event_send(&gxe);
+                        }
                     }
                 }
             }

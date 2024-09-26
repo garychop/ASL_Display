@@ -34,6 +34,7 @@ bool g_ION_ClicksActive = false;
 bool g_TonesActive = false;
 bool g_CuesActive = false;
 uint8_t g_AP1 = 0xff, g_AP2 = 0xff, g_AP3 = 0x0, g_AP4 = 0x0;
+int8_t g_SaySomething_HHP_Index = 0x00;
 
 int g_SettingsChanged;
 int8_t g_StartupDelayCounter = 0;

@@ -24,6 +24,7 @@
 uint8_t g_OriginalVolumeLevel = 0;
 uint8_t g_OriginalAuditoryVoiceActive = 0;
 bool g_OriginalION_ClicksActive = false;
+bool g_OriginalCueSetting;
 
 char g_VolumeLevelStr[8];
 
@@ -115,6 +116,11 @@ VOID ION_AuditorySettingsScreen_draw_function(GX_WINDOW* window)
         break;
     } // end switch
 
+    if (g_CuesActive)
+        gx_button_select((GX_BUTTON*)&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_CuesToggleBtn);
+    else
+        gx_button_deselect((GX_BUTTON*)&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_CuesToggleBtn, true);
+
     // Set Tones button
     if (g_TonesActive)
         gx_button_select((GX_BUTTON*)&ION_AuditorySettingsScreen.ION_AuditorySettingsScreen_TonesToggleBtn);
@@ -136,6 +142,7 @@ UINT ION_AuditorySettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *even
 		    g_OriginalVolumeLevel = g_AuditoryVolumeLevel;
 		    g_OriginalAuditoryVoiceActive = g_Audible_Setting;
 		    g_OriginalION_ClicksActive = g_ION_ClicksActive;
+		    g_OriginalCueSetting = g_CuesActive;
 		    break;
 
 		// Adjust Volume
@@ -162,6 +169,14 @@ UINT ION_AuditorySettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *even
             g_ION_ClicksActive = false;
 			break;
 
+        // CUES toggle button processing
+        case GX_SIGNAL(CUES_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_ON):
+            g_CuesActive = true;
+            break;
+        case GX_SIGNAL(CUES_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_OFF):
+             g_CuesActive = false;
+            break;
+
         // TONES toggle button processing
         case GX_SIGNAL(TONES_TOGGLE_BTN_ID, GX_EVENT_TOGGLE_ON):
             g_TonesActive = true;
@@ -181,7 +196,8 @@ UINT ION_AuditorySettingsScreen_event_process (GX_WINDOW *window, GX_EVENT *even
 		case GX_SIGNAL(OK_BTN_ID, GX_EVENT_CLICKED):
             if ((g_OriginalVolumeLevel != g_AuditoryVolumeLevel)
              || (g_OriginalAuditoryVoiceActive != g_Audible_Setting)
-             || (g_OriginalION_ClicksActive != g_ION_ClicksActive))
+             || (g_OriginalION_ClicksActive != g_ION_ClicksActive)
+             || (g_OriginalCueSetting = g_CuesActive))
              {
                 SendAuditorySettings();
              }

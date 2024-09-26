@@ -23,7 +23,6 @@
 
 AUDIO_SETTINGS_STRUCT g_AudioPhraseSettings[AUDIO_PHRASE_MAX_NUMBER] =
 {
- { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_ENABLE_CUES},
  { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_HELP_ME},
  { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_HELLO},
  { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_HI},
@@ -52,9 +51,10 @@ AUDIO_SETTINGS_STRUCT g_AudioPhraseSettings[AUDIO_PHRASE_MAX_NUMBER] =
  { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_DONT_PET_DOG },
  { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_YES },
  { .m_Enabled = true, .m_Description = GX_STRING_ID_AUDIO_NO },
- { .m_Enabled = false, .m_Description = GX_STRING_ID_NONE },
- { .m_Enabled = false, .m_Description = GX_STRING_ID_NONE },
- { .m_Enabled = false, .m_Description = GX_STRING_ID_NONE }
+ { .m_Enabled = false, .m_Description = 0 },
+ { .m_Enabled = false, .m_Description = 0 },
+ { .m_Enabled = false, .m_Description = 0 },
+ { .m_Enabled = false, .m_Description = 0 }
 };
 
 typedef struct

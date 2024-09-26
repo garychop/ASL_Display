@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 23. 9.2024   Time (hh:mm): 14:11                        */
+/*  Date (dd.mm.yyyy): 26. 9.2024   Time (hh:mm): 12:03                        */
 /*******************************************************************************/
 
 
@@ -610,6 +610,70 @@ GX_CHECKBOX_PROPERTIES ION_AuditorySettingsScreen_TonesToggleBtn_properties =
     GX_PIXELMAP_ID_TOGGLE_GRAY,              /* unchecked disabled pixelmap id */
     GX_PIXELMAP_ID_TOGGLE_GREEN              /* checked disabled pixelmap id   */
 };
+GX_PROMPT_PROPERTIES ION_AuditorySettingsScreen_CuesPrompt_properties =
+{
+    GX_STRING_ID_AUDIO_ENABLE_CUES,          /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+GX_CHECKBOX_PROPERTIES ION_AuditorySettingsScreen_CuesToggleBtn_properties =
+{
+    0,                                       /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_SELECTED_TEXT,               /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT,               /* selected text color            */
+    GX_PIXELMAP_ID_TOGGLE_GRAY,              /* unchecked pixelmap id          */
+    GX_PIXELMAP_ID_TOGGLE_GREEN,             /* checked pixelmap id            */
+    GX_PIXELMAP_ID_TOGGLE_GRAY,              /* unchecked disabled pixelmap id */
+    GX_PIXELMAP_ID_TOGGLE_GREEN              /* checked disabled pixelmap id   */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_CuesToggleBtn_define =
+{
+    "CuesToggleBtn",
+    GX_TYPE_CHECKBOX,                        /* widget type                    */
+    CUES_TOGGLE_BTN_ID,                      /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_ENABLED|GX_STYLE_BUTTON_TOGGLE|GX_STYLE_TEXT_RIGHT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_CHECKBOX),                     /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_checkbox_create,               /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {138, 90, 200, 126},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_AUDITORYSETTINGSSCREEN_CONTROL_BLOCK, ION_AuditorySettingsScreen_CuesToggleBtn), /* control block */
+    (void *) &ION_AuditorySettingsScreen_CuesToggleBtn_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_CuesPrompt_define =
+{
+    "CuesPrompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    CUES_PROMPT_ID,                          /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_RIGHT,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {25, 90, 124, 128},                      /* widget size                    */
+    &ION_AuditorySettingsScreen_CuesToggleBtn_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_AUDITORYSETTINGSSCREEN_CONTROL_BLOCK, ION_AuditorySettingsScreen_CuesPrompt), /* control block */
+    (void *) &ION_AuditorySettingsScreen_CuesPrompt_properties /* extended properties */
+};
 
 GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_TonesToggleBtn_define =
 {
@@ -627,8 +691,8 @@ GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_TonesToggleBtn_define =
     gx_studio_checkbox_create,               /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {135, 106, 197, 142},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    {138, 135, 200, 171},                    /* widget size                    */
+    &ION_AuditorySettingsScreen_CuesPrompt_define, /* next widget definition   */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(ION_AUDITORYSETTINGSSCREEN_CONTROL_BLOCK, ION_AuditorySettingsScreen_TonesToggleBtn), /* control block */
     (void *) &ION_AuditorySettingsScreen_TonesToggleBtn_properties /* extended properties */
@@ -650,7 +714,7 @@ GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_TonesPrompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {20, 105, 119, 143},                     /* widget size                    */
+    {26, 135, 125, 173},                     /* widget size                    */
     &ION_AuditorySettingsScreen_TonesToggleBtn_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(ION_AUDITORYSETTINGSSCREEN_CONTROL_BLOCK, ION_AuditorySettingsScreen_TonesPrompt), /* control block */
@@ -696,7 +760,7 @@ GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_PadClicksToggleBtn_define =
     gx_studio_checkbox_create,               /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {135, 160, 197, 196},                    /* widget size                    */
+    {138, 180, 200, 216},                    /* widget size                    */
     &ION_AuditorySettingsScreen_Audible_Selection_Button_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(ION_AUDITORYSETTINGSSCREEN_CONTROL_BLOCK, ION_AuditorySettingsScreen_PadClicksToggleBtn), /* control block */
@@ -719,7 +783,7 @@ GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_PadClicksPrompt_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {24, 161, 123, 197},                     /* widget size                    */
+    {26, 180, 125, 216},                     /* widget size                    */
     &ION_AuditorySettingsScreen_PadClicksToggleBtn_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(ION_AUDITORYSETTINGSSCREEN_CONTROL_BLOCK, ION_AuditorySettingsScreen_PadClicksPrompt), /* control block */
@@ -5129,6 +5193,29 @@ GX_TEXT_BUTTON_PROPERTIES PrimaryTemplate_LongPressButton_properties =
     GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
 };
 
+GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_PrimaryTemplate_SaySomething_Button_define =
+{
+    "PrimaryTemplate_SaySomething_Button",
+    GX_TYPE_BUTTON,                          /* widget type                    */
+    SAY_SOMETHING_BTN,                       /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_RAISED|GX_STYLE_ENABLED,   /* style flags                  */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_BUTTON),                       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_button_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {400, 108, 479, 131},                    /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(PRIMARYTEMPLATE_CONTROL_BLOCK, PrimaryTemplate_PrimaryTemplate_SaySomething_Button), /* control block */
+    (void *) GX_NULL                         /* no extended properties         */
+};
+
 GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_GotoBluetoothSubmenu_define =
 {
     "GotoBluetoothSubmenu",
@@ -5146,7 +5233,7 @@ GX_CONST GX_STUDIO_WIDGET PrimaryTemplate_GotoBluetoothSubmenu_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {340, 108, 419, 131},                    /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &PrimaryTemplate_PrimaryTemplate_SaySomething_Button_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(PRIMARYTEMPLATE_CONTROL_BLOCK, PrimaryTemplate_GotoBluetoothSubmenu), /* control block */
     (void *) GX_NULL                         /* no extended properties         */

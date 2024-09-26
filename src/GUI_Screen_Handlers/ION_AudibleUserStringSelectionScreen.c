@@ -40,13 +40,13 @@ typedef struct
 */
 
 VOID AudibleUserSelectionString_List_callback(GX_VERTICAL_LIST *list, GX_WIDGET *widget, INT index);
-void SetNextSelection(ION_AUDIBLESTRINGSELECTIONSCREEN_CONTROL_BLOCK *windowPtr);
+//void SetNextSelection(ION_AUDIBLESTRINGSELECTIONSCREEN_CONTROL_BLOCK *windowPtr);
 
 /*************************************************************************************
 * Global and Local variables
 */
 
-static int g_Selected_Button_Index = 0;
+//static int g_Selected_Button_Index = 0;
 static int g_NumberOfButtons;
 
 // The following hold the Data for the User Audioble Phrase Screen.
@@ -107,10 +107,6 @@ static void CreateWidgets (GX_VERTICAL_LIST *list)
 			AudibleUserSelectionString_List_callback(list, (GX_WIDGET*) &g_ScreenInfo[activeFeatureCount], index);
 			++activeFeatureCount;
 		}
-		else if (index == 1)	// Cues setting is in the 0 spot
-		{
-			continue;
-		}
 		else if (g_AudioPhraseSettings[index - 1].m_Enabled)
 		{
 			g_ScreenInfo[activeFeatureCount].m_AV_Index = index - 1;
@@ -132,7 +128,7 @@ static void UpdateSelection (void)
 
 	for (index = 0; index < AUDIO_PHRASE_MAX_NUMBER; ++index)
 	{
-		if (g_Selected_Button_Index == index)
+		if ((g_SaySomething_HHP_Index-1) == index)
 		{
 			g_ScreenInfo[index].m_PromptWidget.gx_widget_disabled_fill_color = GX_COLOR_ID_DISABLED_FILL;
 			g_ScreenInfo[index].m_PromptWidget.gx_widget_normal_fill_color = GX_COLOR_ID_BTN_LOWER;
@@ -156,21 +152,21 @@ static void UpdateSelection (void)
 /*************************************************************************************
 * This function highligths the next selection in the list.
 */
-void SetNextSelection(ION_AUDIBLESTRINGSELECTIONSCREEN_CONTROL_BLOCK *windowPtr)
-{
-	int maxItems;
-	int selectedIndex;
-
-	maxItems = windowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox.gx_vertical_list_child_count;
-	selectedIndex = windowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox.gx_vertical_list_selected;
-	if (selectedIndex >= maxItems - 1)
-		selectedIndex = 0;
-	else
-		++selectedIndex;
-
-	g_Selected_Button_Index = selectedIndex;
-
-}
+//void SetNextSelection(ION_AUDIBLESTRINGSELECTIONSCREEN_CONTROL_BLOCK *windowPtr)
+//{
+//	int maxItems;
+//	int selectedIndex;
+//
+//	maxItems = windowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox.gx_vertical_list_child_count;
+//	selectedIndex = windowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox.gx_vertical_list_selected;
+//	if (selectedIndex >= maxItems - 1)
+//		selectedIndex = 0;
+//	else
+//		++selectedIndex;
+//
+//	g_Selected_Button_Index = selectedIndex;
+//
+//}
 
 /*************************************************************************************
  * Function Name: UserBTDeviceSelectionScreen_event_handler
@@ -185,75 +181,53 @@ UINT ION_AudibleStringSelectionScreen_event_handler(GX_WINDOW *window, GX_EVENT 
 	{
 	case GX_EVENT_SHOW:
 		CreateWidgets(&WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox);
-		g_Selected_Button_Index = 0;	// Start with the "BACK" item.
+		//g_Selected_Button_Index = 0;	// Start with the "BACK" item.
+		//g_SaySomethingIndex = 0;        // Start with Main Menu select, this should be changed to 0x01 "BACK" index
 		UpdateSelection();		// Adjust the items colors, font and icons.
-		gx_vertical_list_selected_set (&WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox, g_Selected_Button_Index);
+		gx_vertical_list_selected_set (&WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox, g_SaySomething_HHP_Index-1);
         g_ChangeScreen_WIP = false;
 		break;
 
-    case GX_SIGNAL (DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):
-		// Select the next item, rolling to the first item.
-		SetNextSelection(WindowPtr);
-		UpdateSelection();
-		gx_vertical_list_selected_set (&WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox, g_Selected_Button_Index);
-		break;
-
-    case GX_SIGNAL(UP_ARROW_BTN_ID, GX_EVENT_CLICKED):
-		// Select the Previous Item, rolling to the last item in the list.
-		if (g_Selected_Button_Index == 0)
-			g_Selected_Button_Index = g_NumberOfButtons - 1; // "-1" makes it an Array Index
-		else
-			--g_Selected_Button_Index;
-		UpdateSelection();
-		gx_vertical_list_selected_set (&WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox, g_Selected_Button_Index);
-		break;
-
-//	case GX_EVENT_PEN_DOWN:	// We are going to determine if the Up or Down arrow buttons have been held for a
-//							// ... long time (2 seconds) and goto advancing the next item in the User's Bluetooth List.
-//
-//		if (event_ptr->gx_event_target->gx_widget_id == DRIVE_CONTROL_USERPORT_ID)
-//		{
-//			gx_system_timer_start(window, USER_PORT_TIMER_ID, g_TimeoutValue * 2, 0);	// "x4" seems to make the time real.
-//		}
+//    case GX_SIGNAL (DOWN_ARROW_BTN_ID, GX_EVENT_CLICKED):
+//		// Select the next item, rolling to the first item.
+//		SetNextSelection(WindowPtr);
+//		UpdateSelection();
+//		gx_vertical_list_selected_set (&WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox, g_Selected_Button_Index);
 //		break;
 
-//	case GX_EVENT_PEN_UP:
-//		gx_system_timer_stop(window, USER_PORT_TIMER_ID);
-//		if (g_ChangeScreen_WIP)
-//		{
-//			g_ChangeScreen_WIP = false;
-//			break;
-//		}
-//		if (event_ptr->gx_event_target->gx_widget_id == DRIVE_CONTROL_USERPORT_ID)
-//		{
-//			{
-//				SetNextSelection(WindowPtr);
-//				UpdateSelection();
-//				gx_vertical_list_selected_set(&WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox, g_Selected_Button_Index);
-//			}
-//		}
+//    case GX_SIGNAL(UP_ARROW_BTN_ID, GX_EVENT_CLICKED):
+//		// Select the Previous Item, rolling to the last item in the list.
+//		if (g_Selected_Button_Index == 0)
+//			g_Selected_Button_Index = g_NumberOfButtons - 1; // "-1" makes it an Array Index
+//		else
+//			--g_Selected_Button_Index;
+//		UpdateSelection();
+//		gx_vertical_list_selected_set (&WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox, g_Selected_Button_Index);
 //		break;
 
-//    case GX_EVENT_TIMER:
-//		// This is initiated by a PEN_DOWN process of the USER PORT BUTTON.
-//		g_ChangeScreen_WIP = true;	// Need to suppress PEN_UP Handling.
-//		if (event_ptr->gx_event_payload.gx_event_timer_id == USER_PORT_TIMER_ID)
-//		{
-//			// Return back to the previous screen.
-//			if (g_Selected_Button_Index == 0)
-//			{
-//				for (i = 0; i < AUDIO_PHRASE_MAX_NUMBER; ++i)
-//				{
-//					if (g_ScreenInfo[i].m_PromptWidget.gx_widget_name != NULL)
-//						gx_widget_delete((GX_WIDGET*)&g_ScreenInfo[i].m_PromptWidget);
-//					if (g_ScreenInfo[i].m_ItemWidget.gx_widget_parent != NULL)
-//						gx_widget_delete ((GX_WIDGET*) &g_ScreenInfo[i].m_ItemWidget);
-//				}
-//				WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox.gx_vertical_list_child_count = 0;
-//				screen_toggle(PopPushedWindow(), window);
-//			}
-//		}
-//		break;
+    case GX_SIGNAL (SAY_SOMETHING_BTN, GX_EVENT_CLICKED): // This event is triggered by a change in the Bluetooth SubIndex message from ION Hub
+        if (g_SaySomething_HHP_Index == 0x00)        // "00" = Main Menu with Bluetooth feature selected.
+        {
+//          BT_Screen_Widget_Cleanup(g_BT_ScreenInfo, MAX_BLUETOOTH_DEVICES);
+            screen_toggle((GX_WINDOW *)&MainUserScreen, window);
+        }
+//        else if (g_SaySomething_HHP_Index == 0x01)   // Are we back at "BACK"?
+//       {
+//            g_Selected_Button_Index = 0;
+//            UpdateSelection();
+//            gx_vertical_list_selected_set (&WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox, g_SaySomething_HHP_Index);
+//        }
+        else
+        {
+//            g_Selected_Button_Index = g_BluetoothSubIndex >> 4;      // The 1-based index is in the upper nibble
+//            if (g_Selected_Button_Index >= AV_LIST_END)
+//                g_Selected_Button_Index = 0;
+//            UpdateBTUserSelection();
+            UpdateSelection();      // Adjust the items colors, font and icons.
+            gx_vertical_list_selected_set (&WindowPtr->ION_AudibleStringSelectionScreen_AudibleStringListBox, g_SaySomething_HHP_Index-1);
+        }
+        break;
+
 
 	} // end switch on event_ptr
 
