@@ -1,6 +1,7 @@
 #
-#Mon Sep 30 07:37:56 EDT 2024
+#Mon Sep 30 07:52:21 EDT 2024
+settingConfiguration=com.renesas.cdt.managedbuild.gnuarm.config.elf.release.1000509491
 >>>>>>>=133b993f8d17f46bd01b68fc121aeb85d9af1ea1
-activeConfiguration=com.renesas.cdt.managedbuild.gnuarm.config.elf.debug.203495956
-=\=\=\=\=\=\=
+activeConfiguration=com.renesas.cdt.managedbuild.gnuarm.config.elf.release.1000509491
 <<<<<<<=HEAD
+=\=\=\=\=\=\=

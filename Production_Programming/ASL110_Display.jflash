@@ -3,7 +3,7 @@
 [GENERAL]
   aATEModuleSel[24] = 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
   ConnectMode = 0
-  CurrentFile = "C:\asl\ASL104E\ASL104E_HUB\ION_HUB_Firmware\Released_Images\ION_HUB_Firmware_V0.3.3.srec"
+  CurrentFile = "C:\asl\ASL_Display\Released_Images\ASL165_ION_V2.0.2.srec"
   DataFileSAddr = 0x00000000
   GUIMode = 0
   HostName = ""
