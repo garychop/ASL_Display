@@ -26,7 +26,11 @@
 typedef enum ION_PROG_INDEX {DRIVER_SELECT_BTN = 20, HUB_BTN, ATTENDANT_BTN, SOUND_BTN, AUDIO_PHRASE_BTN, USER_SETTINGS_BTN, FEATURE_LIST_BTN, STANDBY_SELECT_BTN, RESET_BTN, INVALID_BTN} MAIN_PROGRAMMING_IDX;
 typedef enum {DRIVER_SELECT_IDX, HUB_IDX, ATTENDANT_IDX, SOUND_IDX, AUDIO_PHRASE_IDX, USER_SETTINGS_IDX, FEATURE_LIST_IDX, STANDBY_SELECT_IDX, RESET_IDX, INVALID_IDX} PROGRAMMING_DEVICE_INDEX;
 
+//*************************************************************************************
+// Local Variables
+
 BUTTON_WIDGET_SCREEN_INFO ION_ProgramSettings_ScreenInfo[INVALID_IDX+1];
+static char g_VersionString[32];
 
 //*************************************************************************************
 // Forward Declarations
@@ -137,6 +141,9 @@ UINT ION_MainProgrammingScreen_event_process (GX_WINDOW *window, GX_EVENT *event
 	case GX_EVENT_SHOW:
 		PopulateIONProgrammingInfo();
 		Create_ION_ProgramminghWidgets(&windowPtr->ION_MainProgrammingScreen_ION_MainProgrammingListBox);
+		// Display Version
+		sprintf (g_VersionString, "ASL165\n%s\nION HUB\n%d.%d.%d", ASL165_ION_VersionString, g_HA_Version_Major, g_HA_Version_Minor, g_HA_Version_Build);
+		gx_multi_line_text_button_text_set (&ION_MainProgrammingScreen.ION_MainProgrammingScreen_Version_Text_Button, g_VersionString);
 		break;
 
 	// Process the Head Array.

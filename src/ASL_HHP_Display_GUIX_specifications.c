@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 26. 9.2024   Time (hh:mm): 12:03                        */
+/*  Date (dd.mm.yyyy): 30. 9.2024   Time (hh:mm): 07:20                        */
 /*******************************************************************************/
 
 
@@ -2648,6 +2648,13 @@ GX_SCROLLBAR_APPEARANCE  ION_MainProgrammingScreen_ION_MainProgramming_vertical_
     GX_COLOR_ID_SHINE,                       /* scroll thumb border color      */
     GX_COLOR_ID_WINDOW_BORDER,               /* scroll button color            */
 };
+GX_ML_TEXT_BUTTON_PROPERTIES ION_MainProgrammingScreen_Version_Text_Button_properties =
+{
+    0,                                       /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
 
 GX_CONST GX_STUDIO_WIDGET ION_MainProgrammingScreen_ION_MainProgramming_vertical_scroll_define =
 {
@@ -2672,6 +2679,29 @@ GX_CONST GX_STUDIO_WIDGET ION_MainProgrammingScreen_ION_MainProgramming_vertical
     (void *) &ION_MainProgrammingScreen_ION_MainProgramming_vertical_scroll_properties /* extended properties */
 };
 
+GX_CONST GX_STUDIO_WIDGET ION_MainProgrammingScreen_Version_Text_Button_define =
+{
+    "Version_Text_Button",
+    GX_TYPE_MULTI_LINE_TEXT_BUTTON,          /* widget type                    */
+    VERSON_TEXT_BTN,                         /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_MULTI_LINE_TEXT_BUTTON),       /* control block size             */
+    GX_COLOR_ID_BTN_LOWER,                   /* normal color id                */
+    GX_COLOR_ID_BTN_UPPER,                   /* selected color id              */
+    gx_studio_multi_line_text_button_create,     /* create function            */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {228, 36, 307, 115},                     /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_MAINPROGRAMMINGSCREEN_CONTROL_BLOCK, ION_MainProgrammingScreen_Version_Text_Button), /* control block */
+    (void *) &ION_MainProgrammingScreen_Version_Text_Button_properties /* extended properties */
+};
+
 GX_CONST GX_STUDIO_WIDGET ION_MainProgrammingScreen_ION_MainProgrammingListBox_define =
 {
     "ION_MainProgrammingListBox",
@@ -2689,7 +2719,7 @@ GX_CONST GX_STUDIO_WIDGET ION_MainProgrammingScreen_ION_MainProgrammingListBox_d
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {16, 32, 221, 227},                      /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &ION_MainProgrammingScreen_Version_Text_Button_define, /* next widget definition */
     &ION_MainProgrammingScreen_ION_MainProgramming_vertical_scroll_define, /* child widget definition */
     offsetof(ION_MAINPROGRAMMINGSCREEN_CONTROL_BLOCK, ION_MainProgrammingScreen_ION_MainProgrammingListBox), /* control block */
     (void *) &ION_MainProgrammingScreen_ION_MainProgrammingListBox_properties /* extended properties */

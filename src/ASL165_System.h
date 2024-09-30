@@ -26,7 +26,7 @@
 #include "DeviceInfo.h"
 
 #define ASL165_DispalyVersionString "ASL165: 2.0.1"
-
+#define ASL165_ION_VersionString "2.0.2"
 
 //#define MAXIMUM_DRIVE_SPEED (40)
 #define MAXIMUM_DRIVE_SPEED_OLD_FIRMWARE (30)
