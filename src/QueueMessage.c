@@ -751,12 +751,14 @@ void Send_Auditory_Setting_ToGUI (uint8_t *data)
     HHP_HA_MSG_STRUCT HHP_Msg;
 
     HHP_Msg.m_MsgType = HHP_HA_AUDITORY_SETTINGS_GET_CMD;
-    HHP_Msg.ION_Auditory_Struct.m_AuditorySetting = data[0];
-    HHP_Msg.ION_Auditory_Struct.m_Volume = data[1];
-    HHP_Msg.ION_Auditory_Struct.m_AP1 = data[2];
-    HHP_Msg.ION_Auditory_Struct.m_AP2 = data[3];
-    HHP_Msg.ION_Auditory_Struct.m_AP3 = data[4];
-    HHP_Msg.ION_Auditory_Struct.m_AP4 = data[5];
+    HHP_Msg.ION_Auditory_Struct.m_IntSpkrVoice = data[0];
+    HHP_Msg.ION_Auditory_Struct.m_IntSpkrVolume = data[1];
+    HHP_Msg.ION_Auditory_Struct.m_ExtSpkrVoice = data[2];
+    HHP_Msg.ION_Auditory_Struct.m_ExtSpkrVolume = data[3];
+    HHP_Msg.ION_Auditory_Struct.m_AP1 = data[4];
+    HHP_Msg.ION_Auditory_Struct.m_AP2 = data[5];
+    HHP_Msg.ION_Auditory_Struct.m_AP3 = data[6];
+    HHP_Msg.ION_Auditory_Struct.m_AP4 = data[7];
 
     tx_queue_send(&q_COMM_to_GUI_Queue, &HHP_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }
@@ -768,12 +770,14 @@ void SendAuditorySettingSetCommand_toHub (uint8_t *setting)
     GUI_MSG_STRUCT q_Msg;
 
     q_Msg.m_MsgType = HHP_HA_AUDITORY_SETTINGS_SET_CMD;
-    q_Msg.ION_Auditory_Struct.m_AuditorySetting = setting[0];
-    q_Msg.ION_Auditory_Struct.m_Volume = setting[1];
-    q_Msg.ION_Auditory_Struct.m_AP1 = setting[2];
-    q_Msg.ION_Auditory_Struct.m_AP2 = setting[3];
-    q_Msg.ION_Auditory_Struct.m_AP3 = setting[4];
-    q_Msg.ION_Auditory_Struct.m_AP4 = setting[5];
+    q_Msg.ION_Auditory_Struct.m_IntSpkrVoice = setting[0];
+    q_Msg.ION_Auditory_Struct.m_IntSpkrVolume = setting[1];
+    q_Msg.ION_Auditory_Struct.m_ExtSpkrVoice = setting[2];
+    q_Msg.ION_Auditory_Struct.m_ExtSpkrVolume = setting[3];
+    q_Msg.ION_Auditory_Struct.m_AP1 = setting[4];
+    q_Msg.ION_Auditory_Struct.m_AP2 = setting[5];
+    q_Msg.ION_Auditory_Struct.m_AP3 = setting[6];
+    q_Msg.ION_Auditory_Struct.m_AP4 = setting[7];
 
     tx_queue_send(&g_GUI_to_COMM_queue, &q_Msg, 10); // TX_NO_WAIT. Without a wait the process seems to be too fast for the processing of the "send".
 }

@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 30. 9.2024   Time (hh:mm): 07:20                        */
+/*  Date (dd.mm.yyyy):  8.10.2024   Time (hh:mm): 14:46                        */
 /*******************************************************************************/
 
 
@@ -16,6 +16,7 @@
 #include "ASL_HHP_Display_GUIX_specifications.h"
 
 static GX_WIDGET *gx_studio_nested_widget_create(GX_BYTE *control, GX_CONST GX_STUDIO_WIDGET *definition, GX_WIDGET *parent);
+ION_SPEAKER_SELECT_SCREEN_CONTROL_BLOCK ION_Speaker_Select_Screen;
 ION_AUDIBLESTRINGSELECTIONSCREEN_CONTROL_BLOCK ION_AudibleStringSelectionScreen;
 ION_AUDIBLESTRING_SETTINGS_SCREEN_CONTROL_BLOCK ION_AudibleString_Settings_Screen;
 ION_AUDITORYSETTINGSSCREEN_CONTROL_BLOCK ION_AuditorySettingsScreen;
@@ -317,6 +318,153 @@ UINT gx_studio_vertical_scrollbar_create(GX_CONST GX_STUDIO_WIDGET *info, GX_WID
     status = gx_vertical_scrollbar_create(scroll, info->widget_name, parent, appearance, info->style);
     return status;
 }
+GX_WINDOW_PROPERTIES ION_Speaker_Select_Screen_properties =
+{
+    GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
+};
+GX_TEXT_BUTTON_PROPERTIES ION_Speaker_Select_Screen_OK_Button_properties =
+{
+    GX_STRING_ID_OK,                         /* string id                      */
+    GX_FONT_ID_ASC24PT,                      /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_TEXT_BUTTON_PROPERTIES ION_Speaker_Select_Screen_ExternalSpeaker_Button_properties =
+{
+    GX_STRING_ID_EXTERNAL_SPEAKER,           /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_TEXT_BUTTON_PROPERTIES ION_Speaker_Select_Screen_InternalSpeaker_Button_properties =
+{
+    GX_STRING_ID_INTERNAL_SPEAKER,           /* string id                      */
+    GX_FONT_ID_BUTTON,                       /* font id                        */
+    GX_COLOR_ID_BTN_TEXT,                    /* normal text color              */
+    GX_COLOR_ID_BTN_TEXT                     /* selected text color            */
+};
+GX_PROMPT_PROPERTIES ION_Speaker_Select_Screen_Speker_Select_Prompt_properties =
+{
+    GX_STRING_ID_SELECT_SPEAKER,             /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_WHITE,                       /* normal text color              */
+    GX_COLOR_ID_WHITE                        /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Speaker_Select_Screen_Speker_Select_Prompt_define =
+{
+    "Speker_Select_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {10, 14, 309, 37},                       /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SPEAKER_SELECT_SCREEN_CONTROL_BLOCK, ION_Speaker_Select_Screen_Speker_Select_Prompt), /* control block */
+    (void *) &ION_Speaker_Select_Screen_Speker_Select_Prompt_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Speaker_Select_Screen_InternalSpeaker_Button_define =
+{
+    "InternalSpeaker_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    INT_SPKR_BTN_ID,                         /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {20, 130, 209, 189},                     /* widget size                    */
+    &ION_Speaker_Select_Screen_Speker_Select_Prompt_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SPEAKER_SELECT_SCREEN_CONTROL_BLOCK, ION_Speaker_Select_Screen_InternalSpeaker_Button), /* control block */
+    (void *) &ION_Speaker_Select_Screen_InternalSpeaker_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Speaker_Select_Screen_ExternalSpeaker_Button_define =
+{
+    "ExternalSpeaker_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    EXT_SPKR_BTN_ID,                         /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    GX_STATUS_ACCEPTS_FOCUS,                 /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {20, 45, 209, 104},                      /* widget size                    */
+    &ION_Speaker_Select_Screen_InternalSpeaker_Button_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SPEAKER_SELECT_SCREEN_CONTROL_BLOCK, ION_Speaker_Select_Screen_ExternalSpeaker_Button), /* control block */
+    (void *) &ION_Speaker_Select_Screen_ExternalSpeaker_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Speaker_Select_Screen_OK_Button_define =
+{
+    "OK_Button",
+    GX_TYPE_TEXT_BUTTON,                     /* widget type                    */
+    OK_BTN_ID,                               /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_THIN|GX_STYLE_ENABLED|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_TEXT_BUTTON),                  /* control block size             */
+    GX_COLOR_ID_TEXT_INPUT_FILL,             /* normal color id                */
+    GX_COLOR_ID_TEXT_INPUT_TEXT,             /* selected color id              */
+    gx_studio_text_button_create,            /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {230, 165, 309, 228},                    /* widget size                    */
+    &ION_Speaker_Select_Screen_ExternalSpeaker_Button_define, /* next widget definition */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_SPEAKER_SELECT_SCREEN_CONTROL_BLOCK, ION_Speaker_Select_Screen_OK_Button), /* control block */
+    (void *) &ION_Speaker_Select_Screen_OK_Button_properties /* extended properties */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_Speaker_Select_Screen_define =
+{
+    "ION_Speaker_Select_Screen",
+    GX_TYPE_WINDOW,                          /* widget type                    */
+    GX_ID_NONE,                              /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE,                    /* style flags                    */
+    0,                                       /* status flags                   */
+    sizeof(ION_SPEAKER_SELECT_SCREEN_CONTROL_BLOCK), /* control block size     */
+    GX_COLOR_ID_WINDOW_FILL,                 /* normal color id                */
+    GX_COLOR_ID_WINDOW_FILL,                 /* selected color id              */
+    gx_studio_window_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    (UINT (*)(GX_WIDGET *, GX_EVENT *)) ION_Speaker_Select_Screen_event_process, /* event function override */
+    {0, 0, 319, 255},                        /* widget size                    */
+    GX_NULL,                                 /* next widget                    */
+    &ION_Speaker_Select_Screen_OK_Button_define, /* child widget               */
+    0,                                       /* control block                  */
+    (void *) &ION_Speaker_Select_Screen_properties /* extended properties      */
+};
 GX_WINDOW_PROPERTIES ION_AudibleStringSelectionScreen_properties =
 {
     GX_PIXELMAP_ID_NEWBACKGROUND_FLATTEN_1   /* wallpaper pixelmap id          */
@@ -628,6 +776,36 @@ GX_CHECKBOX_PROPERTIES ION_AuditorySettingsScreen_CuesToggleBtn_properties =
     GX_PIXELMAP_ID_TOGGLE_GRAY,              /* unchecked disabled pixelmap id */
     GX_PIXELMAP_ID_TOGGLE_GREEN              /* checked disabled pixelmap id   */
 };
+GX_PROMPT_PROPERTIES ION_AuditorySettingsScreen_Spkr_Location_Prompt_properties =
+{
+    GX_STRING_ID_INT_SPKR,                   /* string id                      */
+    GX_FONT_ID_PROMPT,                       /* font id                        */
+    GX_COLOR_ID_TEXT,                        /* normal text color              */
+    GX_COLOR_ID_SELECTED_TEXT                /* selected text color            */
+};
+
+GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_Spkr_Location_Prompt_define =
+{
+    "Spkr_Location_Prompt",
+    GX_TYPE_PROMPT,                          /* widget type                    */
+    SPKR_ID,                                 /* widget id                      */
+    #if defined(GX_WIDGET_USER_DATA)
+    0,                                       /* user data                      */
+    #endif
+    GX_STYLE_BORDER_NONE|GX_STYLE_TRANSPARENT|GX_STYLE_TEXT_CENTER,   /* style flags */
+    0,                                       /* status flags                   */
+    sizeof(GX_PROMPT),                       /* control block size             */
+    GX_COLOR_ID_WIDGET_FILL,                 /* normal color id                */
+    GX_COLOR_ID_SELECTED_FILL,               /* selected color id              */
+    gx_studio_prompt_create,                 /* create function                */
+    GX_NULL,                                 /* drawing function override      */
+    GX_NULL,                                 /* event function override        */
+    {216, 12, 311, 35},                      /* widget size                    */
+    GX_NULL,                                 /* no next widget                 */
+    GX_NULL,                                 /* no child widgets               */ 
+    offsetof(ION_AUDITORYSETTINGSSCREEN_CONTROL_BLOCK, ION_AuditorySettingsScreen_Spkr_Location_Prompt), /* control block */
+    (void *) &ION_AuditorySettingsScreen_Spkr_Location_Prompt_properties /* extended properties */
+};
 
 GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_CuesToggleBtn_define =
 {
@@ -646,7 +824,7 @@ GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_CuesToggleBtn_define =
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
     {138, 90, 200, 126},                     /* widget size                    */
-    GX_NULL,                                 /* no next widget                 */
+    &ION_AuditorySettingsScreen_Spkr_Location_Prompt_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(ION_AUDITORYSETTINGSSCREEN_CONTROL_BLOCK, ION_AuditorySettingsScreen_CuesToggleBtn), /* control block */
     (void *) &ION_AuditorySettingsScreen_CuesToggleBtn_properties /* extended properties */
@@ -875,7 +1053,7 @@ GX_CONST GX_STUDIO_WIDGET ION_AuditorySettingsScreen_Auditory_Volume_Prompt_defi
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {225, 12, 304, 75},                      /* widget size                    */
+    {224, 40, 303, 69},                      /* widget size                    */
     &ION_AuditorySettingsScreen_Auditory_VolumeDown_Btn_define, /* next widget definition */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(ION_AUDITORYSETTINGSSCREEN_CONTROL_BLOCK, ION_AuditorySettingsScreen_Auditory_Volume_Prompt), /* control block */
@@ -8797,6 +8975,7 @@ GX_CONST GX_STUDIO_WIDGET MainUserScreen_define =
 };
 GX_CONST GX_STUDIO_WIDGET_ENTRY ASL_HHP_Display_GUIX_widget_table[] =
 {
+    { &ION_Speaker_Select_Screen_define, (GX_WIDGET *) &ION_Speaker_Select_Screen },
     { &ION_AudibleStringSelectionScreen_define, (GX_WIDGET *) &ION_AudibleStringSelectionScreen },
     { &ION_AudibleString_Settings_Screen_define, (GX_WIDGET *) &ION_AudibleString_Settings_Screen },
     { &ION_AuditorySettingsScreen_define, (GX_WIDGET *) &ION_AuditorySettingsScreen },

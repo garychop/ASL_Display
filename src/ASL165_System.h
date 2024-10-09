@@ -68,6 +68,7 @@ typedef enum {INVALID_FEATURE_HB_ID,
 
 typedef enum ENUM_TIMER_IDS {ARROW_PUSHED_TIMER_ID = 1, CALIBRATION_TIMER_ID, PAD_ACTIVE_TIMER_ID} ENUM_TIMER_IDS_ENUM;
 typedef enum {SILENCE_AUDIBLE = 0, MALE_VOICE_AUDIBLE, FEMALE_VOICE_AUDIBLE, CHILDS_VOICE_AUDIBLE, AUDIBLE_TYPE_END} AUDIBLE_TYPE_ENUM;
+typedef enum {INTERNAL_SPEAKER_E, EXTERNAL_SPEAKER_E, INVALID_SPEAKER} SPEAKER_ENUM;
 
 // Bit masks pertaining to the REQUEST FEATURE SETTNG CMD HA<->HHP comms command.
 #define FUNC_FEATURE_POWER_ON_OFF_BIT_MASK              (0x01)
@@ -115,6 +116,15 @@ typedef struct
 } AUDIO_SETTINGS_STRUCT;
 extern AUDIO_SETTINGS_STRUCT g_AudioPhraseSettings[AUDIO_PHRASE_MAX_NUMBER];
 
+typedef struct {
+    AUDIBLE_TYPE_ENUM m_Voice; // = MALE_VOICE_AUDIBLE;
+    unsigned char m_TonesActive; // = false;
+    uint8_t m_AuditoryVolumeLevel; //  = 20;
+    bool m_CuesActive; //  = true;
+    bool m_ClicksActive;
+} SPEAKER_SETTINGS_STRUCT;
+extern SPEAKER_SETTINGS_STRUCT g_SpeakerSettings[2];
+
 
 //*****************************************************************************
 // GLOBAL VARIABLES
@@ -133,6 +143,7 @@ extern HUB_PORT_SCHEMA_ENUM g_Mode_Switch_Schema;
 extern HEARTBEAT_FEATURE_ID_ENUM g_ActiveFeature;     // this indicates the active feature.
 extern GX_WIDGET *g_ActiveScreen;
 
+extern SPEAKER_ENUM g_SpeakerIndex;
 extern AUDIBLE_TYPE_ENUM g_Audible_Setting;
 extern uint8_t g_AuditoryVolumeLevel;
 extern bool g_TonesActive;

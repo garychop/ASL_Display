@@ -1272,14 +1272,16 @@ uint32_t Process_GUI_Messages (GUI_MSG_STRUCT GUI_Msg)
             break;
 
         case HHP_HA_AUDITORY_SETTINGS_SET_CMD:
-            HA_Msg[0] = 0x09;     // msg length from LENGTH to CHECKSUM, inclusive
+            HA_Msg[0] = 11;     // msg length from LENGTH to CHECKSUM, inclusive
             HA_Msg[1] = HHP_HA_AUDITORY_SETTINGS_SET_CMD;
-            HA_Msg[2] = GUI_Msg.ION_Auditory_Struct.m_AuditorySetting;
-            HA_Msg[3] = GUI_Msg.ION_Auditory_Struct.m_Volume;
-            HA_Msg[4] = GUI_Msg.ION_Auditory_Struct.m_AP1;
-            HA_Msg[5] = GUI_Msg.ION_Auditory_Struct.m_AP2;
-            HA_Msg[6] = GUI_Msg.ION_Auditory_Struct.m_AP3;
-            HA_Msg[7] = GUI_Msg.ION_Auditory_Struct.m_AP4;
+            HA_Msg[2] = GUI_Msg.ION_Auditory_Struct.m_IntSpkrVoice;
+            HA_Msg[4] = GUI_Msg.ION_Auditory_Struct.m_IntSpkrVolume;
+            HA_Msg[5] = GUI_Msg.ION_Auditory_Struct.m_ExtSpkrVoice;
+            HA_Msg[6] = GUI_Msg.ION_Auditory_Struct.m_ExtSpkrVolume;
+            HA_Msg[7] = GUI_Msg.ION_Auditory_Struct.m_AP1;
+            HA_Msg[8] = GUI_Msg.ION_Auditory_Struct.m_AP2;
+            HA_Msg[9] = GUI_Msg.ION_Auditory_Struct.m_AP3;
+            HA_Msg[10] = GUI_Msg.ION_Auditory_Struct.m_AP4;
             cs = CalculateChecksum(HA_Msg, (uint8_t)(HA_Msg[0]-1));
             HA_Msg[HA_Msg[0]-1] = cs;
             msgStatus = Send_I2C_Package(HA_Msg, HA_Msg[0]);

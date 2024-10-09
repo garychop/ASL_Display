@@ -1,5 +1,12 @@
 //*************************************************************************
-// my_gui_thread_entry.
+//
+// (c) COPYRIGHT, 2024 Adaptive Switch Technologies (ASL)
+//
+// All rights reserved. This file is the intellectual property of ASL and it may
+// not be disclosed to others or used for any purposes without the written consent of ASL.
+//
+//*************************************************************************
+// my_gui_thread_entry.c
 //
 //  Created on: Nov 21, 2019
 //      Author: Gary Chopcinski, Kg Solutions, LLC
@@ -8,6 +15,7 @@
 //  handling and message handling from the Communication Task.
 //
 //*************************************************************************
+
 
 #include "my_gui_thread.h"
 #include "lcd.h"
@@ -140,6 +148,7 @@ void my_gui_thread_entry(void)
     gx_studio_named_widget_create("ION_PadDirectionScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_SIPnPuffProgrammingScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("ION_SNP_Calibrate_Screen", GX_NULL, GX_NULL);
+    gx_studio_named_widget_create("ION_Speaker_Select_Screen", GX_NULL, GX_NULL);    // Create and show first startup screen.
     gx_studio_named_widget_create("MainUserScreen", GX_NULL, GX_NULL);    // Create and show first startup screen.
     gx_studio_named_widget_create("MinimumDriveScreen", GX_NULL, GX_NULL);
     gx_studio_named_widget_create("MoreSelectionScreen", GX_NULL, GX_NULL);

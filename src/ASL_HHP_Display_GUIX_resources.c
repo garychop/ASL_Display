@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 30. 9.2024   Time (hh:mm): 07:20                        */
+/*  Date (dd.mm.yyyy):  8.10.2024   Time (hh:mm): 14:46                        */
 /*******************************************************************************/
 
 
@@ -50185,10 +50185,15 @@ GX_CONST GX_UBYTE main_display_AUDIO_WHICH_WAY_English[] = "WHICH WAY";
 GX_CONST GX_UBYTE main_display_AUDIO_YES_English[] = "YES";
 GX_CONST GX_UBYTE main_display_AUDIO_VOICE_OFF_English[] = "VOICE\rOFF";
 GX_CONST GX_UBYTE main_display_AUDIO_TONES_English[] = "TONES";
+GX_CONST GX_UBYTE main_display_INT_SPKR_English[] = "INT SPKR";
+GX_CONST GX_UBYTE main_display_INTERNAL_SPEAKER_English[] = "INTERNAL SPEAKER";
+GX_CONST GX_UBYTE main_display_EXT_SPKR_English[] = "EXT SPKR";
+GX_CONST GX_UBYTE main_display_EXTERNAL_SPEAKER_English[] = "EXTERNAL SPEAKER";
+GX_CONST GX_UBYTE main_display_SELECT_SPEAKER_English[] = "SELECT SPEAKER";
 
 /* String Table for main_display language English                              */
 
-GX_CONST GX_UBYTE *main_display_English_string_table[186] =
+GX_CONST GX_UBYTE *main_display_English_string_table[191] =
 {
     GX_NULL,
     main_display_SWITCH_DRV_CTRL_English,
@@ -50375,7 +50380,12 @@ GX_CONST GX_UBYTE *main_display_English_string_table[186] =
     main_display_AUDIO_WHICH_WAY_English,
     main_display_AUDIO_YES_English,
     main_display_AUDIO_VOICE_OFF_English,
-    main_display_AUDIO_TONES_English
+    main_display_AUDIO_TONES_English,
+    main_display_INT_SPKR_English,
+    main_display_INTERNAL_SPEAKER_English,
+    main_display_EXT_SPKR_English,
+    main_display_EXTERNAL_SPEAKER_English,
+    main_display_SELECT_SPEAKER_English
 
 };
 

@@ -169,9 +169,11 @@ typedef struct GUI_MSG_S
         } ION_SNP_Calibration_CMD_s;
         struct
         {   // Used with HHP_HA_AUDITORY_SETTINGS_GET_CMD
-            uint8_t m_AuditorySetting;
-            uint8_t m_Volume;
-            uint8_t m_AP1;
+            uint8_t m_IntSpkrVoice;
+            uint8_t m_IntSpkrVolume;
+            uint8_t m_ExtSpkrVoice;
+            uint8_t m_ExtSpkrVolume;
+            uint8_t m_AP1; //"AP" is Audio Phrase settings for SAY SOMETHING
             uint8_t m_AP2;
             uint8_t m_AP3;
             uint8_t m_AP4;
@@ -323,9 +325,11 @@ typedef struct HHP_HA_MSG_S
         } BT_DeviceDefinition;
         struct
         {   // Used with HHP_HA_AUDITORY_SETTINGS_SET_CMD
-            uint8_t m_AuditorySetting;
-            uint8_t m_Volume;
-            uint8_t m_AP1;
+            uint8_t m_IntSpkrVoice;
+            uint8_t m_IntSpkrVolume;
+            uint8_t m_ExtSpkrVoice;
+            uint8_t m_ExtSpkrVolume;
+            uint8_t m_AP1; //"AP" is Audio Phrase settings for SAY SOMETHING
             uint8_t m_AP2;
             uint8_t m_AP3;
             uint8_t m_AP4;

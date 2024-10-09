@@ -31,6 +31,9 @@ HUB_PORT_SCHEMA_ENUM g_Mode_Switch_Schema = DRV_MODE_SWITCH_PIN5;
 AUDIBLE_TYPE_ENUM g_Audible_Setting = SILENCE_AUDIBLE;
 uint8_t g_AuditoryVolumeLevel = 20;
 bool g_ION_ClicksActive = false;
+SPEAKER_ENUM g_SpeakerIndex;
+SPEAKER_SETTINGS_STRUCT g_SpeakerSettings[2];
+
 bool g_TonesActive = false;
 bool g_CuesActive = false;
 uint8_t g_AP1 = 0xff, g_AP2 = 0xff, g_AP3 = 0x0, g_AP4 = 0x0;

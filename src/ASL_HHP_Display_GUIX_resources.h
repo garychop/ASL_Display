@@ -6,7 +6,7 @@
 /*  Studio User Guide, or visit our web site at azure.com/rtos                 */
 /*                                                                             */
 /*  GUIX Studio Revision 6.4.0.0                                               */
-/*  Date (dd.mm.yyyy): 30. 9.2024   Time (hh:mm): 07:20                        */
+/*  Date (dd.mm.yyyy):  8.10.2024   Time (hh:mm): 14:46                        */
 /*******************************************************************************/
 
 
@@ -404,6 +404,11 @@
 #define GX_STRING_ID_AUDIO_YES 183
 #define GX_STRING_ID_AUDIO_VOICE_OFF 184
 #define GX_STRING_ID_AUDIO_TONES 185
-#define MAIN_DISPLAY_STRING_TABLE_SIZE 186
+#define GX_STRING_ID_INT_SPKR 186
+#define GX_STRING_ID_INTERNAL_SPEAKER 187
+#define GX_STRING_ID_EXT_SPKR 188
+#define GX_STRING_ID_EXTERNAL_SPEAKER 189
+#define GX_STRING_ID_SELECT_SPEAKER 190
+#define MAIN_DISPLAY_STRING_TABLE_SIZE 191
 
 #endif                                       /* sentry                         */
